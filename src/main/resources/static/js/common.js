@@ -85,4 +85,77 @@ while(   nOffset   !=   -1   )
 } 
    
 return   bstr   +   strUtf8; 
-} 
+}
+
+function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle){
+    var result = true;
+
+    $.ajax({
+        type : "POST",
+        url : url,
+        timeout : 60000,
+        data : JSON.stringify(data),
+        dataType : 'json',
+        async :isASync,
+        contentType: 'application/json',
+        success : function(resu) {
+            if(resu.response.error_code != 0){
+                gritterError(failTitle, resu.response);
+                result = false;
+            }else{
+                result = handlerFunc(resu);
+            }
+        },
+        statusCode: {
+            404: function() {
+                handlerErrorStatusCode(404);
+            },
+            500: function() {
+                handlerErrorStatusCode(500);
+            },
+            422: function () {
+                handlerErrorStatusCode(422);
+            }
+        }
+    });
+
+    return result;
+}
+
+function handlerErrorStatusCode(errorStatus){
+    switch (errorStatus){
+        case 500:
+            $.gritter.add({
+                title : '呀呀的:',
+                text : '服务自己500了，你叫我怎么办',
+                class_name : 'gritter-error gritter-center'
+            });
+            break;
+        case 404:
+            $.gritter.add({
+                title : '呵呵:',
+                text : '你确认你的请求url配置正确了？',
+                class_name : 'gritter-error gritter-center'
+            });
+            break;
+        case 422:
+            $.gritter.add({
+                title : '咋了:',
+                text : '请求参数出错了或服务器调用返回422了',
+                class_name : 'gritter-error gritter-center'
+            });
+            break;
+    }
+}
+
+function gritterError(title, response){
+    var msg = response.hint_message;
+    if(msg == null || "" == msg){
+        msg = response.error_message;
+    }
+    $.gritter.add({
+        title : title,
+        text : msg,
+        class_name : 'gritter-error gritter-center'
+    });
+}

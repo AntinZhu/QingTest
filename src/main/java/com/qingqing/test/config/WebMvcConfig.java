@@ -39,7 +39,7 @@ public class WebMvcConfig {
 
     @Bean
     public ResponseBuildInteceptor responseBuildInteceptor(){
-        return new ResponseBuildInteceptor();
+        return new MyResponseBuildInteceptor();
     }
 
     @Bean

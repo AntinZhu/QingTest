@@ -25,9 +25,13 @@ import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.config.feign.MyPtFeignConfiguration;
 import com.qingqing.test.feign.PtRequestInterceptor;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -89,4 +93,11 @@ public interface ApiPtClient {
     @ProtoResponseBody
     StudentAddGroupOrderResponse joinGroup(JoinGroupOrderRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 
+    @RequestMapping(path = "/{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    String studentCommonRequest(@RequestBody Object request, @PathVariable("url") String url, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+
+    @RequestMapping(path = "/{url}", method = RequestMethod.POST)
+    @ResponseBody
+    String teacherCommonRequest(@PathVariable("url") String url, String request, @RequestHeader(name = PtRequestInterceptor.TEACHER_ID) Long teacherId);
 }

@@ -88,6 +88,7 @@
 <script src="${base}/static/assets/js/additional-methods.min.js"></script>
 <script src="${base}/static/assets/js/bootbox.min.js"></script>
 <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
+<script src="${base}/static/js/common.js"></script>
 
 <link rel="stylesheet" href="${base}/static/css/adminmain2.css" type="text/css"/>
 <script type="text/javascript">

@@ -6,11 +6,17 @@
         <typeAlias alias="UserType" type="com.qingqing.common.auth.domain.UserType"/>
         <typeAlias alias="OrderPayTypeV3" type="com.qingqing.test.bean.pay.OrderPayTypeV3" />
         <typeAlias alias="OrderType" type="com.qingqing.common.domain.order.OrderType" />
+        <typeAlias alias="RequestType" type="com.qingqing.test.domain.inter.RequestType" />
+        <typeAlias alias="InterfaceType" type="com.qingqing.test.domain.inter.InterfaceType" />
+        <typeAlias alias="HtmlElementType" type="com.qingqing.test.domain.inter.HtmlElementType" />
     </typeAliases>
 
     <typeHandlers>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.common.auth.domain.UserType"/>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.bean.pay.OrderPayTypeV3"/>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.common.domain.order.OrderType"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.RequestType"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.InterfaceType"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.HtmlElementType" />
     </typeHandlers>
 </configuration>

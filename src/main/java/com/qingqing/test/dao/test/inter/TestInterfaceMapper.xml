@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.test.inter.TestInterfaceMapper" >
+  <resultMap id="BaseResultMap" type="com.qingqing.test.domain.inter.TestInterface" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="interface_name" property="interfaceName" jdbcType="VARCHAR" />
+    <result column="interface_url" property="interfaceUrl" jdbcType="VARCHAR" />
+    <result column="interface_type" property="interfaceType" javaType="InterfaceType" />
+    <result column="request_type" property="requestType" javaType="RequestType" />
+    <result column="request_user_type" property="requestUserType" javaType="UserType" />
+    <result column="sort_desc_num" property="sortDescNum" jdbcType="INTEGER" />
+    <result column="catelog_id" property="catelogId" jdbcType="INTEGER" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, interface_name, interface_url, interface_type, request_type, request_user_type, 
+    sort_desc_num, catelog_id, is_deleted, create_time, last_update_time
+  </sql>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="Base_Column_List" />
+    from t_interface
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterface" keyProperty="id" useGeneratedKeys="true">
+    insert into t_interface (interface_name, interface_url,
+      interface_type, request_type, request_user_type, 
+      sort_desc_num, catelog_id, is_deleted, 
+      create_time)
+    values (#{interfaceName,jdbcType=VARCHAR}, #{interfaceUrl,jdbcType=VARCHAR},
+      #{interfaceType,javaType=InterfaceType}, #{requestType,javaType=RequestType}, #{requestUserType,javaType=UserType},
+      #{sortDescNum,jdbcType=INTEGER}, #{catelogId,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT}, 
+      now())
+  </insert>
+
+  <select id="selectByCatelogId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="Base_Column_List" />
+    from t_interface
+    where catelog_id = #{catelogId,jdbcType=BIGINT}
+  </select>
+</mapper>

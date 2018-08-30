@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.test.inter.TestInterfaceCatelogMapper" >
+  <resultMap id="BaseResultMap" type="com.qingqing.test.domain.inter.TestInterfaceCatelog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="catelog_name" property="catelogName" jdbcType="VARCHAR" />
+    <result column="sort_desc_num" property="sortDescNum" jdbcType="INTEGER" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, catelog_name, sort_desc_num, is_deleted, create_time, last_update_time
+  </sql>
+
+  <select id="selectByAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_interface_catelog
+    where is_deleted = FALSE
+  </select>
+
+  <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceCatelog" keyProperty="id" useGeneratedKeys="true">
+    insert into t_interface_catelog (catelog_name, sort_desc_num,
+      is_deleted, create_time, last_update_time
+      )
+    values (#{catelogName,jdbcType=VARCHAR}, #{sortDescNum,jdbcType=INTEGER},
+      #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+</mapper>
