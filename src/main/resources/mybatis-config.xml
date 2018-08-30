@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <typeAlias alias="UserType" type="com.qingqing.common.auth.domain.UserType"/>
+        <typeAlias alias="OrderPayTypeV3" type="com.qingqing.test.bean.pay.OrderPayTypeV3" />
+        <typeAlias alias="OrderType" type="com.qingqing.common.domain.order.OrderType" />
+    </typeAliases>
+
+    <typeHandlers>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.common.auth.domain.UserType"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.bean.pay.OrderPayTypeV3"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.common.domain.order.OrderType"/>
+    </typeHandlers>
+</configuration>

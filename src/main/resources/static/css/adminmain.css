@@ -1,0 +1,224 @@
+@charset "utf-8";
+body{ font: 62.5% "Microsoft YaHei", "微软雅黑", "SimSun", "宋体"; margin:0}
+.demoHeaders { margin-top: 2em; }
+#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
+#dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
+ul#icons {margin: 0; padding: 0;}
+ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+ul#icons span.ui-icon {float: left; margin: 0 4px;}
+
+.loginDialog #loginDialog {overflow-y:hidden;}
+.loginDialog .ui-dialog-titlebar-close {display:none;}
+
+#pageContainer {width:100% !important;border-top:5px solid #444444;}
+#pageHeader {background:url("images/logo.png") #FCFDFD;background-repeat: no-repeat;height:60px;
+text-align:right;font-size:15px;font-weight:bold;margin-left:10px}
+#pageHeader .headerDesc{width:300px;float:left;text-align:left;padding-left:180px;font-size:36px;color:#FF0000}
+#pageHeader .headerLinks {width:300px;margin-right:25px;padding-top:30px;height:100%;float:right}
+#contentContainer {margin:5px 10px 0 10px;border:1px solid #A6C9E2;min-height:400px;min-width:940px}
+#footer {margin:5px 10px 0 10px;font-size:110%;text-align:center;color:#696969}
+
+.homePage h2 {font-size:15px}
+.homePage {font-size:120%}
+.homePage h3 {font-size:14px}
+.ui-widget-content ul li a {color:#2E6E9E;font-weight:bold}
+.ui-widget-content ul li a:hover {color:#6796AF;font-weight:bold}
+.ui-tabs .ui-tabs-panel {padding: 10px 0 0 0;}
+#leftMenu {width:200px;float:left;}
+#rightContent {min-width:700px;margin-left:220px;padding-top:5px;margin-right:10px}
+#rightContent {*float:left;*margin-left:20px;}
+.leftNav {margin-top:10px}
+.leftNav a {color:#2E6E9E;}
+.leftNav a:hover {color:#6796AF;}
+.messageHolder p {margin:10px 0 10px 0}
+.generaLtable{magin:0;border:0;padding:0;border-collapse:collapse}
+.generaLtable a {color:#2E6E9E}
+.generaLtable a:hover {color:#6796AF}
+.generaltable tr td {border:1px solid #A6C9E2;text-align:center;magin:0;}
+.generaltable tr th {border:1px solid #A6C9E2;text-align:center;background:#F5F8F9;magin:0;}
+.generaltable tbody tr:hover {color:#FFFFFF;background:#5C9CCC}
+.generaltable tbody tr:hover a {color:#FFFFFF}
+.generaltable tbody tr:hover a:hover {color:#DDDDDD}
+.generaltable tbody .dataRowOver td {color:#FFFFFF;background:#5C9CCC}
+.generaltable tbody .dataRowOver td a {color:#FFFFFF}
+.generaltable tbody .dataRowOver td a:hover {color:#DDDDDD}
+.generaltable .highest {color:red !important;font-weight:bold}
+.generaltable .recentChanged {background:#acdd4a !important;} 
+
+.searchBlock .searchTitle {float:left;width:200px}
+.searchBlock .searchContent {float:left;}
+
+.deleteDialog #deleteDialog {overflow-y:hidden;}
+.deleteDialog #deleteDialog div{font-size:14px;line-height:20px}
+.deleteDialog #deleteDialog .label{font-weight:600;margin-right:10px}
+
+.disableDialog #disableDialog {overflow-y:hidden;}
+.disableDialog #disableDialog div{font-size:14px;line-height:20px}
+.disableDialog #disableDialog .label{font-weight:600;margin-right:10px}
+.disableDialog #editFilterRuleDialog {overflow-y:hidden;}
+.disableDialog #editFilterRuleDialog div{font-size:14px;line-height:20px}
+.disableDialog #editFilterRuleDialog .label{font-weight:600;margin-right:10px}
+.disableDialog #disableDialog span{display:inline-block}
+
+.commonDialog {overflow-y:hidden;}
+.commonDialog div{font-size:14px;line-height:20px}
+.commonDialog .label{font-weight:600;margin-right:10px}
+.commonDialog span{display:inline-block}
+
+.subTitle {border-bottom:1px solid #969696; background-color:#EEEEEE;padding-left:5px;font-weight:700;line-height:25px;margin-bottom:10px;}
+.subContent {padding-left:5px;margin-bottom:10px}
+.subContent td input {width:300px}
+.fieldNote {color:#696969;padding-left:10px}
+.fieldNote a {color:#2E6E9E}
+.fieldNote a:hover {color:#6796AF}
+
+.filterRule h3 {background:#696969;color:#FFFFFF}
+.filterRule h4 {color:#2e6e9e}
+.ruleBolck {margin-top:5px; border-bottom:1px solid #787878;line-height:20px}
+.ruleBolck a {color:#2E6E9E}
+.ruleBolck a:hover {color:#6796AF}
+
+.errorMsg li {list-style:none;}
+
+.newtable{width:100%;margin-top:10px}
+.newtable .row{line-height:38px;padding-left:10px}
+.newtable .l1{background:#CECECE;}
+.newtable .l2{}
+
+/*time picker*/
+.ui-timepicker-list {
+	overflow-y: auto;
+	height: 150px;
+	width: 6.5em;
+	background: #fff;
+	border: 1px solid #ddd;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	-webkit-box-shadow:0 5px 10px rgba(0,0,0,0.2);
+	-moz-box-shadow:0 5px 10px rgba(0,0,0,0.2);
+	box-shadow:0 5px 10px rgba(0,0,0,0.2);
+	outline: none;
+	z-index: 10001;
+}
+.ui-timepicker-list.ui-timepicker-with-duration {
+	width: 11em;
+}
+.ui-timepicker-duration {
+	margin-left: 5px; color: #888;
+}
+.ui-timepicker-list:hover .ui-timepicker-duration {
+	color: #888;
+}
+.ui-timepicker-list li {
+	padding: 3px 0 3px 5px;
+	cursor: pointer;
+	white-space: nowrap;
+	color: #000;
+	list-style: none;
+	margin: 0;
+}
+.ui-timepicker-list:hover .ui-timepicker-selected {
+	background: #fff; color: #000;
+}
+li.ui-timepicker-selected,
+.ui-timepicker-list li:hover,
+.ui-timepicker-list:hover .ui-timepicker-selected:hover {
+	background: #1980EC; color: #fff;
+}
+li.ui-timepicker-selected .ui-timepicker-duration,
+.ui-timepicker-list li:hover .ui-timepicker-duration {
+	color: #ccc;
+}
+
+.ui-tooltip {
+    background: #363636;
+    color: white;
+    font-weight: 800;
+    width: 200px;
+    padding: 5px 10px 5px 10px;
+    margin-top:-10px;
+  }
+ .introduction {
+ 	border: 2px solid #969696;
+ 	padding:5px 0px 5px 10px;
+ 	background: #696969;
+ 	color: #FFFFFF;
+ 	margin-top:5px
+ }
+ 
+ .reporttd {
+ 	position:relative;
+ }
+ 
+ .reporttd .timetips {
+ 	position:absolute;
+ 	display:none;
+ 	background:#FFF;
+ 	border:1px solid #111;
+ 	z-index:9999;
+ 	color:#363636;
+ 	font-size:14px;
+ 	width:260px;
+ 	font-weight:normal;
+ 	top:25px;
+ }
+ 
+ .notAnaylzed {
+ 	background:red;
+ 	color:#FFF !important;
+ }
+ 
+ .couponCompare .ccouponLink {
+ 	float:left;
+ 	margin-right:20px;
+ }
+ 
+ .couponCompare .hasnew a {
+ 	color:red;
+ 	font-weight:bold;
+ }
+ 
+ .couponReportDetail .title {
+ 	width:95%;
+ 	background: #6eac2c;
+ 	border:1px solid #6eac2c;
+ 	color: #FFF;
+ 	line-height:30px;
+ 	font-size:16px;
+ }
+ 
+ .couponReportDetail .title b {
+ 	margin-left:10px;
+ }
+ 
+ .couponReportDetail .couponlist {
+ 	width:95%;
+ 	border:1px solid #696969;
+ 	margin-bottom:10px;
+ 	over-flow:hidden;
+ }
+ 
+ .couponReportDetail .couponlist .title {
+ 	width:100%;
+ 	background: #696969;
+ 	border:none;
+ 	color: #FFF;
+ }
+ 
+ .couponReportDetail .couponlist .title span {
+ 	padding-left:10px;
+ }
+ 
+ .couponReportDetail .newadded {
+ 	border:1px solid #2191c0;
+ }
+ 
+  .couponReportDetail .newadded .title {
+  	background: #2191c0;
+  }
+  
+  .couponReportDetail .couponlist .content {
+  	padding-left:10px;
+  	
+  }

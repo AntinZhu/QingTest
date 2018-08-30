@@ -1,0 +1,23 @@
+@charset "utf-8";
+body{ font: "Microsoft YaHei", "微软雅黑", "SimSun", "宋体"; margin:0}
+.clear{clear:both}
+.page-content h2 {font-size:18px;font-weight:bold}
+.page-content h3 {font-size:16px;font-weight:bold}
+.page-content {font-size:120%}
+.nav-list>li>a,.breadcrumb {font-size:14px;}
+.nav-list>li.active>a, .nav-list>li.active>a:hover, .nav-list>li.active>a:focus, .nav-list>li.active>a:active {font-size:14px !important;}
+.table-responsive{margin:10px 0 0 0}
+.my-filter .btn{margin-top:-5px;}
+
+.popup{font-size:14px}
+.ace-file-input{width:400px}
+
+.forminput td {padding-bottom:15px}
+.input-group {float:left}
+
+.width150 {width:150px}
+.width320 {width:320px;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {.chosen-search input {line-height:20px !important;padding-top:10px !important}}
+
+#showImage img {width:300px}
