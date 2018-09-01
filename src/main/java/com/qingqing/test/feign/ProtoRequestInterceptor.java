@@ -9,8 +9,12 @@ import feign.RequestTemplate;
 public abstract class ProtoRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
-        template.header("Content-Type", "application/x-protobuf");
-        template.header("Accept", "application/x-protobuf");
+        if(template.headers().get("Content-Type") == null){
+            template.header("Content-Type", "application/x-protobuf");
+        }
+        if(template.headers().get("Accept") == null){
+            template.header("Accept", "application/x-protobuf");
+        }
 
         doApply(template);
     }

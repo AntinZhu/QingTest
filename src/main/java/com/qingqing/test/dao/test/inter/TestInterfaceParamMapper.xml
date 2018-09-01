@@ -12,6 +12,7 @@
     <result column="selectable_values" property="selectableValues" jdbcType="VARCHAR" />
     <result column="is_must" property="isMust" jdbcType="TINYINT" />
     <result column="html_ele_type" property="htmlEleType" javaType="HtmlElementType" />
+    <result column="encode_type" property="encodeType" javaType="ParamEncodeType" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
@@ -19,7 +20,7 @@
 
   <sql id="Base_Column_List" >
     id, interface_id, param_name, remark, sort_desc_num, default_value, selectable_values, 
-    is_must, html_ele_type, is_deleted, create_time, last_update_time
+    is_must, html_ele_type, encode_type, is_deleted, create_time, last_update_time
   </sql>
 
   <select id="selectByInterfaceId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -30,11 +31,11 @@
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" keyProperty="id" useGeneratedKeys="true">
     insert into t_interface_param (interface_id, param_name,
-      remark, sort_desc_num, default_value, 
+      remark, sort_desc_num, default_value, html_ele_type, encode_type,
       selectable_values, is_must, is_deleted, 
       create_time)
     values (#{interfaceId,jdbcType=BIGINT}, #{paramName,jdbcType=VARCHAR},
-      #{remark,jdbcType=VARCHAR}, #{sortDescNum,jdbcType=INTEGER}, #{defaultValue,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{sortDescNum,jdbcType=INTEGER}, #{defaultValue,jdbcType=VARCHAR},  #{htmlEleType,javaType=HtmlElementType},  #{encodeType,javaType=ParamEncodeType},
       #{selectableValues,jdbcType=VARCHAR}, #{isMust,jdbcType=TINYINT}, #{isDeleted,jdbcType=TINYINT}, 
       mow())
   </insert>

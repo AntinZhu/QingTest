@@ -10,7 +10,7 @@
 <![endif]-->
 
 <!-- page specific plugin styles -->
-
+<link rel="stylesheet" href="${base}/static/assets/css/select2.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/chosen.css"/>
 <link rel="stylesheet" href="${base}/static/assets/css/jquery-ui-1.10.3.full.min.css" />
 <#--<link rel="stylesheet" href="${base}/static/assets/css/jquery-ui-1.10.3.custom.min.css" />-->
@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="${base}/static/assets/css/bootstrap-timepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/daterangepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/colorpicker.css" />
+<link rel="stylesheet" href="${base}/static/assets/css/bootstrap-editable.css" />
 
 <!-- ace styles -->
 
@@ -78,7 +79,7 @@
 <script src="${base}/static/assets/js/ace-extra.min.js"></script>
 
 <!-- ace scripts -->
-
+<script src="${base}/static/assets/js/jquery.nestable.min.js"></script>
 <script src="${base}/static/assets/js/ace-elements.min.js"></script>
 <script src="${base}/static/assets/js/ace.min.js"></script>
 <script src="${base}/static/assets/js/chosen.jquery.min.js"></script>
@@ -88,7 +89,10 @@
 <script src="${base}/static/assets/js/additional-methods.min.js"></script>
 <script src="${base}/static/assets/js/bootbox.min.js"></script>
 <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
+<script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
+<script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
 <script src="${base}/static/js/common.js"></script>
+
 
 <link rel="stylesheet" href="${base}/static/css/adminmain2.css" type="text/css"/>
 <script type="text/javascript">

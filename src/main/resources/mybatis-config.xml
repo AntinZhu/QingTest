@@ -9,6 +9,7 @@
         <typeAlias alias="RequestType" type="com.qingqing.test.domain.inter.RequestType" />
         <typeAlias alias="InterfaceType" type="com.qingqing.test.domain.inter.InterfaceType" />
         <typeAlias alias="HtmlElementType" type="com.qingqing.test.domain.inter.HtmlElementType" />
+        <typeAlias alias="ParamEncodeType" type="com.qingqing.test.domain.inter.ParamEncodeType" />
     </typeAliases>
 
     <typeHandlers>
@@ -18,5 +19,6 @@
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.RequestType"/>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.InterfaceType"/>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.HtmlElementType" />
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.ParamEncodeType" />
     </typeHandlers>
 </configuration>

@@ -95,7 +95,7 @@ public interface ApiPtClient {
 
     @RequestMapping(path = "/{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    String studentCommonRequest(@RequestBody Object request, @PathVariable("url") String url, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+    String studentCommonRequest(@PathVariable("url") String url, @RequestBody String request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 
     @RequestMapping(path = "/{url}", method = RequestMethod.POST)
     @ResponseBody

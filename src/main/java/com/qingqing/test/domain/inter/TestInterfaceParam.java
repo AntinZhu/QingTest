@@ -21,6 +21,8 @@ public class TestInterfaceParam {
 
     private HtmlElementType htmlEleType;
 
+    private ParamEncodeType encodeType;
+
     private Boolean isDeleted;
 
     private Date createTime;
@@ -97,6 +99,14 @@ public class TestInterfaceParam {
 
     public void setHtmlEleType(HtmlElementType htmlEleType) {
         this.htmlEleType = htmlEleType;
+    }
+
+    public ParamEncodeType getEncodeType() {
+        return encodeType;
+    }
+
+    public void setEncodeType(ParamEncodeType encodeType) {
+        this.encodeType = encodeType;
     }
 
     public Boolean getDeleted() {

@@ -25,8 +25,8 @@ import javax.sql.DataSource;
 public class DataSourcePassportConfig {
 
     public final static String DATA_SOURCE_NAME = "qq_passport";
-    public final static String SQL_SESSION_FACTORY = "sqlPassportSessionFactory";
-    public final static String TX_MANAGER = "passportTransactionManager";
+    public final static String SQL_SESSION_FACTORY = DATA_SOURCE_NAME + "sqlSessionFactory";
+    public final static String TX_MANAGER = DATA_SOURCE_NAME + "TransactionManager";
 
     private static String validation_query = "SELECT 1 FROM DUAL";
 
