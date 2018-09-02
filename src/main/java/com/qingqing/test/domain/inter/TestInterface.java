@@ -6,25 +6,16 @@ import java.util.Date;
 
 public class TestInterface {
     private Long id;
-
     private String interfaceName;
-
     private String interfaceUrl;
-
     private InterfaceType interfaceType;
-
     private RequestType requestType;
-
     private UserType requestUserType;
-
     private Integer sortDescNum;
-
     private Integer catelogId;
-
+    private String paramDetail;
     private Boolean isDeleted;
-
     private Date createTime;
-
     private Date lastUpdateTime;
 
     public Long getId() {
@@ -113,5 +104,13 @@ public class TestInterface {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public String getParamDetail() {
+        return paramDetail;
+    }
+
+    public void setParamDetail(String paramDetail) {
+        this.paramDetail = paramDetail;
     }
 }

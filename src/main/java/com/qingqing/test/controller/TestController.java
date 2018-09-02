@@ -1,8 +1,11 @@
 package com.qingqing.test.controller;
 
+import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
+import com.qingqing.common.web.protobuf.ProtoRespGenerator;
+import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
@@ -46,8 +49,12 @@ public class TestController {
     }
 
     @RequestMapping("/interface/invoke")
-    @ResponseBody
-    public String invoke(@RequestBody InterfaceInvokeRequest request) {
-        return testInterfaceManager.invoke(request);
+    @ProtoResponseBody
+    public com.qingqing.api.proto.v1.ProtoBufResponse.SimpleDataResponse invoke(@RequestBody InterfaceInvokeRequest request) {
+        String result =  testInterfaceManager.invoke(request);
+        return com.qingqing.api.proto.v1.ProtoBufResponse.SimpleDataResponse.newBuilder()
+                .setData(result)
+                .setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
+                .build();
     }
 }

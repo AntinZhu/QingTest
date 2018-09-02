@@ -8,7 +8,7 @@ import java.util.List;
 public class InterfaceInvokeRequest {
     private Long interfaceId;
     private Long requestUserId;
-    private List<InterfaceInvokeParam> paramList;
+    private String param;
 
     public Long getInterfaceId() {
         return interfaceId;
@@ -26,32 +26,11 @@ public class InterfaceInvokeRequest {
         this.requestUserId = requestUserId;
     }
 
-    public List<InterfaceInvokeParam> getParamList() {
-        return paramList;
+    public String getParam() {
+        return param;
     }
 
-    public void setParamList(List<InterfaceInvokeParam> paramList) {
-        this.paramList = paramList;
-    }
-
-    public static class InterfaceInvokeParam{
-        private Long paramId;
-        private String paramValue;
-
-        public Long getParamId() {
-            return paramId;
-        }
-
-        public void setParamId(Long paramId) {
-            this.paramId = paramId;
-        }
-
-        public String getParamValue() {
-            return paramValue;
-        }
-
-        public void setParamValue(String paramValue) {
-            this.paramValue = paramValue;
-        }
+    public void setParam(String param) {
+        this.param = param;
     }
 }

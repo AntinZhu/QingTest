@@ -31,6 +31,6 @@ public class MyResponseBuildInteceptor extends ResponseBuildInteceptor {
         } catch (Exception e) {
             logger.warn("MyResponseBuildInteceptor set response builder error:"+e.getMessage()+ ",uri:" + request.getRequestURI());
         }
-        return true;
+        return super.preHandle(request, response, handler);
     }
 }

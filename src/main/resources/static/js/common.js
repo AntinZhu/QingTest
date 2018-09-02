@@ -100,10 +100,24 @@ function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle){
         contentType: 'application/json',
         success : function(resu) {
             if(resu.response.error_code != 0){
-                gritterError(failTitle, resu.response);
+                switch (resu.response.error_code){
+                    case 422:
+                        handlerErrorStatusCode(resu.response.error_code, resu);
+                        break;
+                    default :
+                        gritterError(failTitle, resu.response);
+                        break;
+                }
                 result = false;
             }else{
                 result = handlerFunc(resu);
+            }
+        },
+        error :function (jqXHR, textStatus, errorThrown) {
+            switch (jqXHR.status){
+                case 422:
+                    handlerErrorStatusCode(422, jqXHR.responseText);
+                    break;
             }
         },
         statusCode: {
@@ -112,9 +126,6 @@ function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle){
             },
             500: function() {
                 handlerErrorStatusCode(500);
-            },
-            422: function () {
-                handlerErrorStatusCode(422);
             }
         }
     });
@@ -122,7 +133,7 @@ function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle){
     return result;
 }
 
-function handlerErrorStatusCode(errorStatus){
+function handlerErrorStatusCode(errorStatus, resu){
     switch (errorStatus){
         case 500:
             $.gritter.add({
@@ -139,9 +150,10 @@ function handlerErrorStatusCode(errorStatus){
             });
             break;
         case 422:
+            var response = JSON.parse(resu);
             $.gritter.add({
                 title : '咋了:',
-                text : '请求参数出错了或服务器调用返回422了',
+                text : '请求参数出错了,服务器返回：' +  response.response.error_message,
                 class_name : 'gritter-error gritter-center'
             });
             break;

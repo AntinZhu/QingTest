@@ -1,6 +1,8 @@
 package com.qingqing.test.config.feign;
 
+import com.qingqing.test.config.feign.exception.MyErrorDecoder;
 import com.qingqing.test.feign.PtRequestInterceptor;
+import feign.Feign;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 
@@ -14,10 +16,10 @@ public class MyPtFeignConfiguration {
         return new PtRequestInterceptor();
     }
 
-//    @Bean
-//    public Feign.Builder feignBuilder(QingqingClient qingqingClient){
-//        return Feign.builder().client(qingqingClient);
-//    }
+    @Bean
+    public Feign.Builder feignBuilder(MyErrorDecoder errorDecoder){
+        return Feign.builder().errorDecoder(errorDecoder);
+    }
 //
 //    @Bean
 //    public QingqingClient qingqingClient(HttpClientManagerV2 httpClientManagerV2){

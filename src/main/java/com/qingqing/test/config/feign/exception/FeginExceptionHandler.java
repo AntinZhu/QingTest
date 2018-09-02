@@ -1,15 +1,23 @@
 package com.qingqing.test.config.feign.exception;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.exception.QingQingRuntimeException;
+import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.web.protobuf.ProtoExceptionHandler;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.InterfaceBaseResponse;
+import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.config.MyResponseBuildInteceptor;
 import feign.FeignException;
+import org.apache.commons.httpclient.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,9 +45,17 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             FeignException fex = (FeignException)ex;
             response.setStatus(fex.status());
             if( pf != null ) {
-                String reason = fex.getMessage();
-                builder.setField(pf, ProtoRespGenerator.getUnprocessableErrResp(reason));
-                return builder.build();
+               SimpleResponse result = JsonUtil.getObjectFromJson(fex.getMessage().substring(fex.getMessage().indexOf("content:\n") + 8), SimpleResponse.class);
+                response.setStatus(fex.status());
+                switch (fex.status()){
+                    case 422:
+                        if( pf != null ) {
+                            builder.setField(pf, ProtoRespGenerator.generateResponse(result.getResponse().getError_code(), result.getResponse().getError_message(), result.getResponse().getHint_message()));
+                        }
+
+                        return builder.build();
+
+                }
             }
         }else if(pf == null){
             Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);

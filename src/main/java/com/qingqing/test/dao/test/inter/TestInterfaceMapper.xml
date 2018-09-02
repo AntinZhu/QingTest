@@ -13,11 +13,12 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="param_detail" property="paramDetail" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
     id, interface_name, interface_url, interface_type, request_type, request_user_type, 
-    sort_desc_num, catelog_id, is_deleted, create_time, last_update_time
+    sort_desc_num, catelog_id, is_deleted, create_time, last_update_time, param_detail
   </sql>
 
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -30,11 +31,11 @@
     insert into t_interface (interface_name, interface_url,
       interface_type, request_type, request_user_type, 
       sort_desc_num, catelog_id, is_deleted, 
-      create_time)
+      create_time, param_detail)
     values (#{interfaceName,jdbcType=VARCHAR}, #{interfaceUrl,jdbcType=VARCHAR},
       #{interfaceType,javaType=InterfaceType}, #{requestType,javaType=RequestType}, #{requestUserType,javaType=UserType},
       #{sortDescNum,jdbcType=INTEGER}, #{catelogId,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT}, 
-      now())
+      now(), #{paramDetail, jdbcType=VARCHAR}
   </insert>
 
   <select id="selectByCatelogId" resultMap="BaseResultMap" parameterType="java.lang.Long" >

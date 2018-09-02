@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class TestInterfaceBean {
     private TestInterface inter;
-    private List<TestInterfaceParam> params;
 
     public TestInterface getInter() {
         return inter;
@@ -18,13 +17,5 @@ public class TestInterfaceBean {
 
     public void setInter(TestInterface inter) {
         this.inter = inter;
-    }
-
-    public List<TestInterfaceParam> getParams() {
-        return params;
-    }
-
-    public void setParams(List<TestInterfaceParam> params) {
-        this.params = params;
     }
 }

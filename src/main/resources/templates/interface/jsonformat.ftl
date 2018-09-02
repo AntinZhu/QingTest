@@ -78,26 +78,13 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                <input type="number" name="requestUserId" id="requestUserId" value="22367" class="col-xs-12 col-sm-3" />
+                                                <input type="hidden" name="requestUserId" id="requestUserId" value="22367" class="col-xs-12 col-sm-3" />
+                                                <span class="editable editable-click editable-unsaved" id="requestUserIdDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">22367</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="hr hr-dotted"></div>
-
-                                    <div id="paramEleDiv">
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param">请求body:</label>
-
-                                        <div class="col-xs-12 col-sm-9">
-                                            <div class="clearfix">
-                                                <textarea id="param" class="autosize-transition form-control"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求参数:</label>
@@ -204,8 +191,8 @@
                             <div class="profile-info-name"> {name} </div>
 
                             <div class="profile-info-value">
-
-                                <span class="editable" id="{key}_label">{default}</span>
+                                <input type="hidden" id="{key}" name="{key}" value="{defaultValue}"/>
+                                <span class="editable" id="{key}_label">{defaultName}</span>
                             </div>
                         </div>
                     </div>
@@ -301,9 +288,8 @@
             });
 
             function handlerInterface(resu){
-//                interfaceData = resu.interfaceInfo;
-//                $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 jsonShow(resu);
+                $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT"){
                     $("#requestUserIdDev").removeClass("hide");
@@ -318,8 +304,8 @@
                     }
                 }
 
-                $("#param").text(resu.interfaceInfo.params[0].selectableValues);
-                var params = JSON.parse(resu.interfaceInfo.params[0].selectableValues);
+                $("#param").text(resu.interfaceInfo.inter.paramDetail);
+                var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
 
                 var paramHtmls = genHtml("", params);
                 $("#paramListDiv").html(paramHtmls);
@@ -351,13 +337,16 @@
                                 value : options[0].text,
                                 source: options,
                                 success: function(response, newValue) {
-                                    alert(newValue);
+                                    $(this).prev("input").val(newValue);
                                 }
                             });
                         }else{
                             $('#' + paramKey + "_label").editable({
                                 type: 'text',
-                                name: 'username'
+                                name: paramKey,
+                                success: function(response, newValue) {
+                                    $(this).prev("input").val(newValue);
+                                }
                             });
                         }
                     }
@@ -396,39 +385,58 @@
                 var html = $("#input_editable").html();
                 var paramHtml = html.replace(new RegExp("{name}","gm"), param.name);
                 paramHtml = paramHtml.replace(new RegExp("{key}","gm"), paramKey + param.key);
-                paramHtml = paramHtml.replace(new RegExp("{default}","gm"), param.default);
+                var defaultName = "";
+                var defaultValue = "";
+                if(param.defaultValue != null){
+                    if(param.defaultValue.name != null){
+                        defaultName = param.defaultValue.name;
+                        defaultValue =  param.defaultValue.value;
+                    }else{
+                        defaultName = param.defaultValue;
+                        defaultValue = param.defaultValue;
+                    }
+                }
+                paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
+                paramHtml = paramHtml.replace(new RegExp("{defaultValue}","gm"), defaultValue);
 
                 return paramHtml;
             }
 
             jQuery(function($) {
                 $('#teacherIdBtn').click(function () {
-                    var paramList = new Array();
-                    var idx = 0;
-                    for(var paramIdx in interfaceData.params) {
-                        var param = interfaceData.params[paramIdx];
-                        var paramValue = $("#" + param.paramName).val();
-                        if(paramValue == null && param.must){
-                            return false;
+                    var param = new Object();
+                    $("#paramListDiv input").each(function(key,value){
+//                        alert(key + "->" + value.id + "->" + value.value);
+                        var paramNameArr = value.id.split("-");
+                        if(paramNameArr.length == 1){
+                            param[value.id] = value.value;
+                        }else{
+                            var paramObj = param;
+                            var paramName = paramNameArr[0];
+                            for(paranNameIdx in paramNameArr){
+                                paramName = paramNameArr[paranNameIdx];
+                                if(paranNameIdx == paramNameArr.length - 1){
+                                    break;
+                                }
+                                if(paramObj[paramName] == null){
+                                    paramObj[paramName] = new Object();
+                                }
+                                paramObj = paramObj[paramName];
+                            }
+                            paramObj[paramName] = value.value;
                         }
-
-                        if(paramValue != null){
-                            var paramItem = new Object();
-                            paramItem.paramId = param.id;
-                            paramItem.paramValue = paramValue;
-                            paramList[idx++] = paramItem;
-                        }
-                    }
+                    });
+//                    alert(JSON.stringify(param));
                     var data = {
                         interfaceId : $("#interfaceId").val(),
                         requestUserId : $("#requestUserId").val(),
-                        paramList : paramList
+                        param : JSON.stringify(param)
                     };
                     commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:");
                 });
 
                 function handlerTeacherInfo(resu){
-                    jsonShow(resu);
+                    jsonShow(resu.data);
                 };
 
                 //editables on first profile page
@@ -436,6 +444,11 @@
                 $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
                 $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>'+
                         '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
+
+                $("#requestUserIdDiv").editable({
+                    type: 'text',
+                    name: 'username'
+                });
 
                 //editables
                 $('#username').editable({

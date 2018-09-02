@@ -3,6 +3,8 @@ package com.qingqing.test.bean.base;
 public class SimpleResponse {
     private BaseResponse response;
 
+    public SimpleResponse(){}
+
     public SimpleResponse(BaseResponse response) {
         this.response = response;
     }
