@@ -51,9 +51,4 @@ public class MyErrorDecoder implements ErrorDecoder {
 
         return FeignException.errorStatus(methodKey, response);
     }
-
-    public static void main(String[] args){
-        String s = "{\"response\": {\"error_code\": 422,\"error_message\": \"unknown user id\",\"hint_message\": \"\"}}";
-        SimpleResponse simpleResponse = JsonUtil.getObjectFromJson(s, SimpleResponse.class);
-    }
 }

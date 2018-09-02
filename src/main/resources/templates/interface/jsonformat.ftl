@@ -218,15 +218,12 @@
                 compress_flag = false;
                 renderLine();
             }
-            $('#json-src').keyup(function(){
-                init();
-                var content = $.trim($(this).val());
-                jsonShow(content);
-            });
 
             function jsonShow(content){
                 var result = '';
-                content = JSON.stringify(content);
+                if(Object.prototype.toString.call(content) != "[object String]"){
+                    content = JSON.stringify(content);
+                }
                 if (content!='') {
                     try{
                         current_json = jsonlint.parse(content);
@@ -253,7 +250,6 @@
                 $('#line-num').html(line_num_html);
             }
             $('.clear').click(function(){
-                $('#json-src').val('');
                 $('#json-target').html('');
             });
             (function($){
@@ -278,7 +274,6 @@
                     }
                 };
             })(jQuery);
-            $('#json-src').keyup();
 
             $(document).ready(function(){
                 var data = {
