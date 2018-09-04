@@ -30,6 +30,10 @@
         .json_boolean{ color: #f98280;font-weight:bold;}
         .json_link{ color: #61D2D6;font-weight:bold;}
         .json_array_brackets{}
+
+        .next-line{
+            display:block;
+        }
     </style>
 
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
@@ -86,7 +90,7 @@
 
                                     <div class="hr hr-dotted"></div>
 
-                                    <div class="form-group">
+                                    <div class="form-group hiden" id="paramDiv">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求参数:</label>
 
                                         <div class="col-xs-12 col-sm-9" id = "paramListDiv">
@@ -156,20 +160,6 @@
                 <br style="clear:both;">
 
                 <div class="hide">
-                    <div id="inputDiv">
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="{paramName}">{remark}:</label>
-
-                            <div class="col-xs-12 col-sm-9">
-                                <div class="clearfix">
-                                    <input type="number" name="{paramName}" id="{paramName}" value="{defaultValue}" class="col-xs-12 col-sm-3" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="space-2"></div>
-                    </div>
-
                     <div id="table_editable">
                         <div class="profile-user-info profile-user-info-striped" id = "{id}">
                             {paramList}
@@ -177,22 +167,42 @@
                     </div>
 
                     <div id = "sub_editable">
-                        <div class="profile-info-row">
+                        <div class="profile-info-row" alt="{alt}">
                             <div class="profile-info-name"> {name} </div>
 
                             <div class="profile-info-value">
+                                <div class="spinner-buttons input-group-btn hide delInputDiv {key}" style="display: inline-block;">
+                                    <button class="btn spinner-down btn-xs btn-danger delInputBtn" type="button">
+                                        <i class="icon-minus smaller-75"></i>
+                                    </button>
+                                </div>
+                                <div class="spinner-buttons input-group-btn hide addInputDiv {key}" style="display: inline-block;margin-left: 25px">
+                                    <button class="btn spinner-up btn-xs btn-success addInputBtn" type="button">
+                                        <i class="icon-plus smaller-75"></i>
+                                    </button>
+                                </div>
                                 {paramList}
                             </div>
                         </div>
                     </div>
 
                     <div id = "input_editable">
-                        <div class="profile-info-row">
+                        <div class="profile-info-row" alt="{alt}">
                             <div class="profile-info-name"> {name} </div>
 
                             <div class="profile-info-value">
-                                <input type="hidden" id="{key}" name="{key}" value="{defaultValue}"/>
-                                <span class="editable" id="{key}_label">{defaultName}</span>
+                                <div class="spinner-buttons input-group-btn hide delInputDiv {key}" style="display: inline-block;margin-right: 25px;">
+                                    <button class="btn spinner-down btn-xs btn-danger delInputBtn" type="button">
+                                        <i class="icon-minus smaller-75"></i>
+                                    </button>
+                                </div>
+                                <div class="spinner-buttons input-group-btn hide addInputDiv {key}" style="display: inline-block;">
+                                    <button class="btn spinner-up btn-xs btn-success addInputBtn"  type="button">
+                                        <i class="icon-plus smaller-75"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="{key}" alt="{alt}" value="{defaultValue}"/>
+                                <span class="editable input_label {key}_label">{defaultName}</span>
                             </div>
                         </div>
                     </div>
@@ -201,8 +211,6 @@
         </div>
 
         <script type="text/javascript">
-            var interfaceData;
-
             $('textarea').numberedtextarea();
             var current_json = '';
             var current_json_str = '';
@@ -277,11 +285,12 @@
 
             $(document).ready(function(){
                 var data = {
-                    data : 9
+                    data : 10
                 };
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
             });
 
+            var interfaceParam;
             function handlerInterface(resu){
                 jsonShow(resu);
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
@@ -302,12 +311,73 @@
                 $("#param").text(resu.interfaceInfo.inter.paramDetail);
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
 
-                var paramHtmls = genHtml("", params);
-                $("#paramListDiv").html(paramHtmls);
+                if(params != ""){
+                    interfaceParam = params;
+                    var paramHtmls = genHtml("", params, "0");
+                    $("#paramListDiv").html(paramHtmls);
 
-                initHtml("", params);
+                    initHtml("", params);
+                    $("#paramDiv").removeClass("hide");
+                    $(".addInputBtn").click(cloneInput);
+                    $(".delInputBtn").click(removeInput);
+                }
             }
 
+            function cloneInput(){
+                var inputClone = $(this).parent().parent().clone();
+                inputClone.children("div .addInputDiv").remove();
+                var newAltParent = $(this).parent().parent().parent().attr("alt");
+                var newAltParent = incAlt(newAltParent);
+                var firstAltParent = firstAlt(newAltParent);
+
+                $(this).parent().parent().parent().attr("alt", newAltParent);
+                inputClone.find("input").each(function(index,element){
+                    var nowAlt = $(element).attr("alt");
+                    var newAlt= nowAlt.replace(firstAltParent, newAltParent);
+                    $(element).attr("alt", newAlt);
+                });
+                $(this).parent().parent().parent().append(inputClone);
+
+                editableInit();
+                $(".delInputBtn").unbind("click").click(removeInput);
+                $(".addInputBtn").unbind("click").click(cloneInput);
+            }
+
+            function incAlt(alt){
+                var newAlt = "";
+
+                var splitArr = alt.split("-");
+                for(var idx in splitArr){
+                    var altItem = splitArr[idx];
+                    if(idx == splitArr.length - 1){
+                        altItem = new Number(altItem) + 1;
+                    }
+                    newAlt += newAlt ==""? altItem : "-" + altItem;
+                }
+
+                return newAlt;
+            }
+
+            function firstAlt(alt){
+                var newAlt = "";
+
+                var splitArr = alt.split("-");
+                for(var idx in splitArr){
+                    var altItem = splitArr[idx];
+                    if(idx == splitArr.length - 1){
+                        altItem = 0;
+                    }
+                    newAlt += newAlt ==""? altItem : "-" + altItem;
+                }
+
+                return newAlt;
+            }
+
+            function removeInput(){
+                $(this).parent().parent().remove();
+            }
+
+            var paramInfo = new Object();
             function initHtml(parentKey, params){
                 if(parentKey != ''){
                     parentKey += "-";
@@ -315,11 +385,30 @@
 
                 for(var paramIdx in params) {
                     var param = params[paramIdx];
+                    var isMulti = Array.isArray(param);
+                    if(isMulti){
+                        param = param[0];
+                    }
+
                     var paramKey = parentKey + param.key;
+                    paramInfo[paramKey] = new Object();
+                    paramInfo[paramKey]["isMulti"] = isMulti;
 
                     if(param.detail != null){
                         initHtml(paramKey, param.detail);
                     }else{
+                        var defaultName = "";
+                        var defaultValue = "";
+                        if(param.defaultValue != null){
+                            if(param.defaultValue.name != null){
+                                defaultName = param.defaultValue.name;
+                                defaultValue =  param.defaultValue.value;
+                            }else{
+                                defaultName = param.defaultValue;
+                                defaultValue = param.defaultValue;
+                            }
+                        }
+
                         if(param.selectable != null){
                             var options = [];
                             for(var secIdx in param.selectable){
@@ -327,28 +416,49 @@
                                 options.push({id: sec.value, text: sec.name});
                             }
 
-                            $('#' + paramKey + "_label").editable({
-                                type: 'select2',
-                                value : options[0].text,
-                                source: options,
-                                success: function(response, newValue) {
-                                    $(this).prev("input").val(newValue);
-                                }
-                            });
+                            paramInfo[paramKey]["options"] = options;
+                            paramInfo[paramKey]["selectable"] = true;
                         }else{
-                            $('#' + paramKey + "_label").editable({
-                                type: 'text',
-                                name: paramKey,
-                                success: function(response, newValue) {
-                                    $(this).prev("input").val(newValue);
-                                }
-                            });
+                            paramInfo[paramKey]["selectable"] = false;
                         }
+
+                        paramInfo[paramKey]["type"] = Object.prototype.toString.call(defaultValue);
+                    }
+                }
+
+                editableInit();
+            }
+
+            function editableInit(){
+                for(var prop in paramInfo){
+                    if(paramInfo[prop]["selectable"]){
+                        var options = paramInfo[prop]["options"];
+                        $('.' + prop + "_label").editable({
+                            type: 'select2',
+                            value : options[0].text,
+                            source: options,
+                            success: function(response, newValue) {
+                                $(this).prev("input").val(newValue);
+                            }
+                        });
+                    }else{
+                        $('.' + prop + '_label').editable({
+                            type: 'text',
+                            success: function(response, newValue) {
+                                $(this).prev("input").val(newValue);
+                            }
+                        });
+                    }
+
+                    if(paramInfo[prop]["isMulti"]){
+                        $("div ." + prop).removeClass("hide");
+                        $("div ." + prop).removeClass("hide");
+                        $("." + prop + "_label").css("display", "block");
                     }
                 }
             }
 
-            function genHtml(parentKey, params){
+            function genHtml(parentKey, params, paramAlt){
                 if(parentKey != ''){
                     parentKey += "-";
                 }
@@ -357,14 +467,20 @@
                 for(var paramIdx in params){
                     var param = params[paramIdx];
                     var paramHtml = "";
+                    var isArray = Array.isArray(param);
+                    if(isArray){
+                        param = param[0];
+                    }
                     if(param.detail != null){
-                        var subTableHtml = genHtml(parentKey + param.key, param.detail);
+                        var subTableHtml = genHtml(parentKey + param.key, param.detail, paramAlt + "-0");
 
                         var subHtml = $("#sub_editable").html();
-                        paramHtml = subHtml.replace(new RegExp("{name}","gm"), param.name);
+                        paramHtml = subHtml.replace(new RegExp("{key}","gm"), parentKey + param.key);
+                        paramHtml = paramHtml.replace(new RegExp("{name}","gm"), param.name);
                         paramHtml = paramHtml.replace(new RegExp("{paramList}","gm"), subTableHtml);
+                        paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
                     }else{
-                        paramHtml = initInput(parentKey, param);
+                        paramHtml = initInput(parentKey, param, paramAlt);
                     }
                     paramHtmls += paramHtml;
                 }
@@ -376,10 +492,11 @@
                 return tableHtml;
             }
 
-            function initInput(paramKey, param){
+            function initInput(paramKey, param, paramAlt){
                 var html = $("#input_editable").html();
                 var paramHtml = html.replace(new RegExp("{name}","gm"), param.name);
                 paramHtml = paramHtml.replace(new RegExp("{key}","gm"), paramKey + param.key);
+                paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
                 var defaultName = "";
                 var defaultValue = "";
                 if(param.defaultValue != null){
@@ -391,6 +508,7 @@
                         defaultValue = param.defaultValue;
                     }
                 }
+
                 paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
                 paramHtml = paramHtml.replace(new RegExp("{defaultValue}","gm"), defaultValue);
 
@@ -400,35 +518,88 @@
             jQuery(function($) {
                 $('#teacherIdBtn').click(function () {
                     var param = new Object();
+                    fromIdxInfo = new Object();
+                    destIdxInfo = new Object();
+
                     $("#paramListDiv input").each(function(key,value){
-//                        alert(key + "->" + value.id + "->" + value.value);
-                        var paramNameArr = value.id.split("-");
-                        if(paramNameArr.length == 1){
-                            param[value.id] = value.value;
-                        }else{
-                            var paramObj = param;
-                            var paramName = paramNameArr[0];
-                            for(paranNameIdx in paramNameArr){
-                                paramName = paramNameArr[paranNameIdx];
-                                if(paranNameIdx == paramNameArr.length - 1){
-                                    break;
-                                }
-                                if(paramObj[paramName] == null){
-                                    paramObj[paramName] = new Object();
-                                }
-                                paramObj = paramObj[paramName];
-                            }
-                            paramObj[paramName] = value.value;
-                        }
+//                        alert(key + "->" + value.name + "->" + value.value);
+                        var paramNameArr = value.name.split("-");
+                        var altArr = value.alt.split("-");
+
+                        formatParam(param, "", paramNameArr, altArr, 0, value);
                     });
 //                    alert(JSON.stringify(param));
+                    jsonShow(param);
                     var data = {
                         interfaceId : $("#interfaceId").val(),
                         requestUserId : $("#requestUserId").val(),
                         param : JSON.stringify(param)
                     };
                     commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:");
+                    fromIdxInfo = null;
+                    destIdxInfo = null;
                 });
+
+                var fromIdxInfo;
+                var destIdxInfo;
+                function formatParam(paramObj, paramName, paramNameArr, altArr, arrIdx, value){
+                    var propName = paramNameArr[arrIdx];
+                    paramName = paramName == ""? propName:paramName + "-" + propName;
+                    if(paramInfo[paramName]["isMulti"]){ // 数组形式
+                        if(paramObj[propName] == null){
+                            paramObj[propName] = new Array();
+                        }
+
+                        var idx = altArr[arrIdx];
+                        if(arrIdx == paramNameArr.length -1){
+                            paramObj[propName].push(formatValue(value.name, value.value));
+                            return;
+                        }else{
+                            var obj;
+                            if(fromIdxInfo[paramName] != null && fromIdxInfo[paramName] == idx){
+                                idx = destIdxInfo[paramName];
+                            }else{
+                                if(idx > 0){
+                                    if(paramObj[propName][idx-1] == null){
+                                        fromIdxInfo[paramName] = idx;
+                                        while(paramObj[propName][idx-1] == null){
+                                            idx --;
+                                        }
+                                        destIdxInfo[paramName] = idx;
+                                    }
+                                }
+                            }
+
+                            if(paramObj[propName][idx] == null){
+                                obj = new Object();
+                                paramObj[propName][idx] = obj;
+                            }else{
+                                obj = paramObj[propName][idx];
+                            }
+
+                            formatParam(obj, paramName, paramNameArr, altArr, arrIdx + 1, value);
+                        }
+                    }else{
+                        if(arrIdx == paramNameArr.length -1){
+                            paramObj[propName] = formatValue(value.name, value.value);
+                            return;
+                        }else{
+                            if(paramObj[propName] == null){
+                                paramObj[propName] = new Object();
+                            }
+
+                            formatParam(paramObj[propName], paramName, paramNameArr, altArr, arrIdx + 1, value);
+                        }
+                    }
+                }
+
+                function formatValue(paramKey, value){
+                    if(paramInfo[paramKey]["type"] == "[object Number]"){
+                        return new Number(value);
+                    }
+
+                    return  value;
+                }
 
                 function handlerTeacherInfo(resu){
                     jsonShow(resu.data);
