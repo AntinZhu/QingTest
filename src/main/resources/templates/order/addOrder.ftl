@@ -812,6 +812,7 @@
 
                 if(checkPayTimer != null){
                     clearTimeout(checkPayTimer);
+                    checkPayTimer = null;
                 }
             }
             return true;
@@ -907,7 +908,7 @@
             $("#orderTypeValue").text($("#coursePriceType").find("option:selected").text());
 
             prePay(true);
-
+            updatePayWayList();
             return true;
         }
 
