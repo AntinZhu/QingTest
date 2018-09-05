@@ -1,15 +1,16 @@
 package com.qingqing.test.feign;
 
 import com.google.common.collect.Maps;
-import com.qingqing.common.auth.domain.User;
+import com.qingqing.api.passort.proto.PassportLoginProto.PassportLoginResponse;
+import com.qingqing.api.passort.proto.PassportLoginProto.PassportTkLoginRequestV2;
+import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.common.auth.domain.UserType;
+import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.QingQingRuntimeException;
 import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.web.util.RequestExtract;
-import com.qingqing.test.domain.UserSession;
-import com.qingqing.test.service.SessionRedisService;
-import com.qingqing.test.service.UserSessionService;
-import com.qingqing.test.util.ServerAuthUtil;
+import com.qingqing.test.client.PassportPiClient;
+import com.qingqing.test.controller.errorcode.BaseInterfaceErrorCode;
 import feign.RequestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,9 +30,7 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
     private Map<UserType, String> userTypeKeyMap;
 
     @Autowired
-    private UserSessionService userSessionService;
-    @Autowired
-    private SessionRedisService sessionRedisService;
+    private PassportPiClient passportPiClient;
 
     public PtRequestInterceptor(){
         userTypeKeyMap = Maps.newHashMap();
@@ -57,22 +56,20 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
     }
 
     private void initSessionHeader(RequestTemplate template, UserType userType, Long userId){
-        template.header(RequestExtract.SESSION, getSession(userType, userId));
-        template.header(RequestExtract.KEY_AUTH_TOKEN, ServerAuthUtil.generatorEncryptedToken(new User(userType, userId), 3600L, ""));
-    }
-
-    private String getSession(UserType userType, Long userId){
-        Integer sessionType = 1;
-        User user = new User(userType, userId);
-
-        UserSession session = userSessionService.findUserSession(userId, userType, sessionType);
-        if (session == null) {
-            Long sessionNew = userSessionService.upsertSession(user, sessionType, "", "");
-            sessionRedisService.addSession(user, sessionType, String.valueOf(sessionNew));
-
-            return String.valueOf(sessionNew);
+        String token;
+        String session;
+        try{
+            PassportTkLoginRequestV2 request = PassportTkLoginRequestV2.newBuilder()
+                    .setUserType(UserProto.UserType.valueOf(userType.getValue()))
+                    .setUserId(userId).build();
+            PassportLoginResponse response = passportPiClient.getTokenAndSession(request);
+            token = response.getToken();
+            session = response.getSessionId();
+        }catch (Exception e){
+            throw new ErrorCodeException(BaseInterfaceErrorCode.get_token_session_fail, "");
         }
-
-        return String.valueOf(session.getSessionId());
+        template.header(RequestExtract.SESSION, session);
+        template.header(RequestExtract.KEY_AUTH_TOKEN, token);
     }
+
 }
