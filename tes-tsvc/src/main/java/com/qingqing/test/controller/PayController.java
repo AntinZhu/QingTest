@@ -15,7 +15,7 @@ import com.qingqing.test.bean.order.QingQingCommonOrderBean;
 import com.qingqing.test.bean.pay.request.CheckPayRequest;
 import com.qingqing.test.bean.pay.request.PayRequestBean;
 import com.qingqing.test.bean.pay.request.PrePayRequestBean;
-import com.qingqing.test.client.ApiPtClient;
+import com.qingqing.test.client.PtClient;
 import com.qingqing.test.manager.OrderManager;
 import com.qingqing.test.manager.PayManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class PayController {
     @Autowired
     private OrderManager orderManager;
     @Autowired
-    private ApiPtClient apiPtClient;
+    private PtClient ptClient;
     @Autowired
     private PayManager payManager;
 
@@ -61,7 +61,7 @@ public class PayController {
     @ProtoResponseBody
     public PayCheckResponse payInfos(@RequestBody CheckPayRequest bean){
         CoursePriceType coursePriceType = CoursePriceType.valueOf(bean.getCoursePriceType());
-        return apiPtClient.checkPay(PayCheckRequest.newBuilder().setQingqingCommonOrderId(bean.getQingqingOrderId())
+        return ptClient.checkPay(PayCheckRequest.newBuilder().setQingqingCommonOrderId(bean.getQingqingOrderId())
                 .setOrderType(coursePriceType.getOrderType()).build(), bean.getStudentId());
     }
 

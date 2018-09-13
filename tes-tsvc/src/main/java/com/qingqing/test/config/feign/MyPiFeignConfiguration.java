@@ -1,6 +1,9 @@
 package com.qingqing.test.config.feign;
 
+import com.qingqing.test.config.feign.exception.MyErrorDecoder;
 import com.qingqing.test.feign.PiRequestInterceptor;
+import com.qingqing.test.feign.client.EnvClient;
+import feign.Feign;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -13,21 +16,8 @@ public class MyPiFeignConfiguration {
         return new PiRequestInterceptor();
     }
 
-//    @Bean
-//    public Feign.Builder feignBuilder(MyJsonDecoder jsonDecoder){
-//        return Feign.builder()..decoder(jsonDecoder);
-//    }
-
-//    @Bean
-//    public MyJsonDecoder decoder(){
-//        return new MyJsonDecoder();
-//    }
-//
-//    @Bean
-//    public QingqingClient qingqingClient(HttpClientManagerV2 httpClientManagerV2){
-//        QingqingClient qingqingClient = new QingqingClient();
-//        qingqingClient.setHttpClientManagerV2(httpClientManagerV2);
-//
-//        return qingqingClient;
-//    }
+    @Bean
+    public Feign.Builder feignBuilder(MyErrorDecoder errorDecoder, EnvClient client){
+        return Feign.builder().errorDecoder(errorDecoder).client(client);
+    }
 }

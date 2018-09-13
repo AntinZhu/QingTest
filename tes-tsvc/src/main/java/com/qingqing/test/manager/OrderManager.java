@@ -40,7 +40,7 @@ import com.qingqing.test.bean.pay.ThirdPayBriefBean;
 import com.qingqing.test.bean.pay.request.PayRequestBean;
 import com.qingqing.test.bean.pay.request.PrePayRequestBean;
 import com.qingqing.test.client.ApiPiClient;
-import com.qingqing.test.client.ApiPtClient;
+import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.converter.BaseConverter;
 import com.qingqing.test.controller.converter.OrderConverter;
 import com.qingqing.test.controller.converter.PayConverter;
@@ -69,7 +69,7 @@ public class OrderManager {
     @Autowired
     private ApiPiClient apiPiClient;
     @Autowired
-    private ApiPtClient apiPtClient;
+    private PtClient ptClient;
     @Autowired
     private ThirdPayBriefService thirdPayBriefService;
     @Autowired
@@ -87,7 +87,7 @@ public class OrderManager {
     public TeacherInfoForOrderBean detailForOrder(Long studentId, Long teacherId){
         TeacherProto.SimpleQingQingTeacherIdRequest request = TeacherProto.SimpleQingQingTeacherIdRequest.newBuilder()
                 .setQingqingTeacherId(UserIdEncoder.encodeUser(UserType.teacher, teacherId)).build();
-        TeacherProto.TeacherDetailForStudentToOrderResponse resp = apiPtClient.detailForOrder(request, studentId);
+        TeacherProto.TeacherDetailForStudentToOrderResponse resp = ptClient.detailForOrder(request, studentId);
 
         return OrderConverter.converterToInfoBean(resp);
     }
@@ -118,7 +118,7 @@ public class OrderManager {
 
         builder.addAllOrderModeUnits(getNormalOrderModeUnits(addOrderBean));
 
-        StudentAddGroupOrderResponse response = apiPtClient.studentAddOrderV2(builder.build(), addOrderBean.getStudentId());
+        StudentAddGroupOrderResponse response = ptClient.studentAddOrderV2(builder.build(), addOrderBean.getStudentId());
 
         return OrderConverter.convertAddOrderResult(response);
     }
@@ -130,7 +130,7 @@ public class OrderManager {
                 .setQingqingOrderId(requestBean.getQingqingOrderId())
                 .setOrderType(coursePriceType.getOrderType())
                 .build();
-        GeneralOrderPaymentSummaryV2Response response = apiPtClient.prePayForGeneralOrder(request, requestBean.getStudentId());
+        GeneralOrderPaymentSummaryV2Response response = ptClient.prePayForGeneralOrder(request, requestBean.getStudentId());
 
         return PayConverter.convertToPrePayBean(response);
     }
@@ -201,7 +201,7 @@ public class OrderManager {
             request.setLovehaimiPayUserInfo(Pay.LoveHaiMiPayUserInfo.newBuilder().setPhoneNumber("15121121025").setUserName("张三"));
         }
 
-        PayResult payResult = apiPtClient.payForOrder(request.build(), studentId);
+        PayResult payResult = ptClient.payForOrder(request.build(), studentId);
         BaseResponse baseResponse = BaseConverter.convertBaseResponse(payResult.getResponse());
         switch (baseResponse.getError_code()){
             case 1001:
@@ -273,7 +273,7 @@ public class OrderManager {
             }
 
             request.setQingqingStudentId(UserIdEncoder.encodeUser(UserType.student, studentId));
-            StudentAddGroupOrderResponse response = apiPtClient.joinGroup(request.build(), studentId);
+            StudentAddGroupOrderResponse response = ptClient.joinGroup(request.build(), studentId);
             boolean isMadeUp = false;
             switch (response.getResponse().getErrorCode()){
                 case 0:
@@ -311,7 +311,7 @@ public class OrderManager {
                     .setQingqingOrderId(qingqingOrderId)
                     .setOrderType(OrderType.valueOf(orderType))
                     .build();
-            GeneralOrderPaymentSummaryV2Response prePayResponse = apiPtClient.prePayForGeneralOrder(prePayRequest, studentId);
+            GeneralOrderPaymentSummaryV2Response prePayResponse = ptClient.prePayForGeneralOrder(prePayRequest, studentId);
 
             studentBalanceService.addUserBalance(studentId, prePayResponse.getAllNeedExtraPay());
 
@@ -322,7 +322,7 @@ public class OrderManager {
                     .setOrderType(OrderType.valueOf(orderType))
                     .setMoney(String.valueOf(prePayResponse.getAllNeedExtraPay()));
 
-            PayResult payResult = apiPtClient.payForOrder(request.build(), studentId);
+            PayResult payResult = ptClient.payForOrder(request.build(), studentId);
             return payResult.getResponse().getErrorCode() == 0;
         }catch(Exception e){
             logger.error("pay by balance error, studentId:{} orderId:{} orderType:", studentId, OrderIdEncoder.decodeQingqingOrderId(qingqingOrderId), orderType, e);

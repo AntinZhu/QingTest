@@ -1,4 +1,4 @@
-package com.qingqing.test.config;
+package com.qingqing.test.config.inteceptor;
 
 import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
 import com.qingqing.test.bean.base.InterfaceBaseResponse;

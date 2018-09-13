@@ -87,12 +87,12 @@ while(   nOffset   !=   -1   )
 return   bstr   +   strUtf8; 
 }
 
-function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle){
+function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env){
     var result = true;
 
     $.ajax({
         type : "POST",
-        url : url,
+        url : url + "?env=" + env,
         timeout : 60000,
         data : JSON.stringify(data),
         dataType : 'json',

@@ -5,7 +5,7 @@ import com.qingqing.api.proto.v1.UserAddress.QueryUserAddressResponse;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
-import com.qingqing.test.client.ApiPtClient;
+import com.qingqing.test.client.PtClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class StudentController {
 
     @Autowired
-    private ApiPtClient apiPtClient;
+    private PtClient ptClient;
 
     @RequestMapping("/addresses")
     @ProtoResponseBody
@@ -27,6 +27,6 @@ public class StudentController {
         SimpleQingQingStudentIdRequest request = SimpleQingQingStudentIdRequest.newBuilder()
                 .setQingqingStudentId(UserIdEncoder.encodeUser(UserType.student, studentId))
                 .build();
-        return apiPtClient.studentAddresses(request, studentId);
+        return ptClient.studentAddresses(request, studentId);
     }
 }

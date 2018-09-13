@@ -27,6 +27,9 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
     public static final String TEACHER_ID = "teacherId";
     public static final String TA_ID = "taId";
 
+    public static final String USER_ID = "userId";
+    public static final String USER_TYPE = "userType";
+
     private Map<UserType, String> userTypeKeyMap;
 
     @Autowired
@@ -41,6 +44,10 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
 
     @Override
     protected void doApply(RequestTemplate template) {
+        initSession(template);
+    }
+
+    private void initSession(RequestTemplate template){
         Map<String, Collection<String>> headers = template.headers();
 
         for(Entry<UserType, String> entry : userTypeKeyMap.entrySet()){
@@ -50,6 +57,15 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
                 initSessionHeader(template, entry.getKey(), needSessionUserId);
                 return;
             }
+        }
+
+        Collection<String> userTypeParams  = headers.get(USER_TYPE);
+        Collection<String> userIdParams  = headers.get(USER_ID);
+        if(!CollectionsUtil.isNullOrEmpty(userTypeParams) && !CollectionsUtil.isNullOrEmpty(userIdParams)){
+            String userId = userIdParams.iterator().next();
+            String userType = userTypeParams.iterator().next();
+            initSessionHeader(template, UserType.valueOf(userType), Long.valueOf(userId));
+            return;
         }
 
         throw new QingQingRuntimeException("pt interface need assign user id for session");

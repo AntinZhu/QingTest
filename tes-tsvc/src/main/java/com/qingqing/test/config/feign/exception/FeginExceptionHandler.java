@@ -1,13 +1,8 @@
 package com.qingqing.test.config.feign.exception;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.GeneratedMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.common.exception.ErrorCodeException;
-import com.qingqing.common.exception.QingQingRuntimeException;
-import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.web.protobuf.ProtoExceptionHandler;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
@@ -15,9 +10,8 @@ import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.InterfaceBaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
-import com.qingqing.test.config.MyResponseBuildInteceptor;
+import com.qingqing.test.config.inteceptor.MyResponseBuildInteceptor;
 import feign.FeignException;
-import org.apache.commons.httpclient.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

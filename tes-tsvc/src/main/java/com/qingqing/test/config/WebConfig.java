@@ -3,6 +3,7 @@ package com.qingqing.test.config;
 import com.qingqing.common.web.protobuf.ProtobufHttpMessageConverter;
 import com.qingqing.common.web.protobuf.ProtobufReturnValueHandler;
 import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
+import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -31,10 +32,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private StringHttpMessageConverter stringHttpMessageConverter;
     @Autowired
     private MarshallingHttpMessageConverter marshallingHttpMessageConverter;
+    @Autowired
+    private EnvHandlerInteceptor envHandlerInteceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(responseBuildInteceptor).addPathPatterns("/**");
+        registry.addInterceptor(envHandlerInteceptor).addPathPatterns("/**");
         super.addInterceptors(registry);
     }
 

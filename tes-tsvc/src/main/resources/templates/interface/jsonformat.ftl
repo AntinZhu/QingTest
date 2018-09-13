@@ -77,6 +77,19 @@
                                 <!-- PAGE CONTENT BEGINS -->
                                 <form class="form-horizontal" role="form">
                                     <input type="hidden" id="interfaceId" name="interfaceId" />
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">环境选择:</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                <input type="hidden" name="env" id="env" value="dev" class="col-xs-12 col-sm-3" />
+                                                <button type="button" value="dev" class="btn env btn-primary">开发环境</button>
+                                                <button type="button" value="hjl" class="btn env">接口测试环境</button>
+                                                <button type="button" value="tst" class="btn env">测试环境</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group hide" id="requestUserIdDev">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">请求人ID:</label>
 
@@ -563,6 +576,13 @@
             }
 
             jQuery(function($) {
+
+                $(".env").click(function(){
+                    $(".env.btn-primary").removeClass("btn-primary");
+                    $(this).addClass("btn-primary");
+                    $("#env").val($(this).val());
+                });
+
                 $('#teacherIdBtn').click(function () {
                     var param = new Object();
                     fromIdxInfo = new Object();
@@ -582,7 +602,7 @@
                         requestUserId : $("#requestUserId").val(),
                         param : JSON.stringify(param)
                     };
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:");
+                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:", $("#env").val());
                     fromIdxInfo = null;
                     destIdxInfo = null;
                 });

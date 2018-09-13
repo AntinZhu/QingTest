@@ -1,6 +1,5 @@
 package com.qingqing.test.controller;
 
-import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;

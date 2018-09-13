@@ -6,15 +6,13 @@ import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
-import com.qingqing.test.client.ApiPtClient;
+import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.domain.inter.ParamEncodeType;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.service.inter.TestInterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by zhujianxing on 2018/8/30.
@@ -25,7 +23,7 @@ public class TestInterfaceManager {
     @Autowired
     private TestInterfaceService testInterfaceService;
     @Autowired
-    private ApiPtClient apiPtClient;
+    private PtClient ptClient;
 
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
         TestInterface testInterface = testInterfaceService.findById(interfaceId);
@@ -42,7 +40,18 @@ public class TestInterfaceManager {
             throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown interface for id:" + interfaceId);
         }
 
-        return apiPtClient.studentCommonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId());
+        switch (testInterface.getInterfaceType()){
+            case PT:
+                switch (testInterface.getRequestUserType()){
+                    case student:
+                    case teacher:
+                        return ptClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId(), testInterface.getRequestUserType());
+                    default:
+                        throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_user_type, "unsupport request user type for value:" + testInterface.getRequestUserType());
+                }
+            default:
+                throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_interface_type, "unsupport interface type for value:" + testInterface.getInterfaceType());
+        }
     }
 
     private String encodeParamValue(ParamEncodeType encodeType, String paramValue){

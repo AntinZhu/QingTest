@@ -15,7 +15,7 @@ import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.common.request.SimpleLongStudentRequest;
 import com.qingqing.test.bean.ordercourse.request.StartClassRequest;
-import com.qingqing.test.client.ApiPtClient;
+import com.qingqing.test.client.PtClient;
 import com.qingqing.test.manager.OrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +33,7 @@ public class OrderCourseController {
     @Autowired
     private OrderManager orderManager;
     @Autowired
-    private ApiPtClient apiPtClient;
+    private PtClient ptClient;
 
     @RequestMapping("order_course_list")
     @ResponseBody
@@ -49,7 +49,7 @@ public class OrderCourseController {
                 .setQingqingGroupOrderCourseId(OrderIdEncoder.encodeOrderId(request.getGroupOrderCourseId()))
                 .setDeviceIdentification(getDeviceIdentification())
                 .build();
-       return  apiPtClient.startClass(protoRequest, request.getTeacherId());
+       return  ptClient.startClass(protoRequest, request.getTeacherId());
     }
 
     @RequestMapping("student/apply_freeze")
@@ -60,7 +60,7 @@ public class OrderCourseController {
                 .setReasonType(CancelOrFreezeCourseReasonType.inappropriate_cf_reason_type)
                 .setExtraReason("test")
                 .build();
-        return  apiPtClient.applyFreeze(protoRequest, request.getStudentId());
+        return  ptClient.applyFreeze(protoRequest, request.getStudentId());
     }
 
     @RequestMapping("student/finish_class")
@@ -70,7 +70,7 @@ public class OrderCourseController {
                 .setQingqingOrderCourseId(OrderIdEncoder.encodeOrderId(request.getData()))
                 .setDeviceIdentification(getDeviceIdentification())
                 .build();
-        return  apiPtClient.finishClass(protoRequest, request.getStudentId());
+        return  ptClient.finishClass(protoRequest, request.getStudentId());
     }
 
     @RequestMapping("student/apply_cancel")
@@ -81,7 +81,7 @@ public class OrderCourseController {
                 .setReasonNumber(1)
                 .setResponsibilityType(CourseChangeResponsibilityType.student_change_responsibility_type)
                 .build();
-        return  apiPtClient.applyCancel(protoRequest, request.getStudentId());
+        return  ptClient.applyCancel(protoRequest, request.getStudentId());
     }
 
 

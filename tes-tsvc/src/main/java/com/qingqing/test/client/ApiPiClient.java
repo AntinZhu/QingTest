@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created by zhujianxing on 2017/8/15.
  */
-@FeignClient(value = "apiPiClient", url = "${api.host}/api", configuration = MyPiFeignConfiguration.class)
+@FeignClient(value = "apiPiClient", url = "http://gateway.{env}.idc.cedu.cn/svc/api", configuration = MyPiFeignConfiguration.class)
 public interface ApiPiClient {
 
     /*

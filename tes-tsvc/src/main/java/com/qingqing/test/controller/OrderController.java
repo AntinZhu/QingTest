@@ -12,7 +12,7 @@ import com.qingqing.test.bean.order.StudentAddOrderBean;
 import com.qingqing.test.bean.order.TeacherInfoForOrderBean;
 import com.qingqing.test.bean.order.request.DetailForOrderRequest;
 import com.qingqing.test.bean.order.request.StudentSubOrderDetailRequest;
-import com.qingqing.test.client.ApiPtClient;
+import com.qingqing.test.client.PtClient;
 import com.qingqing.test.manager.OrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class OrderController {
     @Autowired
     private OrderManager orderManager;
     @Autowired
-    private ApiPtClient apiPtClient;
+    private PtClient ptClient;
 
     @RequestMapping("add")
     public String add(){
@@ -56,7 +56,7 @@ public class OrderController {
     @RequestMapping("student/sub_order_detail")
     @ProtoResponseBody
     public GroupSubOrderInfoDetailV2Response subOrderDetail(@RequestBody StudentSubOrderDetailRequest request){
-        return apiPtClient.subOrderDetail(SimpleQingqingGroupSubOrderIdRequest.newBuilder().setQingqingGroupSubOrderId(request.getQingqingOrderId()).build(), request.getStudentId());
+        return ptClient.subOrderDetail(SimpleQingqingGroupSubOrderIdRequest.newBuilder().setQingqingGroupSubOrderId(request.getQingqingOrderId()).build(), request.getStudentId());
     }
 
     @RequestMapping("student/add_order_page")
