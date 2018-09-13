@@ -60,6 +60,143 @@
                 <span class="menu-text"></span>
             </a>
             <main class="row-fluid" style="height:100%;min-height:550px;">
+                <div class="col-md-12" style="padding:0px;height:100%;">
+                    <div class="page-content">
+                        <div class="page-header">
+                            <h1>
+                                接口测试
+                                <small>
+                                    <i class="icon-double-angle-right"></i>
+                                    <label id = "interfaceNameDiv">Common form elements and layouts</label>
+                                </small>
+                            </h1>
+                        </div><!-- /.page-header -->
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <!-- PAGE CONTENT BEGINS -->
+                                <form class="form-horizontal" role="form">
+                                    <input type="hidden" id="interfaceId" name="interfaceId" />
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">环境选择:</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                <input type="hidden" name="env" id="env" value="dev" class="col-xs-12 col-sm-3" />
+                                                <button type="button" value="dev" class="btn env btn-primary">开发环境</button>
+                                                <button type="button" value="hjl" class="btn env">接口测试环境</button>
+                                                <button type="button" value="tst" class="btn env">测试环境</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-dotted"></div>
+
+                                    <div class="form-group hide" id="requestUserIdDev">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">请求人ID:</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                <input type="hidden" name="requestUserId" id="requestUserId" value="22367" class="col-xs-12 col-sm-3" />
+                                                <span class="editable editable-click editable-unsaved" id="requestUserIdDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">22367</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-dotted"></div>
+
+                                    <div class="form-group hiden" id="paramDiv">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求参数:</label>
+
+                                        <div class="col-xs-12 col-sm-9" id = "paramListDiv">
+                                            <div class="profile-user-info profile-user-info-striped" >
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Username </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="username">alexdoe</span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Username </div>
+
+                                                    <div class="profile-info-value">
+                                                        <div class="profile-user-info profile-user-info-striped">
+                                                            <div class="profile-info-row">
+                                                                <div class="profile-info-name"> 名称 </div>
+
+                                                                <div class="profile-info-value">
+                                                                    <span class="editable editable-click editable-unsaved" id="user_name" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">张</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="profile-info-row">
+                                                                <div class="profile-info-name"> 用户信息 </div>
+
+                                                                <div class="profile-info-value">
+                                                                    <span class="editable editable-click" id="user" style="display: inline-block;">undefined</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-dotted"></div>
+                                </form>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="button" id = "teacherIdBtn">
+                                            <i class="icon-ok bigger-110"></i>
+                                            Submit
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <button class="btn" type="reset">
+                                            <i class="icon-undo bigger-110"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding:0;position:relative;height:100%;">
+                    <div class="page-header">
+                        <h1>
+                            请求参数
+                            <small>
+                                <i class="icon-double-angle-right"></i>
+                                <label id = "interfaceNameDiv">如果出现422等情况，请仔细检查参数格式</label>
+                            </small>
+                        </h1>
+                    </div><!-- /.page-header -->
+                    <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
+                        <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
+                        <div class="ro" id="json-request" style="padding:0px 25px;white-space: pre-line;">
+                            <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding:0;position:relative;height:100%;">
+                    <div class="page-header">
+                        <h1>
+                            返回值
+                            <small>
+                                <i class="icon-double-angle-right"></i>
+                                <label id = "interfaceNameDiv">我是一个返回值而已</label>
+                            </small>
+                        </h1>
+                    </div><!-- /.page-header -->
+                    <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
+                        <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
+                        <div class="ro" id="json-response" style="padding:0px 25px;white-space: pre-line;">
+                            <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
+                    </div>
+                </div>
                 <div id="timeline-1">
                     <div class="row">
                         <div class="col-xs-12 col-sm-10 col-sm-offset-1">
@@ -222,6 +359,80 @@
 
                                     <div class="timeline-item clearfix">
                                         <div class="timeline-info">
+                                            <i class="timeline-indicator icon-food btn btn-success no-hover"></i>
+                                        </div>
+
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header widget-header-small hidden"></div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    Going to cafe for lunch
+                                                    <div class="pull-right">
+                                                        <i class="icon-time bigger-110"></i>
+                                                        12:30
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <i class="timeline-indicator icon-star btn btn-warning no-hover green"></i>
+                                        </div>
+
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header widget-header-small">
+                                                <h5 class="smaller">New logo</h5>
+
+                                                <span class="widget-toolbar no-border">
+																	<i class="icon-time bigger-110"></i>
+																	9:15
+																</span>
+
+                                                <span class="widget-toolbar">
+																	<a href="#" data-action="reload">
+																		<i class="icon-refresh"></i>
+																	</a>
+
+																	<a href="#" data-action="collapse">
+																		<i class="icon-chevron-up"></i>
+																	</a>
+																</span>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    Designed a new logo for our website. Would appreciate feedback.
+                                                    <div class="space-6"></div>
+
+                                                    <div class="widget-toolbox clearfix">
+                                                        <div class="pull-right action-buttons">
+                                                            <div class="space-4"></div>
+
+                                                            <div>
+                                                                <a href="#">
+                                                                    <i class="icon-heart red bigger-125"></i>
+                                                                </a>
+
+                                                                <a href="#">
+                                                                    <i class="icon-facebook blue bigger-125"></i>
+                                                                </a>
+
+                                                                <a href="#">
+                                                                    <i class="icon-reply light-green bigger-130"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
                                             <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
                                         </div>
 
@@ -229,19 +440,104 @@
                                             <div class="widget-header hidden"></div>
 
                                             <div class="widget-body">
-                                                <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
+                                                <div class="widget-main"> Took the final exam. Phew! </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.timeline-items -->
+                            </div><!-- /.timeline-container -->
+
+                            <div class="timeline-container">
+                                <div class="timeline-label">
+													<span class="label label-success arrowed-in-right label-lg">
+														<b>Yesterday</b>
+													</span>
+                                </div>
+
+                                <div class="timeline-items">
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <i class="timeline-indicator icon-beer btn btn-inverse no-hover"></i>
+                                        </div>
+
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header widget-header-small">
+                                                <h5 class="smaller">Haloween party</h5>
+
+                                                <span class="widget-toolbar">
+																	<i class="icon-time bigger-110"></i>
+																	1 hour ago
+																</span>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="clearfix">
+                                                        <div class="pull-left">
+                                                            Lots of fun at Haloween party.
+                                                            <br />
+                                                            Take a look at some pics:
+                                                        </div>
+
+                                                        <div class="pull-right">
+                                                            <i class="icon-chevron-left blue bigger-110"></i>
+
+                                                            &nbsp;
+                                                            <img alt="Image 4" width="36" src="${base}/static/assets/images/gallery/thumb-4.jpg" />
+                                                            <img alt="Image 3" width="36" src="${base}/static/assets/images/gallery/thumb-3.jpg" />
+                                                            <img alt="Image 2" width="36" src="${base}/static/assets/images/gallery/thumb-2.jpg" />
+                                                            <img alt="Image 1" width="36" src="${base}/static/assets/images/gallery/thumb-1.jpg" />
+                                                            &nbsp;
+                                                            <i class="icon-chevron-right blue bigger-110"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="timeline-item clearfix">
                                         <div class="timeline-info">
-                                            <i class="timeline-indicator icon-star btn btn-warning no-hover green"></i>
+                                            <i class="timeline-indicator icon-trophy btn btn-pink no-hover green"></i>
                                         </div>
 
-                                        <div class="widget-box transparent collapsed">
+                                        <div class="widget-box transparent">
                                             <div class="widget-header widget-header-small">
-                                                <h5 class="smaller">接口相关配置</h5>
+                                                <h5 class="smaller">Lorum Ipsum</h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod
+                                                    <span class="green bolder">high life</span>
+                                                    accusamus terry richardson ad squid &hellip;
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <i class="timeline-indicator icon-food btn btn-success no-hover"></i>
+                                        </div>
+
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header widget-header-small hidden"></div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main"> Going to cafe for lunch </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <i class="timeline-indicator icon-bug btn btn-danger no-hover"></i>
+                                        </div>
+
+                                        <div class="widget-box">
+                                            <div class="widget-header header-color-red2 widget-header-small">
+                                                <h5 class="smaller">Critical security patch released</h5>
 
                                                 <span class="widget-toolbar no-border">
 																	<i class="icon-time bigger-110"></i>
@@ -254,88 +550,41 @@
 																	</a>
 
 																	<a href="#" data-action="collapse">
-																		<i class="icon-chevron-down"></i>
+																		<i class="icon-chevron-up"></i>
 																	</a>
 																</span>
                                             </div>
 
                                             <div class="widget-body">
                                                 <div class="widget-main">
-                                                    <div class="col-md-6" style="padding:0;position:relative;height:100%;">
-                                                        <div class="page-header">
-                                                            <h1>
-                                                                接口配置
-                                                                <small>
-                                                                    <i class="icon-double-angle-right"></i>
-                                                                    <label>也就是看看</label>
-                                                                </small>
-                                                            </h1>
-                                                        </div><!-- /.page-header -->
-                                                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                                                            <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                                                            <div class="ro" id="json-interface" style="padding:0px 25px;white-space: pre-line;">
-                                                                <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6" style="padding:0;position:relative;height:100%;">
-                                                        <div class="page-header">
-                                                            <h1>
-                                                                接口参数配置
-                                                                <small>
-                                                                    <i class="icon-double-angle-right"></i>
-                                                                    <label>如果此处的json格式不对，说明配置有问题</label>
-                                                                </small>
-                                                            </h1>
-                                                        </div><!-- /.page-header -->
-                                                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                                                            <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                                                            <div class="ro" id="json-interface-detail" style="padding:0px 25px;white-space: pre-line;">
-                                                                <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="widget-toolbox clearfix">
-                                                        <div class="pull-right action-buttons">
-                                                            <div class="space-4"></div>
-
-                                                            <div>
-                                                                <a href="#">
-                                                                    <i class="icon-heart red bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-facebook blue bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-reply light-green bigger-130"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    Please download the new patch for maximum security.
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div><!-- /.timeline-items -->
+                            </div><!-- /.timeline-container -->
 
+                            <div class="timeline-container">
+                                <div class="timeline-label">
+													<span class="label label-grey arrowed-in-right label-lg">
+														<b>May 17</b>
+													</span>
+                                </div>
+
+                                <div class="timeline-items">
                                     <div class="timeline-item clearfix">
                                         <div class="timeline-info">
-                                            <i class="timeline-indicator icon-star btn btn-warning no-hover green"></i>
+                                            <i class="timeline-indicator icon-leaf btn btn-primary no-hover green"></i>
                                         </div>
 
-                                        <div class="widget-box transparent collapsed">
+                                        <div class="widget-box transparent">
                                             <div class="widget-header widget-header-small">
-                                                <h5 class="smaller">
-                                                    请求参数 和 结果
-                                                    <small>
-                                                        <i class="icon-double-angle-right"></i>
-                                                        <label>如果返回422了，请仔细检查以下参数</label>
-                                                    </small>
-                                                </h5>
+                                                <h5 class="smaller">Lorum Ipsum</h5>
 
                                                 <span class="widget-toolbar no-border">
 																	<i class="icon-time bigger-110"></i>
-																	9:15
+																	10:22
 																</span>
 
                                                 <span class="widget-toolbar">
@@ -344,52 +593,20 @@
 																	</a>
 
 																	<a href="#" data-action="collapse">
-																		<i class="icon-chevron-down"></i>
+																		<i class="icon-chevron-up"></i>
 																	</a>
 																</span>
                                             </div>
 
                                             <div class="widget-body">
                                                 <div class="widget-main">
-                                                    <div class="col-md-6" style="padding:0;position:relative;height:100%;">
-                                                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                                                            <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                                                            <div class="ro" id="json-request" style="padding:0px 25px;white-space: pre-line;">
-                                                                <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6" style="padding:0;position:relative;height:100%;">
-                                                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                                                            <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                                                            <div class="ro" id="json-response" style="padding:0px 25px;white-space: pre-line;">
-                                                                <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="widget-toolbox clearfix">
-                                                        <div class="pull-right action-buttons">
-                                                            <div class="space-4"></div>
-
-                                                            <div>
-                                                                <a href="#">
-                                                                    <i class="icon-heart red bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-facebook blue bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-reply light-green bigger-130"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod
+                                                    <span class="blue bolder">high life</span>
+                                                    accusamus terry richardson ad squid &hellip;
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div><!-- /.timeline-items -->
                             </div><!-- /.timeline-container -->
                         </div>
@@ -577,8 +794,7 @@
 
             var interfaceParam;
             function handlerInterface(resu){
-                jsonShow(resu, "json-interface");
-                jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
+                jsonShow(resu, "json-request");
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT"){
