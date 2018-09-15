@@ -89,6 +89,9 @@ return   bstr   +   strUtf8;
 
 function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env){
     var result = true;
+    if(env == null){
+        env = "";
+    }
 
     $.ajax({
         type : "POST",

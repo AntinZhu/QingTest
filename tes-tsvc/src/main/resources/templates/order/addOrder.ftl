@@ -1010,8 +1010,12 @@
                 teacherId : teacherId
             };
 
+            var addressData = {
+                data : new Number(studentId)
+            };
+
             commonAjaxRequest("${base}/v1/order/teacher/detail_for_order.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:");
-            commonAjaxRequest("${base}/v1/student/addresses.json?studentId=" + studentId, null, handlerAddress, true, "获取用户地址信息异常:");
+            commonAjaxRequest("${base}/v1/student/addresses.json", addressData, handlerAddress, true, "获取用户地址信息异常:");
         });
 
         $('#gradeId').change(function(){

@@ -71,40 +71,43 @@
                                 </div>
 
                                 <div class="timeline-items">
+                                    <!-- 请求的接口地址 -->
+                                    <div class="timeline-item clearfix">
+                                        <div class="timeline-info">
+                                            <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
+                                        </div>
+
+                                        <div class="widget-box transparent">
+                                            <div class="widget-header hidden"></div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 接口参数 -->
                                     <div class="timeline-item clearfix">
                                         <div class="timeline-info">
                                             <img alt="Susan't Avatar" src="${base}/static/assets/avatars/avatar1.png" />
                                             <span class="label label-info label-sm">16:22</span>
                                         </div>
 
-                                        <div class="widget-box transparent">
-                                            <div class="widget-header widget-header-small">
-                                                <h4>
-                                                    接口测试
-                                                    <small>
-                                                        <i class="icon-double-angle-right"></i>
-                                                        <label id = "interfaceNameDiv">Common form elements and layouts</label>
-                                                    </small>
-                                                </h4>
+                                        <div id="param" class="panel-group accordion-style1 accordion-style2">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <a href="#faq-0-1" data-parent="#timeline-1" data-toggle="collapse" class="accordion-toggle">
+                                                        <i class="icon-chevron-left pull-right" data-icon-hide="icon-chevron-down" data-icon-show="icon-chevron-left"></i>
+                                                        <h1>
+                                                            接口测试
+                                                            <small>
+                                                                <i class="icon-double-angle-right"></i>
+                                                                <label id = "interfaceNameDiv">Common form elements and layouts</label>
+                                                            </small>
+                                                        </h1>
+                                                    </a>
+                                                </div>
 
-                                                <span class="widget-toolbar no-border">
-																	<i class="icon-time bigger-110"></i>
-																	16:22
-																</span>
-
-                                                <span class="widget-toolbar">
-																	<a href="#" data-action="reload">
-																		<i class="icon-refresh"></i>
-																	</a>
-
-																	<a href="#" data-action="collapse">
-																		<i class="icon-chevron-up"></i>
-																	</a>
-																</span>
-                                            </div>
-
-                                            <div class="widget-body">
-                                                <div class="widget-main">
+                                                <div class="panel-collapse" id="faq-0-1">
                                                     <div class="col-xs-12">
                                                         <!-- PAGE CONTENT BEGINS -->
                                                         <form class="form-horizontal" role="form">
@@ -194,73 +197,27 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="widget-toolbox clearfix">
-                                                        <div class="pull-left">
-                                                            <i class="icon-hand-right grey bigger-125"></i>
-                                                            <a href="#" class="bigger-110">Click to read &hellip;</a>
-                                                        </div>
-
-                                                        <div class="pull-right action-buttons">
-                                                            <a href="#">
-                                                                <i class="icon-ok green bigger-130"></i>
-                                                            </a>
-
-                                                            <a href="#">
-                                                                <i class="icon-pencil blue bigger-125"></i>
-                                                            </a>
-
-                                                            <a href="#">
-                                                                <i class="icon-remove red bigger-125"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="timeline-item clearfix">
-                                        <div class="timeline-info">
-                                            <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
-                                        </div>
-
-                                        <div class="widget-box transparent">
-                                            <div class="widget-header hidden"></div>
-
-                                            <div class="widget-body">
-                                                <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <!--接口的相关配置 -->
                                     <div class="timeline-item clearfix">
                                         <div class="timeline-info">
                                             <i class="timeline-indicator icon-star btn btn-warning no-hover green"></i>
                                         </div>
+                                        <div id="faq-list-1" class="panel-group accordion-style1 accordion-style2">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <a href="#faq-1-1" data-parent="#timeline-1" data-toggle="collapse" class="accordion-toggle collapsed">
+                                                        <i class="icon-chevron-left pull-right" data-icon-hide="icon-chevron-down" data-icon-show="icon-chevron-left"></i>
 
-                                        <div class="widget-box transparent collapsed">
-                                            <div class="widget-header widget-header-small">
-                                                <h5 class="smaller">接口相关配置</h5>
+                                                        <i class="icon-user bigger-130"></i>
+                                                        &nbsp;接口相关配置
+                                                    </a>
+                                                </div>
 
-                                                <span class="widget-toolbar no-border">
-																	<i class="icon-time bigger-110"></i>
-																	9:15
-																</span>
-
-                                                <span class="widget-toolbar">
-																	<a href="#" data-action="reload">
-																		<i class="icon-refresh"></i>
-																	</a>
-
-																	<a href="#" data-action="collapse">
-																		<i class="icon-chevron-down"></i>
-																	</a>
-																</span>
-                                            </div>
-
-                                            <div class="widget-body">
-                                                <div class="widget-main">
+                                                <div class="panel-collapse collapse" id="faq-1-1">
                                                     <div class="col-md-6" style="padding:0;position:relative;height:100%;">
                                                         <div class="page-header">
                                                             <h1>
@@ -294,63 +251,27 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="widget-toolbox clearfix">
-                                                        <div class="pull-right action-buttons">
-                                                            <div class="space-4"></div>
-
-                                                            <div>
-                                                                <a href="#">
-                                                                    <i class="icon-heart red bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-facebook blue bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-reply light-green bigger-130"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <!-- 接口请求的参数和结果 -->
                                     <div class="timeline-item clearfix">
                                         <div class="timeline-info">
                                             <i class="timeline-indicator icon-star btn btn-warning no-hover green"></i>
                                         </div>
+                                        <div id="faq-list-2" class="panel-group accordion-style1 accordion-style2">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <a href="#faq-2-1" data-parent="#timeline-1" data-toggle="collapse" class="accordion-toggle collapsed">
+                                                        <i class="icon-chevron-left pull-right" data-icon-hide="icon-chevron-down" data-icon-show="icon-chevron-left"></i>
 
-                                        <div class="widget-box transparent collapsed">
-                                            <div class="widget-header widget-header-small">
-                                                <h5 class="smaller">
-                                                    请求参数 和 结果
-                                                    <small>
-                                                        <i class="icon-double-angle-right"></i>
-                                                        <label>如果返回422了，请仔细检查以下参数</label>
-                                                    </small>
-                                                </h5>
+                                                        <i class="icon-user bigger-130"></i>
+                                                        &nbsp;请求参数和返回
+                                                    </a>
+                                                </div>
 
-                                                <span class="widget-toolbar no-border">
-																	<i class="icon-time bigger-110"></i>
-																	9:15
-																</span>
-
-                                                <span class="widget-toolbar">
-																	<a href="#" data-action="reload">
-																		<i class="icon-refresh"></i>
-																	</a>
-
-																	<a href="#" data-action="collapse">
-																		<i class="icon-chevron-down"></i>
-																	</a>
-																</span>
-                                            </div>
-
-                                            <div class="widget-body">
-                                                <div class="widget-main">
+                                                <div class="panel-collapse collapse" id="faq-2-1">
                                                     <div class="col-md-6" style="padding:0;position:relative;height:100%;">
                                                         <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
                                                             <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
@@ -365,26 +286,6 @@
                                                                 <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="widget-toolbox clearfix">
-                                                        <div class="pull-right action-buttons">
-                                                            <div class="space-4"></div>
-
-                                                            <div>
-                                                                <a href="#">
-                                                                    <i class="icon-heart red bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-facebook blue bigger-125"></i>
-                                                                </a>
-
-                                                                <a href="#">
-                                                                    <i class="icon-reply light-green bigger-130"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -395,6 +296,7 @@
                         </div>
                     </div>
                 </div>
+
                 <br style="clear:both;">
 
                 <div class="hide">
@@ -445,6 +347,7 @@
                         </div>
                     </div>
                 </div>
+
             </main>
             <div class="ace-settings-container" id="ace-settings-container">
                 <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
@@ -575,10 +478,17 @@
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
             });
 
+            function refreshInterfaceUrl(){
+                var env = $("#env").val();
+                $("#interfaceUrl").text(interfaceUrlPrefix.replace("{env}", env));
+            }
+
             var interfaceParam;
+            var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
             function handlerInterface(resu){
                 jsonShow(resu, "json-interface");
                 jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
+                interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl;
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT"){
@@ -594,7 +504,6 @@
                     }
                 }
 
-                $("#param").text(resu.interfaceInfo.inter.paramDetail);
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
 
                 if(params != ""){
@@ -604,10 +513,30 @@
 
                     initHtml("", params);
                     $("#paramDiv").removeClass("hide");
-                    $(".addInputBtn").click(cloneInput);
-                    $(".delInputBtn").click(removeInput);
                 }
+
+                refreshInterfaceUrl();
             }
+
+            $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
+            $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
+//            $(document).on('click', '.accordion-toggle', function(event) {
+//                event.stopPropagation();
+//                var $this = $(this);
+//                var parent = $this.data('parent');
+//                var actives = $(parent).find('.open');
+//                for(var idx = 0; idx < actives.length; idx++){
+//                    $(actives[idx]).collapse('hide');
+//                }
+////                // From bootstrap itself
+////                if (actives && actives.length) {
+////                    hasData = actives.data('collapse');
+////                    //if (hasData && hasData.transitioning) return;
+////                    actives.collapse('hide');
+////                }
+////                var target = $this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, ''); //strip for ie7
+////                $(target).collapse('toggle');
+//            });
 
             function cloneInput(){
                 var inputClone = $(this).parent().parent().clone();
@@ -625,8 +554,6 @@
                 $(this).parent().parent().parent().append(inputClone);
 
                 editableInit();
-                $(".delInputBtn").unbind("click").click(removeInput);
-                $(".addInputBtn").unbind("click").click(cloneInput);
             }
 
             function incAlt(alt){
@@ -807,6 +734,8 @@
                     $(".env.btn-primary").removeClass("btn-primary");
                     $(this).addClass("btn-primary");
                     $("#env").val($(this).val());
+
+                    refreshInterfaceUrl();
                 });
 
                 $('#teacherIdBtn').click(function () {
@@ -821,14 +750,13 @@
 
                         formatParam(param, "", paramNameArr, altArr, 0, value);
                     });
-//                    alert(JSON.stringify(param));
                     jsonShow(param, "json-request");
                     var data = {
                         interfaceId : $("#interfaceId").val(),
                         requestUserId : $("#requestUserId").val(),
                         param : JSON.stringify(param)
                     };
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:", $("#env").val());
+                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val());
                     fromIdxInfo = null;
                     destIdxInfo = null;
                 });
@@ -915,73 +843,6 @@
                     name: 'username'
                 });
 
-                var countries = [];
-                $.each({ "CA": "Canada", "IN": "India", "NL": "Netherlands", "TR": "Turkey", "US": "United States"}, function(k, v) {
-                    countries.push({id: k, text: v});
-                });
-
-                var cities = [];
-                cities["CA"] = [];
-                $.each(["Toronto", "Ottawa", "Calgary", "Vancouver"] , function(k, v){
-                    cities["CA"].push({id: v, text: v});
-                });
-                cities["IN"] = [];
-                $.each(["Delhi", "Mumbai", "Bangalore"] , function(k, v){
-                    cities["IN"].push({id: v, text: v});
-                });
-                cities["NL"] = [];
-                $.each(["Amsterdam", "Rotterdam", "The Hague"] , function(k, v){
-                    cities["NL"].push({id: v, text: v});
-                });
-                cities["TR"] = [];
-                $.each(["Ankara", "Istanbul", "Izmir"] , function(k, v){
-                    cities["TR"].push({id: v, text: v});
-                });
-                cities["US"] = [];
-                $.each(["New York", "Miami", "Los Angeles", "Chicago", "Wysconsin"] , function(k, v){
-                    cities["US"].push({id: v, text: v});
-                });
-
-                var currentValue = "NL";
-                $('#country').editable({
-                    type: 'select2',
-                    value : 'NL',
-                    source: countries,
-                    success: function(response, newValue) {
-                        if(currentValue == newValue) return;
-                        currentValue = newValue;
-
-                        var new_source = (!newValue || newValue == "") ? [] : cities[newValue];
-
-                        //the destroy method is causing errors in x-editable v1.4.6
-                        //it worked fine in v1.4.5
-                        /**
-                         $('#city').editable('destroy').editable({
-							type: 'select2',
-							source: new_source
-						}).editable('setValue', null);
-                         */
-
-                                //so we remove it altogether and create a new element
-                        var city = $('#city').removeAttr('id').get(0);
-                        $(city).clone().attr('id', 'city').text('Select City').editable({
-                            type: 'select2',
-                            value : null,
-                            source: new_source
-                        }).insertAfter(city);//insert it after previous instance
-                        $(city).remove();//remove previous instance
-
-                    }
-                });
-
-                $('#city').editable({
-                    type: 'select2',
-                    value : 'Amsterdam',
-                    source: cities[currentValue]
-                });
-
-
-
                 $('#signup').editable({
                     type: 'date',
                     format: 'yyyy-mm-dd',
@@ -989,265 +850,6 @@
                     datepicker: {
                         weekStart: 1
                     }
-                });
-
-                $('#age').editable({
-                    type: 'spinner',
-                    name : 'age',
-                    spinner : {
-                        min : 16, max:99, step:1
-                    }
-                });
-
-                //var $range = document.createElement("INPUT");
-                //$range.type = 'range';
-                $('#login').editable({
-                    type: 'slider',//$range.type == 'range' ? 'range' : 'slider',
-                    name : 'login',
-                    slider : {
-                        min : 1, max:50, width:100
-                    },
-                    success: function(response, newValue) {
-                        if(parseInt(newValue) == 1)
-                            $(this).html(newValue + " hour ago");
-                        else $(this).html(newValue + " hours ago");
-                    }
-                });
-
-                $('#about').editable({
-                    mode: 'inline',
-                    type: 'wysiwyg',
-                    name : 'about',
-                    wysiwyg : {
-                        //css : {'max-width':'300px'}
-                    },
-                    success: function(response, newValue) {
-                    }
-                });
-
-
-
-                // *** editable avatar *** //
-                try {//ie8 throws some harmless exception, so let's catch it
-
-                    //it seems that editable plugin calls appendChild, and as Image doesn't have it, it causes errors on IE at unpredicted points
-                    //so let's have a fake appendChild for it!
-                    if( /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ) Image.prototype.appendChild = function(el){}
-
-                    var last_gritter
-                    $('#avatar').editable({
-                        type: 'image',
-                        name: 'avatar',
-                        value: null,
-                        image: {
-                            //specify ace file input plugin's options here
-                            btn_choose: 'Change Avatar',
-                            droppable: true,
-                            /**
-                             //this will override the default before_change that only accepts image files
-                             before_change: function(files, dropped) {
-								return true;
-							},
-                             */
-
-                            //and a few extra ones here
-                            name: 'avatar',//put the field name here as well, will be used inside the custom plugin
-                            max_size: 110000,//~100Kb
-                            on_error : function(code) {//on_error function will be called when the selected file has a problem
-                                if(last_gritter) $.gritter.remove(last_gritter);
-                                if(code == 1) {//file format error
-                                    last_gritter = $.gritter.add({
-                                        title: 'File is not an image!',
-                                        text: 'Please choose a jpg|gif|png image!',
-                                        class_name: 'gritter-error gritter-center'
-                                    });
-                                } else if(code == 2) {//file size rror
-                                    last_gritter = $.gritter.add({
-                                        title: 'File too big!',
-                                        text: 'Image size should not exceed 100Kb!',
-                                        class_name: 'gritter-error gritter-center'
-                                    });
-                                }
-                                else {//other error
-                                }
-                            },
-                            on_success : function() {
-                                $.gritter.removeAll();
-                            }
-                        },
-                        url: function(params) {
-                            // ***UPDATE AVATAR HERE*** //
-                            //You can replace the contents of this function with examples/profile-avatar-update.js for actual upload
-
-
-                            var deferred = new $.Deferred
-
-                            //if value is empty, means no valid files were selected
-                            //but it may still be submitted by the plugin, because "" (empty string) is different from previous non-empty value whatever it was
-                            //so we return just here to prevent problems
-                            var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
-                            if(!value || value.length == 0) {
-                                deferred.resolve();
-                                return deferred.promise();
-                            }
-
-
-                            //dummy upload
-                            setTimeout(function(){
-                                if("FileReader" in window) {
-                                    //for browsers that have a thumbnail of selected image
-                                    var thumb = $('#avatar').next().find('img').data('thumb');
-                                    if(thumb) $('#avatar').get(0).src = thumb;
-                                }
-
-                                deferred.resolve({'status':'OK'});
-
-                                if(last_gritter) $.gritter.remove(last_gritter);
-                                last_gritter = $.gritter.add({
-                                    title: 'Avatar Updated!',
-                                    text: 'Uploading to server can be easily implemented. A working example is included with the template.',
-                                    class_name: 'gritter-info gritter-center'
-                                });
-
-                            } , parseInt(Math.random() * 800 + 800))
-
-                            return deferred.promise();
-                        },
-
-                        success: function(response, newValue) {
-                        }
-                    })
-                }catch(e) {}
-
-
-
-                //another option is using modals
-                $('#avatar2').on('click', function(){
-                    var modal =
-                            '<div class="modal hide fade">\
-                                <div class="modal-header">\
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                    <h4 class="blue">Change Avatar</h4>\
-                                </div>\
-                                \
-                                <form class="no-margin">\
-                                <div class="modal-body">\
-                                    <div class="space-4"></div>\
-                                    <div style="width:75%;margin-left:12%;"><input type="file" name="file-input" /></div>\
-                                </div>\
-                                \
-                                <div class="modal-footer center">\
-                                    <button type="submit" class="btn btn-small btn-success"><i class="icon-ok"></i> Submit</button>\
-                                    <button type="button" class="btn btn-small" data-dismiss="modal"><i class="icon-remove"></i> Cancel</button>\
-                                </div>\
-                                </form>\
-                            </div>';
-
-
-                    var modal = $(modal);
-                    modal.modal("show").on("hidden", function(){
-                        modal.remove();
-                    });
-
-                    var working = false;
-
-                    var form = modal.find('form:eq(0)');
-                    var file = form.find('input[type=file]').eq(0);
-                    file.ace_file_input({
-                        style:'well',
-                        btn_choose:'Click to choose new avatar',
-                        btn_change:null,
-                        no_icon:'icon-picture',
-                        thumbnail:'small',
-                        before_remove: function() {
-                            //don't remove/reset files while being uploaded
-                            return !working;
-                        },
-                        before_change: function(files, dropped) {
-                            var file = files[0];
-                            if(typeof file === "string") {
-                                //file is just a file name here (in browsers that don't support FileReader API)
-                                if(! (/\.(jpe?g|png|gif)$/i).test(file) ) return false;
-                            }
-                            else {//file is a File object
-                                var type = $.trim(file.type);
-                                if( ( type.length > 0 && ! (/^image\/(jpe?g|png|gif)$/i).test(type) )
-                                        || ( type.length == 0 && ! (/\.(jpe?g|png|gif)$/i).test(file.name) )//for android default browser!
-                                ) return false;
-
-                                if( file.size > 110000 ) {//~100Kb
-                                    return false;
-                                }
-                            }
-
-                            return true;
-                        }
-                    });
-
-                    form.on('submit', function(){
-                        if(!file.data('ace_input_files')) return false;
-
-                        file.ace_file_input('disable');
-                        form.find('button').attr('disabled', 'disabled');
-                        form.find('.modal-body').append("<div class='center'><i class='icon-spinner icon-spin bigger-150 orange'></i></div>");
-
-                        var deferred = new $.Deferred;
-                        working = true;
-                        deferred.done(function() {
-                            form.find('button').removeAttr('disabled');
-                            form.find('input[type=file]').ace_file_input('enable');
-                            form.find('.modal-body > :last-child').remove();
-
-                            modal.modal("hide");
-
-                            var thumb = file.next().find('img').data('thumb');
-                            if(thumb) $('#avatar2').get(0).src = thumb;
-
-                            working = false;
-                        });
-
-
-                        setTimeout(function(){
-                            deferred.resolve();
-                        } , parseInt(Math.random() * 800 + 800));
-
-                        return false;
-                    });
-
-                });
-
-
-
-                //////////////////////////////
-                $('.profile-social-links > a').tooltip();
-
-                $('.easy-pie-chart.percentage').each(function(){
-                    var barColor = $(this).data('color') || '#555';
-                    var trackColor = '#E2E2E2';
-                    var size = parseInt($(this).data('size')) || 72;
-                    $(this).easyPieChart({
-                        barColor: barColor,
-                        trackColor: trackColor,
-                        scaleColor: false,
-                        lineCap: 'butt',
-                        lineWidth: parseInt(size/10),
-                        animate:false,
-                        size: size
-                    }).css('color', barColor);
-                });
-
-                ///////////////////////////////////////////
-                $('.input-mask-phone').mask('(999) 999-9999');
-
-
-
-                ////////////////////
-                //change profile
-                $('[data-toggle="buttons"] .btn').on('click', function(e){
-                    var target = $(this).find('input[type=radio]');
-                    var which = parseInt(target.val());
-                    $('.user-profile').parent().addClass('hide');
-                    $('#user-profile-'+which).parent().removeClass('hide');
                 });
             });
         </script>
