@@ -9,7 +9,7 @@
     <result column="request_type" property="requestType" javaType="RequestType" />
     <result column="request_user_type" property="requestUserType" javaType="UserType" />
     <result column="sort_desc_num" property="sortDescNum" jdbcType="INTEGER" />
-    <result column="catelog_id" property="catelogId" jdbcType="INTEGER" />
+    <result column="catelog_index" property="catelogIndex" jdbcType="INTEGER" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
@@ -18,7 +18,7 @@
 
   <sql id="Base_Column_List" >
     id, interface_name, interface_url, interface_type, request_type, request_user_type, 
-    sort_desc_num, catelog_id, is_deleted, create_time, last_update_time, param_detail
+    sort_desc_num, catelog_index, is_deleted, create_time, last_update_time, param_detail
   </sql>
 
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -30,11 +30,11 @@
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterface" keyProperty="id" useGeneratedKeys="true">
     insert into t_interface (interface_name, interface_url,
       interface_type, request_type, request_user_type, 
-      sort_desc_num, catelog_id, is_deleted, 
+      sort_desc_num, catelog_index, is_deleted,
       create_time, param_detail)
     values (#{interfaceName,jdbcType=VARCHAR}, #{interfaceUrl,jdbcType=VARCHAR},
       #{interfaceType,javaType=InterfaceType}, #{requestType,javaType=RequestType}, #{requestUserType,javaType=UserType},
-      #{sortDescNum,jdbcType=INTEGER}, #{catelogId,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT}, 
+      #{sortDescNum,jdbcType=INTEGER}, #{catelogIndex,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT},
       now(), #{paramDetail, jdbcType=VARCHAR}
   </insert>
 

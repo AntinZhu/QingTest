@@ -12,7 +12,7 @@ public class TestInterface {
     private RequestType requestType;
     private UserType requestUserType;
     private Integer sortDescNum;
-    private Integer catelogId;
+    private String catelogIndex;
     private String paramDetail;
     private Boolean isDeleted;
     private Date createTime;
@@ -82,12 +82,12 @@ public class TestInterface {
         this.sortDescNum = sortDescNum;
     }
 
-    public Integer getCatelogId() {
-        return catelogId;
+    public String getCatelogIndex() {
+        return catelogIndex;
     }
 
-    public void setCatelogId(Integer catelogId) {
-        this.catelogId = catelogId;
+    public void setCatelogIndex(String catelogIndex) {
+        this.catelogIndex = catelogIndex;
     }
 
     public Date getCreateTime() {

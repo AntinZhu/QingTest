@@ -33,120 +33,35 @@
         </div>
     </div><!-- #sidebar-shortcuts -->
 
-    <ul class="nav nav-list">
-        <li>
-            <a href="index.html">
-                <i class="icon-dashboard"></i>
-                <span class="menu-text"> Dashboard </span>
-            </a>
-        </li>
-
-        <li>
-            <a href="typography.html">
-                <i class="icon-text-width"></i>
-                <span class="menu-text"> Typography </span>
-            </a>
-        </li>
-
+    <ul class="nav nav-list" id="catelog-ul">
         <li>
             <a href="#" class="dropdown-toggle">
                 <i class="icon-desktop"></i>
-                <span class="menu-text"> UI Elements </span>
+                <span class="menu-text"> 流程化页面 </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
 
             <ul class="submenu">
                 <li>
-                    <a href="elements.html">
+                    <a href="${base}/v1/order/student/add_order_page">
                         <i class="icon-double-angle-right"></i>
-                        Elements
+                        订单流程
                     </a>
-                </li>
-
-                <li>
-                    <a href="buttons.html">
-                        <i class="icon-double-angle-right"></i>
-                        Buttons &amp; Icons
-                    </a>
-                </li>
-
-                <li>
-                    <a href="treeview.html">
-                        <i class="icon-double-angle-right"></i>
-                        Treeview
-                    </a>
-                </li>
-
-                <li>
-                    <a href="jquery-ui.html">
-                        <i class="icon-double-angle-right"></i>
-                        jQuery UI
-                    </a>
-                </li>
-
-                <li>
-                    <a href="nestable-list.html">
-                        <i class="icon-double-angle-right"></i>
-                        Nestable Lists
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-double-angle-right"></i>
-
-                        Three Level Menu
-                        <b class="arrow icon-angle-down"></b>
-                    </a>
-
-                    <ul class="submenu">
-                        <li>
-                            <a href="#">
-                                <i class="icon-leaf"></i>
-                                Item #1
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-pencil"></i>
-
-                                4th level
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-plus"></i>
-                                        Add Product
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-eye-open"></i>
-                                        View Products
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </li>
 
-        <li>
+        <li class="active">
             <a href="#" class="dropdown-toggle">
                 <i class="icon-list"></i>
-                <span class="menu-text"> Tables </span>
+                <span class="menu-text"> 单接口测试 </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
 
             <ul class="submenu">
-                <li>
+                <li  class="active">
                     <a href="tables.html">
                         <i class="icon-double-angle-right"></i>
                         Simple &amp; Dynamic
@@ -161,175 +76,6 @@
                 </li>
             </ul>
         </li>
-
-        <li>
-            <a href="#" class="dropdown-toggle">
-                <i class="icon-edit"></i>
-                <span class="menu-text"> Forms </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu">
-                <li>
-                    <a href="form-elements.html">
-                        <i class="icon-double-angle-right"></i>
-                        Form Elements
-                    </a>
-                </li>
-
-                <li>
-                    <a href="form-wizard.html">
-                        <i class="icon-double-angle-right"></i>
-                        Wizard &amp; Validation
-                    </a>
-                </li>
-
-                <li>
-                    <a href="wysiwyg.html">
-                        <i class="icon-double-angle-right"></i>
-                        Wysiwyg &amp; Markdown
-                    </a>
-                </li>
-
-                <li>
-                    <a href="dropzone.html">
-                        <i class="icon-double-angle-right"></i>
-                        Dropzone File Upload
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            <a href="widgets.html">
-                <i class="icon-list-alt"></i>
-                <span class="menu-text"> Widgets </span>
-            </a>
-        </li>
-
-        <li>
-            <a href="calendar.html">
-                <i class="icon-calendar"></i>
-
-                <span class="menu-text">
-									Calendar
-									<span class="badge badge-transparent tooltip-error" title="2&nbsp;Important&nbsp;Events">
-										<i class="icon-warning-sign red bigger-130"></i>
-									</span>
-								</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="gallery.html">
-                <i class="icon-picture"></i>
-                <span class="menu-text"> Gallery </span>
-            </a>
-        </li>
-
-        <li>
-            <a href="#" class="dropdown-toggle">
-                <i class="icon-tag"></i>
-                <span class="menu-text"> More Pages </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu">
-                <li>
-                    <a href="profile.html">
-                        <i class="icon-double-angle-right"></i>
-                        User Profile
-                    </a>
-                </li>
-
-                <li>
-                    <a href="inbox.html">
-                        <i class="icon-double-angle-right"></i>
-                        Inbox
-                    </a>
-                </li>
-
-                <li>
-                    <a href="pricing.html">
-                        <i class="icon-double-angle-right"></i>
-                        Pricing Tables
-                    </a>
-                </li>
-
-                <li>
-                    <a href="invoice.html">
-                        <i class="icon-double-angle-right"></i>
-                        Invoice
-                    </a>
-                </li>
-
-                <li>
-                    <a href="timeline.html">
-                        <i class="icon-double-angle-right"></i>
-                        Timeline
-                    </a>
-                </li>
-
-                <li>
-                    <a href="login.html">
-                        <i class="icon-double-angle-right"></i>
-                        Login &amp; Register
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="active open">
-            <a href="#" class="dropdown-toggle">
-                <i class="icon-file-alt"></i>
-
-                <span class="menu-text">
-									Other Pages
-									<span class="badge badge-primary ">5</span>
-								</span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu">
-                <li class="active">
-                    <a href="faq.html">
-                        <i class="icon-double-angle-right"></i>
-                        FAQ
-                    </a>
-                </li>
-
-                <li>
-                    <a href="error-404.html">
-                        <i class="icon-double-angle-right"></i>
-                        Error 404
-                    </a>
-                </li>
-
-                <li>
-                    <a href="error-500.html">
-                        <i class="icon-double-angle-right"></i>
-                        Error 500
-                    </a>
-                </li>
-
-                <li>
-                    <a href="grid.html">
-                        <i class="icon-double-angle-right"></i>
-                        Grid
-                    </a>
-                </li>
-
-                <li>
-                    <a href="blank.html">
-                        <i class="icon-double-angle-right"></i>
-                        Blank Page
-                    </a>
-                </li>
-            </ul>
-        </li>
     </ul><!-- /.nav-list -->
 
     <div class="sidebar-collapse" id="sidebar-collapse">
@@ -338,5 +84,57 @@
 
     <script type="text/javascript">
         try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+
+        $(document).ready(function(){
+            commonAjaxRequest("${base}/v1/test/catelog.json", null, handlerCatelog, false, "获取分类信息失败:");
+        });
+
+        var item_html = "<li class=\"{index}\"\><a href=\"{linkUrl}\"><i class=\"\"></i>{catelogName}</a></li>";
+        var catelog_html = "<li class=\"{index}\"><a href=\"#\" class=\"dropdown-toggle\"><i class=\"{icon}\"></i><span class=\"menu-text\"> {catelogName} </span><b class=\"arrow icon-angle-down\"></b></a><ul class=\"submenu\">{items}</ul></li>";
+        function handlerCatelog(resu){
+            $("#catelog-ul").html(catelogList(resu.resultList));
+        }
+
+        function catelogList(catelogList){
+            var catelogHtml = "";
+            for(var idx in catelogList){
+                var catelog = catelogList[idx];
+
+                var thisHtml;
+                if(catelog.subCategoryList != null){
+                    thisHtml = catelogWithSub(catelog);
+                }else{
+                    thisHtml = catelogItem(catelog);
+                }
+                catelogHtml += thisHtml;
+            }
+
+            return catelogHtml;
+        }
+
+        function catelogWithSub(catelog){
+            var thisHtml = catelog_html;
+            thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
+            thisHtml = thisHtml.replace("{index}", catelog.catelog.catelogIndex);
+            thisHtml = thisHtml.replace("{icon}", randomIcon());
+            thisHtml = thisHtml.replace("{items}", catelogList(catelog.subCategoryList));
+
+            return thisHtml;
+        }
+
+        function catelogItem(catelog){
+            var thisHtml = item_html;
+            thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
+            thisHtml = thisHtml.replace("{index}", catelog.catelog.catelogIndex);
+            var linkUrl;
+            if(catelog.catelog.linkUrl != null && "#" != catelog.catelog.linkUrl){
+                linkUrl = "${base}" + catelog.catelog.linkUrl;
+            }else{
+                linkUrl = "#";
+            }
+            thisHtml = thisHtml.replace("{linkUrl}", linkUrl);
+
+            return thisHtml;
+        }
     </script>
 </div>

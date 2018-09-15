@@ -6,6 +6,8 @@ import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
+import com.qingqing.test.bean.common.response.ListResponse;
+import com.qingqing.test.bean.inter.CatelogBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
@@ -13,9 +15,13 @@ import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.manager.TestInterfaceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -28,7 +34,8 @@ public class TestController {
     private TestInterfaceManager testInterfaceManager;
 
     @RequestMapping("json_format")
-    public String studentAddOrderPage(){
+    public String studentAddOrderPage(@RequestParam("id") Long id, Model model){
+        model.addAttribute("interfaceId", id);
         return "interface/jsonformat";
     }
 
@@ -45,6 +52,17 @@ public class TestController {
         interfaceResponse.setResponse(BaseResponse.SUCC_RESP);
         interfaceResponse.setInterfaceInfo(interfaceBean);
         return interfaceResponse;
+    }
+
+    @RequestMapping("/catelog")
+    @ResponseBody
+    public ListResponse<CatelogBean> catelog(){
+        List<CatelogBean> dataList = testInterfaceManager.getCatelogList();
+
+        ListResponse<CatelogBean> resultList = new ListResponse<>();
+        resultList.setResponse(BaseResponse.SUCC_RESP);
+        resultList.setResultList(dataList);
+        return resultList;
     }
 
     @RequestMapping("/interface/invoke")

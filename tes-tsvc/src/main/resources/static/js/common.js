@@ -204,3 +204,113 @@ function isEmpty(object) {
     }
     return true;
 }
+
+var allIcon = [
+    "icon-adjust",
+    "icon-asterisk",
+    "icon-ban-circle",
+    "icon-bar-chart",
+    "icon-barcode",
+    "icon-beaker",
+    "icon-beer",
+    "icon-bell",
+    "icon-bell-alt",
+    "icon-bolt",
+    "icon-book",
+    "icon-bookmark",
+    "icon-bookmark-empty",
+    "icon-briefcase",
+    "icon-bullhorn",
+    "icon-calendar",
+    "icon-camera",
+    "icon-camera-retro",
+    "icon-certificate",
+    "icon-check",
+    "icon-check-empty",
+    "icon-circle",
+    "icon-circle-blank",
+    "icon-cloud",
+    "icon-cloud-download",
+    "icon-cloud-upload",
+    "icon-coffee",
+    "icon-cog",
+    "icon-cogs",
+    "icon-comment",
+    "icon-comment-alt",
+    "icon-comments",
+    "icon-comments-alt",
+    "icon-credit-card",
+    "icon-dashboard",
+    "icon-desktop",
+    "icon-download",
+    "icon-download-alt",
+    "icon-edit",
+    "icon-envelope",
+    "icon-envelope-alt",
+    "icon-exchange",
+    "icon-exclamation-sign",
+    "icon-external-link",
+    "icon-eye-close",
+    "icon-eye-open",
+    "icon-facetime-video",
+    "icon-fighter-jet",
+    "icon-film",
+    "icon-filter",
+    "icon-fire",
+    "icon-flag",
+    "icon-folder-close",
+    "icon-folder-open",
+    "icon-folder-close-alt",
+    "icon-folder-open-alt",
+    "icon-food",
+    "icon-gift",
+    "icon-glass",
+    "icon-globe",
+    "icon-group",
+    "icon-hdd",
+    "icon-headphones",
+    "icon-heart",
+    "icon-heart-empty",
+    "icon-home",
+    "icon-inbox",
+    "icon-info-sign",
+    "icon-key",
+    "icon-leaf",
+    "icon-laptop",
+    "icon-legal",
+    "icon-lemon",
+    "icon-lightbulb",
+    "icon-lock",
+    "icon-unlock"
+];
+
+function randomIcon(){
+    return allIcon[random(0, allIcon.length - 1)];
+}
+
+
+/**
+ * 产生随机整数，包含下限值，但不包括上限值
+ * @param {Number} lower 下限
+ * @param {Number} upper 上限
+ * @return {Number} 返回在下限到上限之间的一个随机整数
+ */
+function random(lower, upper) {
+    return Math.floor(Math.random() * (upper - lower)) + lower;
+}
+
+function activeCatelog(catelogIndex){
+    if(catelogIndex != null && catelogIndex != ""){
+        var activeIndexArr = catelogIndex.split("-");
+        var activeIndex = "";
+        for(var idx in activeIndexArr){
+            var index = activeIndexArr[idx];
+            if(idx > 0){
+                activeIndex += "-";
+            }
+            activeIndex = activeIndex + index;
+            $("." + activeIndex).addClass("active");
+            $("." + activeIndex + " a:first i").addClass("icon-bookmark");
+        }
+    }
+}

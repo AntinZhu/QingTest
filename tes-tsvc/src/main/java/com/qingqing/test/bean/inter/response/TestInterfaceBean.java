@@ -1,7 +1,6 @@
 package com.qingqing.test.bean.inter.response;
 
 import com.qingqing.test.domain.inter.TestInterface;
-import com.qingqing.test.domain.inter.TestInterfaceParam;
 
 import java.util.List;
 

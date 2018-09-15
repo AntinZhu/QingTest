@@ -4,13 +4,11 @@ import java.util.Date;
 
 public class TestInterfaceCatelog {
     private Integer id;
-
     private String catelogName;
-
+    private String catelogIndex;
+    private String linkUrl;
     private Integer sortDescNum;
-
     private Boolean isDeleted;
-
     private Date createTime;
 
     private Date lastUpdateTime;
@@ -29,6 +27,22 @@ public class TestInterfaceCatelog {
 
     public void setCatelogName(String catelogName) {
         this.catelogName = catelogName == null ? null : catelogName.trim();
+    }
+
+    public String getCatelogIndex() {
+        return catelogIndex;
+    }
+
+    public void setCatelogIndex(String catelogIndex) {
+        this.catelogIndex = catelogIndex;
+    }
+
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
     }
 
     public Integer getSortDescNum() {
