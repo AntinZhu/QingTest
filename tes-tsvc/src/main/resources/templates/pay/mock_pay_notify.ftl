@@ -204,6 +204,12 @@
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
             });
 
+            $(".env").click(function(){
+                $(".env.btn-primary").removeClass("btn-primary");
+                $(this).addClass("btn-primary");
+                $("#env").val($(this).val());
+            });
+
             function handlerInterface(resu){
                 activeCatelog(resu.interfaceInfo.inter.catelogIndex);
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);

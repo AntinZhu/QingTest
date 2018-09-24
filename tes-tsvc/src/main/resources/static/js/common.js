@@ -386,12 +386,6 @@ $('.clear').click(function(){
     };
 })(jQuery);
 
-$(".env").click(function(){
-    $(".env.btn-primary").removeClass("btn-primary");
-    $(this).addClass("btn-primary");
-    $("#env").val($(this).val());
-});
-
 function thirdPayWayList(payBriefList){
     var trText = "";
     for(idx in payBriefList){

@@ -374,6 +374,14 @@
                     jsonShow(resu.data, "json-response");
                 };
 
+                $(".env").click(function(){
+                    $(".env.btn-primary").removeClass("btn-primary");
+                    $(this).addClass("btn-primary");
+                    $("#env").val($(this).val());
+
+                    refreshInterfaceUrl();
+                });
+
                 //editables on first profile page
                 $.fn.editable.defaults.mode = 'inline';
                 $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
