@@ -14,6 +14,7 @@
     <script src="${base}/static/js/json/json2.js"></script>
     <script src="${base}/static/js/json/jsonlint.js"></script>
     <script src="${base}/static/js/json/jquery.numberedtextarea.js"></script>
+    <script src="${base}/static/js/param.js"></script>
 
 </head>
 <body>
@@ -27,8 +28,10 @@
             <a class="menu-toggler" id="menu-toggler" href="#">
                 <span class="menu-text"></span>
             </a>
-            <main class="row-fluid" style="height:100%;min-height:550px;">
-                <div class="col-md-12" style="padding:0px;height:100%;">
+
+        <#include "/include/sidebar.ftl" />
+
+                <div class="main-content">
                     <div class="page-content">
                         <div class="page-header">
                             <h1>
@@ -44,7 +47,6 @@
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 <form class="form-horizontal" role="form">
-                                    <input type="hidden" id="interfaceId" name="interfaceId" />
                                     <div class="form-group">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">环境选择:</label>
 
@@ -60,134 +62,116 @@
 
                                     <div class="hr hr-dotted"></div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderId">订单ID:</label>
+                                    <div class="form-group hiden" id="paramDiv">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求参数:</label>
 
-                                        <div class="col-xs-12 col-sm-9">
-                                            <div class="clearfix">
+                                        <div class="col-xs-12 col-sm-9" id = "paramListDiv">
+                                            <div class="profile-user-info profile-user-info-striped" >
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Username </div>
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="username">alexdoe</span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Username </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="orderId">订单类型:</label>
+                                                    <div class="profile-info-value">
+                                                        <div class="profile-user-info profile-user-info-striped">
+                                                            <div class="profile-info-row">
+                                                                <div class="profile-info-name"> 名称 </div>
 
-                                        <div class="col-xs-12 col-sm-9">
-                                            <div class="clearfix">
+                                                                <div class="profile-info-value">
+                                                                    <span class="editable editable-click editable-unsaved" id="user_name" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">张</span>
+                                                                </div>
+                                                            </div>
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                                            <div class="profile-info-row">
+                                                                <div class="profile-info-name"> 用户信息 </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">环境选择:</label>
-
-                                        <div class="col-xs-12 col-sm-9">
-                                            <div class="clearfix">
-                                                <input type="hidden" name="env" id="env" value="dev" class="col-xs-12 col-sm-3" />
-                                                <button type="button" value="dev" class="btn env btn-primary">开发环境</button>
-                                                <button type="button" value="hjl" class="btn env">接口测试环境</button>
-                                                <button type="button" value="tst" class="btn env">测试环境</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="balanceAmount">第三方支付路径</label>
-                                        <div class="col-xs-12 col-sm-6">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered table-hover">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>支付方式</th>
-                                                        <th>关联记录</th>
-                                                        <th class="hidden-480">Status</th>
-                                                        <th>操作</th>
-                                                    </tr>
-                                                    </thead>
-
-                                                    <tbody id="payWayList">
-                                                    </tbody>
-                                                </table>
+                                                                <div class="profile-info-value">
+                                                                    <span class="editable editable-click" id="user" style="display: inline-block;">undefined</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="hr hr-dotted"></div>
                                 </form>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="button" id = "submitBtn">
+                                            <i class="icon-ok bigger-110"></i>
+                                            Submit
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <button class="btn" type="reset">
+                                            <i class="icon-undo bigger-110"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="hr hr-dotted"></div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" style="text-align: right;" for="balanceAmount">第三方支付路径:</label>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>支付方式</th>
+                                                    <th>关联记录</th>
+                                                    <th class="hidden-480">Status</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody id="payWayList">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
-            <div class="ace-settings-container" id="ace-settings-container">
-                <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
-                    <i class="icon-cog bigger-150"></i>
-                </div>
-
-                <div class="ace-settings-box" id="ace-settings-box">
-                    <div>
-                        <div class="pull-left">
-                            <select id="skin-colorpicker" class="hide">
-                                <option data-skin="default" value="#438EB9">#438EB9</option>
-                                <option data-skin="skin-1" value="#222A2D">#222A2D</option>
-                                <option data-skin="skin-2" value="#C6487E">#C6487E</option>
-                                <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
-                            </select>
-                        </div>
-                        <span>&nbsp; Choose Skin</span>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
-                        <label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
-                        <label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
-                        <label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
-                        <label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
-                        <label class="lbl" for="ace-settings-add-container">
-                            Inside
-                            <b>.container</b>
-                        </label>
-                    </div>
-                </div>
-            </div><!-- /#ace-settings-container -->
-        </div>
+                <#include "/include/rightu-util.ftl" />
 
         <script type="text/javascript">
-            function updatePayWayList(){
-                var data = {
-                    coursePriceType : $("#coursePriceType").val(),
-                    qingqingOrderId : $("#qingqingOrderId").val()
-                };
+            $('#submitBtn').click(updatePayWayList);
 
-                commonAjaxRequest("${base}/v1/pay/pay_infos.json", data, handlerPayWayList, true, "获取第三方支付路径出错:");
+            function updatePayWayList(){
+                var data = generateJsonParam("#paramListDiv input");
+
+                commonAjaxRequest("${base}/v1/pay/pay_infos_2.json", data, handlerPayWayList, true, "获取第三方支付路径出错:");
             }
 
             var syncPayWayList;
             function handlerPayWayList(resu){
-                var trText = "";
-                for(idx in resu.payBriefList){
-                    var payBrief = resu.payBriefList[idx];
-                    trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td>" + $("#payWayOperation").html() + "</td></tr>";
+                if(resu.payBriefList == null){
+                    $.gritter.add({
+                        title : '第三方支付路径:',
+                        text : '未找到第三方支付路径',
+                        class_name : 'gritter-info gritter-center'
+                    });
+                    return;
                 }
-                $("#payWayList").html(trText);
+                $("#payWayList").html(thirdPayWayList(resu.payBriefList));
+
+                if(syncPayWayList == null){
+                    syncPayWayList = setInterval(updatePayWayList, 5000);
+                }
                 return true;
             }
 
@@ -205,6 +189,35 @@
                 }
             });
 
+            function handlerMockThirdNotify(resu){
+                $.gritter.add({
+                    title : '模拟第三方支付成功通知成功:',
+                    text : '模拟第三方支付成功通知成功',
+                    class_name : 'gritter-info gritter-center'
+                });
+            }
+
+            $(document).ready(function(){
+                var data = {
+                    data : 1
+                };
+                commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
+            });
+
+            function handlerInterface(resu){
+                activeCatelog(resu.interfaceInfo.inter.catelogIndex);
+                var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
+
+                if(params != ""){
+                    interfaceParam = params;
+                    var paramHtmls = genHtml("", params, "0");
+                    $("#paramListDiv").html(paramHtmls);
+
+                    initHtml("", params);
+                    $("#paramDiv").removeClass("hide");
+                }
+                $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
+            }
         </script>
     </div>
 </body>

@@ -314,3 +314,90 @@ function activeCatelog(catelogIndex){
         }
     }
 }
+
+var current_json = '';
+var current_json_str = '';
+var xml_flag = false;
+var zip_flag = false;
+var shown_flag = false;
+var compress_flag = false;
+$('.tip').tooltip();
+function init(){
+    xml_flag = false;
+    zip_flag = false;
+    shown_flag = false;
+    compress_flag = false;
+    renderLine();
+}
+
+function jsonShow(content, id){
+    var result = '';
+    if(Object.prototype.toString.call(content) != "[object String]"){
+        content = JSON.stringify(content);
+    }
+    if (content!='') {
+        try{
+            current_json = jsonlint.parse(content);
+            current_json_str = JSON.stringify(current_json);
+            result = new JSONFormat(content,4).toString();
+        }catch(e){
+            result = '<span style="color: #f1592a;font-weight:bold;">' + e + '</span>';
+            current_json_str = result;
+        }
+
+        $('#' + id).html(result);
+    }else{
+        $('#' + id).html('');
+    }
+}
+
+function renderLine(){
+    var line_num = $('#json-target').height()/20;
+    $('#line-num').html("");
+    var line_num_html = "";
+    for (var i = 1; i < line_num+1; i++) {
+        line_num_html += "<div>"+i+"<div>";
+    }
+    $('#line-num').html(line_num_html);
+}
+$('.clear').click(function(){
+    $('#json-target').html('');
+});
+(function($){
+    $.fn.innerText = function(msg) {
+        if (msg) {
+            if (document.body.innerText) {
+                for (var i in this) {
+                    this[i].innerText = msg;
+                }
+            } else {
+                for (var i in this) {
+                    this[i].innerHTML.replace(/&amp;lt;br&amp;gt;/gi,"n").replace(/(&amp;lt;([^&amp;gt;]+)&amp;gt;)/gi, "");
+                }
+            }
+            return this;
+        } else {
+            if (document.body.innerText) {
+                return this[0].innerText;
+            } else {
+                return this[0].innerHTML.replace(/&amp;lt;br&amp;gt;/gi,"n").replace(/(&amp;lt;([^&amp;gt;]+)&amp;gt;)/gi, "");
+            }
+        }
+    };
+})(jQuery);
+
+$(".env").click(function(){
+    $(".env.btn-primary").removeClass("btn-primary");
+    $(this).addClass("btn-primary");
+    $("#env").val($(this).val());
+});
+
+function thirdPayWayList(payBriefList){
+    var trText = "";
+    for(idx in payBriefList){
+        var payBrief = payBriefList[idx];
+        trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td><div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\"><button type=\"button\" class=\"btn btn-xs btn-success mockPayBtn\"><i class=\"icon-ok bigger-120\"></i></button></div></td></tr>";
+    }
+
+    return trText;
+}

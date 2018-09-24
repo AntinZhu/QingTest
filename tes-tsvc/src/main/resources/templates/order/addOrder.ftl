@@ -483,14 +483,6 @@
 
 
             <div class="hide">
-                <div  id="payWayOperation">
-                    <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                        <button type="button" class="btn btn-xs btn-success mockPayBtn">
-                            <i class="icon-ok bigger-120"></i>
-                        </button>
-                    </div>
-                </div>
-
                 <div>
                     <table id="orderCourseRow">
                         <tr>
@@ -845,12 +837,9 @@
 
         var syncPayWayList;
         function handlerPayWayList(resu){
-            var trText = "";
-            for(idx in resu.payBriefList){
-                var payBrief = resu.payBriefList[idx];
-                trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td>" + $("#payWayOperation").html() + "</td></tr>";
+            if(resu.payBriefList != null){
+                $("#payWayList").html(thirdPayWayList(resu.payBriefList));
             }
-            $("#payWayList").html(trText);
             $('.mockPayBtn').click(function(){
                 var qinqqingTradeNo = $(this).parent().parent().prev("td").prev("td").text().trim();
                 var data = {

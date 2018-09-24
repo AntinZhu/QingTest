@@ -45,6 +45,17 @@ public class PayController {
         return JsonUtil.format(orderManager.getPayBriefInfo(coursePriceType.getOrderType().getNumber(), OrderIdEncoder.decodeQingqingOrderId(bean.getQingqingOrderId())));
     }
 
+    @RequestMapping("pay_infos_2")
+    @ResponseBody
+    public String payInfos2(@ProtoRequestBody PayCheckRequest bean){
+        return JsonUtil.format(orderManager.getPayBriefInfo(bean.getOrderType().getNumber(), OrderIdEncoder.decodeQingqingOrderId(bean.getQingqingCommonOrderId())));
+    }
+
+    @RequestMapping("mock_pay_notify")
+    public String mockPay(){
+        return "pay/mock_pay_notify";
+    }
+
     @RequestMapping("ack_pay")
     @ResponseBody
     public String pay(@RequestBody PayRequestBean request){
