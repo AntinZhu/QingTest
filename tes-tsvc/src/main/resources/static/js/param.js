@@ -101,6 +101,7 @@ function initHtml(parentKey, params){
             }
 
             paramInfo[paramKey]["type"] = Object.prototype.toString.call(defaultValue);
+            paramInfo[paramKey]["class"] = param.class;
         }
     }
 
@@ -120,12 +121,29 @@ function editableInit(){
                 }
             });
         }else{
-            $('.' + prop + '_label').editable({
-                type: 'text',
-                success: function(response, newValue) {
-                    $(this).prev("input").val(newValue);
-                }
-            });
+            if(paramInfo[prop]["class"] != null){
+                $(document).find(".date_editable").each(function(key,value){
+                    $(value).editable({
+                        type: 'date',
+                        format: 'yyyy-mm-dd',
+                        viewformat: 'yyyy-mm-dd',
+                        datepicker: {
+                            weekStart: 1
+                        },
+                        success: function(response, newValue) {
+                            $(this).prev("input").val(newValue.getTime());
+                        }
+                    });
+                });
+            }else{
+                $('.' + prop + '_label').editable({
+                    type: 'text',
+                    success: function(response, newValue) {
+                        $(this).prev("input").val(newValue);
+                    }
+                });
+            }
+
         }
 
         if(paramInfo[prop]["isMulti"]){
@@ -136,7 +154,7 @@ function editableInit(){
     }
 }
 
-var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn hide delInputDiv {key}\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn hide addInputDiv {key}\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div><input type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label\">{defaultName}</span></div></div>";
+var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn hide delInputDiv {key}\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn hide addInputDiv {key}\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div><input type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
 var editable_table_html = "<div class=\"profile-user-info profile-user-info-striped\" id = \"{id}\">{paramList}</div>";
 var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn hide delInputDiv {key}\" style=\"display: inline-block;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn hide addInputDiv {key}\" style=\"display: inline-block;margin-left: 25px\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\" type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>{paramList}</div></div>";
 function genHtml(parentKey, params, paramAlt){
@@ -189,6 +207,8 @@ function initInput(paramKey, param, paramAlt){
             defaultValue = param.defaultValue;
         }
     }
+    var classes = param.class == null? "":param.class;
+    paramHtml = paramHtml.replace(new RegExp("{class}","gm"), classes);
 
     paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
     paramHtml = paramHtml.replace(new RegExp("{defaultValue}","gm"), defaultValue);

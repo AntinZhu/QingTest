@@ -38,7 +38,6 @@
 
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
-    <link href="${base}/static/css/json/font-awesome.min.css" rel="stylesheet">
 
     <script src="${base}/static/js/json/hm.js"></script>
     <script src="${base}/static/js/json/jquery.message.js"></script>
@@ -324,7 +323,6 @@
             function handlerInterface(resu){
                 activeCatelog(resu.interfaceInfo.inter.catelogIndex);
                 jsonShow(resu, "json-interface");
-                jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                 interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl;
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
@@ -341,15 +339,18 @@
                     }
                 }
 
-                var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
+                if(resu.interfaceInfo.inter.paramDetail != null){
+                    jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
+                    var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
 
-                if(params != ""){
-                    interfaceParam = params;
-                    var paramHtmls = genHtml("", params, "0");
-                    $("#paramListDiv").html(paramHtmls);
+                    if(params != ""){
+                        interfaceParam = params;
+                        var paramHtmls = genHtml("", params, "0");
+                        $("#paramListDiv").html(paramHtmls);
 
-                    initHtml("", params);
-                    $("#paramDiv").removeClass("hide");
+                        initHtml("", params);
+                        $("#paramDiv").removeClass("hide");
+                    }
                 }
 
                 refreshInterfaceUrl();
@@ -390,7 +391,10 @@
 
                 $("#requestUserIdDiv").editable({
                     type: 'text',
-                    name: 'username'
+                    name: 'username',
+                    success: function(response, newValue) {
+                        $(this).prev("input").val(newValue);
+                    }
                 });
 
                 //editables
@@ -399,7 +403,7 @@
                     name: 'username'
                 });
 
-                $('#signup').editable({
+                $('.date_editable').editable({
                     type: 'date',
                     format: 'yyyy-mm-dd',
                     viewformat: 'dd/mm/yyyy',
