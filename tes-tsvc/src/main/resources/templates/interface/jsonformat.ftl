@@ -148,7 +148,7 @@
 
                                                                                 <div class="hr hr-dotted"></div>
 
-                                                                                <div class="form-group hiden" id="paramDiv">
+                                                                                <div class="form-group hide" id="paramDiv">
                                                                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求参数:</label>
 
                                                                                     <div class="col-xs-12 col-sm-9" id = "paramListDiv">
@@ -339,7 +339,7 @@
                     }
                 }
 
-                if(resu.interfaceInfo.inter.paramDetail != null){
+                if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                     var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
 
