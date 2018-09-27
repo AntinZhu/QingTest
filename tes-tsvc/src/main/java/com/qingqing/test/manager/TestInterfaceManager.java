@@ -8,6 +8,7 @@ import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.test.bean.inter.CatelogBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
+import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.domain.inter.ParamEncodeType;
@@ -35,6 +36,8 @@ public class TestInterfaceManager {
     private TestInterfaceCatelogService testInterfaceCatelogService;
     @Autowired
     private PtClient ptClient;
+    @Autowired
+    private PiClient piClient;
 
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
         TestInterface testInterface = testInterfaceService.findById(interfaceId);
@@ -118,6 +121,8 @@ public class TestInterfaceManager {
                     default:
                         throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_user_type, "unsupport request user type for value:" + testInterface.getRequestUserType());
                 }
+            case PI:
+                return piClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId(), testInterface.getRequestUserType());
             default:
                 throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_interface_type, "unsupport interface type for value:" + testInterface.getInterfaceType());
         }

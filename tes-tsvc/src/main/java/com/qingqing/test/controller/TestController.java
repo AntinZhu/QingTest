@@ -1,7 +1,10 @@
 package com.qingqing.test.controller;
 
+import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleDataResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
+import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
@@ -13,6 +16,7 @@ import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.manager.TestInterfaceManager;
+import com.qingqing.test.util.QingParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +38,14 @@ public class TestController {
     private TestInterfaceManager testInterfaceManager;
 
     @RequestMapping("json_format")
-    public String studentAddOrderPage(@RequestParam("id") Long id, Model model){
+    public String show(@RequestParam("id") Long id, Model model){
         model.addAttribute("interfaceId", id);
         return "interface/jsonformat";
+    }
+
+    @RequestMapping("edit")
+    public String edit(Model model){
+        return "interface/edit";
     }
 
     @RequestMapping("/interface")
@@ -73,5 +82,17 @@ public class TestController {
                 .setData(result)
                 .setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .build();
+    }
+
+    @RequestMapping("/interface/request/convert")
+    @ResponseBody
+    public SimpleDataResponse convertParam(@ProtoRequestBody SimpleStringRequest request) {
+        if(!request.hasData()){
+            throw new RequestValidateException("need param className", "need param className");
+        }
+
+        String data = QingParamUtil.generateParamJson(request.getData());
+        return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
+                .setData(data).build();
     }
 }

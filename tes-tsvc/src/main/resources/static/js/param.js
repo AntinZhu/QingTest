@@ -120,30 +120,6 @@ function editableInit(){
                     $(this).prev("input").val(newValue);
                 }
             });
-        }else{
-            if(paramInfo[prop]["class"] != null){
-                $(document).find(".date_editable").each(function(key,value){
-                    $(value).editable({
-                        type: 'date',
-                        format: 'yyyy-mm-dd',
-                        viewformat: 'yyyy-mm-dd',
-                        datepicker: {
-                            weekStart: 1
-                        },
-                        success: function(response, newValue) {
-                            $(this).prev("input").val(newValue.getTime());
-                        }
-                    });
-                });
-            }else{
-                $('.' + prop + '_label').editable({
-                    type: 'text',
-                    success: function(response, newValue) {
-                        $(this).prev("input").val(newValue);
-                    }
-                });
-            }
-
         }
 
         if(paramInfo[prop]["isMulti"]){
@@ -152,12 +128,42 @@ function editableInit(){
             $("." + prop + "_label").css("display", "block");
         }
     }
+
+    $(document).find(".date_editable").each(function(key,value){
+        $(value).editable({
+            type: 'date',
+            format: 'yyyy-mm-dd',
+            viewformat: 'yyyy-mm-dd',
+            datepicker: {
+                weekStart: 1
+            },
+            success: function(response, newValue) {
+                $(this).prev("input").val(newValue.getTime());
+            }
+        });
+    });
+
+    $(document).find(".input_editable").each(function(key,value){
+        $(value).editable({
+            type: 'text',
+            success: function(response, newValue) {
+                $(this).prev("input").val(newValue);
+            }
+        });
+    });
 }
 
-var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn hide delInputDiv {key}\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn hide addInputDiv {key}\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div><input type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
+var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" type=\"hidden\" name=\"{key}^name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\"><input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
+var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" type=\"hidden\" name=\"{key}^name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">{paramList}</div></div>";
+
+var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn delInputDiv {multiClass}\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn addInputDiv {multiClass}\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div><input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
 var editable_table_html = "<div class=\"profile-user-info profile-user-info-striped\" id = \"{id}\">{paramList}</div>";
-var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn hide delInputDiv {key}\" style=\"display: inline-block;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn hide addInputDiv {key}\" style=\"display: inline-block;margin-left: 25px\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\" type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>{paramList}</div></div>";
+var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn delInputDiv {multiClass}\" style=\"display: inline-block;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn addInputDiv {multiClass}\" style=\"display: inline-block;margin-left: 25px\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\" type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>{paramList}</div></div>";
 function genHtml(parentKey, params, paramAlt){
+    return genHtml(parentKey, params, paramAlt, false);
+}
+
+function genHtml(parentKey, params, paramAlt, isEditStatus){
     if(parentKey != ''){
         parentKey += "-";
     }
@@ -171,15 +177,21 @@ function genHtml(parentKey, params, paramAlt){
             param = param[0];
         }
         if(param.detail != null){
-            var subTableHtml = genHtml(parentKey + param.key, param.detail, paramAlt + "-0");
+            var subTableHtml = genHtml(parentKey + param.key, param.detail, paramAlt + "-0",isEditStatus);
 
-            var subHtml = sub_editable_html;
+            var subHtml = isEditStatus? sub_editable_html_edit:sub_editable_html;
             paramHtml = subHtml.replace(new RegExp("{key}","gm"), parentKey + param.key);
             paramHtml = paramHtml.replace(new RegExp("{name}","gm"), param.name);
-            paramHtml = paramHtml.replace(new RegExp("{paramList}","gm"), subTableHtml);
             paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
+            if(!isArray){
+                paramHtml = paramHtml.replace(new RegExp("{multiClass}","gm"), "hide");
+                paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "false");
+            }else{
+                paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "true");
+            }
+            paramHtml = paramHtml.replace(new RegExp("{paramList}","gm"), subTableHtml);
         }else{
-            paramHtml = initInput(parentKey, param, paramAlt);
+            paramHtml = initInput(parentKey, param, paramAlt, isArray, isEditStatus);
         }
         paramHtmls += paramHtml;
     }
@@ -191,8 +203,8 @@ function genHtml(parentKey, params, paramAlt){
     return tableHtml;
 }
 
-function initInput(paramKey, param, paramAlt){
-    var html = input_editable_html;
+function initInput(paramKey, param, paramAlt, isArray, isEditStatus){
+    var html = isEditStatus? input_editable_html_edit:input_editable_html;
     var paramHtml = html.replace(new RegExp("{name}","gm"), param.name);
     paramHtml = paramHtml.replace(new RegExp("{key}","gm"), paramKey + param.key);
     paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
@@ -207,11 +219,17 @@ function initInput(paramKey, param, paramAlt){
             defaultValue = param.defaultValue;
         }
     }
-    var classes = param.class == null? "":param.class;
+    var classes = param.class == null? "input_editable":param.class;
     paramHtml = paramHtml.replace(new RegExp("{class}","gm"), classes);
 
     paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
     paramHtml = paramHtml.replace(new RegExp("{defaultValue}","gm"), defaultValue);
+    if(!isArray){
+        paramHtml = paramHtml.replace(new RegExp("{multiClass}","gm"), "hide");
+        paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "false");
+    }else{
+        paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "true");
+    }
 
     return paramHtml;
 }
@@ -288,4 +306,61 @@ function formatValue(paramInfo, paramKey, value){
     }
 
     return  value;
+}
+
+function showParam(paramData, isEditStatus){
+    if(paramData != null && paramData != "") {
+        var params = JSON.parse(paramData);
+        var paramHtmls = genHtml("", params, "0", isEditStatus);
+        $("#paramListDiv").html(paramHtmls);
+
+        initHtml("", params);
+        $("#paramDiv").removeClass("hide");
+    }
+}
+
+function generateEditParam(localtion){
+    var param = new Object();
+
+    $("" + localtion).each(function(key,value){
+        if(value.name.indexOf("^name") >= 0){
+            return;
+        }
+
+        var paramNameArr = value.name.split("-");
+        var altArr = value.alt.split("-");
+        formatEditParam(param, "", paramNameArr, altArr, 0, value);
+    });
+
+    return param;
+}
+
+function formatEditParam(paramObj, paramName, paramNameArr, altArr, arrIdx, value){
+    var propName = paramNameArr[arrIdx];
+    paramName = paramName == ""? propName:paramName + "-" + propName;
+    if($(value).attr("isMulti") == "true"){ // 数组形式
+        if(paramObj[propName] == null){
+            paramObj[propName] = new Array();
+        }
+
+        if(arrIdx == paramNameArr.length -1){
+            paramObj[propName].push(formatValue(paramInfo, value.name, value.value));
+            return;
+        }else{
+            var obj = paramObj[propName];
+
+            formatEditParam(obj, paramName, paramNameArr, altArr, arrIdx + 1, value);
+        }
+    }else{
+        if(arrIdx == paramNameArr.length -1){
+            paramObj[propName] = formatValue(paramInfo, value.name, value.value);
+            return;
+        }else{
+            if(paramObj[propName] == null){
+                paramObj[propName] = new Object();
+            }
+
+            formatEditParam(paramObj[propName], paramName, paramNameArr, altArr, arrIdx + 1, value);
+        }
+    }
 }

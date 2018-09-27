@@ -1,7 +1,7 @@
-package com.qingqing.test;
+package com.qingqing.test.util;
 
-import com.qingqing.api.proto.v1.TeacherProto.TeachingTimeAndClassTimeRequest;
-import com.qingqing.test.util.QingStringUtil;
+import com.qingqing.api.proto.v1.Pay.GeneralOrderPaymentSummaryV2Response;
+import com.qingqing.common.exception.QingQingRuntimeException;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -14,15 +14,31 @@ import java.util.List;
 /**
  * Created by zhujianxing on 2018/9/26.
  */
-public class Main {
+public class QingParamUtil {
 
     public static void main(String[] args) throws ClassNotFoundException, IntrospectionException {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
-        System.out.println(printField(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
+//        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
+        System.out.println(GeneralOrderPaymentSummaryV2Response.class.getName());
     }
 
-    private static String printField(Class<?> clazz, String prefix) throws ClassNotFoundException, IntrospectionException {
+    public static String generateParamJson(String className){
+        Class clazz;
+        try {
+            clazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new QingQingRuntimeException("class not found", "class not found");
+        }
+
+        try {
+            return "[" + generateParamJson(clazz, "") + "]";
+        } catch (Exception e) {
+            throw new QingQingRuntimeException("class not found", "class not found", e);
+        }
+    }
+
+    private static String generateParamJson(Class<?> clazz, String prefix) throws ClassNotFoundException, IntrospectionException {
         if(clazz.isPrimitive() || Object.class.equals(clazz)){
             return "";
         }
@@ -34,9 +50,13 @@ public class Main {
 
                 PropertyDescriptor pd = null;
                 try{
-                    pd = new PropertyDescriptor(properties, clazz, "get" + properties, null);
+                    pd = new PropertyDescriptor(properties, clazz, QingStringUtil.generateGetMethod(properties), null);
                 }catch(IntrospectionException e){
-                    // ignore
+                    try{
+                        pd = new PropertyDescriptor(properties, clazz, QingStringUtil.generateGetListMethod(properties), null);
+                    }catch(IntrospectionException ef) {
+                        continue;
+                    }
                 }
                 properties = QingStringUtil.toUnderlineStyle(properties);
                 if(field.getType().isPrimitive() || Object.class.equals(field.getType())){ // String及基本数据类型
@@ -65,25 +85,31 @@ public class Main {
                             Class genericClazz = (Class)pt.getActualTypeArguments()[0]; //【4】 得到泛型里的class类型对象。
                             System.out.println("\t\t --- >" + genericClazz.getName());
                             if(!genericClazz.isPrimitive() && !Number.class.isAssignableFrom(genericClazz)){
-                                result.append(toCollectionProperties(properties, genericClazz));
+                                result.append("[");
+                                result.append(toObjectProperties(properties, genericClazz));
+                                result.append("]");
                             }else{
                                 if(Number.class.isAssignableFrom(genericClazz)){
+                                    result.append("[");
                                     result.append(toNumberProperties(properties));
+                                    result.append("]");
                                 }else{
+                                    result.append("[");
                                     result.append(toStringProperties(properties));
+                                    result.append("]");
                                 }
                             }
                         }
                     }else{ // 单一元素
-                       String subType =  printField(field.getType(), prefix + "\t");
-                        result.append(String.format("{\"key\":\"%s\",\"name\":\"%s\",\"detail\":%s},", properties, properties, subType));
+                        result.append(toObjectProperties(properties, field.getType()));
                     }
                 }
+                result.append(",");
             }
         }
 
         String s = result.toString();
-        return "[" + s.substring(0, s.length() - 1) + "]";
+        return s.substring(0, s.length() - 1);
     }
 
     private static String toEnumProperties(String properties, Class<?> enumClazz){
@@ -102,19 +128,19 @@ public class Main {
 
         String selectable = result.toString();
         selectable = selectable.substring(0, selectable.length() - 1);
-        return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":%s\"selectable\":[%s]},", properties, properties, defaultValue, selectable);
+        return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":%s\"selectable\":[%s]}", properties, properties, defaultValue, selectable);
     }
 
     private static String toStringProperties(String properties){
-        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"%s\"},", properties, properties, properties);
+        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"%s\"}", properties, properties, properties);
     }
 
     private static String toNumberProperties(String properties){
-        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":1},", properties, properties);
+        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":1}", properties, properties);
     }
 
-    private static String toCollectionProperties(String properties, Class<?> collectionType) throws IntrospectionException, ClassNotFoundException {
-        String subType = printField(collectionType, "\t\t\t");
-        return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"detail\":[%s]},", properties, properties, subType);
+    private static String toObjectProperties(String properties, Class<?> subTypeClass) throws IntrospectionException, ClassNotFoundException {
+        String subType = generateParamJson(subTypeClass, "\t\t\t");
+        return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"detail\":[%s]}", properties, properties, subType);
     }
 }

@@ -27,20 +27,17 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
     public static final String TEACHER_ID = "teacherId";
     public static final String TA_ID = "taId";
 
-    public static final String USER_ID = "userId";
-    public static final String USER_TYPE = "userType";
+    protected Map<UserType, String> userTypeKeyMap;
 
-    private Map<UserType, String> userTypeKeyMap;
-
-    @Autowired
-    private PassportPiClient passportPiClient;
-
-    public PtRequestInterceptor(){
+    public PtRequestInterceptor() {
         userTypeKeyMap = Maps.newHashMap();
         userTypeKeyMap.put(UserType.student, STUDENT_ID);
         userTypeKeyMap.put(UserType.teacher, TEACHER_ID);
         userTypeKeyMap.put(UserType.ta, TA_ID);
     }
+
+    @Autowired
+    private PassportPiClient passportPiClient;
 
     @Override
     protected void doApply(RequestTemplate template) {

@@ -76,20 +76,6 @@
 
                                         <div class="timeline-items">
                                             <div id="faq-list-1" class="panel-group accordion-style1 accordion-style2">
-                                                <!-- 请求的接口地址 -->
-                                                <div class="timeline-item clearfix">
-                                                    <div class="timeline-info">
-                                                        <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
-                                                    </div>
-
-                                                    <div class="widget-box transparent">
-                                                        <div class="widget-header hidden"></div>
-
-                                                        <div class="widget-body">
-                                                            <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <!-- 接口参数 -->
                                                 <div class="timeline-item clearfix">
                                                     <div class="timeline-info">
@@ -98,18 +84,6 @@
                                                     </div>
 
                                                     <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <div href="#faq-0-1"  class="accordion-toggle">
-                                                                <h1>
-                                                                    接口测试
-                                                                    <small>
-                                                                        <i class="icon-double-angle-right"></i>
-                                                                        <label id = "interfaceNameDiv">Common form elements and layouts</label>
-                                                                    </small>
-                                                                </h1>
-                                                            </div>
-                                                        </div>
-
                                                         <div id="faq-0-1">
                                                             <div id="accordion" class="accordion-style2">
                                                                 <div class="group">
@@ -117,8 +91,24 @@
 
                                                                     <div>
                                                                         <div class="col-xs-12">
+                                                                            <form class="form-horizontal">
+                                                                                <div class="form-group">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-5">Grid Sizing</label>
 
-                                                                            <#include "/include/param.ftl" />
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <input class="col-xs-10" type="text" id="className" placeholder="输入类名..." />
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+
+                                                                                        <div class="help-block" id="input-span-slider"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+
+                                                                            <div class="hr hr-dotted"></div>
+                                                                            <div class="hr hr-dotted"></div>
 
                                                                             <div class="clearfix form-actions">
                                                                                 <div class="col-md-offset-3 col-md-9">
@@ -128,39 +118,14 @@
                                                                                     </button>
 
                                                                                     &nbsp; &nbsp; &nbsp;
-                                                                                    <button class="btn" type="reset">
+                                                                                    <button class="btn" type="reset" id = "resetBtn">
                                                                                         <i class="icon-undo bigger-110"></i>
                                                                                         Reset
                                                                                     </button>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
 
-                                                            <div class="group">
-                                                                <h3 class="accordion-header">请求参数</h3>
-                                                                <div>
-                                                                    <div class="col-md-12" style="padding:0;position:relative;height:100%;">
-                                                                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                                                                            <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                                                                            <div class="ro" id="json-request" style="padding:0px 25px;white-space: pre-line;">
-                                                                                <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="group">
-                                                                    <h3 class="accordion-header">返回值</h3>
-
-                                                                    <div>
-                                                                        <div class="col-md-12" style="padding:0;position:relative;height:100%;">
-                                                                            <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                                                                                <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                                                                                <div class="ro" id="json-response" style="padding:0px 25px;white-space: pre-line;">
-                                                                                    <span data-type="object"><i style="cursor:pointer;" class="fa fa-minus-square-o" onclick="hide(this)"></i>{<br><br>}</span></div>
-                                                                            </div>
+                                                                            <#include "/include/paramDetail.ftl" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -236,118 +201,45 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
-            $(document).ready(function(){
-                var data = {
-                    data : ${interfaceId}
-                };
-                commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
-            });
-
-            function refreshInterfaceUrl(){
-                var env = $("#env").val();
-                $("#interfaceUrl").text(interfaceUrlPrefix.replace("{env}", env));
-            }
-
-            var interfaceParam;
-            var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
-            function handlerInterface(resu){
-                activeCatelog(resu.interfaceInfo.inter.catelogIndex);
-                jsonShow(resu, "json-interface");
-                interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl;
-                $("#interfaceId").val(resu.interfaceInfo.inter.id);
-                $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
-                if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
-                    $("#requestUserIdDev").removeClass("hide");
-                    var requestLabel = $("#requestUserIdDev").find("label");
-                    switch (resu.interfaceInfo.inter.requestUserType){
-                        case "teacher":
-                            requestLabel.text(requestLabel.text() + "(老师)");
-                            break;
-                        case "student":
-                            requestLabel.text(requestLabel.text() + "(学生)");
-                            break;
-                        case "ta":
-                            requestLabel.text(requestLabel.text() + "(助教)");
-                            break;
-                    }
-                }
-
-                if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
-                    jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
-                    showParam(resu.interfaceInfo.inter.paramDetail);
-                }
-
-                refreshInterfaceUrl();
-            }
-
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
 
-            jQuery(function($) {
-                $('#teacherIdBtn').click(function () {
-                    var param = generateJsonParam("#paramListDiv input");
-                    jsonShow(param, "json-request");
-                    var data = {
-                        interfaceId : $("#interfaceId").val(),
-                        requestUserId : $("#requestUserId").val(),
-                        param : JSON.stringify(param)
-                    };
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val());
-                });
+            $("#teacherIdBtn").click(function () {
+                var className = $('#className').val();
+                if(className == null || className == ""){
+                    notice("参数有误", "请输入类名");
+                    return;
+                }
 
-                function handlerTeacherInfo(resu){
-                    jsonShow(resu.data, "json-response");
+                var data = {
+                    data : className
                 };
 
-                $(".env").click(function(){
-                    $(".env.btn-primary").removeClass("btn-primary");
-                    $(this).addClass("btn-primary");
-                    $("#env").val($(this).val());
+                commonAjaxRequest("${base}/v1/test/interface/request/convert.json", data, handlerConvert, true, "解析出错:");
+            });
 
-                    refreshInterfaceUrl();
-                });
+            function handlerConvert(resu){
+                jsonShow(resu, "json-interface");
+                jsonShow(resu.data, "json-interface-detail");
+                showParam(resu.data, true);
+            }
 
-                //editables on first profile page
-                $.fn.editable.defaults.mode = 'inline';
-                $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
-                $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>'+
-                        '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
+            $("#resetBtn").click(function () {
+                jsonShow(generateEditParam("#paramListDiv input"), "json-interface");
+            });
 
-                $("#requestUserIdDiv").editable({
-                    type: 'text',
-                    name: 'username',
-                    success: function(response, newValue) {
-                        $(this).prev("input").val(newValue);
-                    }
-                });
+            jQuery(function($) {
+                activeCatelog("${Request["catelogIndex"]!"2-1"}");
 
-                //editables
-                $('#username').editable({
-                    type: 'text',
-                    name: 'username'
-                });
-
-                $('.date_editable').editable({
-                    type: 'date',
-                    format: 'yyyy-mm-dd',
-                    viewformat: 'dd/mm/yyyy',
-                    datepicker: {
-                        weekStart: 1
-                    }
-                });
-
-                $( "#accordion" ).accordion({
-                    collapsible: true ,
-                    heightStyle: "content",
-                    animate: 250,
-                    header: ".accordion-header"
-                }).sortable({
-                    axis: "y",
-                    handle: ".accordion-header",
-                    stop: function( event, ui ) {
-                        // IE doesn't register the blur when sorting
-                        // so trigger focusout handlers to remove .ui-state-focus
-                        ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+                $( "#input-span-slider" ).slider({
+                    value:10,
+                    range: "min",
+                    min: 1,
+                    max: 12,
+                    step: 1,
+                    slide: function( event, ui ) {
+                        var val = parseInt(ui.value);
+                        $('#className').attr('class', 'col-xs-'+val);
                     }
                 });
             });

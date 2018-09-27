@@ -129,6 +129,11 @@
             var linkUrl;
             if(catelog.catelog.linkUrl != null && "#" != catelog.catelog.linkUrl){
                 linkUrl = "${base}" + catelog.catelog.linkUrl;
+                if(linkUrl.indexOf("?") >= 0){
+                    linkUrl += "&catelogIndex=" + catelog.catelog.catelogIndex;
+                }else{
+                    linkUrl += "?catelogIndex=" + catelog.catelog.catelogIndex;
+                }
             }else{
                 linkUrl = "#";
             }

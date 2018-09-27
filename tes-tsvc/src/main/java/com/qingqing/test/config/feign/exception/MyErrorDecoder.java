@@ -4,6 +4,7 @@ import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.common.exception.QingQingRuntimeException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
+import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.controller.converter.BaseConverter;
 import feign.FeignException;
@@ -44,8 +45,13 @@ public class MyErrorDecoder implements ErrorDecoder {
             return new SimpleResponse(BaseConverter.convertBaseResponse(proto.getResponse()));
         }else{
             String responseValue = "";
-            responseValue = Util.toString(response.body().asReader());
-            return JsonUtil.getObjectFromJson(responseValue, SimpleResponse.class);
+            if(response.body() != null){
+                responseValue = Util.toString(response.body().asReader());
+                return JsonUtil.getObjectFromJson(responseValue, SimpleResponse.class);
+            }else{
+                String reason = response.status() + response.reason();
+                return new SimpleResponse(new BaseResponse(1001, reason, reason));
+            }
         }
     }
 }

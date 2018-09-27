@@ -175,6 +175,14 @@ function gritterError(title, response){
     });
 }
 
+function notice(title, msg){
+    $.gritter.add({
+        title : title,
+        text : msg,
+        class_name : 'gritter-error gritter-center'
+    });
+}
+
 function deleteEmptyProperty(object){
     for (var i in object) {
         var value = object[i];

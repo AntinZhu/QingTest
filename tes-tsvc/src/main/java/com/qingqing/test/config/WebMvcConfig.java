@@ -4,6 +4,7 @@ import com.qingqing.common.web.protobuf.ProtobufHttpMessageConverter;
 import com.qingqing.common.web.protobuf.ProtobufReturnValueHandler;
 import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
 import com.qingqing.test.config.feign.exception.FeginExceptionHandler;
+import com.qingqing.test.config.inteceptor.CatelogHandlerInteceptor;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
 import com.qingqing.test.config.inteceptor.MyResponseBuildInteceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -48,6 +49,12 @@ public class WebMvcConfig {
     public EnvHandlerInteceptor envHandlerInteceptor(){
         return new EnvHandlerInteceptor();
     }
+
+    @Bean
+    public CatelogHandlerInteceptor catelogHandlerInteceptor(){
+        return new CatelogHandlerInteceptor();
+    }
+
 
     @Bean
     public ProtobufHttpMessageConverter protobufHttpMessageConverter(){

@@ -7,6 +7,10 @@ import feign.RequestTemplate;
  * Created by zhujianxing on 2018/2/4.
  */
 public abstract class ProtoRequestInterceptor implements RequestInterceptor {
+
+    public static final String USER_ID = "userId";
+    public static final String USER_TYPE = "userType";
+
     @Override
     public void apply(RequestTemplate template) {
         if(template.headers().get("Content-Type") == null){
