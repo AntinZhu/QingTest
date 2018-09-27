@@ -95,9 +95,10 @@ function initHtml(parentKey, params){
                 }
 
                 paramInfo[paramKey]["options"] = options;
-                paramInfo[paramKey]["selectable"] = true;
+                paramInfo[paramKey]["is_selectable"] = true;
+                paramInfo[paramKey]["selectable"] = param.selectable;
             }else{
-                paramInfo[paramKey]["selectable"] = false;
+                paramInfo[paramKey]["is_selectable"] = false;
             }
 
             paramInfo[paramKey]["type"] = Object.prototype.toString.call(defaultValue);
@@ -110,7 +111,7 @@ function initHtml(parentKey, params){
 
 function editableInit(){
     for(var prop in paramInfo){
-        if(paramInfo[prop]["selectable"]){
+        if(paramInfo[prop]["is_selectable"]){
             var options = paramInfo[prop]["options"];
             $('.' + prop + "_label").editable({
                 type: 'select2',
@@ -153,8 +154,8 @@ function editableInit(){
     });
 }
 
-var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" type=\"hidden\" name=\"{key}^name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\"><input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
-var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" type=\"hidden\" name=\"{key}^name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">{paramList}</div></div>";
+var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" type=\"hidden\" id=\"{key}--name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\"><input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
+var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" type=\"hidden\" id=\"{key}--name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">{paramList}</div></div>";
 
 var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn delInputDiv {multiClass}\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn addInputDiv {multiClass}\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div><input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
 var editable_table_html = "<div class=\"profile-user-info profile-user-info-striped\" id = \"{id}\">{paramList}</div>";
@@ -219,7 +220,14 @@ function initInput(paramKey, param, paramAlt, isArray, isEditStatus){
             defaultValue = param.defaultValue;
         }
     }
-    var classes = param.class == null? "input_editable":param.class;
+    var classes = "";
+    if(param.selectable == null){
+        if(param.class != null){
+            classes = param.class;
+        }else{
+            classes = "input_editable";
+        }
+    }
     paramHtml = paramHtml.replace(new RegExp("{class}","gm"), classes);
 
     paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
@@ -320,47 +328,62 @@ function showParam(paramData, isEditStatus){
 }
 
 function generateEditParam(localtion){
-    var param = new Object();
+    var param = new Array();
+    var allObject = new Object();
 
     $("" + localtion).each(function(key,value){
-        if(value.name.indexOf("^name") >= 0){
+        if(value.name.indexOf("--name") >= 0 || value.name == ""){
             return;
         }
 
         var paramNameArr = value.name.split("-");
-        var altArr = value.alt.split("-");
-        formatEditParam(param, "", paramNameArr, altArr, 0, value);
+        formatEditParam(param, "", paramNameArr, 0, value, allObject);
     });
 
     return param;
 }
 
-function formatEditParam(paramObj, paramName, paramNameArr, altArr, arrIdx, value){
+function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allObject){
     var propName = paramNameArr[arrIdx];
+    //console.log(value.name + "->" + propName);
     paramName = paramName == ""? propName:paramName + "-" + propName;
-    if($(value).attr("isMulti") == "true"){ // 数组形式
-        if(paramObj[propName] == null){
-            paramObj[propName] = new Array();
-        }
 
-        if(arrIdx == paramNameArr.length -1){
-            paramObj[propName].push(formatValue(paramInfo, value.name, value.value));
-            return;
+    var obj;
+    if(allObject[paramName] == null){
+        obj = new Object();
+        obj.key = propName;
+        obj.name = $("#" + paramName + "--name").val();
+        if($("#" + paramName + "--name").attr("isMulti") == "true"){
+            var objArr = new Array();
+            objArr.push(obj);
+            paramObj.push(objArr);
         }else{
-            var obj = paramObj[propName];
-
-            formatEditParam(obj, paramName, paramNameArr, altArr, arrIdx + 1, value);
+            paramObj.push(obj);
         }
     }else{
-        if(arrIdx == paramNameArr.length -1){
-            paramObj[propName] = formatValue(paramInfo, value.name, value.value);
-            return;
-        }else{
-            if(paramObj[propName] == null){
-                paramObj[propName] = new Object();
-            }
+        obj = allObject[paramName];
+    }
 
-            formatEditParam(paramObj[propName], paramName, paramNameArr, altArr, arrIdx + 1, value);
+    if(arrIdx == paramNameArr.length -1){
+        if(paramInfo[paramName]["selectable"] != null){
+            obj.selectable = paramInfo[paramName]["selectable"];
+            var defaultObj = new Object();
+            defaultObj.name = value.value;
+            defaultObj.value = value.value;
+            obj.defaultValue = defaultObj;
+        }else{
+            obj.defaultValue = value.value;
         }
+        return;
+    }else{
+        var detailArr = allObject[paramName];
+        if(detailArr == null){
+            detailArr = new Array();
+
+            obj.detail = detailArr;
+            allObject[paramName] =detailArr;
+        }
+
+        formatEditParam(detailArr, paramName, paramNameArr, arrIdx + 1, value, allObject);
     }
 }
