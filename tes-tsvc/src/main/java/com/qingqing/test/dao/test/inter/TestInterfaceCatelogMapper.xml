@@ -5,7 +5,8 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="catelog_name" property="catelogName" jdbcType="VARCHAR" />
     <result column="catelog_index" property="catelogIndex" jdbcType="VARCHAR" />
-    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="ref_type" property="refType" javaType="CatelogRefType" />
+    <result column="ref_value" property="refValue" jdbcType="VARCHAR" />
     <result column="sort_desc_num" property="sortDescNum" jdbcType="INTEGER" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -13,7 +14,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, catelog_name, catelog_index, link_url, sort_desc_num, is_deleted, create_time, last_update_time
+    id, catelog_name, catelog_index, ref_type, ref_value, sort_desc_num, is_deleted, create_time, last_update_time
   </sql>
 
   <select id="selectByAll" resultMap="BaseResultMap">
@@ -29,10 +30,10 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceCatelog" keyProperty="id" useGeneratedKeys="true">
-    insert into t_interface_catelog (catelog_name, catelog_index, link_url, sort_desc_num,
+    insert into t_interface_catelog (catelog_name, catelog_index, ref_type, ref_value, sort_desc_num,
       is_deleted, create_time
       )
-    values (#{catelogName,jdbcType=VARCHAR}, #{catelogIndex,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, 0,
+    values (#{catelogName,jdbcType=VARCHAR}, #{catelogIndex,jdbcType=VARCHAR}, #{refType,javaType=CatelogRefType}, #{refValue, jdbcType=VARCHAR}, 0,
       0, now()
       )
   </insert>
@@ -47,4 +48,15 @@
     update t_interface_catelog set sort_desc_num = sort_desc_num + 1
     where id = #{id}
   </update>
+
+  <update id="deleteById">
+    update t_interface_catelog set is_deleted = 1
+    where id = #{id}
+  </update>
+
+  <select id="selectByRefTypeAndRefValue" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_interface_catelog
+    where ref_type = #{refType, javaType=CatelogRefType} and ref_value = #{refValue}
+  </select>
 </mapper>

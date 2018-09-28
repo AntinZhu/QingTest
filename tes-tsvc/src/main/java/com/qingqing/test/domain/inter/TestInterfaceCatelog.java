@@ -6,7 +6,8 @@ public class TestInterfaceCatelog {
     private Long id;
     private String catelogName;
     private String catelogIndex;
-    private String linkUrl;
+    private CatelogRefType refType;
+    private String refValue;
     private Integer sortDescNum;
     private Boolean isDeleted;
     private Date createTime;
@@ -37,12 +38,20 @@ public class TestInterfaceCatelog {
         this.catelogIndex = catelogIndex;
     }
 
-    public String getLinkUrl() {
-        return linkUrl;
+    public CatelogRefType getRefType() {
+        return refType;
     }
 
-    public void setLinkUrl(String linkUrl) {
-        this.linkUrl = linkUrl;
+    public void setRefType(CatelogRefType refType) {
+        this.refType = refType;
+    }
+
+    public String getRefValue() {
+        return refValue;
+    }
+
+    public void setRefValue(String refValue) {
+        this.refValue = refValue;
     }
 
     public Integer getSortDescNum() {

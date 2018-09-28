@@ -251,7 +251,6 @@
             var interfaceParam;
             var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
             function handlerInterface(resu){
-                activeCatelog(resu.interfaceInfo.inter.catelogIndex);
                 jsonShow(resu, "json-interface");
                 interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl;
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);

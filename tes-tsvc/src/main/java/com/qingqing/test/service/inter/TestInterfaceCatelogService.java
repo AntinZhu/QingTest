@@ -1,5 +1,6 @@
 package com.qingqing.test.service.inter;
 
+import com.qingqing.test.domain.inter.CatelogRefType;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 
 import java.util.List;
@@ -17,4 +18,8 @@ public interface TestInterfaceCatelogService {
     TestInterfaceCatelog selectForUpdate(Long id);
 
     void incDescSortNum(Long id);
+
+    void deletedById(Long id);
+
+    TestInterfaceCatelog selectByRefTypeAndRefValue(CatelogRefType refType, String refValue);
 }

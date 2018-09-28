@@ -97,6 +97,7 @@
         var catelog_html = "<li class=\"{index}\"><a href=\"#\" class=\"dropdown-toggle\"><i class=\"{icon}\"></i><span class=\"menu-text\"> {catelogName} </span><b class=\"arrow icon-angle-down\"></b></a><ul class=\"submenu\">{items}</ul></li>";
         function handlerCatelog(resu){
             $("#catelog-ul").html(catelogList(resu.resultList));
+            activeCatelog("${Request["catelogIndex"]!"2-1"}");
         }
 
         function catelogList(catelogList){
@@ -105,7 +106,7 @@
                 var catelog = catelogList[idx];
 
                 var thisHtml;
-                if(catelog.subCategoryList != null){
+                if(catelog.catelog.refType == "cate"){
                     thisHtml = catelogWithSub(catelog);
                 }else{
                     thisHtml = catelogItem(catelog);
@@ -131,15 +132,22 @@
             thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
             thisHtml = thisHtml.replace("{index}", catelog.catelog.catelogIndex);
             var linkUrl;
-            if(catelog.catelog.linkUrl != null && "#" != catelog.catelog.linkUrl){
-                linkUrl = "${base}" + catelog.catelog.linkUrl;
+            switch (catelog.catelog.refType){
+                case "url":
+                    linkUrl = "${base}" + catelog.catelog.refValue;
+                    break;
+                case "inter":
+                    linkUrl = "${base}/v1/test/json_format?id=" + catelog.catelog.refValue;
+                    break;
+                default:
+                    linkUrl = "#";
+            }
+            if(linkUrl != null && "#" != linkUrl){
                 if(linkUrl.indexOf("?") >= 0){
                     linkUrl += "&catelogIndex=" + catelog.catelog.catelogIndex;
                 }else{
                     linkUrl += "?catelogIndex=" + catelog.catelog.catelogIndex;
                 }
-            }else{
-                linkUrl = "#";
             }
             thisHtml = thisHtml.replace("{linkUrl}", linkUrl);
 

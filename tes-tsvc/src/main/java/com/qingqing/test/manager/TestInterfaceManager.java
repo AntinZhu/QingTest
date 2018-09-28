@@ -12,6 +12,7 @@ import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
+import com.qingqing.test.domain.inter.CatelogRefType;
 import com.qingqing.test.domain.inter.ParamEncodeType;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
@@ -45,25 +46,40 @@ public class TestInterfaceManager {
 
     @Transactional
     public Long saveTestInterface(SaveInterfaceBean saveBean, TestInterfaceCatelog parentCatelog){
-        testInterfaceService.save(saveBean.getInter());
-        Long interfaceId = saveBean.getInter().getId();
+        TestInterface testInterface = saveBean.getInter();
+        if(testInterface.getId() == null){
+            testInterfaceService.save(testInterface);
+            Long interfaceId = testInterface.getId();
 
-        TestInterfaceCatelog latestParentCatelog = catelogService.selectForUpdate(parentCatelog.getId());
-        TestInterfaceCatelog interfaceCatelog = interfaceCatelog(latestParentCatelog, interfaceId, saveBean.getCatelogName());
-        catelogService.save(interfaceCatelog);
-        catelogService.incDescSortNum(parentCatelog.getId());
+            saveInterfaceCatelog(parentCatelog.getId(), interfaceId, saveBean.getCatelogName());
+        }else{
+            Long interfaceId = testInterface.getId();
+            testInterfaceService.update(testInterface);
+            TestInterfaceCatelog catelog = catelogService.selectByRefTypeAndRefValue(CatelogRefType.inter, String.valueOf(interfaceId));
+            if(catelog == null || !catelog.getId().equals(parentCatelog.getId())){
+                saveInterfaceCatelog(parentCatelog.getId(), interfaceId, saveBean.getCatelogName());
 
-        return interfaceId;
+                if(catelog != null){
+                    catelogService.deletedById(catelog.getId());
+                }
+            }
+        }
+
+        return testInterface.getId();
     }
 
-    private TestInterfaceCatelog interfaceCatelog(TestInterfaceCatelog parentCatelog, Long interfaceId, String catelogName){
+    private void saveInterfaceCatelog(Long parentCatelogId, Long interfaceId, String catelogName){
+        TestInterfaceCatelog parentCatelog = catelogService.selectForUpdate(parentCatelogId);
+
         TestInterfaceCatelog catelog = new TestInterfaceCatelog();
         catelog.setCatelogName(catelogName);
         catelog.setCatelogIndex(parentCatelog.getCatelogIndex() + "-" + (parentCatelog.getSortDescNum() + 1));
-        catelog.setLinkUrl("/v1/test/json_format?id=" + interfaceId);
+        catelog.setRefType(CatelogRefType.inter);
+        catelog.setRefValue(String.valueOf(interfaceId));
         catelog.setDeleted(Boolean.FALSE);
 
-        return catelog;
+        catelogService.save(catelog);
+        catelogService.incDescSortNum(parentCatelog.getId());
     }
 
     public TestInterfaceBean getInterfaceBean(Long interfaceId){

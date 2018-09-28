@@ -46,6 +46,7 @@
     <script src="${base}/static/js/json/jsonlint.js"></script>
     <script src="${base}/static/js/json/jquery.numberedtextarea.js"></script>
     <script src="${base}/static/js/param.js"></script>
+    <script src="${base}/static/js/catelog.js"></script>
     <script src="${base}/static/assets/js/fuelux/fuelux.tree.min.js"></script>
     <script src="${base}/static/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
 
@@ -94,6 +95,7 @@
                                                                     <div>
                                                                         <div class="col-xs-12">
                                                                             <form class="form-horizontal">
+                                                                                <input type="hidden" id = "interfaceId" />
                                                                                 <div class="form-group">
                                                                                     <label class="col-sm-3 control-label no-padding-right" for="catelogName">目录显示名称:</label>
 
@@ -306,70 +308,8 @@
 //            });
 
             $(document).ready(function(){
-                commonAjaxRequest("${base}/v1/test/catelog.json", null, handleCateLogParam, false, "获取分类信息失败:");
+                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
             });
-
-            function handleCateLogParam(resu){
-                var cateTreeData = generateCateLogParam(resu.resultList);
-
-                $('#tree1').ace_tree({
-                    dataSource: new DataSourceTree({data: cateTreeData}),
-                    multiSelect:false,
-                    loadingHTML:'<div class="tree-loading"><i class="icon-refresh icon-spin blue"></i></div>',
-                    'open-icon' : 'icon-minus',
-                    'close-icon' : 'icon-plus',
-                    'selectable' : true,
-                    'selected-icon' : 'icon-ok',
-                    'unselected-icon' : 'icon-remove'
-                });
-
-                $('#tree1').on('updated', function(e, result) {
-
-                    //console.log(result.info[0].id);
-                    //result.info  >> an array containing selected items
-                    //result.item
-                    //result.eventType >> (selected or unselected)
-                }).on('selected', function(e,result) {
-                    $("#parentCatelogId").val(result.info[0].cate_id);
-                }).on('unselected', function(e) {
-                    //取消选择的方法
-                }).on('opened', function(e, result) {
-                    //打开文件夹的方法
-                }).on('closed', function(e) {
-                    //关闭文件夹的方法
-                });
-            }
-
-            function generateCateLogParam(resultList){
-                var catelogList;
-                for(var idx in resultList){
-                    var catelogBean = resultList[idx];
-
-                    if(catelogBean.subCategoryList != null) {
-                        var catelog = catelogBean.catelog;
-                        if(catelogList == null){
-                            catelogList= new Object();
-                        }
-                        var cateObj = new Object();
-                        cateObj.name = catelog.catelogName;
-                        var subCateObj = generateCateLogParam(catelogBean.subCategoryList);
-                        if(subCateObj != null){
-                            cateObj.type = "folder";
-
-                            var addiObj = new Object();
-                            cateObj.additionalParameters = addiObj;
-                            addiObj.children = subCateObj;
-                        }else{
-                            cateObj.type = "item";
-                            cateObj.cate_id = catelog.id;
-                        }
-
-                        catelogList[catelog.catelogName] = cateObj;
-                    }
-                }
-
-                return catelogList;
-            }
 
             $("#generateParam").click(function () {
                 var className = $('#className').val();
@@ -523,7 +463,7 @@
             }
 
             jQuery(function($) {
-                activeCatelog("${Request["catelogIndex"]!"2-1"}");
+
             });
         </script>
     </div>

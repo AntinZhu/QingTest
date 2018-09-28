@@ -87,7 +87,7 @@ while(   nOffset   !=   -1   )
 return   bstr   +   strUtf8; 
 }
 
-function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env){
+function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, otherData){
     var result = true;
     if(env == null){
         env = "";
@@ -113,7 +113,7 @@ function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env){
                 }
                 result = false;
             }else{
-                result = handlerFunc(resu);
+                result = handlerFunc(resu, otherData);
             }
         },
         error :function (jqXHR, textStatus, errorThrown) {

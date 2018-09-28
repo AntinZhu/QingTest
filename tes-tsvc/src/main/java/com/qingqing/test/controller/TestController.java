@@ -51,7 +51,7 @@ public class TestController {
 
     @RequestMapping("/interface/edit")
     public String edit(Model model){
-        return "interface/edit";
+        return "interface/editInterface";
     }
 
     @RequestMapping("/interface/save")

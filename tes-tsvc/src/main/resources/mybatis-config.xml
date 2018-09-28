@@ -10,6 +10,7 @@
         <typeAlias alias="InterfaceType" type="com.qingqing.test.domain.inter.InterfaceType" />
         <typeAlias alias="HtmlElementType" type="com.qingqing.test.domain.inter.HtmlElementType" />
         <typeAlias alias="ParamEncodeType" type="com.qingqing.test.domain.inter.ParamEncodeType" />
+        <typeAlias alias="CatelogRefType" type="com.qingqing.test.domain.inter.CatelogRefType" />
     </typeAliases>
 
     <typeHandlers>
@@ -20,5 +21,6 @@
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.InterfaceType"/>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.HtmlElementType" />
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.ParamEncodeType" />
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.CatelogRefType" />
     </typeHandlers>
 </configuration>

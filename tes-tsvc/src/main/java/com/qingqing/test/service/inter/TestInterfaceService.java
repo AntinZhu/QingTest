@@ -9,5 +9,7 @@ public interface TestInterfaceService {
 
     void save(TestInterface testInterface);
 
+    void update(TestInterface testInterface);
+
     TestInterface findById(Long id);
 }

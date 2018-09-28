@@ -1,6 +1,7 @@
 package com.qingqing.test.service.inter.impl;
 
 import com.qingqing.test.dao.test.inter.TestInterfaceCatelogMapper;
+import com.qingqing.test.domain.inter.CatelogRefType;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,15 @@ public class TestInterfaceCatelogServiceImpl implements TestInterfaceCatelogServ
     @Override
     public void incDescSortNum(Long id) {
         testInterfaceCatelogMapper.incSortDescNum(id);
+    }
+
+    @Override
+    public void deletedById(Long id) {
+        testInterfaceCatelogMapper.deleteById(id);
+    }
+
+    @Override
+    public TestInterfaceCatelog selectByRefTypeAndRefValue(CatelogRefType refType, String refValue) {
+        return testInterfaceCatelogMapper.selectByRefTypeAndRefValue(refType, refValue);
     }
 }
