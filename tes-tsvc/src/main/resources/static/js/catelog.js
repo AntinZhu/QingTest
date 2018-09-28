@@ -1,18 +1,19 @@
-function showParentCatelog(catelogUrl, cateDivId, selectValueId){
+function showParentCatelog(catelogUrl, cateDivId, selectValueId, defaultSelectId){
     var othData ={
         cateDivId :cateDivId,
-        selectValueId :selectValueId
+        selectValueId :selectValueId,
+        defaultSelectId : defaultSelectId
     };
     commonAjaxRequest(catelogUrl, null, handleCateLogParam, false, "获取分类信息失败:", "", othData);
-
 }
 
 function handleCateLogParam(resu, othData){
-    var cateTreeData = generateCateLogParam(resu.resultList);
+    var cateTreeData = generateCateLogParam(resu.resultList, othData.defaultSelectId);
 
     $('#' + othData.cateDivId).ace_tree({
         dataSource: new DataSourceTree({data: cateTreeData}),
         multiSelect:false,
+        cacheItems: false,
         loadingHTML:'<div class="tree-loading"><i class="icon-refresh icon-spin blue"></i></div>',
         'open-icon' : 'icon-minus',
         'close-icon' : 'icon-plus',
@@ -30,7 +31,7 @@ function handleCateLogParam(resu, othData){
     }).on('selected', function(e,result) {
         $("#" + othData.selectValueId).val(result.info[0].cate_id);
     }).on('unselected', function(e) {
-        //取消选择的方法
+        $("#" + othData.selectValueId).val("");
     }).on('opened', function(e, result) {
         //打开文件夹的方法
     }).on('closed', function(e) {
@@ -38,7 +39,7 @@ function handleCateLogParam(resu, othData){
     });
 }
 
-function generateCateLogParam(resultList){
+function generateCateLogParam(resultList,defaultSelectId){
     var catelogList;
     for(var idx in resultList){
         var catelogBean = resultList[idx];
@@ -53,8 +54,12 @@ function generateCateLogParam(resultList){
             cateItemObj.type = "item";
             cateItemObj.cate_id = catelog.id;
             catelogList[catelog.catelogName] = cateItemObj;
+            if(defaultSelectId != null && catelog.id == defaultSelectId){
+                cateItemObj["additionalParameters"] = new Object();
+                cateItemObj["additionalParameters"]["item-selected"] = true;
+            }
 
-            var subCateObj = generateCateLogParam(catelogBean.subCategoryList);
+            var subCateObj = generateCateLogParam(catelogBean.subCategoryList, defaultSelectId);
             if(subCateObj != null){
                 var cateObj = new Object();
                 cateObj.name = catelog.catelogName;

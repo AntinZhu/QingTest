@@ -57,6 +57,7 @@
   <select id="selectByRefTypeAndRefValue" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" />
     from t_interface_catelog
-    where ref_type = #{refType, javaType=CatelogRefType} and ref_value = #{refValue}
+    where ref_type = #{refType, javaType=CatelogRefType} and ref_value = #{refValue} and is_deleted = 0
   </select>
+
 </mapper>

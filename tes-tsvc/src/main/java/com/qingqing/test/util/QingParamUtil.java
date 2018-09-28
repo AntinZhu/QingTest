@@ -1,6 +1,6 @@
 package com.qingqing.test.util;
 
-import com.qingqing.api.proto.v1.TeacherProto.SetTeachingTimeRequest;
+import com.qingqing.api.proto.v1.Pay;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 
@@ -21,7 +21,7 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(SetTeachingTimeRequest.class.getName());
+        System.out.println(Pay.GeneralOrderPaymentSummaryV3Request.class.getName());
     }
 
     public static String generateParamJson(String className){

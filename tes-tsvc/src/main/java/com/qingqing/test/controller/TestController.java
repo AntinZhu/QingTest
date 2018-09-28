@@ -50,7 +50,11 @@ public class TestController {
     }
 
     @RequestMapping("/interface/edit")
-    public String edit(Model model){
+    public String edit(@RequestParam(value="id", defaultValue = "0") Long interfaceId, Model model){
+        if(interfaceId > 0){
+            TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
+            model.addAttribute("interfaceBean", interfaceBean);
+        }
         return "interface/editInterface";
     }
 

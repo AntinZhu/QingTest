@@ -2,6 +2,7 @@ package com.qingqing.test.dao.test.inter;
 
 import com.qingqing.test.domain.inter.CatelogRefType;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface TestInterfaceCatelogMapper {
 
     void deleteById(Long id);
 
-    TestInterfaceCatelog selectByRefTypeAndRefValue(CatelogRefType refType, String refValue);
+    TestInterfaceCatelog selectByRefTypeAndRefValue(@Param("refType") CatelogRefType refType, @Param("refValue") String refValue);
 }

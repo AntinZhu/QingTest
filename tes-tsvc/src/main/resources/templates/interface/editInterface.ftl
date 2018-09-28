@@ -66,6 +66,23 @@
             <#include "/include/sidebar.ftl" />
             <div class="main-content">
                 <div class="page-content">
+                    <div class="breadcrumbs" id="breadcrumbs">
+                        <script type="text/javascript">
+                            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+                        </script>
+
+                        <ul class="breadcrumb">
+                            <li>
+                                <i class="icon-home home-icon"></i>
+                                <a href="#">Home</a>
+                            </li>
+
+                            <li>
+                                <a href="#">UI Elements</a>
+                            </li>
+                            <li class="active">Buttons &amp; Icons</li>
+                        </ul><!-- .breadcrumb -->
+                    </div>
                     <main class="row-fluid" style="height:100%;min-height:550px;">
                         <div id="timeline-1">
                             <div class="row">
@@ -107,6 +124,30 @@
                                                                                         <div class="space-2"></div>
                                                                                     </div>
                                                                                 </div>
+
+                                                                                <#if ((interfaceBean.inter.id)!0) gt 0>
+                                                                                    <div class="form-group">
+                                                                                        <label class="col-sm-3 control-label no-padding-right" for="interfaceName">现在所属目录:</label>
+
+                                                                                        <div class="col-sm-9">
+                                                                                            <div class="clearfix">
+                                                                                                <div class="breadcrumbs" id="breadcrumbs">
+                                                                                                    <script type="text/javascript">
+                                                                                                        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+                                                                                                    </script>
+
+                                                                                                    <ul class="breadcrumb">
+                                                                                                        <#list interfaceBean.parentCatelogList as cate>
+                                                                                                            <li><a href="#">${cate.catelogName}</a></li>
+                                                                                                        </#list>
+                                                                                                    </ul><!-- .breadcrumb -->
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="space-2"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </#if>
 
                                                                                 <div class="form-group">
                                                                                     <label class="col-sm-3 control-label no-padding-right" for="interfaceName">接口所属目录:</label>
@@ -308,7 +349,45 @@
 //            });
 
             $(document).ready(function(){
+            <#if ((interfaceBean.inter.id)!0) gt 0>
+                alert("hehe");
+                $("#interfaceId").val(${interfaceBean.inter.id});
+                $("#catelogName").val("${interfaceBean.catelog.catelogName}");
+                $("#parentCatelogId").val("${interfaceBean.catelog.id}");
+                $("#interfaceName").val("${interfaceBean.inter.interfaceName}");
+                $("#interfaceUrl").val("${interfaceBean.inter.interfaceUrl}");
+                var paramDetail ='${interfaceBean.inter.paramDetail!""}';
+                $("#paramDetail").val(paramDetail);
+                if(paramDetail != ""){
+                    showParam(paramDetail, true);
+                }else{
+                    $("#hasParam").removeAttr("checked");
+                    $("#hasParam").val(0);
+                }
+
+                var interfaceType = "${interfaceBean.inter.interfaceType}";
+                $(".qing_interfaceType.btn-primary").removeClass("btn-primary");
+                $(".qing_interfaceType[value=" + interfaceType + "]").addClass("btn-primary");
+                $("#interfaceType").val(interfaceType);
+
+                var requestUserType = "${interfaceBean.inter.requestUserType}";
+                $(".qing_requestUserType.btn-primary").removeClass("btn-primary");
+                $(".qing_requestUserType[value=" + requestUserType + "]").addClass("btn-primary");
+                $("#requestUserType").val(requestUserType);
+
+                // TODO 父的cateId
+                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId", ${interfaceBean.catelog.id});
+            <#else>
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
+            </#if>
+            });
+
+            $("#resetBtn").click(function(){
+                $("#tree1").find(".tree-folder-header").each(function() {
+                    if ($(this).parent().css("display") == "block") {
+                        $(this).trigger("click");
+                    }
+                });
             });
 
             $("#generateParam").click(function () {
@@ -436,6 +515,7 @@
 
                 var data = {
                     inter:{
+                        id : $("#interfaceId").val(),
                         interfaceName : interfaceName,
                         interfaceUrl : interfaceUrl,
                         interfaceType : interfaceType,

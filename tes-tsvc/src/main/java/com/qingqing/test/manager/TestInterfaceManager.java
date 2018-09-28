@@ -2,6 +2,7 @@ package com.qingqing.test.manager;
 
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
 import com.qingqing.common.util.UserIdEncoder;
@@ -22,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhujianxing on 2018/8/30.
@@ -85,9 +83,41 @@ public class TestInterfaceManager {
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
         TestInterface testInterface = testInterfaceService.findById(interfaceId);
 
+        TestInterfaceCatelog catelog = catelogService.selectByRefTypeAndRefValue(CatelogRefType.inter, String.valueOf(interfaceId));
+        List<TestInterfaceCatelog> linkList = null;
+        if(catelog != null){
+            linkList = getCatelogLinkList(catelog);
+        }
+
         TestInterfaceBean resultBean = new TestInterfaceBean();
         resultBean.setInter(testInterface);
+        resultBean.setCatelog(catelog);
+        resultBean.setParentCatelogList(linkList);
         return resultBean;
+    }
+
+    private List<TestInterfaceCatelog> getCatelogLinkList(TestInterfaceCatelog log){
+        return getAllParentIndex(log.getCatelogIndex());
+    }
+
+    private List<TestInterfaceCatelog> getAllParentIndex(String index){
+        List<TestInterfaceCatelog> allCatelogs = testInterfaceCatelogService.selectAll();
+        Map<String, TestInterfaceCatelog> indexMapping = CollectionsUtil.mapComposerId(allCatelogs, TestInterfaceCatelog.INDEX_COMPOSER);
+
+        String[] arr = index.split("-");
+        List<TestInterfaceCatelog> allResultList = new ArrayList<>(arr.length);
+
+        String parentIndex = "";
+        for(int i = 0; i  < arr.length; i++){
+            if(i == 0){
+                parentIndex = arr[i];
+            }else{
+                parentIndex += "-" + arr[i];
+            }
+            allResultList.add(indexMapping.get(parentIndex));
+        }
+
+        return allResultList;
     }
 
     public List<CatelogBean> getCatelogList(){

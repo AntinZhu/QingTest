@@ -1,8 +1,17 @@
 package com.qingqing.test.domain.inter;
 
+import com.qingqing.common.intf.Composer;
+
 import java.util.Date;
 
 public class TestInterfaceCatelog {
+    public static final Composer<String, TestInterfaceCatelog> INDEX_COMPOSER = new Composer<String, TestInterfaceCatelog>() {
+        @Override
+        public String getComposerId(TestInterfaceCatelog testInterfaceCatelog) {
+            return testInterfaceCatelog.getCatelogIndex();
+        }
+    };
+
     private Long id;
     private String catelogName;
     private String catelogIndex;
