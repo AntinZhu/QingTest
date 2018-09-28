@@ -8,4 +8,10 @@ public interface TestInterfaceCatelogMapper {
     int insert(TestInterfaceCatelog record);
 
     List<TestInterfaceCatelog> selectByAll();
+
+    TestInterfaceCatelog findById(Long id);
+
+    TestInterfaceCatelog selectForUpdate(Long id);
+
+    void incSortDescNum(Long id);
 }

@@ -1,8 +1,8 @@
 package com.qingqing.test.util;
 
-import com.qingqing.api.proto.v1.Pay.GeneralOrderPaymentSummaryV2Response;
-import com.qingqing.api.proto.v1.ProtoBufResponse;
-import com.qingqing.common.exception.QingQingRuntimeException;
+import com.qingqing.api.proto.v1.TeacherProto.SetTeachingTimeRequest;
+import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -21,7 +21,7 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(ProtoBufResponse.SimpleResponse.class.getName());
+        System.out.println(SetTeachingTimeRequest.class.getName());
     }
 
     public static String generateParamJson(String className){
@@ -29,13 +29,13 @@ public class QingParamUtil {
         try {
             clazz = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            throw new QingQingRuntimeException("class not found", "class not found");
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "class not found","未找到对应的类"), "class not found");
         }
 
         try {
             return "[" + generateParamJson(clazz, "") + "]";
         } catch (Exception e) {
-            throw new QingQingRuntimeException("class not found", "class not found", e);
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "class not found","类解析错误"), "class not found");
         }
     }
 

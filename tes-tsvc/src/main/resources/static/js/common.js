@@ -403,3 +403,20 @@ function thirdPayWayList(payBriefList){
 
     return trText;
 }
+
+function getAndValidateEmpty(id, paranName){
+    var param = $("#" + id).val();
+    if(param == null || param == ""){
+        $.gritter.add({
+            title : '参数错误:',
+            text : paranName + "不能为空",
+            class_name : 'gritter-error gritter-center'
+        });
+    }
+
+    return param;
+}
+
+function formatObj(obj){
+    return JSON.stringify(obj);
+}

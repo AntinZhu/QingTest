@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qingqing.test.dao.test.inter.TestInterfaceCatelogMapper" >
   <resultMap id="BaseResultMap" type="com.qingqing.test.domain.inter.TestInterfaceCatelog" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="catelog_name" property="catelogName" jdbcType="VARCHAR" />
     <result column="catelog_index" property="catelogIndex" jdbcType="VARCHAR" />
     <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
@@ -22,12 +22,29 @@
     where is_deleted = FALSE
   </select>
 
+  <select id="findById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_interface_catelog
+    where id = #{id}
+  </select>
+
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceCatelog" keyProperty="id" useGeneratedKeys="true">
     insert into t_interface_catelog (catelog_name, catelog_index, link_url, sort_desc_num,
-      is_deleted, create_time, last_update_time
+      is_deleted, create_time
       )
-    values (#{catelogName,jdbcType=VARCHAR}, #{catelogIndex,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{sortDescNum,jdbcType=INTEGER},
-      #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP}
+    values (#{catelogName,jdbcType=VARCHAR}, #{catelogIndex,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, 0,
+      0, now()
       )
   </insert>
+
+  <select id="selectForUpdate" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_interface_catelog
+    where id = #{id} for update
+  </select>
+
+  <update id="incSortDescNum">
+    update t_interface_catelog set sort_desc_num = sort_desc_num + 1
+    where id = #{id}
+  </update>
 </mapper>

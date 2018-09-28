@@ -16,6 +16,11 @@ public class TestInterfaceServiceImpl implements TestInterfaceService{
     private TestInterfaceMapper testInterfaceMapper;
 
     @Override
+    public void save(TestInterface testInterface) {
+        testInterfaceMapper.insert(testInterface);
+    }
+
+    @Override
     public TestInterface findById(Long id) {
         return testInterfaceMapper.selectById(id);
     }

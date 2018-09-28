@@ -3,7 +3,7 @@ package com.qingqing.test.domain.inter;
 import java.util.Date;
 
 public class TestInterfaceCatelog {
-    private Integer id;
+    private Long id;
     private String catelogName;
     private String catelogIndex;
     private String linkUrl;
@@ -13,11 +13,11 @@ public class TestInterfaceCatelog {
 
     private Date lastUpdateTime;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -6,6 +6,7 @@ import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
 import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.test.bean.inter.CatelogBean;
+import com.qingqing.test.bean.inter.SaveInterfaceBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.client.PiClient;
@@ -18,6 +19,7 @@ import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,9 +37,34 @@ public class TestInterfaceManager {
     @Autowired
     private TestInterfaceCatelogService testInterfaceCatelogService;
     @Autowired
+    private TestInterfaceCatelogService catelogService;
+    @Autowired
     private PtClient ptClient;
     @Autowired
     private PiClient piClient;
+
+    @Transactional
+    public Long saveTestInterface(SaveInterfaceBean saveBean, TestInterfaceCatelog parentCatelog){
+        testInterfaceService.save(saveBean.getInter());
+        Long interfaceId = saveBean.getInter().getId();
+
+        TestInterfaceCatelog latestParentCatelog = catelogService.selectForUpdate(parentCatelog.getId());
+        TestInterfaceCatelog interfaceCatelog = interfaceCatelog(latestParentCatelog, interfaceId, saveBean.getCatelogName());
+        catelogService.save(interfaceCatelog);
+        catelogService.incDescSortNum(parentCatelog.getId());
+
+        return interfaceId;
+    }
+
+    private TestInterfaceCatelog interfaceCatelog(TestInterfaceCatelog parentCatelog, Long interfaceId, String catelogName){
+        TestInterfaceCatelog catelog = new TestInterfaceCatelog();
+        catelog.setCatelogName(catelogName);
+        catelog.setCatelogIndex(parentCatelog.getCatelogIndex() + "-" + (parentCatelog.getSortDescNum() + 1));
+        catelog.setLinkUrl("/v1/test/json_format?id=" + interfaceId);
+        catelog.setDeleted(Boolean.FALSE);
+
+        return catelog;
+    }
 
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
         TestInterface testInterface = testInterfaceService.findById(interfaceId);

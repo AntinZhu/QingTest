@@ -86,8 +86,12 @@
         try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
 
         $(document).ready(function(){
-            commonAjaxRequest("${base}/v1/test/catelog.json", null, handlerCatelog, false, "获取分类信息失败:");
+            refreshCatelog();
         });
+
+        function refreshCatelog(){
+            commonAjaxRequest("${base}/v1/test/catelog.json", null, handlerCatelog, false, "获取分类信息失败:");
+        }
 
         var item_html = "<li class=\"{index}\"\><a href=\"{linkUrl}\"><i class=\"\"></i>{catelogName}</a></li>";
         var catelog_html = "<li class=\"{index}\"><a href=\"#\" class=\"dropdown-toggle\"><i class=\"{icon}\"></i><span class=\"menu-text\"> {catelogName} </span><b class=\"arrow icon-angle-down\"></b></a><ul class=\"submenu\">{items}</ul></li>";

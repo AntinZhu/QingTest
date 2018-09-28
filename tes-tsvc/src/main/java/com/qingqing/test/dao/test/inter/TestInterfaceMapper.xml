@@ -35,7 +35,7 @@
     values (#{interfaceName,jdbcType=VARCHAR}, #{interfaceUrl,jdbcType=VARCHAR},
       #{interfaceType,javaType=InterfaceType}, #{requestType,javaType=RequestType}, #{requestUserType,javaType=UserType},
       #{sortDescNum,jdbcType=INTEGER}, #{catelogIndex,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT},
-      now(), #{paramDetail, jdbcType=VARCHAR}
+      now(), #{paramDetail, jdbcType=VARCHAR})
   </insert>
 
   <select id="selectByCatelogId" resultMap="BaseResultMap" parameterType="java.lang.Long" >

@@ -16,6 +16,13 @@ public class SimpleErrorCode implements ErrorCodeInterface {
         this.hintMessage = hintMessage;
     }
 
+
+    public SimpleErrorCode(String hintMessage) {
+        this.errorCode = 1001;
+        this.msg = hintMessage;
+        this.hintMessage = hintMessage;
+    }
+
     @Override
     public Integer getErrorCode() {
         return errorCode;

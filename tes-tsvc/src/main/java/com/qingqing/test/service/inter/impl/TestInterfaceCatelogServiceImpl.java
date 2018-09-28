@@ -21,4 +21,24 @@ public class TestInterfaceCatelogServiceImpl implements TestInterfaceCatelogServ
     public List<TestInterfaceCatelog> selectAll() {
         return testInterfaceCatelogMapper.selectByAll();
     }
+
+    @Override
+    public TestInterfaceCatelog findById(Long id) {
+        return testInterfaceCatelogMapper.findById(id);
+    }
+
+    @Override
+    public void save(TestInterfaceCatelog catelog) {
+        testInterfaceCatelogMapper.insert(catelog);
+    }
+
+    @Override
+    public TestInterfaceCatelog selectForUpdate(Long id) {
+        return testInterfaceCatelogMapper.selectForUpdate(id);
+    }
+
+    @Override
+    public void incDescSortNum(Long id) {
+        testInterfaceCatelogMapper.incSortDescNum(id);
+    }
 }

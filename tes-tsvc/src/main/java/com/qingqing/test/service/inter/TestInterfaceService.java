@@ -7,5 +7,7 @@ import com.qingqing.test.domain.inter.TestInterface;
  */
 public interface TestInterfaceService {
 
+    void save(TestInterface testInterface);
+
     TestInterface findById(Long id);
 }

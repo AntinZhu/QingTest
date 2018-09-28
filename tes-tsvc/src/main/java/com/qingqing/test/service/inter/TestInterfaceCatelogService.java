@@ -9,4 +9,12 @@ import java.util.List;
  */
 public interface TestInterfaceCatelogService {
     List<TestInterfaceCatelog> selectAll();
+
+    TestInterfaceCatelog findById(Long id);
+
+    void save(TestInterfaceCatelog catelog);
+
+    TestInterfaceCatelog selectForUpdate(Long id);
+
+    void incDescSortNum(Long id);
 }

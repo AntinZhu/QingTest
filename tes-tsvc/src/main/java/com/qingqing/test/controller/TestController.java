@@ -11,11 +11,15 @@ import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.inter.CatelogBean;
+import com.qingqing.test.bean.inter.SaveInterfaceBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
+import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
+import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.manager.TestInterfaceManager;
+import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.util.QingParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +40,8 @@ public class TestController {
 
     @Autowired
     private TestInterfaceManager testInterfaceManager;
+    @Autowired
+    private TestInterfaceCatelogService catelogService;
 
     @RequestMapping("json_format")
     public String show(@RequestParam("id") Long id, Model model){
@@ -43,9 +49,24 @@ public class TestController {
         return "interface/jsonformat";
     }
 
-    @RequestMapping("edit")
+    @RequestMapping("/interface/edit")
     public String edit(Model model){
         return "interface/edit";
+    }
+
+    @RequestMapping("/interface/save")
+    @ProtoResponseBody
+    public SimpleDataResponse save(@RequestBody SaveInterfaceBean saveBean){
+        Long parentCatelogId = saveBean.getParentCatelogId();
+        TestInterfaceCatelog testInterfaceCatelog = catelogService.findById(parentCatelogId);
+        if(testInterfaceCatelog == null){
+            throw new ErrorCodeException(new SimpleErrorCode("未能找到对应所属目录"), "cannot found parent catelog");
+        }
+
+        Long interfaceId = testInterfaceManager.saveTestInterface(saveBean, testInterfaceCatelog);
+
+        return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
+                .setData(String.valueOf(interfaceId)).build();
     }
 
     @RequestMapping("/interface")
