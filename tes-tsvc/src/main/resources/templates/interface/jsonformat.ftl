@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Hello World!</title>
-    <#include "/include/resource.ftl" />
+    <#include "/include/resource_uncompressed.ftl" />
 
     <style>
         .spinner-preview {

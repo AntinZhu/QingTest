@@ -4,19 +4,19 @@ $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-
 '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
 
 function cloneInput(){
-    var inputClone = $(this).parent().parent().clone();
+    var inputClone = $(this).parent().parent().parent().clone();
     inputClone.children("div .addInputDiv").remove();
-    var newAltParent = $(this).parent().parent().parent().attr("alt");
+    var newAltParent = $(this).parent().parent().parent().parent().attr("alt");
     var newAltParent = incAlt(newAltParent);
     var firstAltParent = firstAlt(newAltParent);
 
-    $(this).parent().parent().parent().attr("alt", newAltParent);
+    $(this).parent().parent().parent().parent().attr("alt", newAltParent);
     inputClone.find("input").each(function(index,element){
         var nowAlt = $(element).attr("alt");
         var newAlt= nowAlt.replace(firstAltParent, newAltParent);
         $(element).attr("alt", newAlt);
     });
-    $(this).parent().parent().parent().append(inputClone);
+    $(this).parent().parent().parent().parent().append(inputClone);
 
     editableInit();
 }
@@ -52,7 +52,12 @@ function firstAlt(alt){
 }
 
 function removeInput(){
-    $(this).parent().parent().remove();
+    if($(this).attr("isMulti") == "true"){
+        alert("hehe");
+        $(this).parent().parent().remove();
+    }else{
+        $(this).parent().parent().parent().remove();
+    }
 }
 
 var paramInfo = new Object();
@@ -97,6 +102,7 @@ function initHtml(parentKey, params){
                 paramInfo[paramKey]["options"] = options;
                 paramInfo[paramKey]["is_selectable"] = true;
                 paramInfo[paramKey]["selectable"] = param.selectable;
+                paramInfo[paramKey]["defaultValue"] = param.defaultValue.value;
             }else{
                 paramInfo[paramKey]["is_selectable"] = false;
             }
@@ -115,10 +121,11 @@ function editableInit(){
             var options = paramInfo[prop]["options"];
             $('.' + prop + "_label").editable({
                 type: 'select2',
-                value : options[0].text,
+                value : paramInfo[prop]["defaultValue"],
                 source: options,
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
+                    $(this).prev("input").trigger("change");
                 }
             });
         }
@@ -156,12 +163,17 @@ function editableInit(){
     });
 }
 
-var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" id=\"{key}--name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\"><input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
+var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" class=\"qing_editable\" isMulti=\"{isMulti}\" type=\"hidden\" id=\"{key}--name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\"><input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
 var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" id=\"{key}--name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">{paramList}</div></div>";
 
-var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn delInputDiv {multiClass}\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn addInputDiv {multiClass}\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div><input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
+var del_btn_html = "<div class=\"spinner-buttons input-group-btn delInputDiv\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div>";
+var add_btn_html = "<div class=\"spinner-buttons input-group-btn addInputDiv\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>";
+del_btn_html = "<div class='pull-right action-buttons'><a class=\"red delInputBtn\" isMulti='{isMulti}' href=\"#\"><i class=\"icon-trash bigger-130\"></i></a></div>";
+add_btn_html = "<div style='margin-bottom: 22px;'><div class='pull-right action-buttons'><a class=\"blue addInputBtn\" href=\"#\"><i class=\"icon-pencil bigger-130\"></i></a></div></div>";
+
+var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\">{editable}" + del_btn_html + "<input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
 var editable_table_html = "<div class=\"profile-user-info profile-user-info-striped\" id = \"{id}\">{paramList}</div>";
-var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\"><div class=\"spinner-buttons input-group-btn delInputDiv {multiClass}\" style=\"display: inline-block;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div><div class=\"spinner-buttons input-group-btn addInputDiv {multiClass}\" style=\"display: inline-block;margin-left: 25px\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\" type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>{paramList}</div></div>";
+var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\">{editable}" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
 function genHtml(parentKey, params, paramAlt){
     return genHtml(parentKey, params, paramAlt, false);
 }
@@ -187,10 +199,11 @@ function genHtml(parentKey, params, paramAlt, isEditStatus){
             paramHtml = paramHtml.replace(new RegExp("{name}","gm"), param.name);
             paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
             if(!isArray){
-                paramHtml = paramHtml.replace(new RegExp("{multiClass}","gm"), "hide");
+                paramHtml = paramHtml.replace(new RegExp("{editable}","gm"), "");
                 paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "false");
             }else{
                 paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "true");
+                paramHtml = paramHtml.replace(new RegExp("{editable}","gm"), add_btn_html);
             }
             paramHtml = paramHtml.replace(new RegExp("{paramList}","gm"), subTableHtml);
         }else{
@@ -235,9 +248,10 @@ function initInput(paramKey, param, paramAlt, isArray, isEditStatus){
     paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
     paramHtml = paramHtml.replace(new RegExp("{defaultValue}","gm"), defaultValue);
     if(!isArray){
-        paramHtml = paramHtml.replace(new RegExp("{multiClass}","gm"), "hide");
+        paramHtml = paramHtml.replace(new RegExp("{editable}","gm"), "");
         paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "false");
     }else{
+        paramHtml = paramHtml.replace(new RegExp("{editable}","gm"), add_btn_html);
         paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "true");
     }
 
@@ -374,7 +388,7 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
             defaultObj.value = value.value;
             obj.defaultValue = defaultObj;
         }else{
-            obj.defaultValue = value.value;
+            obj.defaultValue = formatValue(paramInfo, value.name,value.value);
         }
         return;
     }else{

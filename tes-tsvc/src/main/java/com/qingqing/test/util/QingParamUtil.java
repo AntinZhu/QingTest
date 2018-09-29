@@ -35,7 +35,7 @@ public class QingParamUtil {
         try {
             return "[" + generateParamJson(clazz, "") + "]";
         } catch (Exception e) {
-            throw new ErrorCodeException(new SimpleErrorCode(1001, "class not found","类解析错误"), "class not found");
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "class not found","类解析错误"), "class not found", e);
         }
     }
 
@@ -59,52 +59,52 @@ public class QingParamUtil {
                         continue;
                     }
                 }
-                properties = QingStringUtil.toUnderlineStyle(properties);
-                if(field.getType().isPrimitive() || Object.class.equals(field.getType())){ // String及基本数据类型
-                    if(pd != null ){
-                        System.out.println(prefix + properties + "->" + field.getType().getName());
-                        Class<?> propertiesType = (Class<?>) pd.getReadMethod().getGenericReturnType();
-                        if(String.class.equals(propertiesType) || propertiesType.isPrimitive() || Number.class.isAssignableFrom(propertiesType)){
-                            if(String.class.equals(propertiesType)){
-                                result.append(toStringProperties(properties));
-                            }else{
-                                result.append(toNumberProperties(properties));
-                            }
-                        }else{
-                            result.append(toEnumProperties(properties, propertiesType));
-                        }
-                        System.out.println(prefix + "[" + propertiesType + "]");
-                    }
-                }else{
-                    System.out.println(prefix + properties + "->" + field.getType().getName());
-                    if(field.getType().isAssignableFrom(List.class)){ // list
-                        Type fc = field.getGenericType(); // 关键的地方，如果是List类型，得到其Generic的类型
+                if(pd != null){
+                    properties = QingStringUtil.toUnderlineStyle(properties);
+                    if(List.class.isAssignableFrom(field.getType())) { // list
+                        Type fc = pd.getReadMethod().getGenericReturnType(); // 关键的地方，如果是List类型，得到其Generic的类型
                         if(fc == null) continue;
 
                         if(fc instanceof ParameterizedType){
                             ParameterizedType pt = (ParameterizedType) fc;
                             Class genericClazz = (Class)pt.getActualTypeArguments()[0]; //【4】 得到泛型里的class类型对象。
                             System.out.println("\t\t --- >" + genericClazz.getName());
-                            if(!genericClazz.isPrimitive() && !Number.class.isAssignableFrom(genericClazz)){
-                                result.append("[");
-                                result.append(toObjectProperties(properties, genericClazz));
-                                result.append("]");
-                            }else{
-                                if(Number.class.isAssignableFrom(genericClazz)){
-                                    result.append("[");
-                                    result.append(toNumberProperties(properties));
-                                    result.append("]");
-                                }else{
-                                    result.append("[");
-                                    result.append(toStringProperties(properties));
-                                    result.append("]");
-                                }
-                            }
+                            result.append("[");
+                            result.append(toProperties(properties, genericClazz));
+                            result.append("]");
                         }
-                    }else{ // 单一元素
-                        result.append(toObjectProperties(properties, field.getType()));
+                    }else{
+                        Class<?> propertiesType = (Class<?>) pd.getReadMethod().getGenericReturnType();
+                        result.append(toProperties(properties, propertiesType));
                     }
                 }
+
+//                if(field.getType().isPrimitive() || Object.class.equals(field.getType())){ // String及基本数据类型
+//                    if(pd != null ){
+//                        System.out.println(prefix + properties + "->" + field.getType().getName());
+//                        Class<?> propertiesType = (Class<?>) pd.getReadMethod().getGenericReturnType();
+//                        result.append(toProperties(properties, propertiesType));
+//                        System.out.println(prefix + "[" + propertiesType + "]");
+//                    }
+//                }else{
+//                    System.out.println(prefix + properties + "->" + field.getType().getName());
+//                    if(field.getType().isAssignableFrom(List.class)){ // list
+//                        Type fc = pd.getReadMethod().getGenericReturnType(); // 关键的地方，如果是List类型，得到其Generic的类型
+//                        if(fc == null) continue;
+//
+//                        if(fc instanceof ParameterizedType){
+//                            ParameterizedType pt = (ParameterizedType) fc;
+//                            Class genericClazz = (Class)pt.getActualTypeArguments()[0]; //【4】 得到泛型里的class类型对象。
+//                            System.out.println("\t\t --- >" + genericClazz.getName());
+//                            result.append("[");
+//                            result.append(toProperties(properties, genericClazz));
+//                            result.append("]");
+//                        }
+//                    }else{ // 单一元素
+//                        result.append(toObjectProperties(properties, field.getType()));
+//                    }
+//                }
+
                 result.append(",");
             }
         }
@@ -113,23 +113,43 @@ public class QingParamUtil {
         return s.substring(0, s.length() - 1);
     }
 
-    private static String toEnumProperties(String properties, Class<?> enumClazz){
+    private static String toProperties(String properties, Class propertiesType) throws IntrospectionException, ClassNotFoundException {
+        if(String.class.equals(propertiesType) || propertiesType.isPrimitive() || Number.class.isAssignableFrom(propertiesType)){
+            if(String.class.equals(propertiesType)){
+                return toStringProperties(properties);
+            }else{
+                return toNumberProperties(properties);
+            }
+        }else{
+            return toObjectOrEnumProperties(properties, propertiesType);
+        }
+    }
+
+    private static String toObjectOrEnumProperties(String properties, Class<?> enumClazz) throws IntrospectionException, ClassNotFoundException {
         StringBuilder result = new StringBuilder();
-        String defaultValue = "";
+        String defaultValue = null;
+        boolean isEnum = false;
         for(Field field : enumClazz.getDeclaredFields()) {
             if ((Modifier.STATIC & field.getModifiers()) == Modifier.STATIC) {
                 if(enumClazz.equals(field.getType())){
+                    isEnum = true;
                     String select = String.format("{\"name\":\"%s\",\"value\":\"%s\"},", field.getName(), field.getName());
-                    defaultValue = select;
+                    if(defaultValue == null){
+                        defaultValue = select;
+                    }
                     result.append(select);
                     System.out.println(field.getName() + "-----" + field.getType().getName());
                 }
             }
         }
 
-        String selectable = result.toString();
-        selectable = selectable.substring(0, selectable.length() - 1);
-        return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":%s\"selectable\":[%s]}", properties, properties, defaultValue, selectable);
+        if(isEnum){
+            String selectable = result.toString();
+            selectable = selectable.substring(0, selectable.length() - 1);
+            return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":%s\"selectable\":[%s]}", properties, properties, defaultValue, selectable);
+        }else{
+            return toObjectProperties(properties, enumClazz);
+        }
     }
 
     private static String toStringProperties(String properties){
