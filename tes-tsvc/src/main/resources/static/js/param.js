@@ -53,15 +53,19 @@ function firstAlt(alt){
 
 function removeInput(){
     if($(this).attr("isMulti") == "true"){
-        alert("hehe");
+        var par = $(this).parent().parent().parent();
         $(this).parent().parent().remove();
+        if(par.children("div.profile-info-value").length == 0){
+            par.remove();
+        }
     }else{
         $(this).parent().parent().parent().remove();
     }
+    notifyParamChanged();
 }
 
 var paramInfo = new Object();
-function initHtml(parentKey, params){
+function initHtml(parentKey, params, valueChangedNotifyId){
     if(parentKey != ''){
         parentKey += "-";
     }
@@ -76,6 +80,7 @@ function initHtml(parentKey, params){
         var paramKey = parentKey + param.key;
         paramInfo[paramKey] = new Object();
         paramInfo[paramKey]["isMulti"] = isMulti;
+        paramInfo["valueChangedNotifyId"] = valueChangedNotifyId;
 
         if(param.detail != null){
             initHtml(paramKey, param.detail);
@@ -115,8 +120,13 @@ function initHtml(parentKey, params){
     editableInit();
 }
 
+var notParamPropertiesArr = ["valueChangedNotifyId"];
 function editableInit(){
     for(var prop in paramInfo){
+        if($.inArray(prop, notParamPropertiesArr) != -1){
+            continue;
+        }
+
         if(paramInfo[prop]["is_selectable"]){
             var options = paramInfo[prop]["options"];
             $('.' + prop + "_label").editable({
@@ -125,7 +135,7 @@ function editableInit(){
                 source: options,
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
-                    $(this).prev("input").trigger("change");
+                    notifyParamChanged();
                 }
             });
         }
@@ -147,7 +157,7 @@ function editableInit(){
             },
             success: function(response, newValue) {
                 $(this).prev("input").val(newValue.getTime());
-                $(this).prev("input").trigger("change");
+                notifyParamChanged();
             }
         });
     });
@@ -157,23 +167,30 @@ function editableInit(){
             type: 'text',
             success: function(response, newValue) {
                 $(this).prev("input").val(newValue);
-                $(this).prev("input").trigger("change");
+                notifyParamChanged();
             }
         });
     });
 }
 
-var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" class=\"qing_editable\" isMulti=\"{isMulti}\" type=\"hidden\" id=\"{key}--name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\"><input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
-var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" id=\"{key}--name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">{paramList}</div></div>";
+function notifyParamChanged(){
+    if(paramInfo["valueChangedNotifyId"] != null){
+        $("#" + paramInfo["valueChangedNotifyId"]).trigger("change");
+    }
+}
 
 var del_btn_html = "<div class=\"spinner-buttons input-group-btn delInputDiv\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div>";
 var add_btn_html = "<div class=\"spinner-buttons input-group-btn addInputDiv\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>";
-del_btn_html = "<div class='pull-right action-buttons'><a class=\"red delInputBtn\" isMulti='{isMulti}' href=\"#\"><i class=\"icon-trash bigger-130\"></i></a></div>";
-add_btn_html = "<div style='margin-bottom: 22px;'><div class='pull-right action-buttons'><a class=\"blue addInputBtn\" href=\"#\"><i class=\"icon-pencil bigger-130\"></i></a></div></div>";
+del_btn_html = "<div class='pull-right action-buttons'><a class=\"red delInputBtn hide\" isMulti='{isMulti}' href=\"###\"><i class=\"icon-trash bigger-130\"></i></a></div>";
+add_btn_html = "<div style='margin-bottom: 22px;'><div class='pull-right action-buttons'><a class=\"blue addInputBtn\" href=\"###\"><i class=\"icon-plus bigger-130\"></i></a></div></div>";
 
 var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\">{editable}" + del_btn_html + "<input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
 var editable_table_html = "<div class=\"profile-user-info profile-user-info-striped\" id = \"{id}\">{paramList}</div>";
 var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\">{editable}" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+
+var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" class=\"qing_editable\" isMulti=\"{isMulti}\" type=\"hidden\" id=\"{key}--name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\">" + del_btn_html + "<input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
+var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" id=\"{key}--name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+
 function genHtml(parentKey, params, paramAlt){
     return genHtml(parentKey, params, paramAlt, false);
 }
@@ -332,13 +349,23 @@ function formatValue(paramInfo, paramKey, value){
     return  value;
 }
 
-function showParam(paramData, isEditStatus){
+function showParam(options){
+    var paramData = options.paramData;
+    var isEditStatus = false;
+    if("isEditStatus" in options){
+        isEditStatus = options.isEditStatus;
+    }
+    var valueChangedNotifyId;
+    if("valueChangedNotifyId" in options){
+        valueChangedNotifyId = options.valueChangedNotifyId;
+    }
+
     if(paramData != null && paramData != "") {
         var params = JSON.parse(paramData);
         var paramHtmls = genHtml("", params, "0", isEditStatus);
         $("#paramListDiv").html(paramHtmls);
 
-        initHtml("", params);
+        initHtml("", params, valueChangedNotifyId);
         $("#paramDiv").removeClass("hide");
     }
 }
@@ -403,3 +430,13 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
         formatEditParam(detailArr, paramName, paramNameArr, arrIdx + 1, value, allObject);
     }
 }
+
+$(document).on("change", "#deleteBtnSwitch", function(){
+    if($(this).val() == 0){
+        $(".delInputBtn").removeClass("hide");
+        $(this).val(1);
+    }else{
+        $(".delInputBtn").addClass("hide");
+        $(this).val(0);
+    }
+});

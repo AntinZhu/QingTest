@@ -21,7 +21,7 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(Pay.GeneralOrderPaymentSummaryV3Request.class.getName());
+        System.out.println(Pay.GeneralOrderPaymentSummaryV2Response.class.getName());
     }
 
     public static String generateParamJson(String className){
@@ -131,7 +131,7 @@ public class QingParamUtil {
         boolean isEnum = false;
         for(Field field : enumClazz.getDeclaredFields()) {
             if ((Modifier.STATIC & field.getModifiers()) == Modifier.STATIC) {
-                if(enumClazz.equals(field.getType())){
+                if(!"DEFAULT_INSTANCE".equals(field.getName()) && enumClazz.equals(field.getType())){
                     isEnum = true;
                     String select = String.format("{\"name\":\"%s\",\"value\":\"%s\"},", field.getName(), field.getName());
                     if(defaultValue == null){

@@ -339,7 +339,7 @@
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
             //输入框的值改变时触发
-            $(document).on("change", "#paramListDiv :input.qing_editable",function(e){
+            $(document).on("change", "#paramDetail",function(e){
                 $("#paramDetail").val(generateEditParam("#paramListDiv input"));
             });
 
@@ -350,7 +350,6 @@
 
             $(document).ready(function(){
             <#if ((interfaceBean.inter.id)!0) gt 0>
-                alert("hehe");
                 $("#interfaceId").val(${interfaceBean.inter.id});
                 $("#catelogName").val("${interfaceBean.catelog.catelogName}");
                 $("#parentCatelogId").val("${interfaceBean.catelog.id}");
@@ -359,7 +358,7 @@
                 var paramDetail ='${interfaceBean.inter.paramDetail!""}';
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){
-                    showParam(paramDetail, true);
+                    showParam({paramData:paramDetail, isEditStatus:true, valueChangedNotifyId:"paramDetail"});
                 }else{
                     $("#hasParam").removeAttr("checked");
                     $("#hasParam").val(0);
@@ -407,7 +406,7 @@
             function handlerConvert(resu){
                 jsonShow(resu, "json-interface");
                 jsonShow(resu.data, "json-interface-detail");
-                showParam(resu.data, true);
+                showParam({paramData:resu.data, isEditStatus:true,valueChangedNotifyId:"paramDetail"});
                 $("#paramDetail").val(resu.data);
             }
 

@@ -327,7 +327,7 @@
             function handlerConvert(resu){
                 jsonShow(resu, "json-interface");
                 jsonShow(resu.data, "json-interface-detail");
-                showParam(resu.data, true);
+                showParam({paramData:resu.data, isEditStatus:true});
                 $("#paramDetail").val(resu.data);
             }
 

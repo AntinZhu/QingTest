@@ -273,7 +273,7 @@
 
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
-                    showParam(resu.interfaceInfo.inter.paramDetail);
+                    showParam({paramData:resu.interfaceInfo.inter.paramDetail});
                 }
 
                 refreshInterfaceUrl();
