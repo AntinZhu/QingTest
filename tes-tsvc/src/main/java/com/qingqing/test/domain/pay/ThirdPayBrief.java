@@ -1,6 +1,5 @@
 package com.qingqing.test.domain.pay;
 
-import com.qingqing.common.domain.order.OrderType;
 import com.qingqing.common.util.converter.lang.BigDecimalUtil;
 import com.qingqing.test.bean.pay.OrderPayTypeV3;
 
@@ -15,7 +14,7 @@ public class ThirdPayBrief {
 	
 	private Long relatedOrderId;
 	
-	private OrderType relatedOrderType;
+	private String relatedOrderType;
 	
 	private String qingqingTradeNo;
 	
@@ -167,11 +166,11 @@ public class ThirdPayBrief {
 		this.relatedOrderId = relatedOrderId;
 	}
 
-	public OrderType getRelatedOrderType() {
+	public String getRelatedOrderType() {
 		return relatedOrderType;
 	}
 
-	public void setRelatedOrderType(OrderType relatedOrderType) {
+	public void setRelatedOrderType(String relatedOrderType) {
 		this.relatedOrderType = relatedOrderType;
 	}
 

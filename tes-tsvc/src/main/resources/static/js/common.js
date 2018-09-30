@@ -398,7 +398,7 @@ function thirdPayWayList(payBriefList){
     var trText = "";
     for(idx in payBriefList){
         var payBrief = payBriefList[idx];
-        trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td><div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\"><button type=\"button\" class=\"btn btn-xs btn-success mockPayBtn\"><i class=\"icon-ok bigger-120\"></i></button></div></td></tr>";
+        trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td>" + payBrief.tradeId + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td><div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\"><button type=\"button\" class=\"btn btn-xs btn-success mockPayBtn\"><i class=\"icon-ok bigger-120\"></i></button></div></td></tr>";
     }
 
     return trText;

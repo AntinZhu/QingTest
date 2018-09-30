@@ -9,6 +9,7 @@ public class ThirdPayBriefBean {
     private String payTypeName;
     private String qingqingTradeNo;
     private String payStatus;
+    private String tradeId;
 
     public String getPayTypeKey() {
         return payTypeKey;
@@ -40,5 +41,13 @@ public class ThirdPayBriefBean {
 
     public void setPayStatus(String payStatus) {
         this.payStatus = payStatus;
+    }
+
+    public String getTradeId() {
+        return tradeId;
+    }
+
+    public void setTradeId(String tradeId) {
+        this.tradeId = tradeId;
     }
 }

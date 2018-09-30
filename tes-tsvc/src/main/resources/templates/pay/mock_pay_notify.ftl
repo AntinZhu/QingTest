@@ -73,6 +73,7 @@
                                                 <tr>
                                                     <th>支付方式</th>
                                                     <th>关联记录</th>
+                                                    <th>TradeId</th>
                                                     <th class="hidden-480">Status</th>
                                                     <th>操作</th>
                                                 </tr>
@@ -97,7 +98,7 @@
             function updatePayWayList(){
                 var data = generateJsonParam("#paramListDiv input");
 
-                commonAjaxRequest("${base}/v1/pay/pay_infos_2.json", data, handlerPayWayList, true, "获取第三方支付路径出错:");
+                commonAjaxRequest("${base}/v1/pay/pay_infos_2.json", data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val());
             }
 
             var syncPayWayList;
@@ -119,12 +120,12 @@
             }
 
             $(document).off("click", '.mockPayBtn').on('click', '.mockPayBtn',function(){
-                var qinqqingTradeNo = $(this).parent().parent().prev("td").prev("td").text().trim();
+                var qinqqingTradeNo = $(this).parent().parent().prev("td").prev("td").prev("td").text().trim();
                 var data = {
                     data : qinqqingTradeNo
                 };
 
-                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json", data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:");
+                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json", data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:", $("#env").val());
 
 
                 if(syncPayWayList == null){
@@ -154,7 +155,7 @@
             });
 
             function handlerInterface(resu){
-                activeCatelog(resu.interfaceInfo.inter.catelogIndex);
+//                activeCatelog(resu.interfaceInfo.inter.catelogIndex);
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
 
                 if(params != ""){

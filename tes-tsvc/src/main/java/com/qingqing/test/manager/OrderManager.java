@@ -241,6 +241,7 @@ public class OrderManager {
                 bean.setPayTypeKey(payType.getKey());
                 bean.setPayTypeName(payType.getName());
                 bean.setQingqingTradeNo(thirdPayBrief.getQingqingTradeNo());
+                bean.setTradeId(thirdPayBrief.getTradeId());
 
                 beanList.add(bean);
             }
