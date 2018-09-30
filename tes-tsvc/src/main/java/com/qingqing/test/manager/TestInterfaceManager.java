@@ -19,6 +19,7 @@ import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceService;
+import com.qingqing.test.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,8 @@ public class TestInterfaceManager {
     private PtClient ptClient;
     @Autowired
     private PiClient piClient;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     public Long saveTestInterface(SaveInterfaceBean saveBean, TestInterfaceCatelog parentCatelog){
@@ -207,9 +210,9 @@ public class TestInterfaceManager {
                 case order_id:
                     return OrderIdEncoder.encodeOrderId(Long.parseLong(paramValue));
                 case student_id:
-                    return UserIdEncoder.encodeUser(UserType.student, Long.parseLong(paramValue));
+                    return userService.encodeUser(UserType.student, Long.parseLong(paramValue));
                 case teacher_id:
-                    return UserIdEncoder.encodeUser(UserType.teacher, Long.parseLong(paramValue));
+                    return userService.encodeUser(UserType.teacher, Long.parseLong(paramValue));
             }
         }
 

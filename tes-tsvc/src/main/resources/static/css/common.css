@@ -1,0 +1,22 @@
+@charset "utf-8";
+.sidebar_right{
+	width: 400px;
+	float: left;
+	position: relative;
+	border: 1px solid #ccc;
+	border-width: 0 1px 0 0;
+	background-color: #f2f2f2;
+}
+
+.sidebar_right:before{
+	content: "";
+	display: block;
+	width: 400px;
+	position: fixed;
+	bottom: 0;
+	top: 0;
+	z-index: -1;
+	background-color: #f2f2f2;
+	border: 1px solid #ccc;
+	border-width: 0 1px 0 0;
+}

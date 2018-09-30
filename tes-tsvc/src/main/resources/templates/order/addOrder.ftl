@@ -410,6 +410,7 @@
                                                                             <tr>
                                                                                 <th>支付方式</th>
                                                                                 <th>关联记录</th>
+                                                                                <th>TradeId</th>
                                                                                 <th class="hidden-480">Status</th>
                                                                                 <th>操作</th>
                                                                             </tr>
@@ -841,7 +842,7 @@
                 $("#payWayList").html(thirdPayWayList(resu.payBriefList));
             }
             $('.mockPayBtn').click(function(){
-                var qinqqingTradeNo = $(this).parent().parent().prev("td").prev("td").text().trim();
+                var qinqqingTradeNo = $(this).parent().parent().prev("td").prev("td").prev("td").text().trim();
                 var data = {
                     data : qinqqingTradeNo
                 };

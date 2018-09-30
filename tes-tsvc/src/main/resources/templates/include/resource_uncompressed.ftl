@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="${base}/static/assets/css/daterangepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/colorpicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/bootstrap-editable.css" />
+<link rel="stylesheet" href="${base}/static/css/common.css" />
 <!-- ace styles -->
 
 <!--[if lte IE 8]>

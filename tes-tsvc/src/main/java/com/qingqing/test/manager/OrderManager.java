@@ -50,6 +50,7 @@ import com.qingqing.test.service.order.OrderCourseService;
 import com.qingqing.test.service.pay.ThirdPayBriefService;
 import com.qingqing.test.service.pay.StudentBalanceService;
 import com.qingqing.test.service.user.StudentService;
+import com.qingqing.test.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,8 @@ public class OrderManager {
     private StudentBalanceService studentBalanceService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private UserService userService;
 
     public String test(){
         GetSupportBanksResponse response = apiPiClient.listBank();
@@ -86,7 +89,7 @@ public class OrderManager {
 
     public TeacherInfoForOrderBean detailForOrder(Long studentId, Long teacherId){
         TeacherProto.SimpleQingQingTeacherIdRequest request = TeacherProto.SimpleQingQingTeacherIdRequest.newBuilder()
-                .setQingqingTeacherId(UserIdEncoder.encodeUser(UserType.teacher, teacherId)).build();
+                .setQingqingTeacherId(userService.encodeUser(UserType.teacher, teacherId)).build();
         TeacherProto.TeacherDetailForStudentToOrderResponse resp = ptClient.detailForOrder(request, studentId);
 
         return OrderConverter.converterToInfoBean(resp);
@@ -96,7 +99,7 @@ public class OrderManager {
         AddGroupOrderRequestV2.Builder builder = AddGroupOrderRequestV2.newBuilder();
         builder.setQingqingTeacherId(addOrderBean.getQingqingTeacherId());
 
-        String qingqingStudentId = UserIdEncoder.encodeUser(UserType.student, addOrderBean.getStudentId());
+        String qingqingStudentId = userService.encodeUser(UserType.student, addOrderBean.getStudentId());
         builder.setLeaderQingqingUserId(qingqingStudentId);
 
         builder.addQingqingStudentIds(qingqingStudentId);
@@ -273,7 +276,7 @@ public class OrderManager {
                 continue;
             }
 
-            request.setQingqingStudentId(UserIdEncoder.encodeUser(UserType.student, studentId));
+            request.setQingqingStudentId(userService.encodeUser(UserType.student, studentId));
             StudentAddGroupOrderResponse response = ptClient.joinGroup(request.build(), studentId);
             boolean isMadeUp = false;
             switch (response.getResponse().getErrorCode()){

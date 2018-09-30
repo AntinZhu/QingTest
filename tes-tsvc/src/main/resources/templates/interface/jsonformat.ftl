@@ -230,7 +230,7 @@
                     </main>
                 </div>
             </div>
-        <#include "/include/rightu-util.ftl" />
+            <#include "/include/rightool-sidebar.ftl" />
         </div>
 
         <script type="text/javascript">
