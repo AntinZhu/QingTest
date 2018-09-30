@@ -532,6 +532,8 @@
                 </div>
         </div>
 </div><!-- /.main-container -->
+
+        <#include "/include/righttool-sidebar.ftl" />
 </div>
 <script type="text/javascript">
     jQuery(function($) {

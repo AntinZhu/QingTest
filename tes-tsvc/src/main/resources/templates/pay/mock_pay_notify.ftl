@@ -28,9 +28,9 @@
                 <span class="menu-text"></span>
             </a>
 
-        <#include "/include/sidebar.ftl" />
+            <#include "/include/sidebar.ftl" />
 
-                <div class="main-content">
+            <div class="main-content">
                     <div class="page-content">
                         <div class="page-header">
                             <h1>
@@ -90,7 +90,8 @@
                         </div>
                     </div>
                 </div>
-                <#include "/include/rightu-util.ftl" />
+
+            <#include "/include/righttool-sidebar.ftl" />
 
         <script type="text/javascript">
             $('#submitBtn').click(updatePayWayList);
