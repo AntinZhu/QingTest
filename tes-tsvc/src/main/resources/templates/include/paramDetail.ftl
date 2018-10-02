@@ -2,9 +2,9 @@
     <div class="hide" id="paramDiv">
         <span class="col-sm-12" style="margin-bottom: 10px;">
         <label class="pull-right inline">
-            <small class="muted">删除字段:</small>
+            <small class="muted">编辑模式:</small>
 
-            <input id="deleteBtnSwitch" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
+            <input id="editBtnSwitch" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
             <span class="lbl"></span>
         </label>
     </span><!-- /span -->
@@ -48,3 +48,5 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+</script>

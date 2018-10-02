@@ -24,6 +24,7 @@
 
 <link rel="stylesheet" href="${base}/static/assets/css/datepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/bootstrap-timepicker.css" />
+<link rel="stylesheet" href="${base}/static/assets/css/bootstrap-datetimepicker.min.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/daterangepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/colorpicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/bootstrap-editable.css" />
@@ -91,6 +92,8 @@
 <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
+<script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
+<script src="${base}/static/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
 <script src="${base}/static/js/common.js"></script>
 
 

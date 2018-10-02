@@ -331,6 +331,7 @@
                 </div>
             </div>
             <#include "/include/righttool-sidebar.ftl" />
+            <#include "/test/datetime.ftl" />
         </div>
 
         <script type="text/javascript">
@@ -411,7 +412,7 @@
             }
 
             $("#resetBtn").click(function () {
-//                jsonShow(generateEditParam("#paramListDiv input"), "json-interface");
+                jsonShow(generateEditParam("#paramListDiv input"), "json-interface");
             });
 
             $(".qing_interfaceType").click(function(){

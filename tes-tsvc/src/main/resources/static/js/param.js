@@ -6,14 +6,14 @@ $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-
 function cloneInput(){
     var inputClone = $(this).parent().parent().parent().clone();
     inputClone.children("div .addInputDiv").remove();
-    var newAltParent = $(this).parent().parent().parent().parent().attr("alt");
-    var newAltParent = incAlt(newAltParent);
-    var firstAltParent = firstAlt(newAltParent);
+    var nowParent = $(this).parent().parent().parent().attr("alt");
+    var newAltParent = incAlt(nowParent);
+    //var firstAltParent = firstAlt(newAltParent);
 
-    $(this).parent().parent().parent().parent().attr("alt", newAltParent);
-    inputClone.find("input").each(function(index,element){
+    $(inputClone).attr("alt", newAltParent);
+    inputClone.find("[alt]").each(function(index,element){
         var nowAlt = $(element).attr("alt");
-        var newAlt= nowAlt.replace(firstAltParent, newAltParent);
+        var newAlt= nowAlt.replace(nowParent, newAltParent);
         $(element).attr("alt", newAlt);
     });
     $(this).parent().parent().parent().parent().append(inputClone);
@@ -120,6 +120,10 @@ function initHtml(parentKey, params, valueChangedNotifyId){
     editableInit();
 }
 
+function isNumber(value){
+    return Object.prototype.toString.call(value) == "[object Number]";
+}
+
 var notParamPropertiesArr = ["valueChangedNotifyId"];
 function editableInit(){
     for(var prop in paramInfo){
@@ -133,6 +137,7 @@ function editableInit(){
                 type: 'select2',
                 value : paramInfo[prop]["defaultValue"],
                 source: options,
+                disabled : getEditDisableStatus("#editBtnSwitch"),
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
                     notifyParamChanged();
@@ -152,6 +157,7 @@ function editableInit(){
             type: 'date',
             format: 'yyyy-mm-dd',
             viewformat: 'yyyy-mm-dd',
+            disabled : getEditDisableStatus("#editBtnSwitch"),
             datepicker: {
                 weekStart: 1
             },
@@ -165,6 +171,7 @@ function editableInit(){
     $(document).find(".input_editable").each(function(key,value){
         $(value).editable({
             type: 'text',
+            disabled : getEditDisableStatus("#editBtnSwitch"),
             success: function(response, newValue) {
                 $(this).prev("input").val(newValue);
                 notifyParamChanged();
@@ -179,17 +186,24 @@ function notifyParamChanged(){
     }
 }
 
-var del_btn_html = "<div class=\"spinner-buttons input-group-btn delInputDiv\" style=\"display: inline-block;margin-right: 25px;\"><button class=\"btn spinner-down btn-xs btn-danger delInputBtn\" type=\"button\"><i class=\"icon-minus smaller-75\"></i></button></div>";
-var add_btn_html = "<div class=\"spinner-buttons input-group-btn addInputDiv\" style=\"display: inline-block;\"><button class=\"btn spinner-up btn-xs btn-success addInputBtn\"  type=\"button\"><i class=\"icon-plus smaller-75\"></i></button></div>";
-del_btn_html = "<div class='pull-right action-buttons'><a class=\"red delInputBtn hide\" isMulti='{isMulti}' href=\"###\"><i class=\"icon-trash bigger-130\"></i></a></div>";
-add_btn_html = "<div style='margin-bottom: 22px;'><div class='pull-right action-buttons'><a class=\"blue addInputBtn\" href=\"###\"><i class=\"icon-plus bigger-130\"></i></a></div></div>";
+function getEditDisableStatus(statusLocation){
+    var editable = $(statusLocation).val();
+    return editable != "1";
+}
 
-var input_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\">{editable}" + del_btn_html + "<input key=\"{key}\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
-var editable_table_html = "<div class=\"profile-user-info profile-user-info-striped\" id = \"{id}\">{paramList}</div>";
-var sub_editable_html = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> {name} </div><div class=\"profile-info-value\">{editable}" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+var del_btn_html = "<div class='spinner-buttons input-group-btn delInputDiv' style='display: inline-block;margin-right: 25px;'><button class='btn spinner-down btn-xs btn-danger delInputBtn' type='button'><i class='icon-minus smaller-75'></i></button></div>";
+var add_btn_html = "<div class='spinner-buttons input-group-btn addInputDiv' style='display: inline-block;'><button class='btn spinner-up btn-xs btn-success addInputBtn'  type='button'><i class='icon-plus smaller-75'></i></button></div>";
+del_btn_html = "<div class='pull-right action-buttons'><a class='red delInputBtn hide qing_param_edit' isMulti='{isMulti}' href='###'><i class='icon-trash bigger-130'></i></a></div>";
+add_btn_html = "<div style='margin-bottom: 22px;' class='qing_param_edit hide'><div class='pull-right action-buttons'><a class='blue addInputBtn' href='###'><i class='icon-plus bigger-130'></i></a></div></div>";
 
-var input_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\"> <input key=\"{key}\" class=\"qing_editable\" isMulti=\"{isMulti}\" type=\"hidden\" id=\"{key}--name\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span> </div><div class=\"profile-info-value\">" + del_btn_html + "<input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" name=\"{key}\" alt=\"{alt}\" isMulti=\"{isMulti}\" value=\"{defaultValue}\"/><span class=\"editable input_label {key}_label {class}\">{defaultName}</span></div></div>";
-var sub_editable_html_edit = "<div class=\"profile-info-row\" alt=\"{alt}\"><div class=\"profile-info-name\">  <input key=\"{key}\" class=\"qing_editable\" type=\"hidden\" id=\"{key}--name\" isMulti=\"{isMulti}\" alt=\"{alt}\" value=\"{name}\"/><span class=\"editable input_editable input_label\">{name}</span>  </div><div class=\"profile-info-value\">" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> {name} </div><div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}'>{defaultName}</span></div></div>";
+var editable_table_html = "<div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div>";
+var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> {name} </div><div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+
+var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
+
+var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span> </div><div class='profile-info-value'>" + del_btn_html + "<input key='{key}' class='qing_editable' type='hidden' name='{key}' alt='{alt}' isMulti='{isMulti}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}'>{defaultValue}</span>{valueType}</div></div>";
+var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'>  <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div><div class='profile-info-value'>" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
 
 function genHtml(parentKey, params, paramAlt){
     return genHtml(parentKey, params, paramAlt, false);
@@ -237,12 +251,14 @@ function genHtml(parentKey, params, paramAlt, isEditStatus){
 }
 
 function initInput(paramKey, param, paramAlt, isArray, isEditStatus){
+    var key = paramKey + param.key;
     var html = isEditStatus? input_editable_html_edit:input_editable_html;
     var paramHtml = html.replace(new RegExp("{name}","gm"), param.name);
-    paramHtml = paramHtml.replace(new RegExp("{key}","gm"), paramKey + param.key);
+    paramHtml = paramHtml.replace(new RegExp("{key}","gm"), key);
     paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
     var defaultName = "";
     var defaultValue = "";
+    var valueType = "";
     if(param.defaultValue != null){
         if(param.defaultValue.name != null){
             defaultName = param.defaultValue.name;
@@ -250,6 +266,10 @@ function initInput(paramKey, param, paramAlt, isArray, isEditStatus){
         }else{
             defaultName = param.defaultValue;
             defaultValue = param.defaultValue;
+        }
+
+        if(isNumber(defaultValue)){
+            valueType = number_type_html.replace(new RegExp("{key}","gm"), key);;
         }
     }
     var classes = "";
@@ -259,9 +279,11 @@ function initInput(paramKey, param, paramAlt, isArray, isEditStatus){
         }else{
             classes = "input_editable";
         }
+    }else{
+        classes = "select_editable";
     }
     paramHtml = paramHtml.replace(new RegExp("{class}","gm"), classes);
-
+    paramHtml = paramHtml.replace(new RegExp("{valueType}","gm"), valueType);
     paramHtml = paramHtml.replace(new RegExp("{defaultName}","gm"), defaultName);
     paramHtml = paramHtml.replace(new RegExp("{defaultValue}","gm"), defaultValue);
     if(!isArray){
@@ -414,8 +436,13 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
             defaultObj.name = value.value;
             defaultObj.value = value.value;
             obj.defaultValue = defaultObj;
+            obj.class = "select_editable";
         }else{
-            obj.defaultValue = formatValue(paramInfo, value.name,value.value);
+            var defaultObj = new Object();
+            defaultObj.name = $("." + paramName + "_label").text();
+            defaultObj.value = formatValue(paramInfo, value.name,value.value);
+            obj.defaultValue = defaultObj;
+            obj.class = $(value).attr("clazz");
         }
         return;
     }else{
@@ -431,12 +458,54 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
     }
 }
 
-$(document).on("change", "#deleteBtnSwitch", function(){
+$(document).on("change", "#editBtnSwitch", function(){
     if($(this).val() == 0){
-        $(".delInputBtn").removeClass("hide");
+        $(".qing_param_edit").removeClass("hide");
         $(this).val(1);
     }else{
-        $(".delInputBtn").addClass("hide");
+        $(".qing_param_edit").addClass("hide");
         $(this).val(0);
     }
+    editableOff();
 });
+
+function editableOff(){
+    $(document).find(".date_editable").each(function(key,value){
+        $(value).editable('toggleDisabled');
+    });
+
+    $(document).find(".input_editable").each(function(key,value){
+        $(value).editable('toggleDisabled');
+    });
+
+    $(document).find(".select_editable").each(function(key,value){
+        $(value).editable('toggleDisabled');
+    });
+}
+
+$(document).on("click", ".qing_value_type", function(){
+    var key = $(this).attr("key");
+    var clazz = $(this).attr("clazz");
+
+    $(".qing_value_type[key='" + key + "']").removeClass("label-primary");
+    $(this).addClass("label-primary");
+    $("input[name='" + key + "']").attr("clazz", clazz);
+
+    changeDefaultValue(key, clazz);
+
+    notifyParamChanged();
+});
+
+function changeDefaultValue(key, clazz){
+    var defaultValue = "";
+    switch (clazz){
+        case "input_editable":
+            defaultValue = 1;
+            break;
+        case "date_editable":
+            defaultValue = getyyyyMMdd();
+            break;
+    }
+
+    $("." + key + "_label").text(defaultValue);
+}
