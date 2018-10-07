@@ -444,6 +444,8 @@
             });
 
             $("#saveBtn").click(function () {
+                $("#paramDetail").val(generateEditParam("#paramListDiv input"));
+
                 var catelogName = $("#catelogName").val();
                 if(catelogName == null || catelogName == ""){
                     $.gritter.add({

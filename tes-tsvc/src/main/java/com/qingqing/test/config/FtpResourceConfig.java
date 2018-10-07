@@ -38,7 +38,7 @@ public class FtpResourceConfig {
 
     public final static String USERID_TXT_INITIALIZATION = "userIdTxtInitialization";
 
-//    @Bean(initMethod = "connect", destroyMethod = "disconnect")
+    @Bean(initMethod = "connect", destroyMethod = "disconnect")
     public QingqingFtpClientV2 qingqingFtpClient(
             @Value("${ftp.host}") String host,
             @Value("${ftp.port}") Integer port,
