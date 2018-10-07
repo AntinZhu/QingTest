@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class CatelogBean {
     private TestInterfaceCatelog catelog;
+    private String catelogIndex;
     private List<CatelogBean> subCategoryList;
 
     public TestInterfaceCatelog getCatelog() {
@@ -18,6 +19,14 @@ public class CatelogBean {
 
     public void setCatelog(TestInterfaceCatelog catelog) {
         this.catelog = catelog;
+    }
+
+    public String getCatelogIndex() {
+        return catelogIndex;
+    }
+
+    public void setCatelogIndex(String catelogIndex) {
+        this.catelogIndex = catelogIndex;
     }
 
     public List<CatelogBean> getSubCategoryList() {

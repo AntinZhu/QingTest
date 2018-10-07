@@ -92,7 +92,7 @@
 <script src="${base}/static/assets/js/uncompressed/x-editable/bootstrap-editable.js"></script>
 <script src="${base}/static/assets/js/uncompressed/x-editable/ace-editable.js"></script>
 <script src="${base}/static/js/common.js"></script>
-
+<script src="${base}/static/js/catelog.js"></script>
 
 <link rel="stylesheet" href="${base}/static/css/adminmain2.css" type="text/css"/>
 <script type="text/javascript">

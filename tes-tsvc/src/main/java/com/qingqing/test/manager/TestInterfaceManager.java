@@ -5,8 +5,8 @@ import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
-import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.test.bean.inter.CatelogBean;
+import com.qingqing.test.bean.inter.SaveCatelogBean;
 import com.qingqing.test.bean.inter.SaveInterfaceBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
@@ -46,19 +46,31 @@ public class TestInterfaceManager {
     private UserService userService;
 
     @Transactional
+    public TestInterfaceCatelog saveCatelog(SaveCatelogBean saveBean, TestInterfaceCatelog parentCatelog){
+        Long parentCatelogId;
+        if(parentCatelog == null){ // 根目录
+            parentCatelogId = null;
+        }else{ // 子目录
+            parentCatelogId = parentCatelog.getId();
+        }
+
+        return saveCatelog(parentCatelogId, CatelogRefType.cate, "#", saveBean.getCatelogName());
+    }
+
+    @Transactional
     public Long saveTestInterface(SaveInterfaceBean saveBean, TestInterfaceCatelog parentCatelog){
         TestInterface testInterface = saveBean.getInter();
         if(testInterface.getId() == null){
             testInterfaceService.save(testInterface);
             Long interfaceId = testInterface.getId();
 
-            saveInterfaceCatelog(parentCatelog.getId(), interfaceId, saveBean.getCatelogName());
+            saveCatelog(parentCatelog.getId(), CatelogRefType.inter, String.valueOf(interfaceId), saveBean.getCatelogName());
         }else{
             Long interfaceId = testInterface.getId();
             testInterfaceService.update(testInterface);
             TestInterfaceCatelog catelog = catelogService.selectByRefTypeAndRefValue(CatelogRefType.inter, String.valueOf(interfaceId));
-            if(catelog == null || !catelog.getId().equals(parentCatelog.getId())){
-                saveInterfaceCatelog(parentCatelog.getId(), interfaceId, saveBean.getCatelogName());
+            if(catelog == null || !catelog.getId().equals(parentCatelog.getId()) || !catelog.getCatelogName().equals(parentCatelog.getCatelogName())){
+                saveCatelog(parentCatelog.getId(), CatelogRefType.inter, String.valueOf(interfaceId), saveBean.getCatelogName());
 
                 if(catelog != null){
                     catelogService.deletedById(catelog.getId());
@@ -69,18 +81,47 @@ public class TestInterfaceManager {
         return testInterface.getId();
     }
 
-    private void saveInterfaceCatelog(Long parentCatelogId, Long interfaceId, String catelogName){
-        TestInterfaceCatelog parentCatelog = catelogService.selectForUpdate(parentCatelogId);
-
+    private TestInterfaceCatelog saveCatelog(Long parentCatelogId, CatelogRefType refType, String refId, String catelogName){
         TestInterfaceCatelog catelog = new TestInterfaceCatelog();
+
+        String catelogIndex;
+        if(parentCatelogId != null){
+            TestInterfaceCatelog parentCatelog = catelogService.selectForUpdate(parentCatelogId);
+            catelogIndex = parentCatelog.getCatelogIndex() + "-" + (parentCatelog.getSubItemCnt() + 1);
+
+            catelogService.incDescSortNum(parentCatelog.getId());
+        }else{
+            catelogIndex = getNextRootCateogIndex();
+        }
+
         catelog.setCatelogName(catelogName);
-        catelog.setCatelogIndex(parentCatelog.getCatelogIndex() + "-" + (parentCatelog.getSortDescNum() + 1));
-        catelog.setRefType(CatelogRefType.inter);
-        catelog.setRefValue(String.valueOf(interfaceId));
+        catelog.setRefType(refType);
+        catelog.setRefValue(refId);
         catelog.setDeleted(Boolean.FALSE);
+        catelog.setCatelogIndex(catelogIndex);
+        catelog.setParentCatelogId(parentCatelogId == null? 0L : parentCatelogId);
+        if(CatelogRefType.cate.equals(refType)){
+            catelog.setSubItemCnt(0);
+        }
 
         catelogService.save(catelog);
-        catelogService.incDescSortNum(parentCatelog.getId());
+
+        return catelog;
+    }
+
+    private synchronized String getNextRootCateogIndex(){
+        Integer nextCatelogIndex = 0;
+        List<TestInterfaceCatelog> catelogList = catelogService.selectAll();
+        for(TestInterfaceCatelog catelog : catelogList){
+            if(catelog.getCatelogIndex().indexOf("-") == -1){
+                Integer catelogIndex = Integer.parseInt(catelog.getCatelogIndex());
+                if(catelogIndex != null && catelogIndex.compareTo(nextCatelogIndex) > 0){
+                    nextCatelogIndex = catelogIndex;
+                }
+            }
+        }
+
+        return String.valueOf(nextCatelogIndex + 1);
     }
 
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
@@ -136,49 +177,36 @@ public class TestInterfaceManager {
             }
         });
 
-       return getCatelogBeanList(allCatelogs, 0, "");
+       return getCatelogBeanList(allCatelogs, 0L, "");
     }
 
-    private List<CatelogBean> getCatelogBeanList(List<TestInterfaceCatelog> allCatelogs, int startIdx, String parentIndex){
+    private List<CatelogBean> getCatelogBeanList(List<TestInterfaceCatelog> allCatelogs, Long parentId, String parentIndex){
+        if(!StringUtils.isEmpty(parentIndex)){
+            parentIndex = parentIndex + "-";
+        }
+
         List<CatelogBean> subList = null;
-        while (startIdx < allCatelogs.size()){
-            TestInterfaceCatelog catelog = allCatelogs.get(startIdx++);
-            String catelogIndex = catelog.getCatelogIndex();
+        for (TestInterfaceCatelog catelog : allCatelogs){
+            String catelogIndex = String.valueOf(catelog.getSortNum());
             if(!StringUtils.isEmpty(catelogIndex)){
-                if(!catelogIndex.startsWith(parentIndex)){
-                    break;
+                if(!catelog.getParentCatelogId().equals(parentId)){
+                    continue;
                 }
 
-                if(isSub(catelogIndex, parentIndex)){
-                    if(subList == null){
-                        subList = new ArrayList<>();
-                    }
-
-                    CatelogBean catelogBean = new CatelogBean();
-                    catelogBean.setCatelog(catelog);
-                    catelogBean.setSubCategoryList(getCatelogBeanList(allCatelogs, startIdx, catelog.getCatelogIndex()));
-                    subList.add(catelogBean);
+                if(subList == null){
+                    subList = new ArrayList<>();
                 }
+                String fullCatelogIndex = parentIndex + catelogIndex;
+
+                CatelogBean catelogBean = new CatelogBean();
+                catelogBean.setCatelog(catelog);
+                catelogBean.setCatelogIndex(fullCatelogIndex);
+                catelogBean.setSubCategoryList(getCatelogBeanList(allCatelogs, catelog.getId(), fullCatelogIndex));
+                subList.add(catelogBean);
             }
         }
 
         return subList;
-    }
-
-    private boolean isSub(String catelogIndex, String parentIndex){
-        if(!StringUtils.isEmpty(catelogIndex)){
-            if(catelogIndex.startsWith(parentIndex)){
-                try{
-                    int subIndex = StringUtils.isEmpty(parentIndex)? 0 : parentIndex.length() + 1;
-                    Integer.valueOf(catelogIndex.substring(subIndex));
-                    return true;
-                }catch(Exception e){
-                    return false;
-                }
-            }
-        }
-
-        return false;
     }
 
     public String invoke(InterfaceInvokeRequest requestBean){

@@ -106,6 +106,8 @@
 
 			if(data.length) {
 				this.$element.trigger('selected', {info: data});
+			}else{
+				this.$element.trigger('unselected');
 			}
 
 		},

@@ -76,3 +76,60 @@ function generateCateLogParam(resultList,defaultSelectId){
 
     return catelogList;
 }
+
+var item_html = '<li class="{index}"\><a href="{linkUrl}" class="qing_catelog"><i class=""></i>{catelogName}</a></li>';
+var catelog_html = '<li class="{index}"><button type="button"style="display:inline-block;width: 39px;background-color: #fff;"  class="btn-sm qing_catelog_del pull-right hide"><i class="red icon-trash"></i></button><a href="#" style="width: 100%;display:inline-block" class="dropdown-toggle qing_catelog"><i class="{icon}"></i><span class="menu-text">{catelogName}</span><b class="arrow icon-angle-down"></b></a><ul class="submenu">{items}</ul></li>';
+
+function catelogList(catelogList, baseUrl){11
+    var catelogHtml = "";
+    for(var idx in catelogList){
+        var catelog = catelogList[idx];
+
+        var thisHtml;
+        if(catelog.catelog.refType == "cate"){
+            thisHtml = catelogWithSub(catelog, baseUrl);
+        }else{
+            thisHtml = catelogItem(catelog, baseUrl);
+        }
+        catelogHtml += thisHtml;
+    }
+
+    return catelogHtml;
+}
+
+function catelogWithSub(catelog, baseUrl){
+    var thisHtml = catelog_html;
+    thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
+    thisHtml = thisHtml.replace("{index}", catelog.catelogIndex);
+    thisHtml = thisHtml.replace("{icon}", randomIcon());
+    thisHtml = thisHtml.replace("{items}", catelogList(catelog.subCategoryList, baseUrl));
+
+    return thisHtml;
+}
+
+function catelogItem(catelog, baseUrl){
+    var thisHtml = item_html;
+    thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
+    thisHtml = thisHtml.replace("{index}", catelog.catelogIndex);
+    var linkUrl;
+    switch (catelog.catelog.refType){
+        case "url":
+            linkUrl = baseUrl + catelog.catelog.refValue;
+            break;
+        case "inter":
+            linkUrl =  baseUrl + "/v1/test/json_format?id=" + catelog.catelog.refValue;
+            break;
+        default:
+            linkUrl = "#";
+    }
+    if(linkUrl != null && "#" != linkUrl){
+        if(linkUrl.indexOf("?") >= 0){
+            linkUrl += "&catelogIndex=" + catelog.catelogIndex;
+        }else{
+            linkUrl += "?catelogIndex=" + catelog.catelogIndex;
+        }
+    }
+    thisHtml = thisHtml.replace("{linkUrl}", linkUrl);
+
+    return thisHtml;
+}

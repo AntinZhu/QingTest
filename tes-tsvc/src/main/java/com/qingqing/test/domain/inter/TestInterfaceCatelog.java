@@ -5,7 +5,8 @@ import com.qingqing.common.intf.Composer;
 import java.util.Date;
 
 public class TestInterfaceCatelog {
-    public static final Composer<String, TestInterfaceCatelog> INDEX_COMPOSER = new Composer<String, TestInterfaceCatelog>() {
+
+    public static Composer<String, TestInterfaceCatelog> INDEX_COMPOSER = new Composer<String, TestInterfaceCatelog>() {
         @Override
         public String getComposerId(TestInterfaceCatelog testInterfaceCatelog) {
             return testInterfaceCatelog.getCatelogIndex();
@@ -15,9 +16,11 @@ public class TestInterfaceCatelog {
     private Long id;
     private String catelogName;
     private String catelogIndex;
+    private Integer sortNum;
     private CatelogRefType refType;
     private String refValue;
-    private Integer sortDescNum;
+    private Integer subItemCnt;
+    private Long parentCatelogId;
     private Boolean isDeleted;
     private Date createTime;
 
@@ -47,6 +50,14 @@ public class TestInterfaceCatelog {
         this.catelogIndex = catelogIndex;
     }
 
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
+    }
+
     public CatelogRefType getRefType() {
         return refType;
     }
@@ -63,12 +74,20 @@ public class TestInterfaceCatelog {
         this.refValue = refValue;
     }
 
-    public Integer getSortDescNum() {
-        return sortDescNum;
+    public Integer getSubItemCnt() {
+        return subItemCnt;
     }
 
-    public void setSortDescNum(Integer sortDescNum) {
-        this.sortDescNum = sortDescNum;
+    public void setSubItemCnt(Integer subItemCnt) {
+        this.subItemCnt = subItemCnt;
+    }
+
+    public Long getParentCatelogId() {
+        return parentCatelogId;
+    }
+
+    public void setParentCatelogId(Long parentCatelogId) {
+        this.parentCatelogId = parentCatelogId;
     }
 
     public Boolean getDeleted() {

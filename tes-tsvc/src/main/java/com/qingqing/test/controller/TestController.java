@@ -10,7 +10,9 @@ import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.common.response.ListResponse;
+import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.inter.CatelogBean;
+import com.qingqing.test.bean.inter.SaveCatelogBean;
 import com.qingqing.test.bean.inter.SaveInterfaceBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
@@ -71,6 +73,33 @@ public class TestController {
 
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(String.valueOf(interfaceId)).build();
+    }
+
+    @RequestMapping("/catelog/edit")
+    public String editCatelog(@RequestParam(value="id", defaultValue = "0") Long catelogId, Model model){
+        if(catelogId > 0){
+//            TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
+//            model.addAttribute("interfaceBean", interfaceBean);
+        }
+        return "interface/editCatelog";
+    }
+
+    @RequestMapping("/catelog/save")
+    @ResponseBody
+    public SingleResponse saveCatelog(@RequestBody SaveCatelogBean saveBean){
+        Long parentCatelogId = saveBean.getParentCatelogId();
+
+        TestInterfaceCatelog parentCatelog = null;
+        if(parentCatelogId != null){
+            parentCatelog = catelogService.findById(parentCatelogId);
+            if(parentCatelog == null){
+                throw new ErrorCodeException(new SimpleErrorCode("未能找到对应所属目录"), "cannot found parent catelog");
+            }
+        }
+
+        TestInterfaceCatelog catelog = testInterfaceManager.saveCatelog(saveBean, parentCatelog);
+
+        return new SingleResponse(catelog);
     }
 
     @RequestMapping("/interface")

@@ -2,7 +2,7 @@ package com.qingqing.test.bean.base;
 
 public class InterfaceBaseResponse {
 
-    private BaseResponse response;
+    private BaseResponse response = BaseResponse.SUCC_RESP;
 
     public BaseResponse getResponse() {
         return response;

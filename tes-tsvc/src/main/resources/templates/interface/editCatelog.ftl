@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Hello World!</title>
-    <#include "/include/resource.ftl" />
+    <#include "/include/resource_uncompressed.ftl" />
 
     <style>
         .spinner-preview {
@@ -46,9 +46,8 @@
     <script src="${base}/static/js/json/jsonlint.js"></script>
     <script src="${base}/static/js/json/jquery.numberedtextarea.js"></script>
     <script src="${base}/static/js/param.js"></script>
-    <script src="${base}/static/js/catelog.js"></script>
-    <script src="${base}/static/assets/js/fuelux/fuelux.tree.min.js"></script>
-    <script src="${base}/static/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
+    <script src="${base}/static/assets/js/uncompressed/fuelux/fuelux.tree.js"></script>
+    <script src="${base}/static/assets/js/uncompressed/fuelux/data/fuelux.tree-sampledata.js"></script>
 
 </head>
 <body>
@@ -90,7 +89,7 @@
                                                         <div id="faq-0-1">
                                                             <div id="accordion" class="accordion-style2">
                                                                 <div class="group">
-                                                                    <h3 class="accordion-header">接口参数选择</h3>
+                                                                    <h3 class="accordion-header">目录参数选择</h3>
 
                                                                     <div>
                                                                         <div class="col-xs-12">
@@ -108,7 +107,7 @@
                                                                                 </div>
 
                                                                                 <div class="form-group">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="interfaceName">接口所属目录:</label>
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="interfaceName">所属目录:</label>
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
@@ -119,91 +118,10 @@
                                                                                         <div class="space-2"></div>
                                                                                     </div>
                                                                                 </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="interfaceName">接口名称:</label>
-
-                                                                                    <div class="col-sm-9">
-                                                                                        <div class="clearfix">
-                                                                                            <input class="col-xs-5" type="text" id="interfaceName" placeholder="输入接口名称..." />
-                                                                                        </div>
-
-                                                                                        <div class="space-2"></div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="interfaceUrl">接口地址:</label>
-
-                                                                                    <div class="col-sm-9">
-                                                                                        <div class="clearfix">
-                                                                                            <input class="col-xs-10" type="text" id="interfaceUrl" placeholder="输入接口地址..." />
-                                                                                        </div>
-
-                                                                                        <div class="space-2"></div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="interfaceType">接口类型:</label>
-
-                                                                                    <div class="col-xs-12 col-sm-9">
-                                                                                        <div class="clearfix">
-                                                                                            <input type="hidden" name="interfaceType" id="interfaceType" value="PT" />
-                                                                                            <button type="button" value="PT" style="border-radius: 8px;" class="btn btn-sm qing_interfaceType btn-primary">&thinsp;&thinsp;&thinsp;&thinsp;PT&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;</button>
-                                                                                            <button type="button" value="PI" style="border-radius: 8px;" class="btn btn-sm qing_interfaceType">&thinsp;&thinsp;&thinsp;&thinsp;PI&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;</button>
-                                                                                            <button type="button" value="PB" style="border-radius: 8px;" class="btn btn-sm qing_interfaceType">&thinsp;&thinsp;&thinsp;&thinsp;PB&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">接口请求人用户类型:</label>
-
-                                                                                    <div class="col-xs-12 col-sm-9">
-                                                                                        <div class="clearfix">
-                                                                                            <input type="hidden" name="requestUserType" id="requestUserType" value="student" />
-                                                                                            <button type="button" value="student" style="border-radius: 8px;" class="btn btn-sm  qing_requestUserType btn-primary">&thinsp;&thinsp;学生&thinsp;&thinsp;</button>
-                                                                                            <button type="button" value="teacher" style="border-radius: 8px;" class="btn btn-sm  qing_requestUserType">&thinsp;&thinsp;老师&thinsp;&thinsp;</button>
-                                                                                            <button type="button" value="ta" style="border-radius: 8px;" class="btn btn-sm qing_requestUserType">&thinsp;&thinsp;助教&thinsp;&thinsp;</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="className">是否需要参数：</label>
-
-                                                                                    <div class="col-sm-9">
-                                                                                        <div class="clearfix">
-                                                                                            <label>
-                                                                                                <input id="hasParam" class="ace ace-switch ace-switch-6" type="checkbox" value="1" checked="checked" />
-                                                                                                <span class="lbl"></span>
-                                                                                            </label>
-                                                                                        </div>
-
-                                                                                        <div class="space-2"></div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-group" id="classNameDiv">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="className">请求参数类名：</label>
-
-                                                                                    <div class="col-sm-9">
-                                                                                        <div class="clearfix">
-                                                                                            <input type="hidden" id="paramDetail" />
-                                                                                            <input class="col-xs-10" type="text" id="className" placeholder="输入类名..." />
-                                                                                            <button type="button" id="generateParam" style="border-radius: 8px;margin-left: 5px" class="btn btn-sm">生成参数</button>
-                                                                                        </div>
-
-                                                                                        <div class="space-2"></div>
-                                                                                    </div>
-                                                                                </div>
                                                                             </form>
 
                                                                             <div class="hr hr-dotted"></div>
                                                                             <div class="hr hr-dotted"></div>
-
-                                                                            <#include "/include/paramDetail.ftl" />
 
                                                                             <div class="clearfix form-actions">
                                                                                 <div class="col-md-offset-3 col-md-9">
@@ -292,75 +210,17 @@
         </div>
 
         <script type="text/javascript">
-            $('textarea').numberedtextarea();
-
-            $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
-            $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
-            //输入框的值改变时触发
-            $(document).on("change", "#paramListDiv :input.qing_editable",function(e){
-                $("#paramDetail").val(generateEditParam("#paramListDiv input"));
-            });
-
-//            $(document).on("change", "#paramListDiv :input:not(.qing_editable)",function(e){
-//
-//                return false;
-//            });
-
+            var nowTreeId = "tree1";
             $(document).ready(function(){
-                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
+                initCatelog();
             });
 
-            $("#generateParam").click(function () {
-                var className = $('#className').val();
-                if(className == null || className == ""){
-                    notice("参数有误", "请输入类名");
-                    return;
-                }
-
-                var data = {
-                    data : className
-                };
-
-                commonAjaxRequest("${base}/v1/test/interface/request/convert.json", data, handlerConvert, true, "解析出错:");
-            });
-
-            function handlerConvert(resu){
-                jsonShow(resu, "json-interface");
-                jsonShow(resu.data, "json-interface-detail");
-                showParam({paramData:resu.data, isEditStatus:true});
-                $("#paramDetail").val(resu.data);
+            function initCatelog(){
+                showParentCatelog("${base}/v1/test/catelog.json", nowTreeId, "parentCatelogId");
             }
 
             $("#resetBtn").click(function () {
 //                jsonShow(generateEditParam("#paramListDiv input"), "json-interface");
-            });
-
-            $(".qing_interfaceType").click(function(){
-                $(".qing_interfaceType.btn-primary").removeClass("btn-primary");
-                $(this).addClass("btn-primary");
-                $("#interfaceType").val($(this).val());
-            });
-
-            $(".qing_requestUserType").click(function(){
-                $(".qing_requestUserType.btn-primary").removeClass("btn-primary");
-                $(this).addClass("btn-primary");
-                $("#requestUserType").val($(this).val());
-            });
-
-            $("#hasParam").change(function () {
-                var value = $(this).val();
-                if(value == 1){
-                    $(this).val(0);
-                    $("#classNameDiv").addClass("hide");
-                    $("#paramDiv").addClass("hide");
-                }else{
-                    $("#classNameDiv").removeClass("hide");
-                    var paramDetail = $("#paramDetail").val();
-                    if(paramDetail != null && paramDetail != ""){
-                        $("#paramDiv").removeClass("hide");
-                    }
-                    $(this).val(1);
-                }
             });
 
             $("#saveBtn").click(function () {
@@ -375,81 +235,13 @@
                 }
 
                 var parentCatelogId = $("#parentCatelogId").val();
-                if(parentCatelogId == null || parentCatelogId == ""){
-                    $.gritter.add({
-                        title : '参数错误:',
-                        text : "所属目录不能为空",
-                        class_name : 'gritter-error gritter-center'
-                    });
-                    return;
-                }
-
-                var interfaceName = $("#interfaceName").val();
-                if(interfaceName == null || interfaceName == ""){
-                    $.gritter.add({
-                        title : '参数错误:',
-                        text : "接口名称不能为空",
-                        class_name : 'gritter-error gritter-center'
-                    });
-                    return;
-                }
-                var interfaceUrl = $("#interfaceUrl").val();
-                if(interfaceUrl == null || interfaceUrl == ""){
-                    $.gritter.add({
-                        title : '参数错误:',
-                        text : "接口地址不能为空",
-                        class_name : 'gritter-error gritter-center'
-                    });
-                    return;
-                }
-                var interfaceType = $("#interfaceType").val();
-                if(interfaceType == null || interfaceType == ""){
-                    $.gritter.add({
-                        title : '参数错误:',
-                        text : "接口类型不能为空",
-                        class_name : 'gritter-error gritter-center'
-                    });
-                    return;
-                }
-                var requestUserType = $("#requestUserType").val();
-                if(requestUserType == null || requestUserType == ""){
-                    $.gritter.add({
-                        title : '参数错误:',
-                        text : "请求人用户类型不能为空",
-                        class_name : 'gritter-error gritter-center'
-                    });
-                    return;
-                }
-                var paramDetail = "";
-                if($("#hasParam").val() == 1){
-                    paramDetail = $("#paramDetail").val();;
-                    if(paramDetail == null || paramDetail == ""){
-                        $.gritter.add({
-                            title : '参数错误:',
-                            text : "请求参数不能为空",
-                            class_name : 'gritter-error gritter-center'
-                        });
-                        return;
-                    }
-                }
 
                 var data = {
-                    inter:{
-                        interfaceName : interfaceName,
-                        interfaceUrl : interfaceUrl,
-                        interfaceType : interfaceType,
-                        requestType : 1,
-                        requestUserType : requestUserType,
-                        sortDescNum: 0,
-                        catelogIndex:'0',
-                        paramDetail : paramDetail,
-                        deleted : 0
-                    },
                     catelogName : catelogName,
                     parentCatelogId : parentCatelogId
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/save.json", data, handlerSave, true, "解析出错:");
+                commonAjaxRequest("${base}/v1/test/catelog/save.json", data, handlerSave, true, "保存失败:");
             });
 
             function handlerSave(resu){
@@ -458,11 +250,11 @@
                     text : '添加成功',
                     class_name : 'gritter-info gritter-center'
                 });
-                refreshCatelog();
+
+                window.location.reload();
             }
 
             jQuery(function($) {
-
             });
         </script>
     </div>

@@ -318,7 +318,7 @@ function activeCatelog(catelogIndex){
             }
             activeIndex = activeIndex + index;
             $("." + activeIndex).addClass("active");
-            $("." + activeIndex + " a:first i").addClass("icon-bookmark");
+            $("." + activeIndex + " a:first i:first").addClass("icon-bookmark");
         }
     }
 }

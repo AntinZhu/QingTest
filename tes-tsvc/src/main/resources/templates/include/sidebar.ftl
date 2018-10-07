@@ -9,7 +9,7 @@
                 <i class="icon-signal"></i>
             </button>
 
-            <button class="btn btn-info">
+            <button class="btn btn-info" id="qing_catelog_edit_btn" value="0">
                 <i class="icon-pencil"></i>
             </button>
 
@@ -93,65 +93,26 @@
             commonAjaxRequest("${base}/v1/test/catelog.json", null, handlerCatelog, false, "获取分类信息失败:");
         }
 
-        var item_html = "<li class=\"{index}\"\><a href=\"{linkUrl}\"><i class=\"\"></i>{catelogName}</a></li>";
-        var catelog_html = "<li class=\"{index}\"><a href=\"#\" class=\"dropdown-toggle\"><i class=\"{icon}\"></i><span class=\"menu-text\"> {catelogName} </span><b class=\"arrow icon-angle-down\"></b></a><ul class=\"submenu\">{items}</ul></li>";
         function handlerCatelog(resu){
-            $("#catelog-ul").html(catelogList(resu.resultList));
+            $("#catelog-ul").html(catelogList(resu.resultList, "${base}"));
             activeCatelog("${Request["catelogIndex"]!"2-1"}");
         }
 
-        function catelogList(catelogList){
-            var catelogHtml = "";
-            for(var idx in catelogList){
-                var catelog = catelogList[idx];
-
-                var thisHtml;
-                if(catelog.catelog.refType == "cate"){
-                    thisHtml = catelogWithSub(catelog);
-                }else{
-                    thisHtml = catelogItem(catelog);
-                }
-                catelogHtml += thisHtml;
+        $("#qing_catelog_edit_btn").click(function () {
+            var nowValue = $("#qing_catelog_edit_btn").val();
+            if(nowValue == 0){
+                $("#qing_catelog_edit_btn").val(1);
+                $("a.qing_catelog").css("width", "150px");
+                $(".qing_catelog_del").removeClass("hide");
+            }else{
+                $("#qing_catelog_edit_btn").val(0);
+                $("a.qing_catelog").css("width", "100%");
+                $(".qing_catelog_del").addClass("hide");
             }
+        });
 
-            return catelogHtml;
-        }
-
-        function catelogWithSub(catelog){
-            var thisHtml = catelog_html;
-            thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
-            thisHtml = thisHtml.replace("{index}", catelog.catelog.catelogIndex);
-            thisHtml = thisHtml.replace("{icon}", randomIcon());
-            thisHtml = thisHtml.replace("{items}", catelogList(catelog.subCategoryList));
-
-            return thisHtml;
-        }
-
-        function catelogItem(catelog){
-            var thisHtml = item_html;
-            thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
-            thisHtml = thisHtml.replace("{index}", catelog.catelog.catelogIndex);
-            var linkUrl;
-            switch (catelog.catelog.refType){
-                case "url":
-                    linkUrl = "${base}" + catelog.catelog.refValue;
-                    break;
-                case "inter":
-                    linkUrl = "${base}/v1/test/json_format?id=" + catelog.catelog.refValue;
-                    break;
-                default:
-                    linkUrl = "#";
-            }
-            if(linkUrl != null && "#" != linkUrl){
-                if(linkUrl.indexOf("?") >= 0){
-                    linkUrl += "&catelogIndex=" + catelog.catelog.catelogIndex;
-                }else{
-                    linkUrl += "?catelogIndex=" + catelog.catelog.catelogIndex;
-                }
-            }
-            thisHtml = thisHtml.replace("{linkUrl}", linkUrl);
-
-            return thisHtml;
-        }
+        $(".qing_catelog_del").click(function () {
+            alert("hehe");
+        });
     </script>
 </div>

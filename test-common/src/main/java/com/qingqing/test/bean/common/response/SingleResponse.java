@@ -8,6 +8,12 @@ import com.qingqing.test.bean.base.InterfaceBaseResponse;
 public class SingleResponse<T> extends InterfaceBaseResponse {
     private T resultList;
 
+    public SingleResponse(T resultList) {
+        this.resultList = resultList;
+    }
+
+    public SingleResponse(){}
+
     public T getResultList() {
         return resultList;
     }
