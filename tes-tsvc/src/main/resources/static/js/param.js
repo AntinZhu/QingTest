@@ -6,29 +6,31 @@ $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-
 function cloneInput(){
     var inputClone = $(this).parent().parent().parent().clone();
     inputClone.children("div .addInputDiv").remove();
-    var nowParent = $(this).parent().parent().parent().attr("alt");
-    var newAltParent = incAlt(nowParent);
+    var nowParent = $(this).parent().parent().parent();
+    var nowParentAlt = $(nowParent).attr("alt");
+    var childCnt = $(nowParent).parent().children(".profile-info-value").length;
+    var newAltParent = replaceLast(nowParentAlt, childCnt);
     //var firstAltParent = firstAlt(newAltParent);
 
     $(inputClone).attr("alt", newAltParent);
     inputClone.find("[alt]").each(function(index,element){
         var nowAlt = $(element).attr("alt");
-        var newAlt= nowAlt.replace(nowParent, newAltParent);
+        var newAlt= nowAlt.replace(nowParentAlt, newAltParent);
         $(element).attr("alt", newAlt);
     });
-    $(this).parent().parent().parent().parent().append(inputClone);
+    $(nowParent).parent().append(inputClone);
 
     editableInit();
 }
 
-function incAlt(alt){
+function replaceLast(alt, lastNum){
     var newAlt = "";
 
     var splitArr = alt.split("-");
     for(var idx in splitArr){
         var altItem = splitArr[idx];
         if(idx == splitArr.length - 1){
-            altItem = new Number(altItem) + 1;
+            altItem = lastNum;
         }
         newAlt += newAlt ==""? altItem : "-" + altItem;
     }
