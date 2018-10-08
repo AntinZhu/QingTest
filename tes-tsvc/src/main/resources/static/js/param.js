@@ -368,6 +368,12 @@ function formatParam(paramInfo, fromIdxInfo,destIdxInfo, paramObj, paramName, pa
 function formatValue(paramInfo, paramKey, value){
     if(paramInfo[paramKey]["type"] == "[object Number]"){
         return new Number(value);
+    }else{
+        if(value=="true"){
+            return true;
+        }else if(value = "false"){
+            return false;
+        }
     }
 
     return  value;
@@ -435,7 +441,7 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
         if(paramInfo[paramName]["selectable"] != null){
             obj.selectable = paramInfo[paramName]["selectable"];
             var defaultObj = new Object();
-            defaultObj.name = value.value;
+            defaultObj.name = $("." + paramName + "_label").text();
             defaultObj.value = value.value;
             obj.defaultValue = defaultObj;
             obj.class = "select_editable";

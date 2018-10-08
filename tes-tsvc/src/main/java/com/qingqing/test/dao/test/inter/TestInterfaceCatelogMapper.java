@@ -15,7 +15,7 @@ public interface TestInterfaceCatelogMapper {
 
     TestInterfaceCatelog selectForUpdate(Long id);
 
-    void incSortDescNum(Long id);
+    void incSubItemCnt(Long id);
 
     void deleteById(Long id);
 

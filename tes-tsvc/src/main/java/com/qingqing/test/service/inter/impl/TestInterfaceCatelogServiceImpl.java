@@ -39,8 +39,8 @@ public class TestInterfaceCatelogServiceImpl implements TestInterfaceCatelogServ
     }
 
     @Override
-    public void incDescSortNum(Long id) {
-        testInterfaceCatelogMapper.incSortDescNum(id);
+    public void incSubItemCnt(Long id) {
+        testInterfaceCatelogMapper.incSubItemCnt(id);
     }
 
     @Override

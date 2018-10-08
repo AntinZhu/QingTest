@@ -1,8 +1,9 @@
 package com.qingqing.test.util;
 
-import com.qingqing.api.proto.v1.Pay;
-import com.qingqing.api.proto.v1.util.Common;
+import com.googlecode.protobuf.format.JsonFormat;
+import com.qingqing.api.proto.v1.util.Common.SimpleBoolRequest;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 
 import java.beans.IntrospectionException;
@@ -22,7 +23,9 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(Common.SimpleLongRequest.class.getName());
+        System.out.println(generateParamJson(SimpleBoolRequest.class.getName()));
+        System.out.println(JsonUtil.format(JsonFormat
+                .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
     }
 
     public static String generateParamJson(String className){
@@ -73,11 +76,16 @@ public class QingParamUtil {
                             result.append("[");
                             result.append(toProperties(properties, genericClazz));
                             result.append("]");
+                        }else if(((Class) fc).isAssignableFrom(com.google.protobuf.ProtocolStringList.class)){
+                            result.append("[");
+                            result.append(toProperties(properties, String.class));
+                            result.append("]");
                         }
                     }else{
                         Class<?> propertiesType = (Class<?>) pd.getReadMethod().getGenericReturnType();
                         result.append(toProperties(properties, propertiesType));
                     }
+                    result.append(",");
                 }
 
 //                if(field.getType().isPrimitive() || Object.class.equals(field.getType())){ // String及基本数据类型
@@ -105,8 +113,6 @@ public class QingParamUtil {
 //                        result.append(toObjectProperties(properties, field.getType()));
 //                    }
 //                }
-
-                result.append(",");
             }
         }
 
@@ -118,6 +124,8 @@ public class QingParamUtil {
         if(String.class.equals(propertiesType) || propertiesType.isPrimitive() || Number.class.isAssignableFrom(propertiesType)){
             if(String.class.equals(propertiesType)){
                 return toStringProperties(properties);
+            }else if(boolean.class.equals(propertiesType)){
+                return toBooleanProperties(properties);
             }else{
                 return toNumberProperties(properties);
             }
@@ -155,6 +163,10 @@ public class QingParamUtil {
 
     private static String toStringProperties(String properties){
         return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"%s\"}", properties, properties, properties);
+    }
+
+    private static String toBooleanProperties(String properties){
+        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":{\"name\":\"否\",\"value\":\"false\"}, \"selectable\":[{\"name\":\"否\",\"value\":\"false\"},{\"name\":\"是\",\"value\":\"true\"}]}", properties, properties, properties);
     }
 
     private static String toNumberProperties(String properties){

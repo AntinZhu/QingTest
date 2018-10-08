@@ -66,23 +66,6 @@
             <#include "/include/sidebar.ftl" />
             <div class="main-content">
                 <div class="page-content">
-                    <div class="breadcrumbs" id="breadcrumbs">
-                        <script type="text/javascript">
-                            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-                        </script>
-
-                        <ul class="breadcrumb">
-                            <li>
-                                <i class="icon-home home-icon"></i>
-                                <a href="#">Home</a>
-                            </li>
-
-                            <li>
-                                <a href="#">UI Elements</a>
-                            </li>
-                            <li class="active">Buttons &amp; Icons</li>
-                        </ul><!-- .breadcrumb -->
-                    </div>
                     <main class="row-fluid" style="height:100%;min-height:550px;">
                         <div id="timeline-1">
                             <div class="row">
@@ -380,14 +363,6 @@
             <#else>
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
             </#if>
-            });
-
-            $("#resetBtn").click(function(){
-                $("#tree1").find(".tree-folder-header").each(function() {
-                    if ($(this).parent().css("display") == "block") {
-                        $(this).trigger("click");
-                    }
-                });
             });
 
             $("#generateParam").click(function () {

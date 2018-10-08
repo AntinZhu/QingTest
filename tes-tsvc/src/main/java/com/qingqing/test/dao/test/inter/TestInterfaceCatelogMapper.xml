@@ -32,9 +32,9 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceCatelog" keyProperty="id" useGeneratedKeys="true">
-    insert into t_interface_catelog (catelog_name, catelog_index, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time)
-    values (#{catelogName,jdbcType=VARCHAR}, #{catelogIndex,jdbcType=VARCHAR}, #{refType,javaType=CatelogRefType}, #{refValue, jdbcType=VARCHAR}, #{subItemCnt, jdbcType=INTEGER},
-      #{parentCatelogId, jdbcType=BIGINT}, #{sortNum,jdbcType=INTEGER},0, now()
+    insert into t_interface_catelog (catelog_name, sort_num, catelog_index, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time)
+    values (#{catelogName,jdbcType=VARCHAR}, #{sortNum,jdbcType=INTEGER},#{catelogIndex,jdbcType=VARCHAR}, #{refType,javaType=CatelogRefType}, #{refValue, jdbcType=VARCHAR}, #{subItemCnt, jdbcType=INTEGER},
+      #{parentCatelogId, jdbcType=BIGINT},0, now()
       )
   </insert>
 
@@ -44,8 +44,8 @@
     where id = #{id} for update
   </select>
 
-  <update id="incSortDescNum">
-    update t_interface_catelog set sort_desc_num = sort_desc_num + 1
+  <update id="incSubItemCnt">
+    update t_interface_catelog set sub_item_cnt = sub_item_cnt + 1
     where id = #{id}
   </update>
 

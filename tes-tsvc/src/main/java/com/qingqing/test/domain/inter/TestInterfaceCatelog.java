@@ -13,6 +13,13 @@ public class TestInterfaceCatelog {
         }
     };
 
+    public static Composer<Long, TestInterfaceCatelog> ID_COMPOSER = new Composer<Long, TestInterfaceCatelog>() {
+        @Override
+        public Long getComposerId(TestInterfaceCatelog testInterfaceCatelog) {
+            return testInterfaceCatelog.getId();
+        }
+    };
+
     private Long id;
     private String catelogName;
     private String catelogIndex;

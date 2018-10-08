@@ -32,7 +32,8 @@ public class MyErrorDecoder implements ErrorDecoder {
         }
         switch (response.status()){
             case HttpStatus.SC_UNPROCESSABLE_ENTITY:
-                return new RequestValidateException(result.getResponse().getError_message(), result.getResponse().getError_message());
+            case HttpStatus.SC_NOT_FOUND:
+                return new RequestValidateException(result.getResponse().getError_message(), result.getResponse().getHint_message());
         }
 
         return FeignException.errorStatus(methodKey, response);
@@ -44,6 +45,10 @@ public class MyErrorDecoder implements ErrorDecoder {
             ProtoBufResponse.SimpleResponse proto = ProtoBufResponse.SimpleResponse.parseFrom(response.body().asInputStream());
             return new SimpleResponse(BaseConverter.convertBaseResponse(proto.getResponse()));
         }else{
+            if(HttpStatus.SC_NOT_FOUND == response.status()){
+                return new SimpleResponse(new BaseResponse(1001, "", "服务返回404，请检查接口地址是否配置正确"));
+            }
+
             String responseValue = "";
             if(response.body() != null){
                 responseValue = Util.toString(response.body().asReader());

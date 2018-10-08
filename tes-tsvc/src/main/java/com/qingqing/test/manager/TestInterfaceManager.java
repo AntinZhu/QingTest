@@ -85,13 +85,16 @@ public class TestInterfaceManager {
         TestInterfaceCatelog catelog = new TestInterfaceCatelog();
 
         String catelogIndex;
+        Integer sortNum;
         if(parentCatelogId != null){
             TestInterfaceCatelog parentCatelog = catelogService.selectForUpdate(parentCatelogId);
-            catelogIndex = parentCatelog.getCatelogIndex() + "-" + (parentCatelog.getSubItemCnt() + 1);
+            sortNum = parentCatelog.getSubItemCnt() + 1;
+            catelogIndex = parentCatelog.getCatelogIndex() + "-" + sortNum;
 
-            catelogService.incDescSortNum(parentCatelog.getId());
+            catelogService.incSubItemCnt(parentCatelog.getId());
         }else{
-            catelogIndex = getNextRootCateogIndex();
+            sortNum = getNextRootCateogIndex();
+            catelogIndex = String.valueOf(sortNum);
         }
 
         catelog.setCatelogName(catelogName);
@@ -100,16 +103,15 @@ public class TestInterfaceManager {
         catelog.setDeleted(Boolean.FALSE);
         catelog.setCatelogIndex(catelogIndex);
         catelog.setParentCatelogId(parentCatelogId == null? 0L : parentCatelogId);
-        if(CatelogRefType.cate.equals(refType)){
-            catelog.setSubItemCnt(0);
-        }
+        catelog.setSortNum(sortNum);
+        catelog.setSubItemCnt(0);
 
         catelogService.save(catelog);
 
         return catelog;
     }
 
-    private synchronized String getNextRootCateogIndex(){
+    private synchronized Integer getNextRootCateogIndex(){
         Integer nextCatelogIndex = 0;
         List<TestInterfaceCatelog> catelogList = catelogService.selectAll();
         for(TestInterfaceCatelog catelog : catelogList){
@@ -121,7 +123,7 @@ public class TestInterfaceManager {
             }
         }
 
-        return String.valueOf(nextCatelogIndex + 1);
+        return nextCatelogIndex + 1;
     }
 
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
@@ -140,28 +142,23 @@ public class TestInterfaceManager {
         return resultBean;
     }
 
-    private List<TestInterfaceCatelog> getCatelogLinkList(TestInterfaceCatelog log){
-        return getAllParentIndex(log.getCatelogIndex());
-    }
-
-    private List<TestInterfaceCatelog> getAllParentIndex(String index){
+    private List<TestInterfaceCatelog> getCatelogLinkList(TestInterfaceCatelog catelog){
         List<TestInterfaceCatelog> allCatelogs = testInterfaceCatelogService.selectAll();
-        Map<String, TestInterfaceCatelog> indexMapping = CollectionsUtil.mapComposerId(allCatelogs, TestInterfaceCatelog.INDEX_COMPOSER);
+        Map<Long, TestInterfaceCatelog> idMapping = CollectionsUtil.mapComposerId(allCatelogs, TestInterfaceCatelog.ID_COMPOSER);
 
-        String[] arr = index.split("-");
-        List<TestInterfaceCatelog> allResultList = new ArrayList<>(arr.length);
-
-        String parentIndex = "";
-        for(int i = 0; i  < arr.length; i++){
-            if(i == 0){
-                parentIndex = arr[i];
-            }else{
-                parentIndex += "-" + arr[i];
+        List<TestInterfaceCatelog> resultList = new LinkedList<>();
+        Long parentCatelogId = catelog.getId();
+        while (parentCatelogId != null && parentCatelogId != 0L){
+            TestInterfaceCatelog parentCatelog = idMapping.get(parentCatelogId);
+            if(parentCatelog == null){
+                break;
             }
-            allResultList.add(indexMapping.get(parentIndex));
+
+            resultList.add(parentCatelog);
+            parentCatelogId = parentCatelog.getParentCatelogId();
         }
 
-        return allResultList;
+        return resultList;
     }
 
     public List<CatelogBean> getCatelogList(){

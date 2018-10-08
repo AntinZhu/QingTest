@@ -17,7 +17,7 @@ public interface TestInterfaceCatelogService {
 
     TestInterfaceCatelog selectForUpdate(Long id);
 
-    void incDescSortNum(Long id);
+    void incSubItemCnt(Long id);
 
     void deletedById(Long id);
 
