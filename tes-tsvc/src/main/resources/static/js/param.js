@@ -371,7 +371,7 @@ function formatValue(paramInfo, paramKey, value){
     }else{
         if(value=="true"){
             return true;
-        }else if(value = "false"){
+        }else if(value == "false"){
             return false;
         }
     }

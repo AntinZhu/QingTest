@@ -86,6 +86,7 @@
                                                         <div class="widget-header hidden"></div>
 
                                                         <div class="widget-body">
+                                                            <input type="hidden" id="guid" >
                                                             <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
                                                         </div>
                                                     </div>
@@ -245,14 +246,20 @@
 
             function refreshInterfaceUrl(){
                 var env = $("#env").val();
-                $("#interfaceUrl").text(interfaceUrlPrefix.replace("{env}", env));
+                var guid = generateGuid();
+
+                var url = interfaceUrlPrefix.replace("{env}", env);
+                url = url.replace("{guid}", guid);
+
+                $("#interfaceUrl").text(url);
+                $("#guid").val(guid);
             }
 
             var interfaceParam;
             var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
             function handlerInterface(resu){
                 jsonShow(resu, "json-interface");
-                interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl;
+                interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl + "?guid={guid}";
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
@@ -291,7 +298,7 @@
                         requestUserId : $("#requestUserId").val(),
                         param : JSON.stringify(param)
                     };
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val());
+                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
                 });
 
                 function handlerTeacherInfo(resu){

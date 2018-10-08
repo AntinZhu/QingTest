@@ -218,6 +218,7 @@ public class TestInterfaceManager {
                 switch (testInterface.getRequestUserType()){
                     case student:
                     case teacher:
+                    case ta:
                         return ptClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId(), testInterface.getRequestUserType());
                     default:
                         throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_user_type, "unsupport request user type for value:" + testInterface.getRequestUserType());

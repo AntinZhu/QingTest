@@ -133,6 +133,12 @@ public class EnvClient implements Client {
     }
 
     private String formatUrl(String url){
-        return url.replace("{env}", EnvHandlerInteceptor.getEnv());
+        String finalUrl = url.replace("{env}", EnvHandlerInteceptor.getEnv());
+        String guid = EnvHandlerInteceptor.getGuid();
+        if(guid != null){
+            finalUrl = finalUrl + "?guid=" + guid;
+        }
+
+        return finalUrl;
     }
 }

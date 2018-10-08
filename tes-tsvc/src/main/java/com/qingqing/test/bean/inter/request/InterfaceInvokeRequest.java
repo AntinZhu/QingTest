@@ -4,18 +4,9 @@ package com.qingqing.test.bean.inter.request;
  * Created by zhujianxing on 2018/8/30.
  */
 public class InterfaceInvokeRequest {
-    private String env;
     private Long interfaceId;
     private Long requestUserId;
     private String param;
-
-    public String getEnv() {
-        return env;
-    }
-
-    public void setEnv(String env) {
-        this.env = env;
-    }
 
     public Long getInterfaceId() {
         return interfaceId;

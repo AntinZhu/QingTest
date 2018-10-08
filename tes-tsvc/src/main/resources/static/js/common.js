@@ -87,15 +87,18 @@ while(   nOffset   !=   -1   )
 return   bstr   +   strUtf8; 
 }
 
-function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, otherData){
+function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, otherData, guid){
     var result = true;
     if(env == null){
         env = "";
     }
+    if(guid == null){
+        guid = "";
+    }
 
     $.ajax({
         type : "POST",
-        url : url + "?env=" + env,
+        url : url + "?env=" + env + "&guid=" + guid,
         timeout : 60000,
         data : JSON.stringify(data),
         dataType : 'json',
@@ -430,4 +433,11 @@ function getyyyyMMdd(){
     String(curr_date).length < 2 ? (curr_date = "0" + curr_date): curr_date;
     var yyyyMMdd = curr_year + "-" + curr_month +"-"+ curr_date;
     return yyyyMMdd;
+}
+
+function generateGuid() { 
+    return 'test-api-xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {        
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);        
+        return v.toString(16);    
+    });
 }
