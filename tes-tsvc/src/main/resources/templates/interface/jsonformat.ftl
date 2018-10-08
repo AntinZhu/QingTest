@@ -87,10 +87,13 @@
 
                                                         <div class="widget-body">
                                                             <input type="hidden" id="guid" >
-                                                            <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
+                                                            <a target="_blank" id = "logUrl" href="">
+                                                                <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <!-- 接口参数 -->
                                                 <div class="timeline-item clearfix">
                                                     <div class="timeline-info">
@@ -244,6 +247,7 @@
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
             });
 
+            var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()";
             function refreshInterfaceUrl(){
                 var env = $("#env").val();
                 var guid = generateGuid();
@@ -251,8 +255,12 @@
                 var url = interfaceUrlPrefix.replace("{env}", env);
                 url = url.replace("{guid}", guid);
 
+                var logTargetUrl = logUrl.replace("{env}", env);
+                logTargetUrl = logTargetUrl.replace("{guid}", guid);
+
                 $("#interfaceUrl").text(url);
                 $("#guid").val(guid);
+                $("#logUrl").attr("href", logTargetUrl);
             }
 
             var interfaceParam;
