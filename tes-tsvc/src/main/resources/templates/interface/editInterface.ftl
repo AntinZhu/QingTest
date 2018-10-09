@@ -120,7 +120,7 @@
                                                                                                     </script>
 
                                                                                                     <ul class="breadcrumb">
-                                                                                                        <#list interfaceBean.parentCatelogList as cate>
+                                                                                                        <#list interfaceBean.parentCatelogList? reverse as cate>
                                                                                                             <li><a href="#">${cate.catelogName}</a></li>
                                                                                                         </#list>
                                                                                                     </ul><!-- .breadcrumb -->
