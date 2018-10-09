@@ -87,7 +87,7 @@
 
                                                         <div class="widget-body">
                                                             <input type="hidden" id="guid" >
-                                                            <a target="_blank" id = "logUrl" href="">
+                                                            <a target="_blank" title="点击链接可查看调用日志" data-rel="tooltip" id = "logUrl" href="">
                                                                 <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
                                                             </a>
                                                         </div>
@@ -364,6 +364,8 @@
                         ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
                     }
                 });
+
+                $('[data-rel=tooltip]').tooltip();
             });
         </script>
     </div>
