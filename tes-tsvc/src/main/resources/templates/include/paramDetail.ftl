@@ -1,7 +1,7 @@
 <form class="form-horizontal">
-    <div class="hide" id="paramDiv">
+    <div class="hide" id="paramDiv" >
         <span class="col-sm-12" style="margin-bottom: 10px;">
-        <label class="pull-right inline">
+        <label class="pull-right inline"  title="开启时可删除和编辑参数" data-rel="tooltip" >
             <small class="muted">编辑模式:</small>
 
             <input id="editBtnSwitch" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />

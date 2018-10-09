@@ -163,6 +163,9 @@
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
                                                                                             <input class="col-xs-10" type="text" id="interfaceUrl" placeholder="输入接口地址..." />
+                                                                                            <div class="col-xs-9 label label-lg label-light arrowed-in arrowed-right qing_input_tip" style="color: #333">
+                                                                                                需要以服务上下文开始，.json结尾，举例：<b class="red">/svc</b>/api/pt/v1/teacher/get_open_class_completion_status<b class="red">.json</b>
+                                                                                            </div>
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -218,9 +221,10 @@
                                                                                             <input type="hidden" id="paramDetail" />
                                                                                             <input class="col-xs-10" type="text" id="className" placeholder="输入类名..." />
                                                                                             <button type="button" id="generateParam" style="border-radius: 8px;margin-left: 5px" class="btn btn-sm">生成参数</button>
+                                                                                            <div class="col-xs-9 label label-lg label-light arrowed-in arrowed-right qing_input_tip" style="color: #333;">
+                                                                                                内部类使用$,举例:com.qingqing.api.proto.v1.Pay<b class="red">$</b>GeneralOrderPaymentSummaryV2Response
+                                                                                            </div>
                                                                                         </div>
-
-                                                                                        <div class="space-2"></div>
                                                                                     </div>
                                                                                 </div>
                                                                             </form>
@@ -232,13 +236,13 @@
 
                                                                             <div class="clearfix form-actions">
                                                                                 <div class="col-md-offset-3 col-md-9">
-                                                                                    <button class="btn btn-info" type="button" id = "saveBtn">
+                                                                                    <button class="btn btn-info" style="border-radius: 8px" type="button" id = "saveBtn">
                                                                                         <i class="icon-ok bigger-110"></i>
                                                                                         Submit
                                                                                     </button>
 
                                                                                     &nbsp; &nbsp; &nbsp;
-                                                                                    <button class="btn" type="reset" id = "resetBtn">
+                                                                                    <button class="btn" type="reset" style="border-radius: 8px" id = "resetBtn">
                                                                                         <i class="icon-undo bigger-110"></i>
                                                                                         Reset
                                                                                     </button>
@@ -360,6 +364,7 @@
 
                 // TODO 父的cateId
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId", ${interfaceBean.catelog.id});
+                $(".qing_input_tip").addClass("hide");
             <#else>
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
             </#if>

@@ -126,13 +126,13 @@
 
                                                                             <div class="clearfix form-actions">
                                                                                 <div class="col-md-offset-3 col-md-9">
-                                                                                    <button class="btn btn-info" type="button" id = "teacherIdBtn">
+                                                                                    <button class="btn btn-info" style="border-radius: 8px" type="button" id = "teacherIdBtn">
                                                                                         <i class="icon-ok bigger-110"></i>
                                                                                         Submit
                                                                                     </button>
 
                                                                                     &nbsp; &nbsp; &nbsp;
-                                                                                    <button class="btn" type="reset">
+                                                                                    <button class="btn" style="border-radius: 8px" type="reset">
                                                                                         <i class="icon-undo bigger-110"></i>
                                                                                         Reset
                                                                                     </button>

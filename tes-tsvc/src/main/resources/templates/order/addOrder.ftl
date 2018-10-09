@@ -124,6 +124,7 @@
                                                     <h3 class="lighter block green">下单参数选择</h3>
                                                     <div class="hr hr-dotted"></div>
                                                     <form class="form-horizontal" id="validation-form" method="get">
+                                                        <#include "/include/env.ftl" />
                                                         <div class="form-group">
                                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">老师ID:</label>
 
@@ -575,7 +576,7 @@
                         data : $("#groupOrderId").text(),
                         studentId : $("#studentId").val()
                     }
-                    result = commonAjaxRequest("${base}/v1/order/made_up.json", data, notOps, false, "成团失败:");
+                    result = commonAjaxRequest("${base}/v1/order/made_up.json", data, notOps, false, "成团失败:", $("#env").val());
                 }
 
                 orderCourseList();
@@ -626,7 +627,7 @@
                 contentPackageId :contentPackageId
             };
 
-            result = commonAjaxRequest("${base}/v1/order/student/add_order.json", data, handlerAddOrder, false, "生成订单失败:");
+            result = commonAjaxRequest("${base}/v1/order/student/add_order.json", data, handlerAddOrder, false, "生成订单失败:", $("#env").val());
 
             return result;
         }
@@ -637,7 +638,7 @@
                 data : $("#qingqingOrderId").text()
             };
 
-            result = commonAjaxRequest("${base}/v1/order_course/order_course_list.json", data, handlerSubOrderDetail, false, "");
+            result = commonAjaxRequest("${base}/v1/order_course/order_course_list.json", data, handlerSubOrderDetail, false, "", $("#env").val());
 
             return result;
         }
@@ -668,7 +669,7 @@
                     teacherId : $("#teacherIdIpt").val()
                 }
 
-                commonAjaxRequest("${base}/v1/order_course/teacher/start_class.json", data, handlerCommonOrderOps, false, "点击上课失败：");
+                commonAjaxRequest("${base}/v1/order_course/teacher/start_class.json", data, handlerCommonOrderOps, false, "点击上课失败：", $("#env").val());
             });
 
             $(".apply-freeze").click(function(){
@@ -678,7 +679,7 @@
                     studentId : $("#studentId").val()
                 }
 
-                commonAjaxRequest("${base}/v1/order_course/student/apply_freeze.json", data, handlerCommonOrderOps, false, "申请三方赔付失败：");
+                commonAjaxRequest("${base}/v1/order_course/student/apply_freeze.json", data, handlerCommonOrderOps, false, "申请三方赔付失败：", $("#env").val());
             });
 
             $(".finish-class").click(function(){
@@ -688,7 +689,7 @@
                     studentId : $("#studentId").val()
                 }
 
-                commonAjaxRequest("${base}/v1/order_course/student/finish_class.json", data, handlerCommonOrderOps, false, "结课失败：");
+                commonAjaxRequest("${base}/v1/order_course/student/finish_class.json", data, handlerCommonOrderOps, false, "结课失败：", $("#env").val());
             });
 
             $(".apply-cancel").click(function(){
@@ -698,7 +699,7 @@
                     studentId : $("#studentId").val()
                 }
 
-                commonAjaxRequest("${base}/v1/order_course/student/apply_cancel.json", data, handlerApplyCancel, false, "申请删课失败:");
+                commonAjaxRequest("${base}/v1/order_course/student/apply_cancel.json", data, handlerApplyCancel, false, "申请删课失败:", $("#env").val());
             });
         }
 
@@ -779,7 +780,7 @@
                         stageConfigId : stageConfigId
                     };
 
-            result = commonAjaxRequest("${base}/v1/pay/ack_pay.json", data, handlerPay, false, "新增支付路径失败:");
+            result = commonAjaxRequest("${base}/v1/pay/ack_pay.json", data, handlerPay, false, "新增支付路径失败:", $("#env").val());
             return result;
         }
 
@@ -792,7 +793,7 @@
                 payType : $("#payType").val()
             };
 
-            commonAjaxRequest("${base}/v1/pay/check_pay.json", data, handlerCheckPay, false, "查询支付状态失败:");
+            commonAjaxRequest("${base}/v1/pay/check_pay.json", data, handlerCheckPay, false, "查询支付状态失败:", $("#env").val());
         }
 
         function handlerCheckPay(data){
@@ -835,7 +836,7 @@
                 qingqingOrderId : $("#qingqingOrderId").text()
             };
 
-            commonAjaxRequest("${base}/v1/pay/pay_infos.json", data, handlerPayWayList, true, "获取第三方支付路径出错:");
+            commonAjaxRequest("${base}/v1/pay/pay_infos.json", data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val());
         }
 
         var syncPayWayList;
@@ -849,7 +850,7 @@
                     data : qinqqingTradeNo
                 };
 
-                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json", data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:");
+                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json", data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:", $("#env").val());
 
 
                 if(syncPayWayList == null){
@@ -875,7 +876,7 @@
                 coursePriceType : $("#coursePriceType").val()
             };
 
-            return commonAjaxRequest("${base}/v1/pay/pre_pay.json", data, handlerPrePay, isAsync, "获取订单前置接口失败:");
+            return commonAjaxRequest("${base}/v1/pay/pre_pay.json", data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val());
         }
 
         var installmentConfigs;
@@ -1006,8 +1007,8 @@
                 data : new Number(studentId)
             };
 
-            commonAjaxRequest("${base}/v1/order/teacher/detail_for_order.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:");
-            commonAjaxRequest("${base}/v1/student/addresses.json", addressData, handlerAddress, true, "获取用户地址信息异常:");
+            commonAjaxRequest("${base}/v1/order/teacher/detail_for_order.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:", $("#env").val());
+            commonAjaxRequest("${base}/v1/student/addresses.json", addressData, handlerAddress, true, "获取用户地址信息异常:", $("#env").val());
         });
 
         $('#gradeId').change(function(){
@@ -1309,6 +1310,11 @@
             $(this).prev().focus();
         });
 
+        $(".env").click(function(){
+            $(".env.btn-primary").removeClass("btn-primary");
+            $(this).addClass("btn-primary");
+            $("#env").val($(this).val());
+        });
 
         jQuery.validator.addMethod("phone", function (value, element) {
             return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
