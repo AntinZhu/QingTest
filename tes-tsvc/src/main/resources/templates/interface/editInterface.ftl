@@ -419,8 +419,6 @@
             });
 
             $("#saveBtn").click(function () {
-                $("#paramDetail").val(generateEditParam("#paramListDiv input"));
-
                 var catelogName = $("#catelogName").val();
                 if(catelogName == null || catelogName == ""){
                     $.gritter.add({
@@ -479,6 +477,7 @@
                 }
                 var paramDetail = "";
                 if($("#hasParam").val() == 1){
+                    $("#paramDetail").val(generateEditParam("#paramListDiv input"));
                     paramDetail = $("#paramDetail").val();;
                     if(paramDetail == null || paramDetail == ""){
                         $.gritter.add({
