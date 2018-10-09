@@ -334,7 +334,7 @@ function formatParam(paramInfo, fromIdxInfo,destIdxInfo, paramObj, paramName, pa
                 if(idx > 0){
                     if(paramObj[propName][idx-1] == null){
                         fromIdxInfo[paramName] = idx;
-                        while(paramObj[propName][idx-1] == null){
+                        while(idx > 0 && paramObj[propName][idx-1] == null){
                             idx --;
                         }
                         destIdxInfo[paramName] = idx;
