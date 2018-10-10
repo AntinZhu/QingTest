@@ -103,7 +103,7 @@ function initHtml(parentKey, params, valueChangedNotifyId){
                 var options = [];
                 for(var secIdx in param.selectable){
                     var sec = param.selectable[secIdx];
-                    options.push({id: sec.value, text: sec.name});
+                    options.push({value: sec.value, text: sec.name});
                 }
 
                 paramInfo[paramKey]["options"] = options;
@@ -139,6 +139,7 @@ function editableInit(){
                 type: 'select2',
                 value : paramInfo[prop]["defaultValue"],
                 source: options,
+                // mode: "popup",
                 disabled : getEditDisableStatus("#editBtnSwitch"),
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
@@ -505,25 +506,54 @@ $(document).on("click", ".qing_value_type", function(){
     $("input[name='" + key + "']").attr("clazz", clazz);
 
     changeDefaultValue(key, clazz);
-
     notifyParamChanged();
 });
 
 function changeDefaultValue(key, clazz){
+    var keyLabel = $("." + key + "_label");
+    var newKeyLabel = keyLabel.clone();
+    $(newKeyLabel).removeClass("input_editable");
+    $(newKeyLabel).removeClass("date_editable");
+    $(keyLabel).replaceWith(newKeyLabel);
+
     var defaultName = "";
     var defaultValue = 1;
     switch (clazz){
         case "input_editable":
             defaultName = 1;
             defaultValue = 1;
+
+            $("." + key + "_label").editable({
+                type: 'text',
+                disabled : getEditDisableStatus("#editBtnSwitch"),
+                success: function(response, newValue) {
+                    $(this).prev("input").val(newValue);
+                    notifyParamChanged();
+                }
+            });
+
             break;
         case "date_editable":
             defaultName = getyyyyMMdd();
             defaultValue = Date.now();
             defaultValue = defaultValue - defaultValue%100000;
+
+            $("." + key + "_label").editable({
+                type: 'date',
+                format: 'yyyy-mm-dd',
+                viewformat: 'yyyy-mm-dd',
+                disabled : getEditDisableStatus("#editBtnSwitch"),
+                datepicker: {
+                    weekStart: 1
+                },
+                success: function(response, newValue) {
+                    $(this).prev("input").val(newValue.getTime());
+                    notifyParamChanged();
+                }
+            });
             break;
     }
 
-    $("." + key + "_label").text(defaultName);
-    $("input[name='" + key + "']").val(defaultValue);
+    $(newKeyLabel).text(defaultName);
+    $(newKeyLabel).prev("input").val(defaultValue);;
 }

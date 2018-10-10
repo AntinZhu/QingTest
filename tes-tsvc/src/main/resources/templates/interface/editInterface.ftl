@@ -34,6 +34,10 @@
         .next-line{
             display:block;
         }
+
+        .profile-info-value>span+span:before {
+            content: "";
+        }
     </style>
 
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
@@ -90,7 +94,7 @@
                                                         <div id="faq-0-1">
                                                             <div id="accordion" class="accordion-style2">
                                                                 <div class="group">
-                                                                    <h3 class="accordion-header">接口参数选择</h3>
+                                                                    <h3 class="accordion-header">接口参数填写</h3>
 
                                                                     <div>
                                                                         <div class="col-xs-12">
