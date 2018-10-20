@@ -1,6 +1,7 @@
 package com.qingqing.test.config;
 
 import com.qingqing.common.exception.QingQingRuntimeException;
+import com.qingqing.test.hystrix.SwitchableDateSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -44,7 +45,7 @@ public class TestSourceDataConfig {
     private String configPath;
 
     @Bean(name = DATA_SOURCE_NAME)
-    public DataSource getDataSource() {
+    public SwitchableDateSource getDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl(url);
@@ -58,7 +59,8 @@ public class TestSourceDataConfig {
         dataSource.setMaxWait(30000);
         dataSource.setValidationQuery(validation_query);
         dataSource.setTestOnBorrow(true);
-        return dataSource;
+
+        return new SwitchableDateSource(dataSource);
     }
 
     @Bean(name = TX_MANAGER)

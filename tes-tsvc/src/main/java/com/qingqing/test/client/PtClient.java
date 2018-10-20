@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Created by zhujianxing on 2018/2/4.
  */
-@FeignClient(value = "ptClient", url = "http://gateway.{env}.idc.cedu.cn", configuration = MyPtFeignConfiguration.class)
+@FeignClient(value = "ptClient", url = "http://{host}", configuration = MyPtFeignConfiguration.class)
 public interface PtClient {
 
     @RequestMapping(path = "/svc/api/pt/v1/teacher/base_info", method = RequestMethod.POST)

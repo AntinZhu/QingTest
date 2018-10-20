@@ -301,12 +301,16 @@
                 $('#teacherIdBtn').click(function () {
                     var param = generateJsonParam("#paramListDiv input");
                     jsonShow(param, "json-request");
+                    jsonShow("[]", "json-response");
                     var data = {
                         interfaceId : $("#interfaceId").val(),
                         requestUserId : $("#requestUserId").val(),
                         param : JSON.stringify(param)
                     };
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                    var isLocalDebug = $("#isLocalDebug").val();
+                    var localPort = $("#localDebugPort").val();
+
+                    commonAjaxRequest("${base}/v1/test/interface/invoke.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
                 });
 
                 function handlerTeacherInfo(resu){

@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 @SpringBootApplication(
@@ -15,6 +16,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 		}
 )
 @EnableFeignClients
+@EnableCircuitBreaker
 public class TestApiApplication implements EmbeddedServletContainerCustomizer {
 
 	public static void main(String[] args) {

@@ -1,5 +1,7 @@
 package com.qingqing.test.feign.client;
 
+import com.qingqing.common.exception.QingQingRuntimeException;
+import com.qingqing.test.bean.common.Env;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
 import feign.Client;
 import feign.Request;
@@ -30,6 +32,7 @@ import static java.lang.String.format;
  */
 @Component
 public class EnvClient implements Client {
+    public static final String BEAN_NAME = "envClient";
 
     @Override
     public Response execute(Request request, Options options) throws IOException {
@@ -133,8 +136,10 @@ public class EnvClient implements Client {
     }
 
     private String formatUrl(String url){
-        String finalUrl = url.replace("{env}", EnvHandlerInteceptor.getEnv());
-        String guid = EnvHandlerInteceptor.getGuid();
+        String host = getHost();
+
+        String finalUrl = url.replace("{host}", host);
+        String guid = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.GUID);
         if(guid != null){
             if(finalUrl.indexOf("?") == -1){
                 finalUrl = finalUrl + "?guid=" + guid;
@@ -143,6 +148,30 @@ public class EnvClient implements Client {
             }
         }
 
+        finalUrl = finalUrl.replace("{env}", EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV));
+
         return finalUrl;
     }
+
+    protected String getHost(){
+        if(EnvHandlerInteceptor.isLocalDebug()){
+            return "127.0.0.1:" + EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.LOCAL_PORT);
+        }else{
+            return getEnvHost();
+        }
+    }
+
+    private String getEnvHost(){
+        String envValue = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV);
+        Env env = Env.valueOf(envValue);
+        switch (env){
+            case dev:
+            case tst:
+            case hjl:
+                return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
+            default:
+                throw new QingQingRuntimeException("unknown env");
+        }
+    }
+
 }

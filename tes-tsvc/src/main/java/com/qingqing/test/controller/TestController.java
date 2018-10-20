@@ -26,6 +26,7 @@ import com.qingqing.test.util.QingParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,6 +107,20 @@ public class TestController {
     @ResponseBody
     public TestInterfaceResponse testInterface(@ProtoRequestBody SimpleLongRequest request){
         Long interfaceId = request.getData();
+        TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
+        if(interfaceBean.getInter() == null){
+            throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown ytest interface, interfaceId:" + interfaceId);
+        }
+
+        TestInterfaceResponse interfaceResponse = new TestInterfaceResponse();
+        interfaceResponse.setResponse(BaseResponse.SUCC_RESP);
+        interfaceResponse.setInterfaceInfo(interfaceBean);
+        return interfaceResponse;
+    }
+
+    @RequestMapping("/interface/{id}")
+    @ResponseBody
+    public TestInterfaceResponse testInterface(@PathVariable("id") Long interfaceId){
         TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
         if(interfaceBean.getInter() == null){
             throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown ytest interface, interfaceId:" + interfaceId);

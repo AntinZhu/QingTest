@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Created by zhujianxing on 2018/2/4.
  */
-@FeignClient(value = "payPbClient", url = "http://gateway.{env}.idc.cedu.cn/paysvc/api/pb/v1/payin/pay_notify/", configuration = PayFeignConfiguration.class)
+@FeignClient(value = "payPbClient", url = "http://{host}/paysvc/api/pb/v1/payin/pay_notify/", configuration = PayFeignConfiguration.class)
 public interface PayPbClient {
 
     @RequestMapping(path = "alipay", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})

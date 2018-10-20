@@ -483,6 +483,16 @@ $(document).on("change", "#editBtnSwitch", function(){
     editableOff();
 });
 
+$(document).on("change", "#isLocalDebug", function(){
+    if($(this).val() == 0){
+        $(".isLocalDebug").removeClass("hide");
+        $(this).val(1);
+    }else{
+        $(".isLocalDebug").addClass("hide");
+        $(this).val(0);
+    }
+});
+
 function editableOff(){
     $(document).find(".date_editable").each(function(key,value){
         $(value).editable('toggleDisabled');

@@ -375,7 +375,7 @@
             });
 
             $("#generateParam").click(function () {
-                var className = $('#className').val();
+                var className = $('#className').val().trim();
                 if(className == null || className == ""){
                     notice("参数有误", "请输入类名");
                     return;

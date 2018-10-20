@@ -14,8 +14,11 @@ import java.util.Map;
  */
 public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
 
-    private static final String ENV = "env";
-    private static final String GUID = "guid";
+    public static final String ENV = "env";
+    public static final String GUID = "guid";
+    public static final String IS_LOCAL_DEBUG = "is_local";
+    public static final String LOCAL_PORT = "local_port";
+    private static final String[] SAVE_PARAM_SET = new String[]{GUID, IS_LOCAL_DEBUG, LOCAL_PORT};
     private static final ThreadLocal<Map<String, String>> PARAM_MAPPING = new ThreadLocal<>();
 
     @Override
@@ -27,9 +30,11 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
         }
         params.put(ENV, envValue);
 
-        String guid = request.getParameter(GUID);
-        if(!StringUtils.isEmpty(guid)){
-            params.put(GUID, guid);
+        for(String saveParam : SAVE_PARAM_SET){
+            String paramValue = request.getParameter(saveParam);
+            if(!StringUtils.isEmpty(paramValue)){
+                params.put(saveParam, paramValue);
+            }
         }
 
         PARAM_MAPPING.set(params);
@@ -42,11 +47,11 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
         this.PARAM_MAPPING.remove();
     }
 
-    public static final String getEnv(){
-        return PARAM_MAPPING.get().get(ENV);
+    public static final String getParam(String paramName){
+        return PARAM_MAPPING.get().get(paramName);
     }
 
-    public static final String getGuid(){
-        return PARAM_MAPPING.get().get(GUID);
+    public static final boolean isLocalDebug(){
+        return "1".equals(PARAM_MAPPING.get().get(IS_LOCAL_DEBUG));
     }
 }

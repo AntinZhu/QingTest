@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Created by zhujianxing on 2018/2/4.
  */
-@FeignClient(value = "piClient", url = "http://gateway.{env}.idc.cedu.cn", configuration = MyPiFeignConfiguration.class)
+@FeignClient(value = "piClient", url = "http://{host}", configuration = MyPiFeignConfiguration.class)
 public interface PiClient {
 
     @RequestMapping(path = "/{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})

@@ -39,14 +39,17 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             FeignException fex = (FeignException)ex;
             response.setStatus(fex.status());
             if( pf != null ) {
-               SimpleResponse result = JsonUtil.getObjectFromJson(fex.getMessage().substring(fex.getMessage().indexOf("content:\n") + 8), SimpleResponse.class);
                 response.setStatus(fex.status());
                 switch (fex.status()){
                     case 422:
                         if( pf != null ) {
+                            SimpleResponse result = JsonUtil.getObjectFromJson(fex.getMessage().substring(fex.getMessage().indexOf("content:\n") + 8), SimpleResponse.class);
                             builder.setField(pf, ProtoRespGenerator.generateResponse(result.getResponse().getError_code(), result.getResponse().getError_message(), result.getResponse().getHint_message()));
                         }
-
+                    case 401:
+                        if( pf != null ) {
+                            builder.setField(pf, ProtoRespGenerator.generateResponse(401, "", "token session校验不通过"));
+                        }
                         return builder.build();
 
                 }

@@ -1,5 +1,8 @@
 package com.qingqing.test.service.inter.impl;
 
+import com.qingqing.test.aspect.datasource.BackupDataSource;
+import com.qingqing.test.aspect.datasource.ErrorCodeDataSource;
+import com.qingqing.test.config.BackupSourceDataConfig;
 import com.qingqing.test.dao.test.inter.TestInterfaceMapper;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.service.inter.TestInterfaceService;
@@ -16,6 +19,7 @@ public class TestInterfaceServiceImpl implements TestInterfaceService{
     private TestInterfaceMapper testInterfaceMapper;
 
     @Override
+    @ErrorCodeDataSource(hintMessage = "DB罢工，不让新增接口")
     public void save(TestInterface testInterface) {
         testInterfaceMapper.insert(testInterface);
     }
@@ -26,6 +30,7 @@ public class TestInterfaceServiceImpl implements TestInterfaceService{
     }
 
     @Override
+    @BackupDataSource(dateSourceBeanName = BackupSourceDataConfig.DATA_SOURCE_NAME, groupKey = "not_default")
     public TestInterface findById(Long id) {
         return testInterfaceMapper.selectById(id);
     }

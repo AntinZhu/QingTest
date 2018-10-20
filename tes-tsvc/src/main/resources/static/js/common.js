@@ -96,9 +96,15 @@ function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, othe
         guid = "";
     }
 
+    if(url.indexOf("?") == -1){
+        url += "?env=" + env + "&guid=" + guid
+    }else{
+        url += "&env=" + env + "&guid=" + guid
+    }
+
     $.ajax({
         type : "POST",
-        url : url + "?env=" + env + "&guid=" + guid,
+        url : url,
         timeout : 60000,
         data : JSON.stringify(data),
         dataType : 'json',

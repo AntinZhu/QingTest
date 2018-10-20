@@ -29,6 +29,8 @@ public class PiRequestInterceptor extends ProtoRequestInterceptor {
             Long userId = Long.valueOf(userIdParams.iterator().next());
             UserType userType = UserType.valueOf(userTypeParams.iterator().next());
             template.header(RequestExtract.QINGQING_USER, userService.encodeUser(userType, userId));
+        }else{
+            template.header(RequestExtract.QINGQING_USER, "332684829");
         }
 
         long time = System.currentTimeMillis();
