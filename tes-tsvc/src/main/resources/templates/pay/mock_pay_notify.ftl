@@ -234,7 +234,7 @@
 
                 if(params != ""){
                     interfaceParam = params;
-                    var paramHtmls = genHtml("", params, "0");
+                    var paramHtmls = genHtml("", params, null);
                     $("#paramListDiv").html(paramHtmls);
 
                     initHtml("", params);
