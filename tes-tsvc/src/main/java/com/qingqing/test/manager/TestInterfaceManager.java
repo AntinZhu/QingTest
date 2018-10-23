@@ -18,6 +18,7 @@ import com.qingqing.test.domain.inter.ParamEncodeType;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
+import com.qingqing.test.service.inter.TestInterfaceParamService;
 import com.qingqing.test.service.inter.TestInterfaceService;
 import com.qingqing.test.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,8 @@ public class TestInterfaceManager {
     private PiClient piClient;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TestInterfaceParamService testInterfaceParamService;
 
     @Transactional
     public TestInterfaceCatelog saveCatelog(SaveCatelogBean saveBean, TestInterfaceCatelog parentCatelog){
@@ -144,6 +147,7 @@ public class TestInterfaceManager {
         resultBean.setInter(testInterface);
         resultBean.setCatelog(catelog);
         resultBean.setParentCatelogList(linkList);
+        resultBean.setParamList(testInterfaceParamService.selectListByInterfaceId(interfaceId));
         return resultBean;
     }
 

@@ -132,9 +132,9 @@
                                                                                     </button>
 
                                                                                     &nbsp; &nbsp; &nbsp;
-                                                                                    <button class="btn" style="border-radius: 8px" type="reset">
+                                                                                    <button class="btn" style="border-radius: 8px" type="reset" id="resetBtn">
                                                                                         <i class="icon-undo bigger-110"></i>
-                                                                                        Reset
+                                                                                        Save Example
                                                                                     </button>
                                                                                 </div>
                                                                             </div>
@@ -263,8 +263,8 @@
                 $("#logUrl").attr("href", logTargetUrl);
             }
 
-            var interfaceParam;
             var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
+            var paramExamples;
             function handlerInterface(resu){
                 jsonShow(resu, "json-interface");
                 interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl + "?guid={guid}";
@@ -289,9 +289,39 @@
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                     showParam({paramData:resu.interfaceInfo.inter.paramDetail});
+
+                    paramExamples = resu.interfaceInfo.paramList;
+                    initParamChoose(paramExamples);
                 }
 
                 refreshInterfaceUrl();
+            }
+
+            function initParamChoose(paramChooses){
+                if(paramChooses.length == 0){
+                    return;
+                }
+
+                var selector = document.getElementById("paramChoose");
+                selector.length = 0;
+
+                var defaultOption = document.createElement("option");
+                defaultOption.id = 0;
+                defaultOption.paramName = "";
+                selector.options.add(defaultOption);
+                for(idx in paramChooses){
+                    var data = paramChooses[idx];
+                    var option = document.createElement("option")
+                    option.value = data.id;
+                    option.text = data.paramName;
+
+                    selector.options.add(option);
+                }
+
+                $("#paramChooseDiv").removeClass("hide");
+                $("#paramChoose").trigger("chosen:updated");
+
+                $("#paramChoose_chosen").css('width','200px');
             }
 
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
@@ -299,6 +329,7 @@
 
             jQuery(function($) {
                 $('#teacherIdBtn').click(function () {
+                    refreshInterfaceUrl();
                     var param = generateJsonParam("#paramListDiv input");
                     jsonShow(param, "json-request");
                     jsonShow("[]", "json-response");
@@ -316,6 +347,50 @@
                 function handlerTeacherInfo(resu){
                     jsonShow(resu.data, "json-response");
                 };
+
+                $("#paramChoose").change(function(){
+                    var id = $(this).val();
+                    for(idx in paramExamples){
+                        var paramEx = paramExamples[idx];
+                        if(paramEx.id == id){
+                            showParam({paramData:paramEx.paramDetail});
+                            $("#requestUserId").val(paramEx.requestUserId);
+                            $("#requestUserIdDiv").text(paramEx.requestUserId);
+                        }
+                    }
+                });
+
+                $("#resetBtn").on(ace.click_event, function() {
+                    bootbox.prompt("取个名字", function(result) {
+                        if (result === null) {
+                            $.gritter.add({
+                                title : "参数示例",
+                                text : "这个名字还是要有的",
+                                class_name : 'gritter-error gritter-center'
+                            });
+                        } else {
+                            var paramDetail = generateEditParam("#paramListDiv input");
+                            var data = {
+                                interfaceId : $("#interfaceId").val(),
+                                requestUserId : $("#requestUserId").val(),
+                                paramDetail : paramDetail,
+                                deleted : 0,
+                                default : 0,
+                                paramName : result
+                            };
+
+                            commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");
+                        }
+                    });
+                });
+
+                function handlerParamSave(resu){
+                    $.gritter.add({
+                        title : "参数示例",
+                        text : "保存成功",
+                        class_name : 'gritter-info gritter-center'
+                    });
+                }
 
                 $(".env").click(function(){
                     $(".env.btn-primary").removeClass("btn-primary");
@@ -369,6 +444,7 @@
                     }
                 });
 
+                $(".chosen-select").chosen();
                 $('[data-rel=tooltip]').tooltip();
             });
         </script>

@@ -17,6 +17,7 @@ public class TestInterface {
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
+    private String paramClassName;
 
     public Long getId() {
         return id;
@@ -112,5 +113,13 @@ public class TestInterface {
 
     public void setParamDetail(String paramDetail) {
         this.paramDetail = paramDetail;
+    }
+
+    public String getParamClassName() {
+        return paramClassName;
+    }
+
+    public void setParamClassName(String paramClassName) {
+        this.paramClassName = paramClassName;
     }
 }

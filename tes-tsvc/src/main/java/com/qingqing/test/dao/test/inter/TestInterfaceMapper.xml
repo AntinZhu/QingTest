@@ -14,11 +14,12 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
     <result column="param_detail" property="paramDetail" jdbcType="VARCHAR" />
+    <result column="param_class_name" property="paramClassName" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
     id, interface_name, interface_url, interface_type, request_type, request_user_type, 
-    sort_desc_num, catelog_index, is_deleted, create_time, last_update_time, param_detail
+    sort_desc_num, catelog_index, is_deleted, create_time, last_update_time, param_detail, param_class_name
   </sql>
 
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -31,11 +32,11 @@
     insert into t_interface (interface_name, interface_url,
       interface_type, request_type, request_user_type, 
       sort_desc_num, catelog_index, is_deleted,
-      create_time, param_detail)
+      create_time, param_detail, param_class_name)
     values (#{interfaceName,jdbcType=VARCHAR}, #{interfaceUrl,jdbcType=VARCHAR},
       #{interfaceType,javaType=InterfaceType}, #{requestType,javaType=RequestType}, #{requestUserType,javaType=UserType},
       #{sortDescNum,jdbcType=INTEGER}, #{catelogIndex,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT},
-      now(), #{paramDetail, jdbcType=VARCHAR})
+      now(), #{paramDetail, jdbcType=VARCHAR}), #{paramClassName, jdbcType=VARCHAR})
   </insert>
 
   <insert id="update" parameterType="com.qingqing.test.domain.inter.TestInterface">
@@ -45,7 +46,8 @@
     interface_type = #{interfaceType,javaType=InterfaceType},
     request_type = #{requestType,javaType=RequestType},
     request_user_type = #{requestUserType,javaType=UserType},
-    param_detail = #{paramDetail, jdbcType=VARCHAR}
+    param_detail = #{paramDetail, jdbcType=VARCHAR},
+    param_class_name = #{paramClassName, jdbcType=VARCHAR}
     where  id = #{id}
   </insert>
 

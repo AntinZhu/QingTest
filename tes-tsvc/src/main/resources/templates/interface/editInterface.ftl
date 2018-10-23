@@ -365,6 +365,7 @@
                 $(".qing_requestUserType.btn-primary").removeClass("btn-primary");
                 $(".qing_requestUserType[value=" + requestUserType + "]").addClass("btn-primary");
                 $("#requestUserType").val(requestUserType);
+                $("#className").val("${(interfaceBean.inter.paramClassName)!''}");
 
                 // TODO 父的cateId
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId", ${interfaceBean.catelog.id});
@@ -509,7 +510,8 @@
                         sortDescNum: 0,
                         catelogIndex:'0',
                         paramDetail : paramDetail,
-                        deleted : 0
+                        deleted : 0,
+                        paramClassName : $("#className").val()
                     },
                     catelogName : catelogName,
                     parentCatelogId : parentCatelogId

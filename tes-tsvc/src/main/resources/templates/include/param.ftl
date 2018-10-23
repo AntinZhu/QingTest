@@ -5,6 +5,25 @@
     <div class="hr hr-dotted"></div>
     <div class="hr hr-dotted"></div>
 
+    <div class="hide" id = "paramChooseDiv">
+        <div class="form-group">
+            <label style="text-align: right;" class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">参数示例选择:</label>
+
+            <div class="col-xs-12 col-sm-9">
+                <div class="clearfix">
+                    <select class="width-80 chosen-select form-control" id="paramChoose">
+                        <option value="AL">￥567 x 3期（手续费￥81）</option>
+                        <option value="AK">￥567 x 3期（手续费￥81）</option>
+                        <option value="AZ">￥567 x 3期（手续费￥81）</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="hr hr-dotted"></div>
+        <div class="hr hr-dotted"></div>
+    </div>
+
     <div class="hide" id="requestUserIdDev">
         <div class="form-group">
             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">请求人ID:</label>

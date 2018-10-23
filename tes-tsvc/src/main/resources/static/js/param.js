@@ -86,8 +86,8 @@ function initHtml(parentKey, params, valueChangedNotifyId){
                     defaultName = defaultParam.name;
                     defaultValue =  defaultParam.value;
                 }else{
-                    defaultName = defaultParam.defaultValue;
-                    defaultValue = defaultParam.defaultValue;
+                    defaultName = defaultParam;
+                    defaultValue = defaultParam;
                 }
             }
 
@@ -197,7 +197,7 @@ add_btn_html = "<div style='margin-bottom: 22px;' class='qing_param_edit hide'><
 
 var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{name} </div>{value}</div>";
 var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}'>{defaultName}</span></div>";
-var editable_table_html = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "{editable}<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div></div>";
+var editable_table_html = "<div alt='{alt}'>" + del_btn_html + "{editable}<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div></div>";
 var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
 
 var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit_1 hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
@@ -475,18 +475,24 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
     //console.log(value.name + "->" + propName);
     paramName = paramName == ""? propName:paramName + "-" + propName;
 
+    var isArray = $("#" + paramName + "--name").attr("isMulti") == "true";
     var isLast = arrIdx == paramNameArr.length -1;
     var idx = altArr[arrIdx];
 
     if(isLast){
         var obj = formatEditParamObject(propName, paramName, value, allObject);
         if(obj != null){
-            paramObj.push(obj);
+            if(isArray){
+                var objArr = new Array();
+                objArr.push(obj);
+
+                paramObj.push(objArr);
+            }else{
+                paramObj.push(obj);
+            }
         }
         return;
     }else{
-        var isArray = $("#" + paramName + "--name").attr("isMulti") == "true";
-
         var  obj = allObject[paramName];
         if(obj == null){
             obj = new Object();
@@ -561,12 +567,12 @@ function formatEditParamObject(propName, paramName, value, allObject){
     if(isArray){
         var defaultObj = new Object();
         defaultObj.name = $("." + paramName + "_label").text();
-        defaultObj.value = value.value;
+        defaultObj.value = formatValue(paramInfo, paramName, value.value);
 
         obj.defaultValue.push(defaultObj);
     }else{
         obj.defaultValue.name = $("." + paramName + "_label").text();
-        obj.defaultValue.value = value.value;
+        obj.defaultValue.value = formatValue(paramInfo, paramName, value.value);
     }
 
     return newInit? obj:null;

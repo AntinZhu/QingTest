@@ -2,6 +2,7 @@ package com.qingqing.test.bean.inter.response;
 
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
+import com.qingqing.test.domain.inter.TestInterfaceParam;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class TestInterfaceBean {
     private TestInterface inter;
     private TestInterfaceCatelog catelog;
     private List<TestInterfaceCatelog> parentCatelogList;
+    private List<TestInterfaceParam> paramList;
 
     public TestInterface getInter() {
         return inter;
@@ -35,5 +37,13 @@ public class TestInterfaceBean {
 
     public void setParentCatelogList(List<TestInterfaceCatelog> parentCatelogList) {
         this.parentCatelogList = parentCatelogList;
+    }
+
+    public List<TestInterfaceParam> getParamList() {
+        return paramList;
+    }
+
+    public void setParamList(List<TestInterfaceParam> paramList) {
+        this.paramList = paramList;
     }
 }

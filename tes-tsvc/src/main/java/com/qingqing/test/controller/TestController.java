@@ -20,8 +20,10 @@ import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
+import com.qingqing.test.domain.inter.TestInterfaceParam;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
+import com.qingqing.test.service.inter.TestInterfaceParamService;
 import com.qingqing.test.util.QingParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +47,8 @@ public class TestController {
     private TestInterfaceManager testInterfaceManager;
     @Autowired
     private TestInterfaceCatelogService catelogService;
+    @Autowired
+    private TestInterfaceParamService testInterfaceParamService;
 
     @RequestMapping("json_format")
     public String show(@RequestParam("id") Long id, Model model){
@@ -80,6 +84,15 @@ public class TestController {
 
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(String.valueOf(interfaceId)).build();
+    }
+
+    @RequestMapping("/interface/param/save")
+    @ProtoResponseBody
+    public SimpleDataResponse saveParam(@RequestBody TestInterfaceParam param){
+        testInterfaceParamService.save(param);
+
+        return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
+                .setData(String.valueOf(param.getId())).build();
     }
 
     @RequestMapping("/catelog/edit")
