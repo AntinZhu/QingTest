@@ -1,7 +1,9 @@
 package com.qingqing.test.util;
 
 import com.googlecode.protobuf.format.JsonFormat;
+import com.qingqing.api.proto.v1.Pay;
 import com.qingqing.api.proto.v1.TeacherProto.SimpleQingQingTeacherIdRequest;
+import com.qingqing.api.proto.v1.order.Order;
 import com.qingqing.api.proto.v1.util.Common.SimpleBoolRequest;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.JsonUtil;
@@ -24,7 +26,7 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(generateParamJson(SimpleQingQingTeacherIdRequest.class.getName()));
+        System.out.println(generateParamJson(Order.AddOrderRequestV2.class.getName()));
         System.out.println(JsonUtil.format(JsonFormat
                 .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
     }
@@ -74,17 +76,13 @@ public class QingParamUtil {
                             ParameterizedType pt = (ParameterizedType) fc;
                             Class genericClazz = (Class)pt.getActualTypeArguments()[0]; //【4】 得到泛型里的class类型对象。
                             System.out.println("\t\t --- >" + genericClazz.getName());
-                            result.append("[");
-                            result.append(toProperties(properties, genericClazz));
-                            result.append("]");
+                            result.append(toProperties(properties, genericClazz, true));
                         }else if(((Class) fc).isAssignableFrom(com.google.protobuf.ProtocolStringList.class)){
-                            result.append("[");
-                            result.append(toProperties(properties, String.class));
-                            result.append("]");
+                            result.append(toProperties(properties, String.class, true));
                         }
                     }else{
                         Class<?> propertiesType = (Class<?>) pd.getReadMethod().getGenericReturnType();
-                        result.append(toProperties(properties, propertiesType));
+                        result.append(toProperties(properties, propertiesType, false));
                     }
                     result.append(",");
                 }
@@ -121,21 +119,21 @@ public class QingParamUtil {
         return s.substring(0, s.length() - 1);
     }
 
-    private static String toProperties(String properties, Class propertiesType) throws IntrospectionException, ClassNotFoundException {
+    private static String toProperties(String properties, Class propertiesType, boolean isArray) throws IntrospectionException, ClassNotFoundException {
         if(String.class.equals(propertiesType) || propertiesType.isPrimitive() || Number.class.isAssignableFrom(propertiesType)){
             if(String.class.equals(propertiesType)){
-                return toStringProperties(properties);
+                return toStringProperties(properties, isArray);
             }else if(boolean.class.equals(propertiesType)){
-                return toBooleanProperties(properties);
+                return toBooleanProperties(properties, isArray);
             }else{
-                return toNumberProperties(properties);
+                return toNumberProperties(properties, isArray);
             }
         }else{
-            return toObjectOrEnumProperties(properties, propertiesType);
+            return toObjectOrEnumProperties(properties, propertiesType, isArray);
         }
     }
 
-    private static String toObjectOrEnumProperties(String properties, Class<?> enumClazz) throws IntrospectionException, ClassNotFoundException {
+    private static String toObjectOrEnumProperties(String properties, Class<?> enumClazz, boolean isArray) throws IntrospectionException, ClassNotFoundException {
         StringBuilder result = new StringBuilder();
         String defaultValue = null;
         boolean isEnum = false;
@@ -143,11 +141,12 @@ public class QingParamUtil {
             if ((Modifier.STATIC & field.getModifiers()) == Modifier.STATIC) {
                 if(!"DEFAULT_INSTANCE".equals(field.getName()) && enumClazz.equals(field.getType())){
                     isEnum = true;
-                    String select = String.format("{\"name\":\"%s\",\"value\":\"%s\"},", field.getName(), field.getName());
+                    String select = String.format("{\"name\":\"%s\",\"value\":\"%s\"}", field.getName(), field.getName());
                     if(defaultValue == null){
                         defaultValue = select;
                     }
                     result.append(select);
+                    result.append(",");
                     System.out.println(field.getName() + "-----" + field.getType().getName());
                 }
             }
@@ -156,26 +155,46 @@ public class QingParamUtil {
         if(isEnum){
             String selectable = result.toString();
             selectable = selectable.substring(0, selectable.length() - 1);
-            return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":%s\"selectable\":[%s]}", properties, properties, defaultValue, selectable);
+            if(isArray){
+                return String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":[%s],\"selectable\":[%s]}]", properties, properties, defaultValue, selectable);
+            }else{
+                return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":%s,\"selectable\":[%s]}", properties, properties, defaultValue, selectable);
+            }
         }else{
-            return toObjectProperties(properties, enumClazz);
+            return toObjectProperties(properties, enumClazz, isArray);
         }
     }
 
-    private static String toStringProperties(String properties){
-        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"%s\"}", properties, properties, properties);
+    private static String toStringProperties(String properties, boolean isArray){
+        if(isArray){
+            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"[%s]\"}]", properties, properties, properties);
+        }else{
+            return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"%s\"}", properties, properties, properties);
+        }
     }
 
-    private static String toBooleanProperties(String properties){
-        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":{\"name\":\"否\",\"value\":\"false\"}, \"selectable\":[{\"name\":\"否\",\"value\":\"false\"},{\"name\":\"是\",\"value\":\"true\"}]}", properties, properties, properties);
+    private static String toBooleanProperties(String properties, boolean isArray){
+        if(isArray){
+            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":[{\"name\":\"否\",\"value\":\"false\"}], \"selectable\":[{\"name\":\"否\",\"value\":\"false\"},{\"name\":\"是\",\"value\":\"true\"}]}]", properties, properties, properties);
+        }else{
+            return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":{\"name\":\"否\",\"value\":\"false\"}, \"selectable\":[{\"name\":\"否\",\"value\":\"false\"},{\"name\":\"是\",\"value\":\"true\"}]}", properties, properties, properties);
+        }
     }
 
-    private static String toNumberProperties(String properties){
-        return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":1}", properties, properties);
+    private static String toNumberProperties(String properties, boolean isArray){
+        if(isArray){
+            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":[1]}]", properties, properties);
+        }else{
+            return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":1}", properties, properties);
+        }
     }
 
-    private static String toObjectProperties(String properties, Class<?> subTypeClass) throws IntrospectionException, ClassNotFoundException {
+    private static String toObjectProperties(String properties, Class<?> subTypeClass, boolean isArray) throws IntrospectionException, ClassNotFoundException {
         String subType = generateParamJson(subTypeClass, "\t\t\t");
-        return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"detail\":[%s]}", properties, properties, subType);
+        if(isArray){
+            return String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"detail\":[[%s]]}]", properties, properties, subType);
+        }else{
+            return String.format("{\"key\":\"%s\",\"name\":\"%s\",\"detail\":[%s]}", properties, properties, subType);
+        }
     }
 }

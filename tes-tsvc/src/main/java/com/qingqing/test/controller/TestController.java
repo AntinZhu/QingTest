@@ -52,6 +52,12 @@ public class TestController {
         return "interface/jsonformat";
     }
 
+    @RequestMapping("invoke_page")
+    public String invokePage(@RequestParam("id") Long id, Model model){
+        model.addAttribute("interfaceId", id);
+        return "interface/invoke";
+    }
+
     @RequestMapping("/interface/edit")
     public String edit(@RequestParam(value="id", defaultValue = "0") Long interfaceId, Model model){
         if(interfaceId > 0){
