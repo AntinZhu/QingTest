@@ -28,7 +28,7 @@ public enum OrderPayTypeV3 implements HasDefaultInterface<OrderPayTypeV3> {
 	jd_h5_pay(19, OrderPayTypeV2.jd_pay),	// 京东h5支付
     baidu_app_pay(20, OrderPayTypeV2.baidu_pay), // 6.3.5 百度支付
     multiple_pay(21, OrderPayTypeV2.multiple_pay),   // 6.4.5 分次支付app 支付方式
-//    weixinpayApp_teacher(22),   // 6.6.3 微信App 支付方式
+    weixinpayApp_teacher(22, OrderPayTypeV2.weixin_pay),   // 6.6.3 微信App 支付方式
     weixinpayH5_teacher(23, OrderPayTypeV2.weixin_pay),    // 6.6.3 微信H5 支付
 
     new_unionpay(24, OrderPayTypeV2.new_unionpay),   // 6.7.5 新银联支付
