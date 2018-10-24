@@ -403,7 +403,19 @@
             $(".qing_interfaceType").click(function(){
                 $(".qing_interfaceType.btn-primary").removeClass("btn-primary");
                 $(this).addClass("btn-primary");
-                $("#interfaceType").val($(this).val());
+
+                var interfaceType = $(this).val();
+                $("#interfaceType").val(interfaceType);
+                if(interfaceType == "PB"){
+                    $(".qing_requestUserType.btn-primary").removeClass("btn-primary");
+                    $("#requestUserType").val("");
+                    $(".qing_requestUserType").attr("disabled", "disabled");
+                }else{
+                    $(".qing_requestUserType").removeAttr("disabled");
+                    var requestUserTypes = $(".qing_requestUserType");
+                    $(requestUserTypes[0]).addClass("btn-primary");
+                    $("#requestUserType").val($(requestUserTypes[0]).val());
+                }
             });
 
             $(".qing_requestUserType").click(function(){
@@ -477,14 +489,20 @@
                     return;
                 }
                 var requestUserType = $("#requestUserType").val();
-                if(requestUserType == null || requestUserType == ""){
-                    $.gritter.add({
-                        title : '参数错误:',
-                        text : "请求人用户类型不能为空",
-                        class_name : 'gritter-error gritter-center'
-                    });
-                    return;
+                if(interfaceType != "PB"){
+                    if((requestUserType == null || requestUserType == "")){
+                        $.gritter.add({
+                            title : '参数错误:',
+                            text : "请求人用户类型不能为空",
+                            class_name : 'gritter-error gritter-center'
+                        });
+                        return;
+                    }
+                }else{
+                    requestUserType = null;
                 }
+
+
                 var paramDetail = "";
                 if($("#hasParam").val() == 1){
                     $("#paramDetail").val(generateEditParam("#paramListDiv input"));

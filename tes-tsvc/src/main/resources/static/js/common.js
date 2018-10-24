@@ -162,10 +162,14 @@ function handlerErrorStatusCode(errorStatus, resu){
             });
             break;
         case 422:
-            var response = JSON.parse(resu);
+            var hintMsg = "";
+            if(resu != ""){
+                var response = JSON.parse(resu);
+                hintMsg = response.response.error_message;
+            }
             $.gritter.add({
                 title : '咋了:',
-                text : '请求参数出错了,服务器返回：' +  response.response.error_message,
+                text : '请求参数出错了,服务器返回：' +  hintMsg,
                 class_name : 'gritter-error gritter-center'
             });
             break;

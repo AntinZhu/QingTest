@@ -2,6 +2,8 @@ package com.qingqing.test.client;
 
 import com.qingqing.api.passort.proto.PassportLoginProto.PassportLoginResponse;
 import com.qingqing.api.passort.proto.PassportLoginProto.PassportTkLoginRequestV2;
+import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserInfoRequest;
+import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserInfoResponse;
 import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserPhoneNumberRequest;
 import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserPhoneNumberResponse;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
@@ -28,4 +30,11 @@ public interface PassportPiClient {
     @PostMapping(value = "/v1/account/query_user_phone_number", consumes="application/x-protobuf", produces = "application/x-protobuf")
     @ProtoResponseBody
     PassportQueryUserPhoneNumberResponse queryUserPhoneNumber(PassportQueryUserPhoneNumberRequest request);
+
+    /*
+   protobuf
+    */
+    @PostMapping(value = "/v1/account/query_user_by_account", consumes="application/x-protobuf", produces = "application/x-protobuf")
+    @ProtoResponseBody
+    PassportQueryUserInfoResponse queryUserByAccount(PassportQueryUserInfoRequest request);
 }

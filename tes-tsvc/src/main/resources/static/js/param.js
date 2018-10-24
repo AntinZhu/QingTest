@@ -196,17 +196,18 @@ del_btn_html = "<div class='pull-right action-buttons'><a class='red delInputBtn
 add_btn_html = "<div style='margin-bottom: 22px;' class='qing_param_edit hide'><div class='pull-right action-buttons'><a class='blue addInputBtn' href='###'><i class='icon-plus bigger-130'></i></a></div></div>";
 
 var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{name} </div>{value}</div>";
-var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}'>{defaultName}</span></div>";
-var editable_table_html = "<div alt='{alt}'>" + del_btn_html + "{editable}<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div></div>";
+var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' alt='{alt}'>{defaultName}</span></div>";
+var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}<div alt='{alt}'>" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div></div></div>";
+var first_editable_table_html =  del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div>";
 var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
 
 var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit_1 hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
 number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span></span></span><!-- /span -->";
 
 var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span> </div>{value}</div>";
-var input_editable_value_edit = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}'>{defaultName}</span>{valueType}</div>";
+var input_editable_value_edit = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' alt='{alt}'>{defaultName}</span>{valueType}</div>";
 var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'>  <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div><div class='profile-info-value'>" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
-sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div> </div>{paramList}</div>";
+sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div>{paramList}</div>";
 
 function genHtml(parentKey, params, paramAlt){
     return genHtml(parentKey, params, paramAlt, false);
@@ -237,7 +238,7 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
         }
         if(param.detail != null){
             var subTableHtml = "";
-            if(isTableArr || isArray){
+            if(isArray){
                 for(var detailItemIndex in param.detail){
                     subTableHtml += genHtml(parentKey + param.key, param.detail[detailItemIndex], parentAlt_ + detailItemIndex, isEditStatus, isArray);
                 }
@@ -263,7 +264,7 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
         paramHtmls += paramHtml;
     }
 
-    var tableHtml = editable_table_html;
+    var tableHtml = parentKey == ""? first_editable_table_html : editable_table_html;
     tableHtml = tableHtml.replace(new RegExp("{id}","gm"), parentKey);
     tableHtml = tableHtml.replace(new RegExp("{alt}","gm"), parentAlt);
     tableHtml = tableHtml.replace(new RegExp("{paramList}","gm"), paramHtmls);
@@ -564,14 +565,15 @@ function formatEditParamObject(propName, paramName, value, allObject){
         newInit = true;
     }
 
+    var defaultName = $("." + paramName + "_label[alt='" + value.alt + "']").text();
     if(isArray){
         var defaultObj = new Object();
-        defaultObj.name = $("." + paramName + "_label").text();
+        defaultObj.name = defaultName;
         defaultObj.value = formatValue(paramInfo, paramName, value.value);
 
         obj.defaultValue.push(defaultObj);
     }else{
-        obj.defaultValue.name = $("." + paramName + "_label").text();
+        obj.defaultValue.name = defaultName;
         obj.defaultValue.value = formatValue(paramInfo, paramName, value.value);
     }
 

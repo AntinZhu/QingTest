@@ -10,6 +10,7 @@ import com.qingqing.test.bean.inter.SaveCatelogBean;
 import com.qingqing.test.bean.inter.SaveInterfaceBean;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
+import com.qingqing.test.client.PbClient;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
@@ -48,6 +49,8 @@ public class TestInterfaceManager {
     private PtClient ptClient;
     @Autowired
     private PiClient piClient;
+    @Autowired
+    private PbClient pbClient;
     @Autowired
     private UserService userService;
     @Autowired
@@ -234,6 +237,8 @@ public class TestInterfaceManager {
                 }
             case PI:
                 return piClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId(), testInterface.getRequestUserType());
+            case PB:
+                return pbClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam());
             default:
                 throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_interface_type, "unsupport interface type for value:" + testInterface.getInterfaceType());
         }

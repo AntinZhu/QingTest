@@ -11,7 +11,7 @@
 
             <div class="col-xs-12 col-sm-9">
                 <div class="clearfix">
-                    <select class="width-80 chosen-select form-control" id="paramChoose">
+                    <select class="width-100 chosen-select form-control" id="paramChoose">
                         <option value="AL">￥567 x 3期（手续费￥81）</option>
                         <option value="AK">￥567 x 3期（手续费￥81）</option>
                         <option value="AZ">￥567 x 3期（手续费￥81）</option>

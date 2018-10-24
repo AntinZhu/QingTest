@@ -36,7 +36,7 @@
     values (#{interfaceName,jdbcType=VARCHAR}, #{interfaceUrl,jdbcType=VARCHAR},
       #{interfaceType,javaType=InterfaceType}, #{requestType,javaType=RequestType}, #{requestUserType,javaType=UserType},
       #{sortDescNum,jdbcType=INTEGER}, #{catelogIndex,jdbcType=INTEGER}, #{isDeleted,jdbcType=TINYINT},
-      now(), #{paramDetail, jdbcType=VARCHAR}), #{paramClassName, jdbcType=VARCHAR})
+      now(), #{paramDetail, jdbcType=VARCHAR}, #{paramClassName, jdbcType=VARCHAR})
   </insert>
 
   <insert id="update" parameterType="com.qingqing.test.domain.inter.TestInterface">

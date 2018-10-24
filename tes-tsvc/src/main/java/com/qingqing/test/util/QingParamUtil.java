@@ -1,7 +1,7 @@
 package com.qingqing.test.util;
 
 import com.googlecode.protobuf.format.JsonFormat;
-import com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoListRequestForStudentV2;
+import com.qingqing.api.proto.v1.order.Order.AddGroupOrderRequestV2;
 import com.qingqing.api.proto.v1.util.Common.SimpleBoolRequest;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.JsonUtil;
@@ -24,7 +24,7 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(generateParamJson(GroupSubOrderInfoListRequestForStudentV2.class.getName()));
+        System.out.println(generateParamJson(AddGroupOrderRequestV2.class.getName()));
         System.out.println(JsonUtil.format(JsonFormat
                 .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
     }
@@ -165,7 +165,7 @@ public class QingParamUtil {
 
     private static String toStringProperties(String properties, boolean isArray){
         if(isArray){
-            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"[%s]\"}]", properties, properties, properties);
+            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":[\"%s\"]}]", properties, properties, properties);
         }else{
             return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":\"%s\"}", properties, properties, properties);
         }
