@@ -38,15 +38,14 @@ function replaceLast(alt, lastNum){
 }
 
 function removeInput(){
-    if($(this).attr("isMulti") == "true"){
-        var par = $(this).parent().parent().parent();
-        $(this).parent().parent().remove();
-        if(par.children("div.profile-info-value").length == 0){
-            par.remove();
-        }
-    }else{
-        $(this).parent().parent().parent().remove();
+    var valueParent = $(this).parent().parent().parent();
+    var valueParentParent = valueParent.parent();
+
+    valueParent.remove();
+    if(valueParentParent.children("div.profile-info-name").length > 0 && valueParentParent.children("div.profile-info-value").length == 0){
+        valueParentParent.remove();
     }
+
     notifyParamChanged();
 }
 
@@ -270,8 +269,10 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
     tableHtml = tableHtml.replace(new RegExp("{paramList}","gm"), paramHtmls);
     if(isTableArr){
         tableHtml = tableHtml.replace(new RegExp("{editable}","gm"), add_btn_html);
+        tableHtml = tableHtml.replace(new RegExp("{isMulti}","gm"), "true");
     }else{
         tableHtml = tableHtml.replace(new RegExp("{editable}","gm"), "");
+        tableHtml = tableHtml.replace(new RegExp("{isMulti}","gm"), "false");
     }
 
     return tableHtml;

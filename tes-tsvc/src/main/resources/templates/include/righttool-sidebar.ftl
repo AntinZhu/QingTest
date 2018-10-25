@@ -298,7 +298,7 @@
             $.gritter.add({
                 title : "查询结果",
                 text : "未查询到用户手机号",
-                class_name : 'gritter-error gritter-center'
+                class_name : 'gritter-error gritter-right'
             });
         }else {
             $("#userPhone_conv").val(resu.resultList);
@@ -319,7 +319,7 @@
             $.gritter.add({
                 title : "查询结果",
                 text : "未查询到用户ID",
-                class_name : 'gritter-error gritter-center'
+                class_name : 'gritter-error gritter-right'
             });
         }else{
             $("#phoneUserId_conv").val(resu.resultList);
@@ -357,7 +357,7 @@
         $.gritter.add({
             title : "加密结果",
             text : "暂不支持该操作，等待后续支持",
-            class_name : 'gritter-error gritter-center'
+            class_name : 'gritter-error gritter-right'
         });
     }
 
@@ -375,7 +375,7 @@
             $.gritter.add({
                 title : "加密结果",
                 text : "加密失败，请检查用户是否存在",
-                class_name : 'gritter-error gritter-center'
+                class_name : 'gritter-error gritter-right'
             });
         }else{
             $("#qingqingUser_conv").val(resu.resultList);
