@@ -322,7 +322,7 @@
                 </div>
             </div>
             <#include "/include/righttool-sidebar.ftl" />
-            <#include "/test/datetime.ftl" />
+            <#--<#include "/test/datetime.ftl" />-->
         </div>
 
         <script type="text/javascript">
