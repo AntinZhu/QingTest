@@ -44,7 +44,7 @@
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="form-group">
+                                <div class="form-group hide">
                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">请求人ID:</label>
 
                                     <div class="col-xs-12 col-sm-9">
@@ -77,7 +77,7 @@
                                 </div>
 
                                 <div class="hr hr-dotted"></div>
-                                <form class="form-horizontal">
+                                <form class="form-horizontal  hide">
                                     <div class="form-group">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="sourceChannel">切换支付场景</label>
                                         <div class="col-xs-12 col-sm-8">
