@@ -5,7 +5,6 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="catelog_name" property="catelogName" jdbcType="VARCHAR" />
     <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
-    <result column="catelog_index" property="catelogIndex" jdbcType="VARCHAR" />
     <result column="ref_type" property="refType" javaType="CatelogRefType" />
     <result column="ref_value" property="refValue" jdbcType="VARCHAR" />
     <result column="sub_item_cnt" property="subItemCnt" jdbcType="INTEGER" />
@@ -16,7 +15,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, catelog_name, sort_num, catelog_index, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time, last_update_time
+    id, catelog_name, sort_num, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time, last_update_time
   </sql>
 
   <select id="selectByAll" resultMap="BaseResultMap">
@@ -32,8 +31,8 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceCatelog" keyProperty="id" useGeneratedKeys="true">
-    insert into t_interface_catelog (catelog_name, sort_num, catelog_index, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time)
-    values (#{catelogName,jdbcType=VARCHAR}, #{sortNum,jdbcType=INTEGER},#{catelogIndex,jdbcType=VARCHAR}, #{refType,javaType=CatelogRefType}, #{refValue, jdbcType=VARCHAR}, #{subItemCnt, jdbcType=INTEGER},
+    insert into t_interface_catelog (catelog_name, sort_num, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time)
+    values (#{catelogName,jdbcType=VARCHAR}, #{sortNum,jdbcType=INTEGER}, #{refType,javaType=CatelogRefType}, #{refValue, jdbcType=VARCHAR}, #{subItemCnt, jdbcType=INTEGER},
       #{parentCatelogId, jdbcType=BIGINT},0, now()
       )
   </insert>

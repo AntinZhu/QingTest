@@ -100,19 +100,19 @@ public class TestInterfaceManager {
         if(parentCatelogId != null){
             TestInterfaceCatelog parentCatelog = catelogService.selectForUpdate(parentCatelogId);
             sortNum = parentCatelog.getSubItemCnt() + 1;
-            catelogIndex = parentCatelog.getCatelogIndex() + "-" + sortNum;
+//            catelogIndex = parentCatelog.getCatelogIndex() + "-" + sortNum;
 
             catelogService.incSubItemCnt(parentCatelog.getId());
         }else{
             sortNum = getNextRootCateogIndex();
-            catelogIndex = String.valueOf(sortNum);
+//            catelogIndex = String.valueOf(sortNum);
         }
 
         catelog.setCatelogName(catelogName);
         catelog.setRefType(refType);
         catelog.setRefValue(refId);
         catelog.setDeleted(Boolean.FALSE);
-        catelog.setCatelogIndex(catelogIndex);
+//        catelog.setCatelogIndex(catelogIndex);
         catelog.setParentCatelogId(parentCatelogId == null? 0L : parentCatelogId);
         catelog.setSortNum(sortNum);
         catelog.setSubItemCnt(0);
@@ -126,8 +126,8 @@ public class TestInterfaceManager {
         Integer nextCatelogIndex = 0;
         List<TestInterfaceCatelog> catelogList = catelogService.selectAll();
         for(TestInterfaceCatelog catelog : catelogList){
-            if(catelog.getCatelogIndex().indexOf("-") == -1){
-                Integer catelogIndex = Integer.parseInt(catelog.getCatelogIndex());
+            if(catelog.getParentCatelogId() == 0L){
+                Integer catelogIndex = catelog.getSortNum();
                 if(catelogIndex != null && catelogIndex.compareTo(nextCatelogIndex) > 0){
                     nextCatelogIndex = catelogIndex;
                 }
@@ -182,7 +182,11 @@ public class TestInterfaceManager {
         Collections.sort(allCatelogs, new Comparator<TestInterfaceCatelog>(){
             @Override
             public int compare(TestInterfaceCatelog o1, TestInterfaceCatelog o2) {
-                return o1.getCatelogIndex().compareTo(o2.getCatelogIndex());
+                int result = o1.getParentCatelogId().compareTo(o2.getParentCatelogId());
+                if(result == 0){
+                    result = o1.getSortNum().compareTo(o2.getSortNum());
+                }
+                return result;
             }
         });
 
