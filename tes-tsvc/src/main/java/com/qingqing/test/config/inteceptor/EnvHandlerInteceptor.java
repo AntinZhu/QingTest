@@ -1,6 +1,7 @@
 package com.qingqing.test.config.inteceptor;
 
 import com.qingqing.common.util.StringUtils;
+import com.qingqing.common.web.util.ServletUtil;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -18,6 +19,7 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
     public static final String GUID = "guid";
     public static final String IS_LOCAL_DEBUG = "is_local";
     public static final String LOCAL_PORT = "local_port";
+    public static final String IP = "ip";
     private static final String[] SAVE_PARAM_SET = new String[]{GUID, IS_LOCAL_DEBUG, LOCAL_PORT};
     private static final ThreadLocal<Map<String, String>> PARAM_MAPPING = new ThreadLocal<>();
 
@@ -36,7 +38,7 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
                 params.put(saveParam, paramValue);
             }
         }
-
+        params.put(IP, ServletUtil.getRemoteAddress(request));
         PARAM_MAPPING.set(params);
 
         return true;
@@ -54,4 +56,5 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
     public static final boolean isLocalDebug(){
         return "1".equals(PARAM_MAPPING.get().get(IS_LOCAL_DEBUG));
     }
+
 }

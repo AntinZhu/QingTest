@@ -155,7 +155,7 @@ public class EnvClient implements Client {
 
     protected String getHost(){
         if(EnvHandlerInteceptor.isLocalDebug()){
-            return "127.0.0.1:" + EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.LOCAL_PORT);
+            return EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.IP) + ":" + EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.LOCAL_PORT);
         }else{
             return getEnvHost();
         }
