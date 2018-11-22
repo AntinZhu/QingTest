@@ -4,6 +4,7 @@ import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.common.exception.QingQingRuntimeException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
+import com.qingqing.common.util.StringUtils;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.controller.converter.BaseConverter;
@@ -33,7 +34,12 @@ public class MyErrorDecoder implements ErrorDecoder {
         switch (response.status()){
             case HttpStatus.SC_UNPROCESSABLE_ENTITY:
             case HttpStatus.SC_NOT_FOUND:
-                return new RequestValidateException(result.getResponse().getError_message(), result.getResponse().getHint_message());
+                String errorMsg = result.getResponse().getError_message();
+                String hintMsg = result.getResponse().getHint_message();
+                if(StringUtils.isEmpty(hintMsg)){
+                    hintMsg = errorMsg;
+                }
+                return new RequestValidateException(errorMsg, hintMsg);
         }
 
         return FeignException.errorStatus(methodKey, response);

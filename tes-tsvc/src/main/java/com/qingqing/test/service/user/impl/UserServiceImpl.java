@@ -1,7 +1,5 @@
 package com.qingqing.test.service.user.impl;
 
-import com.qingqing.api.passort.proto.PassportLoginProto.PassportLoginResponse;
-import com.qingqing.api.passort.proto.PassportLoginProto.PassportTkLoginRequestV2;
 import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserInfoRequest;
 import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserInfoResponse;
 import com.qingqing.api.passort.proto.PassportQueryProto.PassportQueryUserPhoneNumberRequest;
@@ -10,9 +8,8 @@ import com.qingqing.api.proto.v1.PassportCommon.PassportAccountType;
 import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.common.auth.domain.User;
 import com.qingqing.common.auth.domain.UserType;
-import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.test.client.PassportPiClient;
-import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,19 +25,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String encodeUser(UserType userType, Long userId) {
-        PassportTkLoginRequestV2 request = PassportTkLoginRequestV2.newBuilder()
-                .setUserType(UserProto.UserType.valueOf(userType.getValue()))
-                .setUserId(userId).setAppPlatform("win").build();
-        try{
-            PassportLoginResponse response = passportPiClient.getTokenAndSession(request);
-            if(response.getResponse().getErrorCode() != 0){
-                return null;
-            }else{
-                return response.getQingqingUserId();
-            }
-        }catch(Exception e){
-            throw new ErrorCodeException(new SimpleErrorCode("加密用户ID失败"), "encode user fail, user_id:" + userId + ",userType:" + userType, e);
-        }
+        return UserIdEncoder.encodeUser(userType, userId);
+//        PassportTkLoginRequestV2 request = PassportTkLoginRequestV2.newBuilder()
+//                .setUserType(UserProto.UserType.valueOf(userType.getValue()))
+//                .setUserId(userId).setAppPlatform("win").build();
+//        try{
+//            PassportLoginResponse response = passportPiClient.getTokenAndSession(request);
+//            if(response.getResponse().getErrorCode() != 0){
+//                return null;
+//            }else{
+//                return response.getQingqingUserId();
+//            }
+//        }catch(Exception e){
+//            throw new ErrorCodeException(new SimpleErrorCode("加密用户ID失败"), "encode user fail, user_id:" + userId + ",userType:" + userType, e);
+//        }
     }
 
     @Override
