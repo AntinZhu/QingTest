@@ -40,6 +40,8 @@ public class MyErrorDecoder implements ErrorDecoder {
                     hintMsg = errorMsg;
                 }
                 return new RequestValidateException(errorMsg, hintMsg);
+            case HttpStatus.SC_FORBIDDEN:
+                return new RequestValidateException("forbid request", "服务器返回403,请检查你的参数，请求人，环境是否对应");
         }
 
         return FeignException.errorStatus(methodKey, response);
