@@ -2,6 +2,7 @@ package com.qingqing.test.feign;
 
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.CollectionsUtil;
+import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.web.util.RequestExtract;
 import com.qingqing.common.web.util.ServerAuthUtil;
 import com.qingqing.test.service.user.UserService;
@@ -30,7 +31,7 @@ public class PiRequestInterceptor extends ProtoRequestInterceptor {
             UserType userType = UserType.valueOf(userTypeParams.iterator().next());
             template.header(RequestExtract.QINGQING_USER, userService.encodeUser(userType, userId));
         }else{
-            template.header(RequestExtract.QINGQING_USER, "171693645");
+            template.header(RequestExtract.QINGQING_USER, UserIdEncoder.encodeUser(UserType.student, 120L));
         }
 
         long time = System.currentTimeMillis();

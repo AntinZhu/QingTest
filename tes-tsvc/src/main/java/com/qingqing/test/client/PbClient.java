@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Created by zhujianxing on 2018/2/4.
  */
-@FeignClient(value = "pbClient", url = "http://gateway.{env}.idc.cedu.cn", configuration = MyPbFeignConfiguration.class)
+@FeignClient(value = "pbClient", url = "http://{host}", configuration = MyPbFeignConfiguration.class)
 public interface PbClient {
 
     @RequestMapping(path = "/{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
