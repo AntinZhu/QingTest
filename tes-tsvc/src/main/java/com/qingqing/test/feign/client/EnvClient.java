@@ -140,12 +140,13 @@ public class EnvClient implements Client {
 
         String finalUrl = url.replace("{host}", host);
         String guid = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.GUID);
-        if(guid != null){
-            if(finalUrl.indexOf("?") == -1){
-                finalUrl = finalUrl + "?guid=" + guid;
-            }else{
-                finalUrl = finalUrl + "&guid=" + guid;
-            }
+        if(guid == null){
+            guid = "test-api-" + System.currentTimeMillis();
+        }
+        if(finalUrl.indexOf("?") == -1){
+            finalUrl = finalUrl + "?guid=" + guid;
+        }else{
+            finalUrl = finalUrl + "&guid=" + guid;
         }
 
         finalUrl = finalUrl.replace("{env}", EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV));

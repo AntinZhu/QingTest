@@ -477,6 +477,46 @@
                                         </div><!-- /widget-main -->
                                     </div><!-- /widget-body -->
                                 </div>
+
+                                <div id="accordion" class="accordion-style2 col-xs-6">
+                                    <div class="group">
+                                        <h3 class="accordion-header">大礼包组包参考（DEV）：</h3>
+
+                                        <div>
+                                            <h3>步骤1：生成子订单<br/></h3>
+                                            <blockquote>
+                                                <p>老师：40457  科目：语文 优惠包：买5送1<br/></p>
+                                                <p>老师：2946   科目：数学 优惠包：买5送1<br/></p>
+                                            </blockquote>
+
+                                            <h3>步骤2：生成大礼包<br/></h3>
+                                            <blockquote>
+                                                <p><a href="${base}/v1/test/json_format?id=100&catelogIndex=2-5-6-1###" target="_blank">接口地址</a> </p>
+                                                <p>传入加密的子订单ID</p>
+                                            </blockquote>
+
+                                            <h3>步骤3：生成合并付订单ID<br/></h3>
+                                            <blockquote>
+                                                <p><a href="${base}/v1/test/json_format?id=101&catelogIndex=2-5-6-2" target="_blank" >接口地址</a> </p>
+                                                <p>传入步骤二获得的大礼包ID</p>
+                                                <p>结果中可以获得加密的合并付ID，用于支付流程的测试</p>
+                                            </blockquote>
+
+                                            <h3>步骤4：支付前置<br/></h3>
+                                            <blockquote>
+                                                <p><a href="${base}/v1/test/json_format?id=11&catelogIndex=2-2-1" target="_blank" >接口地址</a> </p>
+                                                <p>传入步骤三获得的合并付ID, 订单类型选择：合并支付订单。</p>
+                                            </blockquote>
+
+                                            <h3>步骤5：请求支付<br/></h3>
+                                            <blockquote>
+                                                <p><a href="${base}/v1/test/json_format?id=93&catelogIndex=2-2-2-7" target="_blank" >接口地址</a> </p>
+                                                <p>参数示例选择中，选择一种支付方式</p>
+                                                <p>订单类型，选择：combined_pay_order_type</p>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div><!-- #accordion -->
                             </div>
                         </div>
                     </div><!-- /.col -->
@@ -538,6 +578,21 @@
 </div>
 <script type="text/javascript">
     jQuery(function($) {
+        $( "#accordion" ).accordion({
+            collapsible: true ,
+            heightStyle: "content",
+            animate: 250,
+            header: ".accordion-header"
+        }).sortable({
+            axis: "y",
+            handle: ".accordion-header",
+            stop: function( event, ui ) {
+                // IE doesn't register the blur when sorting
+                // so trigger focusout handlers to remove .ui-state-focus
+                ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+            }
+        });
+
         $('#simple-colorpicker-1').ace_colorpicker({pull_right:true}).on('change', function(){
             var color_class = $(this).find('option:selected').data('class');
             var new_class = 'widget-header';

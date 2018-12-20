@@ -412,9 +412,12 @@
                     $(".qing_requestUserType").attr("disabled", "disabled");
                 }else{
                     $(".qing_requestUserType").removeAttr("disabled");
-                    var requestUserTypes = $(".qing_requestUserType");
-                    $(requestUserTypes[0]).addClass("btn-primary");
-                    $("#requestUserType").val($(requestUserTypes[0]).val());
+
+                    if($("#requestUserType").val() == ""){
+                        var requestUserTypes = $(".qing_requestUserType");
+                        $(requestUserTypes[0]).addClass("btn-primary");
+                        $("#requestUserType").val($(requestUserTypes[0]).val());
+                    }
                 }
             });
 

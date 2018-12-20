@@ -34,12 +34,15 @@ public class MyErrorDecoder implements ErrorDecoder {
         switch (response.status()){
             case HttpStatus.SC_UNPROCESSABLE_ENTITY:
             case HttpStatus.SC_NOT_FOUND:
-                String errorMsg = result.getResponse().getError_message();
-                String hintMsg = result.getResponse().getHint_message();
-                if(StringUtils.isEmpty(hintMsg)){
-                    hintMsg = errorMsg;
+                if(result != null){
+                    String errorMsg = result.getResponse().getError_message();
+                    String hintMsg = result.getResponse().getHint_message();
+                    if(StringUtils.isEmpty(hintMsg)){
+                        hintMsg = errorMsg;
+                    }
+                    return new RequestValidateException(errorMsg, hintMsg);
                 }
-                return new RequestValidateException(errorMsg, hintMsg);
+                return new RequestValidateException("", "服务器返回：" + response.status());
             case HttpStatus.SC_FORBIDDEN:
                 return new RequestValidateException("forbid request", "服务器返回403,请检查你的参数，请求人，环境是否对应");
         }
@@ -58,7 +61,7 @@ public class MyErrorDecoder implements ErrorDecoder {
             }
 
             String responseValue = "";
-            if(response.body() != null){
+            if(response.body() != null && response.body().length() != null){
                 responseValue = Util.toString(response.body().asReader());
                 return JsonUtil.getObjectFromJson(responseValue, SimpleResponse.class);
             }else{
