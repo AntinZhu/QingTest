@@ -25,7 +25,6 @@ import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.TimeUtil;
-import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.order.AddOrderResultBean;
@@ -38,7 +37,9 @@ import com.qingqing.test.bean.pay.PayType;
 import com.qingqing.test.bean.pay.PrePayBean;
 import com.qingqing.test.bean.pay.ThirdPayBriefBean;
 import com.qingqing.test.bean.pay.request.PayRequestBean;
+import com.qingqing.test.bean.pay.request.PayRequestBeanV2;
 import com.qingqing.test.bean.pay.request.PrePayRequestBean;
+import com.qingqing.test.bean.pay.request.PrePayRequestBeanV2;
 import com.qingqing.test.client.ApiPiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.converter.BaseConverter;
@@ -47,8 +48,8 @@ import com.qingqing.test.controller.converter.PayConverter;
 import com.qingqing.test.domain.order.OrderCourseV1;
 import com.qingqing.test.domain.pay.ThirdPayBrief;
 import com.qingqing.test.service.order.OrderCourseService;
-import com.qingqing.test.service.pay.ThirdPayBriefService;
 import com.qingqing.test.service.pay.StudentBalanceService;
+import com.qingqing.test.service.pay.ThirdPayBriefService;
 import com.qingqing.test.service.user.StudentService;
 import com.qingqing.test.service.user.UserService;
 import org.slf4j.Logger;
@@ -133,7 +134,18 @@ public class OrderManager {
                 .setQingqingOrderId(requestBean.getQingqingOrderId())
                 .setOrderType(coursePriceType.getOrderType())
                 .build();
-        GeneralOrderPaymentSummaryV2Response response = ptClient.prePayForGeneralOrder(request, requestBean.getStudentId());
+        GeneralOrderPaymentSummaryV2Response response = ptClient.prePayForGeneralOrder(request, requestBean.getStudentId(), UserType.student);
+
+        return PayConverter.convertToPrePayBean(response);
+    }
+
+    public PrePayBean getPrePayInfo(PrePayRequestBeanV2 requestBean){
+        GeneralOrderPaymentSummaryV3Request request = GeneralOrderPaymentSummaryV3Request.newBuilder()
+                .setSourceChannel(SourceChannel.valueOf(requestBean.getSourceChannel()))
+                .setQingqingOrderId(requestBean.getQingqingOrderId())
+                .setOrderType(OrderType.valueOf(requestBean.getOrderType()))
+                .build();
+        GeneralOrderPaymentSummaryV2Response response = ptClient.prePayForGeneralOrder(request, requestBean.getUserId(), requestBean.getUserType());
 
         return PayConverter.convertToPrePayBean(response);
     }
@@ -183,9 +195,18 @@ public class OrderManager {
         PayType payType = PayType.parseKey(payRequest.getPayType());
         CoursePriceType coursePriceType = CoursePriceType.valueOf(payRequest.getCoursePriceType());
 
+        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType);
+    }
+
+    public SimpleResponse payForOrder(PayRequestBeanV2 payRequest) {
+        PayType payType = PayType.valueOf(payRequest.getPayType());
+        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType);
+    }
+
+    public SimpleResponse payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType) {
         OrderPayType backupPayType = OrderPayType.alipay;
         Double balancePayAmount = orderAmount;
-        if(!PayType.balance.equals(payType)){
+        if(!PayType.qingqing_balance.equals(payType)){
             backupPayType = payType.getOrderPayType();
             balancePayAmount = 0.0;
         }
@@ -194,17 +215,17 @@ public class OrderManager {
         request.setQingqingOrderId(qingqingOrderId)
                 .setOrderPayType(OrderPayType.qingqing_balance)
                 .setBackupOrderPayType(backupPayType)
-                .setOrderType(coursePriceType.getOrderType())
+                .setOrderType(OrderType.valueOf(orderType))
                 .setMoney(String.valueOf(balancePayAmount));
 
-        if(payRequest.getStageConfigId() != null){
-            request.setCmbInstallmentId(payRequest.getStageConfigId());
-            request.setInstallmentParam(Pay.InstallmentRequestParam.newBuilder().setInstallmentId(payRequest.getStageConfigId()));
+        if(stageConfigId != null){
+            request.setCmbInstallmentId(stageConfigId);
+            request.setInstallmentParam(Pay.InstallmentRequestParam.newBuilder().setInstallmentId(stageConfigId));
             request.setBaiduPayUserInfo(Pay.BaiduPayUserInfo.newBuilder().setEmail("55555555@qq.com").setPhoneNumber("15121121025").setUserName("张三"));
             request.setLovehaimiPayUserInfo(Pay.LoveHaiMiPayUserInfo.newBuilder().setPhoneNumber("15121121025").setUserName("张三"));
         }
 
-        PayResult payResult = ptClient.payForOrder(request.build(), studentId);
+        PayResult payResult = ptClient.payForOrder(request.build(), userId, UserType.valueOf(userType));
         BaseResponse baseResponse = BaseConverter.convertBaseResponse(payResult.getResponse());
         switch (baseResponse.getError_code()){
             case 1001:
@@ -315,7 +336,7 @@ public class OrderManager {
                     .setQingqingOrderId(qingqingOrderId)
                     .setOrderType(OrderType.valueOf(orderType))
                     .build();
-            GeneralOrderPaymentSummaryV2Response prePayResponse = ptClient.prePayForGeneralOrder(prePayRequest, studentId);
+            GeneralOrderPaymentSummaryV2Response prePayResponse = ptClient.prePayForGeneralOrder(prePayRequest, studentId, UserType.student);
 
             studentBalanceService.addUserBalance(studentId, prePayResponse.getAllNeedExtraPay());
 
@@ -326,7 +347,7 @@ public class OrderManager {
                     .setOrderType(OrderType.valueOf(orderType))
                     .setMoney(String.valueOf(prePayResponse.getAllNeedExtraPay()));
 
-            PayResult payResult = ptClient.payForOrder(request.build(), studentId);
+            PayResult payResult = ptClient.payForOrder(request.build(), studentId, UserType.student);
             return payResult.getResponse().getErrorCode() == 0;
         }catch(Exception e){
             logger.error("pay by balance error, studentId:{} orderId:{} orderType:", studentId, OrderIdEncoder.decodeQingqingOrderId(qingqingOrderId), orderType, e);

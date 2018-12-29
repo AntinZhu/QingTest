@@ -451,3 +451,35 @@ function generateGuid() { 
         return v.toString(16);    
     });
 }
+
+function updateOptions(elementId, data, defaultSelectedKey){
+    var selector = document.getElementById(elementId);
+    selector.length = 0;
+
+    var option;
+    if(data == null || data.size == 0){
+        option = document.createElement("option")
+
+        option.text = "当前无可用数据";
+
+        selector.options.add(option);
+    }else{
+        for(idx in data){
+            var siteType = data[idx];
+            option = document.createElement("option")
+            option.value = siteType.key;
+            option.text = siteType.value;
+
+            if(defaultSelectedKey == null && idx == 0){
+                option.setAttribute("selected", "selected");
+            }else if(defaultSelectedKey != null && siteType.key == defaultSelectedKey){
+                option.setAttribute("selected", "selected");
+            }
+
+            selector.options.add(option);
+        }
+    }
+    $("#" + elementId).trigger("chosen:updated");
+
+    $("#" + elementId + "_chosen").css('width','200px');
+};

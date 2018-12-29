@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public enum PayType {
     unknown("", "未知", null),
-    balance("qingqing_balance", "轻轻钱包", OrderPayType.qingqing_balance),
+    qingqing_balance("qingqing_balance", "轻轻钱包", OrderPayType.qingqing_balance),
     alipay("alipay", "支付宝", OrderPayType.alipay),
     weixin_pay("weixin_pay", "微信", OrderPayType.weixin_pay),
     hb_installment("hb_installment", "花呗分期", OrderPayType.hb_installment),
@@ -24,8 +24,6 @@ public enum PayType {
     apple_pay("apple_pay", "Apple Pay", OrderPayType.apple_pay),
     lovehaimi_pay("lovehaimi_pay", "爱海米分期", OrderPayType.lovehaimi_pay),
     cmb_installment("cmb_installment", "招行分期", OrderPayType.cmb_installment),
-
-    // TODO 还有京东等，proto中暂时没有，先不做处理
     ;
 
     private static Map<String, String> keyNameMap = new HashMap<>(PayType.values().length);

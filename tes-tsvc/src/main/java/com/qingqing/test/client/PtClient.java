@@ -59,16 +59,16 @@ public interface PtClient {
 
     @RequestMapping(path = "/svc/api/pt/v6/payment/summary/for_order", method = RequestMethod.POST)
     @ProtoResponseBody
-    GeneralOrderPaymentSummaryV2Response prePayForGeneralOrder(GeneralOrderPaymentSummaryV3Request request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+    GeneralOrderPaymentSummaryV2Response prePayForGeneralOrder(GeneralOrderPaymentSummaryV3Request request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType UserType);
 
 
     @RequestMapping(path = "/svc/api/pt/v5/payment/ackpay/for_order", method = RequestMethod.POST)
     @ProtoResponseBody
-    PayResult payForOrder(PayGeneralOrderSubmitRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+    PayResult payForOrder(PayGeneralOrderSubmitRequest request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType userType);
 
     @RequestMapping(path = "/svc/api/pt/v6/payment/check_pay", method = RequestMethod.POST)
     @ProtoResponseBody
-    PayCheckResponse checkPay(PayCheckRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+    PayCheckResponse checkPay(PayCheckRequest request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType userType);
 
     @RequestMapping(path = "/svc/api/pt/v4/group_order/sub_order_detail", method = RequestMethod.POST)
     @ProtoResponseBody

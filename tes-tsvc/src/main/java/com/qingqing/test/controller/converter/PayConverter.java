@@ -39,7 +39,7 @@ public class PayConverter {
                 supportPayTypeList.add(new KeyAndValue(payType, "未识别类型（" + payType + "）"));
             }
 
-            if(PayType.balance.getKey().equals(payType)){
+            if(PayType.qingqing_balance.getKey().equals(payType)){
                 balanceAmount = String.valueOf(payTypeInfo.getAccountAmont());
             }
 
@@ -57,7 +57,7 @@ public class PayConverter {
                 supportPayTypeList.add(new KeyAndValue(payType, "未识别类型（" + payType + "）-（折叠）"));
             }
 
-            if(PayType.balance.getKey().equals(payType)){
+            if(PayType.qingqing_balance.getKey().equals(payType)){
                 balanceAmount = String.valueOf(payTypeInfo.getAccountAmont());
             }
 

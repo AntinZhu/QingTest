@@ -1,10 +1,12 @@
 package com.qingqing.test.controller;
 
+import com.qingqing.api.proto.v1.OrderCommonEnum.OrderType;
 import com.qingqing.api.proto.v1.Pay.PayCheckRequest;
 import com.qingqing.api.proto.v1.Pay.PayCheckResponse;
 import com.qingqing.api.proto.v1.ProtoBufResponse.BaseResponse;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
+import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
@@ -13,8 +15,11 @@ import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.order.CoursePriceType;
 import com.qingqing.test.bean.order.QingQingCommonOrderBean;
 import com.qingqing.test.bean.pay.request.CheckPayRequest;
+import com.qingqing.test.bean.pay.request.CheckPayRequestV2;
 import com.qingqing.test.bean.pay.request.PayRequestBean;
+import com.qingqing.test.bean.pay.request.PayRequestBeanV2;
 import com.qingqing.test.bean.pay.request.PrePayRequestBean;
+import com.qingqing.test.bean.pay.request.PrePayRequestBeanV2;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.manager.OrderManager;
 import com.qingqing.test.manager.PayManager;
@@ -62,18 +67,37 @@ public class PayController {
         return JsonUtil.format(orderManager.payForOrder(request));
     }
 
+    @RequestMapping("ack_pay_v2")
+    @ResponseBody
+    public String payV2(@RequestBody PayRequestBeanV2 request){
+        return JsonUtil.format(orderManager.payForOrder(request));
+    }
+
     @RequestMapping("pre_pay")
     @ResponseBody
     public String prePay(@RequestBody PrePayRequestBean requestBean){
         return JsonUtil.format(orderManager.getPrePayInfo(requestBean));
     }
 
+    @RequestMapping("pre_pay_v2")
+    @ResponseBody
+    public String prePayV2(@RequestBody PrePayRequestBeanV2 requestBean){
+        return JsonUtil.format(orderManager.getPrePayInfo(requestBean));
+    }
+
     @RequestMapping("check_pay")
     @ProtoResponseBody
-    public PayCheckResponse payInfos(@RequestBody CheckPayRequest bean){
+    public PayCheckResponse checkPay(@RequestBody CheckPayRequest bean){
         CoursePriceType coursePriceType = CoursePriceType.valueOf(bean.getCoursePriceType());
         return ptClient.checkPay(PayCheckRequest.newBuilder().setQingqingCommonOrderId(bean.getQingqingOrderId())
-                .setOrderType(coursePriceType.getOrderType()).build(), bean.getStudentId());
+                .setOrderType(coursePriceType.getOrderType()).build(), bean.getStudentId(), UserType.student);
+    }
+
+    @RequestMapping("check_pay_v2")
+    @ProtoResponseBody
+    public PayCheckResponse checkPayV2(@RequestBody CheckPayRequestV2 bean){
+        return ptClient.checkPay(PayCheckRequest.newBuilder().setQingqingCommonOrderId(bean.getQingqingOrderId())
+                .setOrderType(OrderType.valueOf(bean.getOrderType())).build(), bean.getUserId(), UserType.valueOf(bean.getUserType()));
     }
 
     @RequestMapping("mock_third_pay")
