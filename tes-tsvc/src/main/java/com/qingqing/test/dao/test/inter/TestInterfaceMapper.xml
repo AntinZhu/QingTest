@@ -51,9 +51,9 @@
     where  id = #{id}
   </insert>
 
-  <select id="selectByCatelogId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectAll" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" />
     from t_interface
-    where catelog_id = #{catelogId,jdbcType=BIGINT}
+    where is_deleted = FALSE
   </select>
 </mapper>

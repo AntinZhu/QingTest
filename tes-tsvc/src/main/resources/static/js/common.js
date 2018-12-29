@@ -483,3 +483,7 @@ function updateOptions(elementId, data, defaultSelectedKey){
 
     $("#" + elementId + "_chosen").css('width','200px');
 };
+
+function emptyFunction(resu){
+
+}

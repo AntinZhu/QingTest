@@ -942,7 +942,8 @@
             $("#sourceChannel_chosen").css('width','200px');
 
             $("#orderAmountTxt").text(resu.needPayAmount);
-            $("#balanceAmountTxt").text(resu.balanceAmount);
+            var balanceAmount = new Number(resu.balanceAmount)
+            $("#balanceAmountTxt").text(balanceAmount.toLocaleString());
 
             installmentConfigs = resu.installmentConfigs;
         }

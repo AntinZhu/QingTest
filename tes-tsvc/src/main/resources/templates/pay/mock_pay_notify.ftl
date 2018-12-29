@@ -52,13 +52,13 @@
 
                                 <div class="clearfix form-actions">
                                     <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-info" type="button" id = "submitBtn">
+                                        <button class="btn btn-info" style="border-radius: 8px" type="button" id = "submitBtn">
                                             <i class="icon-ok bigger-110"></i>
                                             Submit
                                         </button>
 
                                         &nbsp; &nbsp; &nbsp;
-                                        <button class="btn" type="reset">
+                                        <button class="btn" style="border-radius: 8px" type="reset">
                                             <i class="icon-undo bigger-110"></i>
                                             Reset
                                         </button>
@@ -135,6 +135,15 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="balanceAmount">操作：</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <button class="btn btn-info" style="border-radius: 8px" type="button" id = "payNotifyBtn">
+                                                支付服务-补偿通知
+                                            </button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -144,6 +153,19 @@
             <#include "/include/righttool-sidebar.ftl" />
 
         <script type="text/javascript">
+            $('#payNotifyBtn').click(payNotify);
+
+            function payNotify(){
+                var data = {
+                    data : "/paysvc/api/crontab/v1/auto_sync_third_pay_notify"
+                }
+
+                var isLocalDebug = $("#isLocalDebug").val();
+                var localPort = $("#localDebugPort").val();
+                commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, emptyFunction, false, "支付服务-交易补偿通知:", $("#env").val());
+            }
+
+
             $('#submitBtn').click(prePayV2);
 
             function prePayV2(isAsync){
@@ -171,7 +193,9 @@
                 $("#payType_chosen").css('width','200px');
 
                 $("#orderAmountTxt").text(resu.needPayAmount);
-                $("#balanceAmountTxt").text(resu.balanceAmount);
+
+                var balanceAmount = new Number(resu.balanceAmount)
+                $("#balanceAmountTxt").text(balanceAmount.toLocaleString());
 
                 installmentConfigs = resu.installmentConfigs;
 

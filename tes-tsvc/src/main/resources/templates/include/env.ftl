@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">环境选择:</label>
+    <label class="control-label col-xs-12 col-sm-3 no-padding-right" style="text-align: right;" for="env">环境选择:</label>
 
     <div class="col-xs-12 col-sm-9">
         <div class="clearfix">
@@ -11,7 +11,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">本地调试开关:</label>
+    <label class="control-label col-xs-12 col-sm-3 no-padding-right" style="text-align: right;" for="env">本地调试开关:</label>
 
     <div class="col-xs-12 col-sm-9">
         <label class="pull-left inline"  title="开启会调本地接口" data-rel="tooltip" >

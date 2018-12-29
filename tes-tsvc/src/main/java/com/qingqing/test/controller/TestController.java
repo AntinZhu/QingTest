@@ -19,11 +19,13 @@ import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
+import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.domain.inter.TestInterfaceParam;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
+import com.qingqing.test.service.inter.TestInterfaceService;
 import com.qingqing.test.util.QingParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +51,8 @@ public class TestController {
     private TestInterfaceCatelogService catelogService;
     @Autowired
     private TestInterfaceParamService testInterfaceParamService;
+    @Autowired
+    private TestInterfaceService testInterfaceService;
 
     @RequestMapping("json_format")
     public String show(@RequestParam("id") Long id, Model model){
@@ -182,5 +186,14 @@ public class TestController {
         String data = QingParamUtil.generateParamJson(request.getData());
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(data).build();
+    }
+
+    @RequestMapping("/interface/all")
+    @ResponseBody
+    public ListResponse<TestInterface> allTestInterface(){
+        ListResponse<TestInterface> interfaceResponse = new ListResponse<>();
+        interfaceResponse.setResponse(BaseResponse.SUCC_RESP);
+        interfaceResponse.setResultList(testInterfaceService.findAll());
+        return interfaceResponse;
     }
 }

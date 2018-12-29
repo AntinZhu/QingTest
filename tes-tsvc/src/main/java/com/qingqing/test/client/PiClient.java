@@ -21,6 +21,10 @@ public interface PiClient {
     @RequestMapping(path = "/{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(PtRequestInterceptor.USER_TYPE) UserType userType);
+
+    @RequestMapping(path = "/{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    String commonRequest(@PathVariable("url") String url);
 }
 
 

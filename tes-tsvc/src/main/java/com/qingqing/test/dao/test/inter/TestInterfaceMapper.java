@@ -11,5 +11,5 @@ public interface TestInterfaceMapper {
 
     TestInterface selectById(Long id);
 
-    List<TestInterface> selectByCatelogId(Long catelogId);
+    List<TestInterface> selectAll();
 }
