@@ -487,3 +487,11 @@ function updateOptions(elementId, data, defaultSelectedKey){
 function emptyFunction(resu){
 
 }
+
+function simpleSucc(resu){
+    $.gritter.add({
+        title : '提示:',
+        text : "接口调用成功",
+        class_name : 'gritter-info gritter-center'
+    });
+}

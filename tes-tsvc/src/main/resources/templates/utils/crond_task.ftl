@@ -81,7 +81,7 @@
         {url:"/svc/api/crontab/v1/auto_off_shelf_teacher", description:"下架超过100天未登录的老师"},
         ];
 
-    var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div></div></div></div>';
+    var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div><div id="link_{idx}" class="hide" style="text-align: center;margin-top: 5px;margin-bottom: 5px;" ><hr style="margin-bottom: 0px;margin-top: 0px;" /><a href="" target="_blank"> 查看日志</a></div></div></div></div>';
     $(document).ready(function(){
         for(var taskIdx in cronTaskArr){
             var task = cronTaskArr[taskIdx];
@@ -94,17 +94,42 @@
     });
 
     function cronTaskIdx(idx){
-        cronTask(cronTaskArr[idx].url);
+        cronTask(idx, cronTaskArr[idx].url);
     }
 
-    function cronTask(url){
+    function cronTask(idx, url){
         var data = {
             data : url
         }
 
         var isLocalDebug = $("#isLocalDebug").val();
         var localPort = $("#localDebugPort").val();
-        commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, emptyFunction, false, "支付服务-交易补偿通知:", $("#env").val());
+        var env = $("#env").val();
+        var guid = generateGuid();
+        var targetData = {
+            idx: idx,
+            guid : guid,
+            env :env
+        }
+
+        commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerCorndSucc, true, "定时任务执行:", env, targetData, guid);
+
+        var logTargetUrl = logUrl.replace("{env}", targetData.env);
+        logTargetUrl = logTargetUrl.replace("{guid}", targetData.guid);
+
+        var idx = targetData.idx;
+        var logEle = $("#link_" + idx);
+        $(logEle).removeClass("hide");
+        $(logEle).children("a:first")[0].href = logTargetUrl;
+    }
+
+    var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()";
+    function handlerCorndSucc(resu, data){
+        $.gritter.add({
+            title : '提示:',
+            text : "接口调用成功",
+            class_name : 'gritter-info gritter-center'
+        });
     }
 
     jQuery(function($) {
