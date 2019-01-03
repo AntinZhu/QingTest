@@ -383,23 +383,27 @@
                 $("#env").val($(this).val());
             });
 
+            var userTypeArr = [];
+            $.each(["student", "teacher", "assistant"] , function(k, v){
+                userTypeArr.push({id: v, text: v});
+            });
             function handlerInterface(resu){
-//                activeCatelog(resu.interfaceInfo.inter.catelogIndex);
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
                     $("#requestUserIdDev").removeClass("hide");
-                    var requestLabel = $("#requestUserIdDev").find("label");
-                    switch (resu.interfaceInfo.inter.requestUserType){
-                        case "teacher":
-                            requestLabel.text(requestLabel.text() + "(老师)");
-                            break;
-                        case "student":
-                            requestLabel.text(requestLabel.text() + "(学生)");
-                            break;
-                        case "ta":
-                            requestLabel.text(requestLabel.text() + "(助教)");
-                            break;
-                    }
+                    $("#requestUserTypeDiv").text(resu.interfaceInfo.inter.requestUserType);
+                    $("#requestUserType").val(resu.interfaceInfo.inter.requestUserType);
+                    $("#requestUserTypeDiv").text(resu.interfaceInfo.inter.requestUserType);
+                    $("#requestUserType").val(resu.interfaceInfo.inter.requestUserType);
+
+                    $('#requestUserTypeDiv').editable({
+                        type: 'select2',
+                        value : resu.interfaceInfo.inter.requestUserType,
+                        source: userTypeArr,
+                        success: function(response, newValue) {
+                            $(this).prev("input").val(newValue);
+                        }
+                    });
                 }
 
                 if(params != ""){

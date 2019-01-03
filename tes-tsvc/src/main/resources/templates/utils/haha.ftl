@@ -45,7 +45,7 @@
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-actions">
                             <div class="input-group">
-                                <input id="qing_search" placeholder="Type your message here ..." type="text" class="form-control" name="message" />
+                                <input id="qing_search" placeholder="输入你想查找的接口名称 ..." type="text" class="form-control" name="message" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-sm btn-info no-radius" type="button" id="interfaceSearch" />
                                 </span>
@@ -101,7 +101,7 @@
                     var task = allInterface[idx];
                     var id = "task_" + task.id;
 
-                    if(task.interfaceName.indexOf(search) != -1){
+                    if(task.interfaceName.toLowerCase().indexOf(search) != -1 || task.interfaceUrl.toLowerCase().indexOf(search) != -1){
                         $("#" + id).removeClass("hide");
                     }
                 }

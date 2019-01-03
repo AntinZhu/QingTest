@@ -123,7 +123,9 @@ public class TestController {
 
         TestInterfaceCatelog catelog = testInterfaceManager.saveCatelog(saveBean, parentCatelog);
 
-        return new SingleResponse(catelog);
+        SingleResponse<TestInterfaceCatelog> result = new SingleResponse<>();
+        result.setResultList(catelog);
+        return result;
     }
 
     @RequestMapping("/interface")

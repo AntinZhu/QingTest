@@ -272,18 +272,6 @@
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
                     $("#requestUserIdDev").removeClass("hide");
-                    var requestLabel = $("#requestUserIdDev").find("label");
-                    switch (resu.interfaceInfo.inter.requestUserType){
-                        case "teacher":
-                            requestLabel.text(requestLabel.text() + "(老师)");
-                            break;
-                        case "student":
-                            requestLabel.text(requestLabel.text() + "(学生)");
-                            break;
-                        case "ta":
-                            requestLabel.text(requestLabel.text() + "(助教)");
-                            break;
-                    }
                 }
 
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
@@ -298,6 +286,8 @@
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
 
             jQuery(function($) {
+                $(".chosen-select").chosen();
+
                 $('#teacherIdBtn').click(function () {
                     var param = generateJsonParam("#paramListDiv input");
                     jsonShow(param, "json-request");

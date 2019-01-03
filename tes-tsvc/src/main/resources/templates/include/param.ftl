@@ -35,6 +35,16 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="requestUserType">请求人类型:</label>
+
+            <div class="col-xs-12 col-sm-9">
+                <div class="clearfix">
+                    <input type="hidden" name="requestUserType" id="requestUserType" value="student" class="col-xs-12 col-sm-3" />
+                    <span class="editable editable-click editable-unsaved" id="requestUserTypeDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">student</span>
+                </div>
+            </div>
+        </div>
 
         <div class="hr hr-dotted"></div>
         <div class="hr hr-dotted"></div>

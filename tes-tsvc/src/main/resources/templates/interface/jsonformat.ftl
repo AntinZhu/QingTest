@@ -265,6 +265,10 @@
 
             var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
             var paramExamples;
+            var userTypeArr = [];
+            $.each(["student", "teacher", "assistant"] , function(k, v){
+                userTypeArr.push({id: v, text: v});
+            });
             function handlerInterface(resu){
                 jsonShow(resu, "json-interface");
                 interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl + "?guid={guid}";
@@ -272,18 +276,17 @@
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
                     $("#requestUserIdDev").removeClass("hide");
-                    var requestLabel = $("#requestUserIdDev").find("label");
-                    switch (resu.interfaceInfo.inter.requestUserType){
-                        case "teacher":
-                            requestLabel.text(requestLabel.text() + "(老师)");
-                            break;
-                        case "student":
-                            requestLabel.text(requestLabel.text() + "(学生)");
-                            break;
-                        case "ta":
-                            requestLabel.text(requestLabel.text() + "(助教)");
-                            break;
-                    }
+                    $("#requestUserTypeDiv").text(resu.interfaceInfo.inter.requestUserType);
+                    $("#requestUserType").val(resu.interfaceInfo.inter.requestUserType);
+
+                    $('#requestUserTypeDiv').editable({
+                        type: 'select2',
+                        value : resu.interfaceInfo.inter.requestUserType,
+                        source: userTypeArr,
+                        success: function(response, newValue) {
+                            $(this).prev("input").val(newValue);
+                        }
+                    });
                 }
 
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
@@ -336,6 +339,7 @@
                     var data = {
                         interfaceId : $("#interfaceId").val(),
                         requestUserId : $("#requestUserId").val(),
+                        requestUserType : $("#requestUserType").val(),
                         param : JSON.stringify(param)
                     };
                     var isLocalDebug = $("#isLocalDebug").val();
@@ -445,6 +449,19 @@
                 });
 
                 $(".chosen-select").chosen();
+                $("#requestUserType_chosen").css("width", "100px");
+                $('.' + prop + "_label").editable({
+                    type: 'select2',
+                    value : paramInfo[prop]["defaultValue"],
+                    source: options,
+                    // mode: "popup",
+                    disabled : false,
+                    success: function(response, newValue) {
+                        $(this).prev("input").val(newValue);
+                        notifyParamChanged();
+                    }
+                });
+
                 $('[data-rel=tooltip]').tooltip();
             });
         </script>

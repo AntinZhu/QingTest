@@ -25,7 +25,7 @@ public class TestApiApplication implements EmbeddedServletContainerCustomizer {
 
 	@Override
 	public void customize(ConfigurableEmbeddedServletContainer container) {
-		container.setPort(8090);
+//		container.setPort(8090);
 		container.setContextPath("/apiTest");
 	}
 }
