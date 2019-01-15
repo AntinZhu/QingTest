@@ -1,6 +1,5 @@
 package com.qingqing.test;
 
-import com.qingqing.api.proto.v1.TeacherProto.TeachingTimeAndClassTimeRequest;
 import com.qingqing.test.util.QingStringUtil;
 
 import java.beans.IntrospectionException;
@@ -19,7 +18,9 @@ public class Main {
     public static void main(String[] args) throws ClassNotFoundException, IntrospectionException {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
-        System.out.println(printField(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
+//        System.out.println(printField(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
+        Double paidAmount = 6D;
+        System.out.println(String.valueOf(paidAmount));
     }
 
     private static String printField(Class<?> clazz, String prefix) throws ClassNotFoundException, IntrospectionException {

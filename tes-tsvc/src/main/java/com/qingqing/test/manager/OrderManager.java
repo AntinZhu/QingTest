@@ -221,8 +221,8 @@ public class OrderManager {
         if(stageConfigId != null){
             request.setCmbInstallmentId(stageConfigId);
             request.setInstallmentParam(Pay.InstallmentRequestParam.newBuilder().setInstallmentId(stageConfigId));
-            request.setBaiduPayUserInfo(Pay.BaiduPayUserInfo.newBuilder().setEmail("55555555@qq.com").setPhoneNumber("15121121025").setUserName("张三"));
-            request.setLovehaimiPayUserInfo(Pay.LoveHaiMiPayUserInfo.newBuilder().setPhoneNumber("15121121025").setUserName("张三"));
+            request.setBaiduPayUserInfo(Pay.BaiduPayUserInfo.newBuilder().setEmail("55555555@qq.com").setPhoneNumber("15121121059").setUserName("张三"));
+            request.setLovehaimiPayUserInfo(Pay.LoveHaiMiPayUserInfo.newBuilder().setPhoneNumber("15121121059").setUserName("张三"));
         }
 
         PayResult payResult = ptClient.payForOrder(request.build(), userId, UserType.valueOf(userType));

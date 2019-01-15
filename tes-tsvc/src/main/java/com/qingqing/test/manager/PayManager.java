@@ -111,7 +111,7 @@ public class PayManager {
     }
 
     private boolean mockBaiduNotify(ThirdPayBrief thirdPayBrief){
-        String param = "period=3&status=&sign=123&orderid=" + thirdPayBrief.getQingqingTradeNo();
+        String param = "period=3&status=8&sign=123&orderid=" + thirdPayBrief.getQingqingTradeNo();
         String result = payPbClient.baiduNotify(param);
 
         BaiduNotifyResponse notifyResult = JsonUtil.getObjectFromJson(result, BaiduNotifyResponse.class);
