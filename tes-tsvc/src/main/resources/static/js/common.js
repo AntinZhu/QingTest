@@ -87,7 +87,7 @@ while(   nOffset   !=   -1   )
 return   bstr   +   strUtf8; 
 }
 
-function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, otherData, guid){
+function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, otherData, guid, headers){
     var result = true;
     if(env == null){
         env = "";
@@ -106,8 +106,10 @@ function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, othe
         type : "POST",
         url : url,
         timeout : 60000,
+        headers: headers,
         data : JSON.stringify(data),
         dataType : 'json',
+        crossDomain: headers != null,
         async :isASync,
         contentType: 'application/json',
         success : function(resu) {

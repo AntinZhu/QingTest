@@ -1,21 +1,36 @@
 package com.qingqing.test.controller;
 
+import com.google.common.collect.Sets;
 import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.User;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.OrderIdEncoder;
+import com.qingqing.common.util.TimeUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.test.bean.common.UserWithDataBean;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
+import com.qingqing.test.manager.QingApiLabManager;
 import com.qingqing.test.service.user.UserService;
+import com.qingqing.test.util.QingFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -26,6 +41,8 @@ public class UtilsController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private QingApiLabManager qingApiLabManager;
 
     @RequestMapping("order/encode")
     @ResponseBody
@@ -102,4 +119,30 @@ public class UtilsController {
         return result;
     }
 
+    @RequestMapping("phone/decode")
+    public @ResponseBody void decodePhone(@RequestParam("file") MultipartFile file,
+                                          @RequestParam("session") String session,
+                                          HttpServletResponse response) throws IOException {
+        List<String> encodeList = QingFileUtils.readLines(file.getInputStream());
+        Map<String, String> resultMap =  qingApiLabManager.decodePhoneNumber(Sets.newHashSet(encodeList), session);
+
+        String fileName = "result-" + TimeUtil.dateToString(new Date(), TimeUtil.TIME_IN_DETAIL_STRING_FORMAT) + ".csv";
+        response.setContentType("application/force-download");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+
+        BufferedWriter writer = null; //输出流
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+            for (Entry<String, String> entry : resultMap.entrySet()) {
+                String line = entry.getKey() + "," + entry.getValue();
+                writer.write(line);
+                writer.newLine();
+            }
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("----------file download" + fileName);
+    }
 }

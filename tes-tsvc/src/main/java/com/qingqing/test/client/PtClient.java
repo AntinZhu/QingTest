@@ -53,7 +53,7 @@ public interface PtClient {
     QueryUserAddressResponse studentAddresses(SimpleQingQingStudentIdRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 
 
-    @RequestMapping(path = "/svc/api/pt/v2/student/teacher/detail_for_order", method = RequestMethod.POST)
+    @RequestMapping(path = "/svc/api/pt/v3/student/teacher/detail_for_order", method = RequestMethod.POST)
     @ProtoResponseBody
     TeacherDetailForStudentToOrderResponse detailForOrder(SimpleQingQingTeacherIdRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 

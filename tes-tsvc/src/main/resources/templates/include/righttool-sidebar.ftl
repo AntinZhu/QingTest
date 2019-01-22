@@ -165,7 +165,36 @@
                     </div>
                 </div>
                 </div>
+
+            <div class="group">
+                <h3 class="accordion-header">线上手机号批量解密</h3>
+
+                <div>
+                    <form id="onlinePhoneDecodeForm" method="post" enctype="multipart/form-data" target="_blank" action="${base}/v1/utils/phone/decode">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">SessionID：</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" name="session" id="sessionId" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                               <input type="file" name = "file" id="id-input-file-3" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button type="button" class="btn btn-grey btn-sm" id="onlinePhoneDecodeBtn">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+        </div>
         </div>
     </div>
 </div><!-- /#ace-settings-container -->
@@ -223,6 +252,19 @@
                 $(value).val("");
             }
         });
+    });
+
+    $('#id-input-file-3').ace_file_input({
+        no_file:'No File ...',
+        btn_choose:'Choose',
+        btn_change:'Change',
+        droppable:false,
+        onchange:null,
+        thumbnail:false //| true | large
+        //whitelist:'gif|png|jpg|jpeg'
+        //blacklist:'exe|php'
+        //onchange:''
+        //
     });
 
     //jquery accordion
@@ -396,5 +438,9 @@
                 $(value).attr("last_input", 1);
             }
         });
+    });
+
+    $("#onlinePhoneDecodeBtn").click(function(){
+        $("#onlinePhoneDecodeForm").submit();
     });
 </script>

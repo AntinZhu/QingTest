@@ -13,7 +13,6 @@ import java.util.List;
  * Created by zhujianxing on 2019/1/10.
  */
 @Configuration
-@ConditionalOnProperty(name = {"a.b", "c.d"})
 public class AutoConfigTest {
 
     @Bean(name = "devEnv")
@@ -22,12 +21,14 @@ public class AutoConfigTest {
     }
 
     @Bean(name = {"tstEnv", "sssss"})
+//    @Bean
     public Env bEnv(){
         return Env.tst;
     }
 
     @Bean
     @QingConditionalOnBean(value = {AutoConfigTest.class, OrderManager.class}, name = "sssss")
+    @ConditionalOnProperty(name = {"a.b", "c.d"})
     public Boolean aaa(List<Env> evnList){
         return Boolean.TRUE;
     }

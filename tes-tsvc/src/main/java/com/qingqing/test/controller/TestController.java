@@ -1,8 +1,10 @@
 package com.qingqing.test.controller;
 
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleDataResponse;
+import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
+import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
@@ -14,6 +16,7 @@ import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.inter.CatelogBean;
 import com.qingqing.test.bean.inter.SaveCatelogBean;
 import com.qingqing.test.bean.inter.SaveInterfaceBean;
+import com.qingqing.test.bean.inter.UserRequestParam;
 import com.qingqing.test.bean.inter.request.InterfaceInvokeRequest;
 import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
@@ -22,6 +25,7 @@ import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.domain.inter.TestInterfaceParam;
+import com.qingqing.test.manager.PassportManager;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
@@ -53,6 +57,8 @@ public class TestController {
     private TestInterfaceParamService testInterfaceParamService;
     @Autowired
     private TestInterfaceService testInterfaceService;
+    @Autowired
+    private PassportManager passportManager;
 
     @RequestMapping("json_format")
     public String show(@RequestParam("id") Long id, Model model){
@@ -197,5 +203,14 @@ public class TestController {
         interfaceResponse.setResponse(BaseResponse.SUCC_RESP);
         interfaceResponse.setResultList(testInterfaceService.findAll());
         return interfaceResponse;
+    }
+
+    @RequestMapping("/user/token")
+    @ResponseBody
+    public SingleResponse<UserRequestParam> getToken(@ProtoRequestBody UserProto.User request){
+        SingleResponse<UserRequestParam> response = new SingleResponse<>();
+        response.setResponse(BaseResponse.SUCC_RESP);
+        response.setResultList(passportManager.getToken(request.getUserId(), UserType.valueOf(request.getUserType().getNumber())));
+        return response;
     }
 }

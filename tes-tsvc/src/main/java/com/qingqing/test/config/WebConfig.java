@@ -6,6 +6,8 @@ import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
 import com.qingqing.test.config.inteceptor.CatelogHandlerInteceptor;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -15,6 +17,7 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.servlet.MultipartConfigElement;
 import java.util.List;
 
 /**
@@ -63,5 +66,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         converters.add(marshallingHttpMessageConverter);
         converters.add(stringHttpMessageConverter);
         super.configureMessageConverters(converters);
+    }
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setMaxFileSize("50MB");
+        factory.setMaxRequestSize("50MB");
+
+        return factory.createMultipartConfig();
+
+
     }
 }

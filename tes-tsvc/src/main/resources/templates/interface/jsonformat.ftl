@@ -265,6 +265,7 @@
 
             var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
             var paramExamples;
+            var interfaceBean;
             var userTypeArr = [];
             $.each(["student", "teacher", "assistant"] , function(k, v){
                 userTypeArr.push({id: v, text: v});
@@ -273,6 +274,7 @@
                 jsonShow(resu, "json-interface");
                 interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl + "?guid={guid}";
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
+                interfaceBean = resu.interfaceInfo.inter;
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
                     $("#requestUserIdDev").removeClass("hide");
@@ -336,20 +338,53 @@
                     var param = generateJsonParam("#paramListDiv input");
                     jsonShow(param, "json-request");
                     jsonShow("[]", "json-response");
-                    var data = {
-                        interfaceId : $("#interfaceId").val(),
-                        requestUserId : $("#requestUserId").val(),
-                        requestUserType : $("#requestUserType").val(),
-                        param : JSON.stringify(param)
-                    };
+
                     var isLocalDebug = $("#isLocalDebug").val();
                     var localPort = $("#localDebugPort").val();
 
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerTeacherInfo, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                    if(isLocalDebug != 1){
+                        var data = {
+                            interfaceId : $("#interfaceId").val(),
+                            requestUserId : $("#requestUserId").val(),
+                            requestUserType : $("#requestUserType").val(),
+                            param : JSON.stringify(param)
+                        };
+                        commonAjaxRequest("${base}/v1/test/interface/invoke.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                    }else{
+                        if(interfaceBean.interfaceType == "PT" || interfaceBean.interfaceType == "PI"){
+                            var user = {
+                                user_id :  new Number($("#requestUserId").val()),
+                                user_type  : $("#requestUserType").val()
+                            }
+
+                            commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerLocalInvoke, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                        }else{
+                            var param = generateJsonParam("#paramListDiv input");
+                            commonAjaxRequest("http://localhost:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), new Object());
+                        }
+                    }
                 });
 
-                function handlerTeacherInfo(resu){
+                function handlerLocalInvoke(data){
+                    var param = generateJsonParam("#paramListDiv input");
+                    var token = data.resultList;
+                    var headers = {
+                        si : token.session,
+                        tk : token.token,
+                        Timestamp : token.timestamp,
+                        Authkey : token.authkey
+                    }
+                    var localPort = $("#localDebugPort").val();
+
+                    commonAjaxRequest("http://localhost:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
+                }
+
+                function handlerInvokeResult(resu){
                     jsonShow(resu.data, "json-response");
+                };
+
+                function handlerLocalInvokeResult(resu){
+                    jsonShow(resu, "json-response");
                 };
 
                 $("#paramChoose").change(function(){
@@ -450,17 +485,6 @@
 
                 $(".chosen-select").chosen();
                 $("#requestUserType_chosen").css("width", "100px");
-                $('.' + prop + "_label").editable({
-                    type: 'select2',
-                    value : paramInfo[prop]["defaultValue"],
-                    source: options,
-                    // mode: "popup",
-                    disabled : false,
-                    success: function(response, newValue) {
-                        $(this).prev("input").val(newValue);
-                        notifyParamChanged();
-                    }
-                });
 
                 $('[data-rel=tooltip]').tooltip();
             });
