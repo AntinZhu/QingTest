@@ -3,6 +3,7 @@ package com.qingqing.test.hystrix;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import com.qingqing.common.exception.QingQingRuntimeException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,11 @@ public class BackupDateSourceHystrixCommand extends HystrixCommand<Object> {
             }finally{
                 BEAN_NAME.remove();
             }
+        }
+
+        Throwable throwable = getExecutionException();
+        if(throwable != null){
+            throw new QingQingRuntimeException("invoke error", throwable);
         }
 
         return null;

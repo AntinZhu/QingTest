@@ -372,7 +372,8 @@
                         si : token.session,
                         tk : token.token,
                         Timestamp : token.timestamp,
-                        Authkey : token.authkey
+                        Authkey : token.authkey,
+                        qingqing_debug_mode : 'true'
                     }
                     var localPort = $("#localDebugPort").val();
 

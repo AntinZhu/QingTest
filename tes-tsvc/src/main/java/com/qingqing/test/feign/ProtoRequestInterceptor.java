@@ -19,6 +19,7 @@ public abstract class ProtoRequestInterceptor implements RequestInterceptor {
         if(template.headers().get("Accept") == null){
             template.header("Accept", "application/x-protobuf");
         }
+        template.header("qingqing_debug_mode", "true");
 
         doApply(template);
     }
