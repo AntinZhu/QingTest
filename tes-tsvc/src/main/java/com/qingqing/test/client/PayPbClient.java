@@ -40,4 +40,8 @@ public interface PayPbClient {
     @RequestMapping(path = "cmblife", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     @ResponseBody
     String cmblifeNotify(String param);
+
+    @RequestMapping(path = "jd", method = RequestMethod.POST, consumes = {MediaType.TEXT_XML_VALUE})
+    @ResponseBody
+    String jdNotify(String param);
 }

@@ -60,6 +60,8 @@ public class PayManager {
                 return mockBaiduNotify(thirdPayBrief);
             case cmb_installment:
                 return mockCmblifeNotify(thirdPayBrief);
+            case jd_pay:
+                return mockJdNotify(thirdPayBrief);
             default:
                 throw new ErrorCodeException(PayErrorCode.not_usupport_mock_notify_type, "not support mock pay notify, OrderPayTypeV2:" + thirdPayBrief.getThirdPaymentTypeV3().getOrderPayTypeV2());
         }
@@ -73,7 +75,7 @@ public class PayManager {
                 "&total_fee=" + thirdPayBrief.getThirdPaymentAmount();
         String result = payPbClient.alipayNotify(param);
 
-        return "success\r\n".equals(result);
+        return "success\r".equals(result);
     }
 
     private boolean mockWeixinNotify(ThirdPayBrief thirdPayBrief){
@@ -145,5 +147,51 @@ public class PayManager {
         CmblifeNotifyResponse notifyResult = JsonUtil.getObjectFromJson(result, CmblifeNotifyResponse.class);
 
         return "1000".equals(String.valueOf(notifyResult.getRespCode()));
+    }
+
+    private boolean mockJdNotify(ThirdPayBrief thirdPayBrief){
+        String param = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+                "<jdpay>" +
+                "  <version>V2.0</version>" +
+                "  <merchant>22294531</merchant>" +
+                "<result>" +
+                "  <code>000000</code>" +
+                "  <desc>success</desc>" +
+                "</result>" +
+                "<device>6220</device>" +
+                "<tradeNum>" + thirdPayBrief.getQingqingTradeNo() + "</tradeNum>" +
+                "<tradeType>0</tradeType>" +
+                "<sign>HM8NC+Epqb1txYYJ3keySPwFXJVydf3H8oVSk85B375QhSsy6sOmIoIKI686fXmRR+30r2+OC7LWryFfRqAGpa1OO7OlDrqzNZoJoDYfAYJysCI5S1u9rNKvXagQg1S7TkqkWBTbHMQJsvfVwaMujYAbCaKrL25WTQVcPIWby70=</sign>" +
+                "<note>备注信息</note>" +
+                "<amount>3140</amount>" +
+                "<status>2</status>" +
+                "<payList>" +
+                "  <pay>" +
+                "    <payType>3</payType>" +
+                "    <amount>1500</amount>" +
+                "    <currency>CNY</currency>" +
+                "    <tradeTime>20180101093516</tradeTime>" +
+                " </pay>" +
+                " <pay>" +
+                "   <payType>0</payType>" +
+                "   <amount>500</amount>" +
+                "   <currency>CNY</currency>" +
+                "   <tradeTime>20180101093516</tradeTime>" +
+                "   <detail>" +
+                "     <cardHolderName>*三</cardHolderName>" +
+                "     <cardHolderMobile>150****1234</cardHolderMobile>" +
+                "     <cardHolderType>0</cardHolderType>" +
+                "     <cardHolderId>****3265</cardHolderId>" +
+                "     <cardNo>622088****4001</cardNo>     " +
+                "     <bankCode>ICBC</bankCode>" +
+                "     <cardType>1</cardType>" +
+                "   </detail>" +
+                "  </pay>" +
+                "</payList>" +
+                "</jdpay>";
+
+        String result = payPbClient.jdNotify(param);
+
+        return "success\r\n".equals(String.valueOf(result));
     }
 }
