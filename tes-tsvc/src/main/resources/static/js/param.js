@@ -167,14 +167,31 @@ function editableInit(){
     });
 
     $(document).find(".input_editable").each(function(key,value){
-        $(value).editable({
-            type: 'text',
-            disabled : getEditDisableStatus("#editBtnSwitch"),
-            success: function(response, newValue) {
-                $(this).prev("input").val(newValue);
-                notifyParamChanged();
-            }
-        });
+        var valueText = $(value).text();
+
+        if(valueText.length > 100){
+            $(value).editable({
+                mode: 'inline',
+                type: 'wysihtml5',
+                name : 'about',
+                wysiwyg : {
+                    css : {'width':'1000px'}
+                },
+                success: function(response, newValue) {
+                    $(this).prev("input").val(newValue);
+                    notifyParamChanged();
+                }
+            });
+        }else{
+            $(value).editable({
+                type: 'text',
+                disabled : getEditDisableStatus("#editBtnSwitch"),
+                success: function(response, newValue) {
+                    $(this).prev("input").val(newValue);
+                    notifyParamChanged();
+                }
+            });
+        }
     });
 }
 
@@ -195,17 +212,17 @@ del_btn_html = "<div class='pull-right action-buttons'><a class='red delInputBtn
 add_btn_html = "<div style='margin-bottom: 22px;' class='qing_param_edit hide'><div class='pull-right action-buttons'><a class='blue addInputBtn' href='###'><i class='icon-plus bigger-130'></i></a></div></div>";
 
 var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{name} </div>{value}</div>";
-var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' alt='{alt}'>{defaultName}</span></div>";
-var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}<div alt='{alt}'>" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div></div></div>";
+var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/>{br}<span class='editable input_label {key}_label {class}' alt='{alt}'>{defaultName}</span></div>";
+var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}<div alt='{alt}'>" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{br}{paramList}</div></div></div></div>";
 var first_editable_table_html =  del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div>";
 var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
 
 var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit_1 hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
 number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span></span></span><!-- /span -->";
 
-var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span> </div>{value}</div>";
+var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{br}<span class='editable input_editable input_label'>{name}</span> </div>{value}</div>";
 var input_editable_value_edit = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' alt='{alt}'>{defaultName}</span>{valueType}</div>";
-var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'>  <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div><div class='profile-info-value'>" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'>  <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div><div class='profile-info-value'>" + del_btn_html + "<div style='margin-right: 13px;'>{br}{paramList}</div></div></div>";
 sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div>{paramList}</div>";
 
 function genHtml(parentKey, params, paramAlt){
@@ -263,10 +280,13 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
         paramHtmls += paramHtml;
     }
 
+    var br = getBr(param.key);
+
     var tableHtml = parentKey == ""? first_editable_table_html : editable_table_html;
     tableHtml = tableHtml.replace(new RegExp("{id}","gm"), parentKey);
     tableHtml = tableHtml.replace(new RegExp("{alt}","gm"), parentAlt);
     tableHtml = tableHtml.replace(new RegExp("{paramList}","gm"), paramHtmls);
+    paramHtml = paramHtml.replace(new RegExp("{br}","gm"), br);
     if(isTableArr){
         tableHtml = tableHtml.replace(new RegExp("{editable}","gm"), add_btn_html);
         tableHtml = tableHtml.replace(new RegExp("{isMulti}","gm"), "true");
@@ -276,6 +296,15 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
     }
 
     return tableHtml;
+}
+
+function getBr(key){
+    var br = "";
+    if(key.length > 17){
+        br = "<br />"
+    }
+
+    return br;
 }
 
 function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
@@ -295,12 +324,15 @@ function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
         valueHtml += genValueInput(key, param, param.defaultValue, isArray, parentAlt + "0", isEditStatus);
     }
 
+    var br = getBr(param.key);
+
     var html = isEditStatus? input_editable_html_edit:input_editable_html;
     var paramHtml = html.replace(new RegExp("{name}","gm"), param.name);
     //paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), paramAlt);
     paramHtml = paramHtml.replace(new RegExp("{value}","gm"), valueHtml);
     paramHtml = paramHtml.replace(new RegExp("{key}","gm"), key);
     paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), isArray);
+    paramHtml = paramHtml.replace(new RegExp("{br}","gm"), br);
 
     return paramHtml;
 }

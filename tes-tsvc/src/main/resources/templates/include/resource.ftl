@@ -76,6 +76,7 @@
 <script src="${base}/static/assets/js/jquery.gritter.min.js"></script>
 
 <!-- page specific plugin scripts -->
+<script src="${base}/static/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="${base}/static/assets/js/jquery.ui.touch-punch.min.js"></script>
 <script src="${base}/static/assets/js/ace-extra.min.js"></script>
 
@@ -84,16 +85,22 @@
 <script src="${base}/static/assets/js/ace-elements.min.js"></script>
 <script src="${base}/static/assets/js/ace.min.js"></script>
 <script src="${base}/static/assets/js/chosen.jquery.min.js"></script>
+<script src="${base}/static/assets/js/bootstrap-wysiwyg.min.js"></script>
 <script src="${base}/static/assets/js/select2.min.js"></script>
 <script src="${base}/static/assets/js/fuelux/fuelux.wizard.min.js"></script>
 <script src="${base}/static/assets/js/jquery.validate.min.js"></script>
 <script src="${base}/static/assets/js/additional-methods.min.js"></script>
 <script src="${base}/static/assets/js/bootbox.min.js"></script>
+<script src="${base}/static/assets/js/jquery.slimscroll.min.js"></script>
+<script src="${base}/static/assets/js/jquery.easy-pie-chart.min.js"></script>
+<script src="${base}/static/assets/js/jquery.hotkeys.min.js"></script>
+
 <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
 <script src="${base}/static/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
+<script src="${base}/static/assets/js/fuelux/fuelux.spinner.min.js"></script>
 <script src="${base}/static/js/common.js"></script>
 <script src="${base}/static/js/catelog.js"></script>
 
