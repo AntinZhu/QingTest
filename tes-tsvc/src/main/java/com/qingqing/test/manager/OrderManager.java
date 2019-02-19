@@ -189,9 +189,7 @@ public class OrderManager {
     }
 
     public SimpleResponse payForOrder(PayRequestBean payRequest) {
-        String qingqingOrderId = payRequest.getQingqingOrderId();
         Double orderAmount = payRequest.getOrderAmount();
-        Long studentId = payRequest.getStudentId();
         PayType payType = PayType.parseKey(payRequest.getPayType());
         CoursePriceType coursePriceType = CoursePriceType.valueOf(payRequest.getCoursePriceType());
 

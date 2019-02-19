@@ -29,7 +29,7 @@ public class TestInterfaceCatelogServiceImpl implements TestInterfaceCatelogServ
     @BackupDataSource(dateSourceBeanName = BackupSourceDataConfig.DATA_SOURCE_NAME)
 //    @EmptyDataSource(isList = true)
     public List<TestInterfaceCatelog> selectAll() {
-        logger.error("query from selectAll");
+//        logger.error("query from selectAll");
         return testInterfaceCatelogMapper.selectByAll();
     }
 

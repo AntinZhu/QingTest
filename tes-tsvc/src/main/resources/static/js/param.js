@@ -227,10 +227,10 @@ var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div cla
 sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div>{paramList}</div>";
 
 function genHtml(parentKey, params, paramAlt){
-    return genHtml(parentKey, params, paramAlt, false);
+    return genHtml(parentKey, params, paramAlt, false, "");
 }
 
-function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
+function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr, paramKey){
     if(parentKey != ''){
         parentKey += "-";
     }
@@ -257,16 +257,19 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
             var subTableHtml = "";
             if(isArray){
                 for(var detailItemIndex in param.detail){
-                    subTableHtml += genHtml(parentKey + param.key, param.detail[detailItemIndex], parentAlt_ + detailItemIndex, isEditStatus, isArray);
+                    subTableHtml += genHtml(parentKey + param.key, param.detail[detailItemIndex], parentAlt_ + detailItemIndex, isEditStatus, isArray, param.name);
                 }
             }else{
-                subTableHtml += genHtml(parentKey + param.key, param.detail, parentAlt_ +  "0", isEditStatus, isArray);
+                subTableHtml += genHtml(parentKey + param.key, param.detail, parentAlt_ +  "0", isEditStatus, isArray, param.name);
             }
+
+            var br = getBr(param.name);
 
             var subHtml = isEditStatus? sub_editable_html_edit:sub_editable_html;
             paramHtml = subHtml.replace(new RegExp("{key}","gm"), parentKey + param.key);
             paramHtml = paramHtml.replace(new RegExp("{name}","gm"), param.name);
             paramHtml = paramHtml.replace(new RegExp("{alt}","gm"), parentAlt);
+            paramHtml = paramHtml.replace(new RegExp("{br}","gm"), br);
             if(!isArray){
                 paramHtml = paramHtml.replace(new RegExp("{editable}","gm"), "");
                 paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "false");
@@ -281,13 +284,13 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
         paramHtmls += paramHtml;
     }
 
-    var br = getBr(param.key);
+    var br = getBr(paramKey);
 
     var tableHtml = parentKey == ""? first_editable_table_html : editable_table_html;
     tableHtml = tableHtml.replace(new RegExp("{id}","gm"), parentKey);
     tableHtml = tableHtml.replace(new RegExp("{alt}","gm"), parentAlt);
     tableHtml = tableHtml.replace(new RegExp("{paramList}","gm"), paramHtmls);
-    paramHtml = paramHtml.replace(new RegExp("{br}","gm"), br);
+    tableHtml = tableHtml.replace(new RegExp("{br}","gm"), br);
     if(isTableArr){
         tableHtml = tableHtml.replace(new RegExp("{editable}","gm"), add_btn_html);
         tableHtml = tableHtml.replace(new RegExp("{isMulti}","gm"), "true");
@@ -300,8 +303,9 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr){
 }
 
 function getBr(key){
+    console.log(key);
     var br = "";
-    if(key.length > 17){
+    if(key != null && key.length > 17){
         br = '<br /><div class="hr hr-dotted"></div>';
     }
 
@@ -319,13 +323,13 @@ function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
     var valueHtml = "";
     if(isArray){
         for(var defaultIndex in param.defaultValue){
-            valueHtml += genValueInput(key, param, param.defaultValue[defaultIndex], isArray, parentAlt + defaultIndex, isEditStatus);
+            valueHtml += genValueInput(key, param, param.defaultValue[defaultIndex], isArray, parentAlt + defaultIndex, isEditStatus, param.name);
         }
     }else{
-        valueHtml += genValueInput(key, param, param.defaultValue, isArray, parentAlt + "0", isEditStatus);
+        valueHtml += genValueInput(key, param, param.defaultValue, isArray, parentAlt + "0", isEditStatus, param.name);
     }
 
-    var br = getBr(param.key);
+    var br = getBr(param.name);
 
     var html = isEditStatus? input_editable_html_edit:input_editable_html;
     var paramHtml = html.replace(new RegExp("{name}","gm"), param.name);
@@ -338,7 +342,7 @@ function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
     return paramHtml;
 }
 
-function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus){
+function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, paramName){
     var valueHtml = isEditStatus? input_editable_value_edit:input_editable_value;
     valueHtml = valueHtml.replace(new RegExp("{key}","gm"), key);
     var valueName = "";
@@ -373,6 +377,7 @@ function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus){
     valueHtml = valueHtml.replace(new RegExp("{valueType}","gm"), valueType);
     valueHtml = valueHtml.replace(new RegExp("{defaultName}","gm"), valueName);
     valueHtml = valueHtml.replace(new RegExp("{defaultValue}","gm"), value);
+    valueHtml = valueHtml.replace(new RegExp("{br}","gm"), getBr(paramName));
     if(!isArray){
         valueHtml = valueHtml.replace(new RegExp("{editable}","gm"), "");
     }else{
