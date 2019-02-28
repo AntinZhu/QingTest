@@ -10,6 +10,7 @@ public class PayRequestBean {
     private Long studentId;
     private String payType;
     private Long stageConfigId;
+    private Double balancePayAmount;
 
     public String getQingqingOrderId() {
         return qingqingOrderId;
@@ -57,5 +58,13 @@ public class PayRequestBean {
 
     public void setStageConfigId(Long stageConfigId) {
         this.stageConfigId = stageConfigId;
+    }
+
+    public Double getBalancePayAmount() {
+        return balancePayAmount;
+    }
+
+    public void setBalancePayAmount(Double balancePayAmount) {
+        this.balancePayAmount = balancePayAmount;
     }
 }

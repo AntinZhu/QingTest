@@ -75,7 +75,7 @@ public class PayManager {
                 "&total_fee=" + thirdPayBrief.getThirdPaymentAmount();
         String result = payPbClient.alipayNotify(param);
 
-        return "success\r".equals(result);
+        return result != null && result.startsWith("success");
     }
 
     private boolean mockWeixinNotify(ThirdPayBrief thirdPayBrief){

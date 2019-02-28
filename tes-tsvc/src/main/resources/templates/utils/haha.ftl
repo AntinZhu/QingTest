@@ -63,7 +63,7 @@
 <script type="text/javascript">
     var allInterface;
 
-    var task_html = '<div class="col-xs-2 col-sm-3 qing_task hide" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center">{content}<br/><a href="{url}" target="_blank" ><button class="btn btn-xs btn-danger"><i class="icon-bolt bigger-110"></i>跳转<i class="icon-arrow-right icon-on-right"></i></button></a></div></div></div></div>';
+    var task_html = '<div class="col-xs-2 col-sm-3 qing_task hide" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center;word-break: break-all;">{content}<br/><a href="{url}" target="_blank" ><button class="btn btn-xs btn-danger"><i class="icon-bolt bigger-110"></i>跳转<i class="icon-arrow-right icon-on-right"></i></button></a></div></div></div></div>';
     $(document).ready(function(){
         commonAjaxRequest("${base}/v1/test/interface/all", null, saveData, false, "查询接口信息出错:", $("#env").val());
     });

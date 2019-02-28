@@ -230,20 +230,18 @@ public class OrderManager {
         PayType payType = PayType.parseKey(payRequest.getPayType());
         CoursePriceType coursePriceType = CoursePriceType.valueOf(payRequest.getCoursePriceType());
 
-        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType);
+        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType, payRequest.getBalancePayAmount());
     }
 
     public SimpleResponse payForOrder(PayRequestBeanV2 payRequest) {
         PayType payType = PayType.valueOf(payRequest.getPayType());
-        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType);
+        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType, payRequest.getBalancePayAmount());
     }
 
-    public SimpleResponse payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType) {
+    public SimpleResponse payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType, Double balancePayAmount) {
         OrderPayType backupPayType = OrderPayType.alipay;
-        Double balancePayAmount = orderAmount;
         if(!PayType.qingqing_balance.equals(payType)){
             backupPayType = payType.getOrderPayType();
-            balancePayAmount = 0.0;
         }
 
         PayGeneralOrderSubmitRequest.Builder request = PayGeneralOrderSubmitRequest.newBuilder();

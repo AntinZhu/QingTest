@@ -81,6 +81,12 @@
                                                                         </span>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="balancePayAmount">钱包支付金额</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <input type="number" id="balancePayAmount" value="0" />
+                                        </div>
+                                    </div>
                                     <div class="form-group hide" id="stageChooseDiv">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="stageConfigId">选择分期数</label>
                                         <div class="col-xs-4 col-sm-4">
@@ -200,6 +206,11 @@
                 installmentConfigs = resu.installmentConfigs;
 
                 $("#resultShow").removeClass("hide");
+
+                var payType = $("#payType").val();
+                if(payType == "qingqing_balance"){
+                    $("#balancePayAmount").val($("#orderAmountTxt").text());
+                }
             }
 
             function updatePayWayList(){
@@ -259,7 +270,8 @@
                     userId : getParam("requestUserId"),
                     userType : "student",
                     payType : payType,
-                    stageConfigId : stageConfigId
+                    stageConfigId : stageConfigId,
+                    balancePayAmount : $("#balancePayAmount").val()
                 };
 
                 var isLocalDebug = $("#isLocalDebug").val();
@@ -343,6 +355,12 @@
                     $("#stageChooseDiv").removeClass("hide");
                 }else{
                     $("#stageChooseDiv").addClass("hide");
+                }
+
+                if(payType == "qingqing_balance"){
+                    $("#balancePayAmount").val($("#orderAmountTxt").text());
+                }else{
+                    $("#balancePayAmount").val(0);
                 }
             });
 

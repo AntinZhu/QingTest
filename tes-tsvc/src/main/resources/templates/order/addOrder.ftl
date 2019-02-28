@@ -387,6 +387,12 @@
 																	</span>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="balancePayAmount">钱包支付金额</label>
+                                                            <div class="col-xs-12 col-sm-3">
+                                                                <input type="number" id="balancePayAmount" value="0" />
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group hide" id="stageChooseDiv">
                                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="stageConfigId">选择分期数</label>
                                                             <div class="col-xs-4 col-sm-4">
@@ -888,7 +894,8 @@
                         studentId : $("#studentId").val(),
                         coursePriceType : $("#coursePriceType").val(),
                         payType : payType,
-                        stageConfigId : stageConfigId
+                        stageConfigId : stageConfigId,
+                        balancePayAmount : $("#balancePayAmount").val()
                     };
 
             result = commonAjaxRequest("${base}/v1/pay/ack_pay.json", data, handlerPay, false, "新增支付路径失败:", $("#env").val());
@@ -1002,6 +1009,11 @@
             $("#balanceAmountTxt").text(balanceAmount.toLocaleString());
 
             installmentConfigs = resu.installmentConfigs;
+
+            var payType = $("#payType").val();
+            if(payType == "qingqing_balance"){
+                $("#balancePayAmount").val($("#orderAmountTxt").text());
+            }
         }
 
         function handlerAddOrder(resu){
@@ -1029,6 +1041,12 @@
                 $("#stageChooseDiv").removeClass("hide");
             }else{
                 $("#stageChooseDiv").addClass("hide");
+            }
+
+            if(payType == "qingqing_balance"){
+                $("#balancePayAmount").val($("#orderAmountTxt").text());
+            }else{
+                $("#balancePayAmount").val(0);
             }
         });
 
