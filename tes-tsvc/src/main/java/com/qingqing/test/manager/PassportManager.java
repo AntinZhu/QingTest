@@ -24,6 +24,7 @@ public class PassportManager {
     public UserRequestParam getToken(Long userId, UserType userType){
         String token;
         String session;
+        String qingqingUserId;
         try{
             PassportTkLoginRequestV2 request = PassportTkLoginRequestV2.newBuilder()
                     .setUserType(UserProto.UserType.valueOf(userType.getValue()))
@@ -31,6 +32,7 @@ public class PassportManager {
             PassportLoginResponse response = passportPiClient.getTokenAndSession(request);
             token = response.getToken();
             session = response.getSessionId();
+            qingqingUserId = response.getQingqingUserId();
         }catch (Exception e){
             throw new ErrorCodeException(BaseInterfaceErrorCode.get_token_session_fail, "", e);
         }
@@ -42,6 +44,7 @@ public class PassportManager {
         tokenAndSession.setToken(token);
         tokenAndSession.setTimestamp(String.valueOf(time));
         tokenAndSession.setAuthkey(ServerAuthUtil.generatorToken(time));
+        tokenAndSession.setQingqingUserId(qingqingUserId);
         return tokenAndSession;
     }
 }

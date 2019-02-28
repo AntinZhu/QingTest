@@ -1,5 +1,7 @@
 package com.qingqing.test.controller.converter;
 
+import com.qingqing.api.proto.v1.ApiServicePackageProto.ApiServicePackageInfo;
+import com.qingqing.api.proto.v1.ApiServicePackageProto.ApiServicePackageInfoForOrder;
 import com.qingqing.api.proto.v1.GradeCourseProto;
 import com.qingqing.api.proto.v1.OrderCommonEnum.GroupSubOrderStatus;
 import com.qingqing.api.proto.v1.TeacherProto;
@@ -8,6 +10,8 @@ import com.qingqing.api.proto.v1.coursecontentpackage.CourseContentPackageProto.
 import com.qingqing.api.proto.v1.coursepackage.CoursePackageProto.CoursePackageUnit;
 import com.qingqing.api.proto.v1.coursepackage.CoursePackageProto.CoursePackageUnits;
 import com.qingqing.api.proto.v1.order.Order.StudentAddGroupOrderResponse;
+import com.qingqing.api.proto.v1.strengthen.ApiStrengthenProto.ApiStrengthenInfo;
+import com.qingqing.api.proto.v1.strengthen.ApiStrengthenProto.ApiTeacherGradeAndSupportStrengthenInfo;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
@@ -20,6 +24,10 @@ import com.qingqing.test.bean.order.CoursePrice;
 import com.qingqing.test.bean.order.CoursePrice.SiteTypeAndPrice;
 import com.qingqing.test.bean.order.CoursePriceType;
 import com.qingqing.test.bean.order.OrderSiteType;
+import com.qingqing.test.bean.order.ServicePackage;
+import com.qingqing.test.bean.order.ServicePackageInfo;
+import com.qingqing.test.bean.order.StrengthenInfo;
+import com.qingqing.test.bean.order.StrengthenPackage;
 import com.qingqing.test.bean.order.TeacherInfoForOrderBean;
 
 import java.util.ArrayList;
@@ -79,11 +87,53 @@ public class OrderConverter {
             courseContentPackageList.add(toCourseContentPackage(courseContentPackageForOrder));
         }
 
+        // 各年级支持的巩固包类型
+        List<StrengthenPackage> strengthenPackageList = new ArrayList<>(response.getGradeStrengthenInfosCount());
+        for(ApiTeacherGradeAndSupportStrengthenInfo strengthenInfo : response.getGradeStrengthenInfosList()){
+            List<StrengthenInfo> strengthenInfoList = new ArrayList<>(strengthenInfo.getStrengthenInfosCount());
+            for(ApiStrengthenInfo apiStrengthenInfo : strengthenInfo.getStrengthenInfosList()){
+                StrengthenInfo info = new StrengthenInfo();
+                info.setStrengthenType(apiStrengthenInfo.getStrengthenType());
+                info.setNormalTimes(apiStrengthenInfo.getNormalTimes());
+                info.setStrengthenTimes(apiStrengthenInfo.getStrengthenTimes());
+
+                strengthenInfoList.add(info);
+            }
+
+            StrengthenPackage strengthenPackage = new StrengthenPackage();
+            strengthenPackage.setGradeId(strengthenInfo.getGradeId());
+            strengthenPackage.setStrengthenInfos(strengthenInfoList);
+
+            strengthenPackageList.add(strengthenPackage);
+        }
+
+        if(response.hasServicePackageInfo()){
+            ApiServicePackageInfoForOrder servicePackageInfoForOrder = response.getServicePackageInfo();
+            Long recommendId = servicePackageInfoForOrder.getRecommendServicePackage().getServicePackageId();
+
+            List<ServicePackageInfo> servicePackageInfoList = new ArrayList<>(servicePackageInfoForOrder.getServicePackageInfosCount());
+            for(ApiServicePackageInfo apiServicePackageInfo : servicePackageInfoForOrder.getServicePackageInfosList()){
+                ServicePackageInfo info = new ServicePackageInfo();
+                info.setId(apiServicePackageInfo.getServicePackageId());
+                info.setPrice(apiServicePackageInfo.getPrice());
+                info.setTimeLength(apiServicePackageInfo.getEffectiveTimeLength());
+                info.setRecommend(apiServicePackageInfo.getServicePackageId() == recommendId);
+
+                servicePackageInfoList.add(info);
+            }
+
+            ServicePackage servicePackage = new ServicePackage();
+            servicePackage.setForce(servicePackageInfoForOrder.getIsForce());
+            servicePackage.setServicePackageInfoList(servicePackageInfoList);
+            bean.setServicePackage(servicePackage);
+        }
+
         bean.setSupportCourseList(BaseConverter.convertToKeyAndValue(courseMap));
         bean.setCourseOrderList(courseOrderBeanList);
         bean.setQingqingTeacherId(response.getTeacherInfo().getQingqingUserId());
         bean.setCoursePackageList(coursePackageList);
         bean.setCourseContentPackageList(courseContentPackageList);
+        bean.setStrengthenPackageList(strengthenPackageList);
 
         return bean;
     }

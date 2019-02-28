@@ -47,6 +47,27 @@ public class BITeacherIndexManager {
         }
     }
 
+    public String queryStudentIndex(Long studentId, String indexName){
+        String queryString = "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"student_id\":\"%s\"}}],\"must_not\":[],\"should\":[]}},\"from\":0,\"size\":10,\"sort\":[],\"aggs\":{}}";
+        queryString = String.format(queryString, studentId);
+
+        HttpEntity entity = new NStringEntity(queryString, ContentType.APPLICATION_JSON);
+        try {
+            String realIndexName = "bi_student_index*";
+            if(indexName != null){
+                realIndexName = indexName;
+            }
+            Response response = restClient.performRequest("GET", "/" + realIndexName + "/_search", params, entity);
+
+            String responseBody = EntityUtils.toString(response.getEntity());
+            JSONObject jsonObject = JSON.parseObject(responseBody);
+
+            return jsonObject.getString("hits");
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("", e);
+        }
+    }
+
     public boolean updateTeacherIndex(Long teacherId, String indexName, String updateString){
         HttpEntity updateEntity = new NStringEntity(updateString, ContentType.APPLICATION_JSON);
         try {
@@ -56,6 +77,18 @@ public class BITeacherIndexManager {
             return respCode == 200 || respCode == 201;
         } catch (IOException e) {
             throw new QingQingRuntimeException("update teacher index error, teacherId:" + teacherId, e);
+        }
+    }
+
+    public boolean updateStudentIndex(Long studentId, String indexName, String updateString){
+        HttpEntity updateEntity = new NStringEntity(updateString, ContentType.APPLICATION_JSON);
+        try {
+            Response response = restClient.performRequest("PUT", "/" + indexName + "/student/" + studentId, params, updateEntity);
+            int respCode = response.getStatusLine().getStatusCode();
+
+            return respCode == 200 || respCode == 201;
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("update student index error, studentId:" + studentId, e);
         }
     }
 

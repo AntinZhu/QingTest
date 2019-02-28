@@ -8,6 +8,7 @@ public class UserRequestParam {
     private String session;
     private String timestamp;
     private String authkey;
+    private String qingqingUserId;
 
     public String getToken() {
         return token;
@@ -39,5 +40,13 @@ public class UserRequestParam {
 
     public void setAuthkey(String authkey) {
         this.authkey = authkey;
+    }
+
+    public String getQingqingUserId() {
+        return qingqingUserId;
+    }
+
+    public void setQingqingUserId(String qingqingUserId) {
+        this.qingqingUserId = qingqingUserId;
     }
 }

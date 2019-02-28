@@ -14,6 +14,7 @@ import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.UserWithDataBean;
 import com.qingqing.test.bean.common.response.SingleResponse;
+import com.qingqing.test.bean.index.StudentIndexBean;
 import com.qingqing.test.bean.index.StudentTeacherIndexBean;
 import com.qingqing.test.bean.index.TeacherIndexBean;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
@@ -219,6 +220,42 @@ public class UtilsController {
     @ResponseBody
     public SimpleResponse updateStudentTeacherIndex(@RequestBody StudentTeacherIndexBean indexBean){
         boolean updateResult = biTeacherIndexManager.updateStudentTeacherIndex(indexBean.getTeacherId(), indexBean.getStudentId(), indexBean.getIndexName(), indexBean.getData());
+
+        BaseResponse baseResponse = BaseResponse.SUCC_RESP;
+        if(!updateResult){
+            baseResponse = new BaseResponse(1001, "update fail", "更新失败");
+        }
+        return new SimpleResponse(baseResponse);
+    }
+
+    @RequestMapping("es/student")
+    public String biStudentIndexPage() {
+        return "utils/es_st";
+    }
+
+    @RequestMapping("es/student/full")
+    public String biStudentIndexPageFull() {
+        return "utils/es_st_full";
+    }
+
+    @RequestMapping("es/student/{studentId}")
+    @ResponseBody
+    public SingleResponse<String> studentEs(@PathVariable("studentId") Long teacherId, @ProtoRequestBody(required=false) SimpleStringRequest request){
+        String indexName = request.getData();
+        if(StringUtils.isEmpty(indexName)){
+            indexName = null;
+        }
+
+        SingleResponse<String> result = new SingleResponse<String>();
+        result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+        result.setResultList(biTeacherIndexManager.queryStudentIndex(teacherId, indexName));
+        return result;
+    }
+
+    @RequestMapping("es/student/update")
+    @ResponseBody
+    public SimpleResponse updateStudentIndex(@RequestBody StudentIndexBean indexBean){
+        boolean updateResult = biTeacherIndexManager.updateStudentIndex(indexBean.getStudentId(), indexBean.getIndexName(), indexBean.getData());
 
         BaseResponse baseResponse = BaseResponse.SUCC_RESP;
         if(!updateResult){

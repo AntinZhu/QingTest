@@ -82,6 +82,7 @@
         {url:"/svc/api/crontab/v1/auto_off_shelf_teacher", description:"下架超过100天未登录的老师"},
         {url:"/svc/api/crontab/v1/sync_installment_backward_refund_status", description:"同步分期退款申请状态"},
         {url:"/svc/api/crontab/v1/upgrade_teach_plan_v3", description:"教学计划数据迁移V3"},
+        {url:"/svc/api/crontab/v1/active_scan_async_event", description:"补偿Data库异步事件"},
         ];
 
     var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div><div id="link_{idx}" class="hide" style="text-align: center;margin-top: 5px;margin-bottom: 5px;" ><hr style="margin-bottom: 0px;margin-top: 0px;" /><a href="" target="_blank"> 查看日志</a></div></div></div></div>';

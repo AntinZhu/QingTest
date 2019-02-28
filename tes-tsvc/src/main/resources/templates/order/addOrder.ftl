@@ -220,6 +220,24 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group hide" id="strengthenTypeDiv">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">搭配巩固课:</label>
+
+                                                                <div class="col-xs-12 col-sm-3">
+                                                                    <select class="width-80 chosen-select" id="strengthenType" data-placeholder="选择巩固课...">
+                                                                        <option value="0">&nbsp;</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group hide" id="servicePackageDiv">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">选择服务包:</label>
+
+                                                                <div class="col-xs-12 col-sm-3">
+                                                                    <select class="width-80 chosen-select" id="servicePackage" data-placeholder="选择服务包...">
+                                                                        <option value="0">&nbsp;</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                             <div class="hr hr-dotted"></div>
                                                         </div>
 
@@ -667,6 +685,40 @@
                 contentPackageId = $("#contentPackageId").val()[0];
             }
 
+            var strengthenType = $("#strengthenType").val();
+            var strengthenData = null;
+            var normalTimes = 0;
+            var strengthenTimes = 0;
+            if(strengthenType > 0){
+                var gradeId = $("#gradeId").val();
+                var strenghtenData = getStrenghtenData(gradeId);
+                for(var idx in strenghtenData){
+                    var strengthen = strenghtenData[idx];
+                    if(strengthen.strengthenType == strengthenType){
+                        strengthenData = strengthen;
+                        break;
+                    }
+                }
+
+                if(strengthenData == null){
+                    $.gritter.add({
+                        title : '数据异常:',
+                        text : '巩固课数据异常，看着办吧',
+                        class_name : 'gritter-error gritter-center'
+                    });
+                    return;
+                }
+
+                normalTimes = strengthenData.normalTimes;
+                strengthenTimes = strengthenData.strengthenTimes;
+            }
+            var servicePackageId = 0;
+            var selectServicePackageId = $("#servicePackage").val();
+            if(selectServicePackageId != null && selectServicePackageId > 0){
+                servicePackageId = selectServicePackageId;
+            }
+
+
             var data = {
                 studentId : $("#studentId").val(),
                 qingqingTeacherId : $("#qingqingTeacherId").val(),
@@ -679,7 +731,11 @@
                 addressId : $('input[name="studentAddressId"]:checked').val(),
                 coursePriceType : $("#coursePriceType").val(),
                 packageCourseId : packageCourseId,
-                contentPackageId :contentPackageId
+                contentPackageId :contentPackageId,
+                strengthenType :strengthenType,
+                normalTimes :normalTimes,
+                strengthenTimes :strengthenTimes,
+                servicePackageId : servicePackageId
             };
 
             result = commonAjaxRequest("${base}/v1/order/student/add_order.json", data, handlerAddOrder, false, "生成订单失败:", $("#env").val());
@@ -1083,11 +1139,13 @@
         var coursePackageList;
         // 内容包
         var contentPackageList;
-
+        // 巩固包
+        var strengthenPackageList;
         function handlerTeacherInfo(resu){
             courseOrderList = resu.courseOrderList;
             coursePackageList = resu.coursePackageList;
             contentPackageList = resu.courseContentPackageList;
+            strengthenPackageList = resu.strengthenPackageList;
 
             $("#qingqingTeacherId").val(resu.qingqingTeacherId);
             // 更新下拉款内容
@@ -1096,6 +1154,28 @@
             updateOrderSelector();
 
             $("#orderDetailSelector").removeClass("hide");
+
+            if(resu.servicePackage != null){
+                var options = new Array();
+                var optionIdx = 0;
+                if(resu.servicePackage.isForce == false){
+                    var option = new Object();
+                    option.key = 0;
+                    option.value = "不购买";
+                    options[optionIdx++] = option;
+                }
+
+                for(idx in resu.servicePackage.servicePackageInfoList){
+                    var servicePackage = resu.servicePackage.servicePackageInfoList[idx];
+
+                    var option = new Object();
+                    option.key = servicePackage.id;
+                    option.value = servicePackage.timeLength + "个月-" + servicePackage.price + (servicePackage.isRecommend == true? "(推荐)":"");
+                    options[optionIdx++] = option;
+                }
+                updateOptions("servicePackage", options, null);
+                $("#servicePackageDiv").removeClass("hide");
+            }
         };
 
         function updateOrderSelector(){
@@ -1301,22 +1381,69 @@
             }
 
             updateOptions("siteType", siteTypes, null);
+            siteTypeChanged();
+        }
+
+        $("#siteType").change(siteTypeChanged);
+
+        function siteTypeChanged(){
             var siteType = $("#siteType").val();
             if(siteType == "0"){
                 $('#studentAddress').removeClass('hide');
             }else{
                 $('#studentAddress').addClass('hide');
             }
+
+            var strengthens = getSupportStrengthen();
+            updateOptions("strengthenType", strengthens, null);
+            if(strengthens.length > 1){
+                $('#strengthenTypeDiv').removeClass('hide');
+            }else{
+                $('#strengthenTypeDiv').addClass('hide');
+            }
         }
 
-        $("#siteType").change(function(){
-            var siteType = $(this).val();
-            if(siteType == "0"){
-                $('#studentAddress').removeClass('hide');
-            }else{
-                $('#studentAddress').addClass('hide');
+        function getSupportStrengthen(){
+            var strengthens = new Array();
+            var strengthen = new Object();
+            strengthen.key = 0;
+            strengthen.value = "不搭配";
+            strengthens[0] = strengthen;
+
+            var siteType = $("#siteType").val();
+            // 线下上门方式，展现巩固包类型选择
+            if(siteType == "0" || siteType == "1"){
+                var discountType = $("#discountType").val();
+                var coursePriceType = $("#coursePriceType").val();
+                if(discountType == "1" && coursePriceType == "1"){ // 普通1V1订单
+                    var gradeId = $("#gradeId").val();
+
+                    var data = getStrenghtenData(gradeId);
+                    if(data != null){
+                        for(var sIdx in data){
+                            var stren = data[sIdx];
+                            strengthen = new Object();
+                            strengthen.key = stren.strengthenType;
+                            strengthen.value = stren.normalTimes + ":" + stren.strengthenTimes;
+                            strengthens[sIdx + 1] = strengthen;
+                        }
+                    }
+                }
             }
-        });
+
+            return strengthens;
+        }
+
+        function getStrenghtenData(gradeId){
+            for(var idx in strengthenPackageList){
+                var strengthenPackage = strengthenPackageList[idx];
+                if(strengthenPackage.gradeId == gradeId){
+                    return strengthenPackage.strengthenInfos;
+                }
+            }
+
+            return null;
+        }
 
         $('#skip-validation').removeAttr('checked').on('click', function(){
             $validation = this.checked;

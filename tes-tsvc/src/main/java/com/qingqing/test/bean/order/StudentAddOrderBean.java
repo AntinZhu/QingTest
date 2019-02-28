@@ -22,6 +22,13 @@ public class StudentAddOrderBean {
     // 内容包ID
     private Long contentPackageId;
 
+    // 巩固包信息
+    private Integer strengthenType;
+    private Integer normalTimes;
+    private Integer strengthenTimes;
+
+    private Long servicePackageId;
+
     public Long getStudentId() {
         return studentId;
     }
@@ -116,5 +123,37 @@ public class StudentAddOrderBean {
 
     public void setClassHour(Integer classHour) {
         this.classHour = classHour;
+    }
+
+    public Integer getStrengthenType() {
+        return strengthenType;
+    }
+
+    public void setStrengthenType(Integer strengthenType) {
+        this.strengthenType = strengthenType;
+    }
+
+    public Integer getNormalTimes() {
+        return normalTimes;
+    }
+
+    public void setNormalTimes(Integer normalTimes) {
+        this.normalTimes = normalTimes;
+    }
+
+    public Integer getStrengthenTimes() {
+        return strengthenTimes;
+    }
+
+    public void setStrengthenTimes(Integer strengthenTimes) {
+        this.strengthenTimes = strengthenTimes;
+    }
+
+    public Long getServicePackageId() {
+        return servicePackageId;
+    }
+
+    public void setServicePackageId(Long servicePackageId) {
+        this.servicePackageId = servicePackageId;
     }
 }

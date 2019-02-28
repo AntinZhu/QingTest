@@ -373,7 +373,8 @@
                         tk : token.token,
                         Timestamp : token.timestamp,
                         Authkey : token.authkey,
-                        qingqing_debug_mode : 'true'
+                        qingqing_debug_mode : 'true',
+                        QingqingUser : token.qingqingUserId
                     }
                     var localPort = $("#localDebugPort").val();
 

@@ -18,6 +18,7 @@ import com.qingqing.api.proto.v1.app.AppCommon.DeviceIdentification;
 import com.qingqing.api.proto.v1.app.AppCommon.PlatformType;
 import com.qingqing.api.proto.v1.app.AppCommon.SourceChannel;
 import com.qingqing.api.proto.v1.order.Order.AddGroupOrderRequestV2;
+import com.qingqing.api.proto.v1.order.Order.ApiStrengthenPackageInfoForOrder;
 import com.qingqing.api.proto.v1.order.Order.JoinGroupOrderRequest;
 import com.qingqing.api.proto.v1.order.Order.OrderModeUnit;
 import com.qingqing.api.proto.v1.order.Order.StudentAddGroupOrderResponse;
@@ -121,6 +122,18 @@ public class OrderManager {
         builder.setPriceType(priceType.getPriceType());
 
         builder.addAllOrderModeUnits(getNormalOrderModeUnits(addOrderBean));
+        if(addOrderBean.getStrengthenType() > 0){
+            ApiStrengthenPackageInfoForOrder.Builder strengthenBuilder = ApiStrengthenPackageInfoForOrder.newBuilder();
+            strengthenBuilder.setStrengthenPackageType(addOrderBean.getStrengthenType());
+            strengthenBuilder.setStrengthenOrderModeUnit(getStrengthenModeUnits(addOrderBean));
+
+            builder.setStrengthenPackageInfo(strengthenBuilder);
+        }
+
+        // 服务包
+        if(addOrderBean.getServicePackageId() != null && addOrderBean.getServicePackageId() > 0){
+            builder.setServicePackageId(addOrderBean.getServicePackageId());
+        }
 
         StudentAddGroupOrderResponse response = ptClient.studentAddOrderV2(builder.build(), addOrderBean.getStudentId());
 
@@ -148,6 +161,30 @@ public class OrderManager {
         GeneralOrderPaymentSummaryV2Response response = ptClient.prePayForGeneralOrder(request, requestBean.getUserId(), requestBean.getUserType());
 
         return PayConverter.convertToPrePayBean(response);
+    }
+
+    private OrderModeUnit getStrengthenModeUnits(StudentAddOrderBean addOrderBean) {
+        Integer strengthenTimes = (addOrderBean.getCourseTimes() * addOrderBean.getStrengthenTimes()) / addOrderBean.getNormalTimes();
+        Integer halfHourLength = 10 / 5;
+        Integer start = 0;
+        Date courseDate = TimeUtil.dayAfterNow(((addOrderBean.getClassHour() / 5) * addOrderBean.getCourseTimes())/ 28 + 1);
+
+        OrderModeUnit.Builder builder6 = OrderModeUnit.newBuilder();
+        TimeParam.Builder timeBuilder = TimeParam.newBuilder();
+        for(int i = 0; i < strengthenTimes; i++){
+            timeBuilder.setDate(TimeUtil.dateToString(courseDate, TimeUtil.DATE_TO_YEAR_MONTH_DAY));
+            timeBuilder.setStartBlock(start);
+            timeBuilder.setEndBlock(start + (halfHourLength -1));
+            builder6.addTimeParams(timeBuilder.build());
+
+            start = start + halfHourLength;
+            if(start > 28){
+                start = 0;
+                courseDate = TimeUtil.dayAfter(courseDate, 1);
+            }
+        }
+        builder6.setSiteType(OrderSiteType.live_ost);
+        return builder6.build();
     }
 
     private List<OrderModeUnit> getNormalOrderModeUnits(StudentAddOrderBean addOrderBean) {

@@ -1,8 +1,8 @@
 package com.qingqing.test.util;
 
 import com.googlecode.protobuf.format.JsonFormat;
-import com.qingqing.api.proto.v1.serviceslice.ServiceSliceProto.ApiSubmitCourseReportV2Request;
 import com.qingqing.api.proto.v1.util.Common.SimpleBoolRequest;
+import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
@@ -24,7 +24,7 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(generateParamJson(ApiSubmitCourseReportV2Request.class.getName()));
+        System.out.println(generateParamJson(SimpleLongRequest.class.getName()));
         System.out.println(JsonUtil.format(JsonFormat
                 .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
     }
