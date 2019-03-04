@@ -19,9 +19,12 @@ import com.qingqing.test.bean.index.StudentTeacherIndexBean;
 import com.qingqing.test.bean.index.TeacherIndexBean;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.manager.BITeacherIndexManager;
+import com.qingqing.test.manager.PhoneNumberManager;
 import com.qingqing.test.manager.QingApiLabManager;
 import com.qingqing.test.service.user.UserService;
 import com.qingqing.test.util.QingFileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,12 +50,26 @@ import java.util.Map.Entry;
 @RequestMapping("/v1/utils")
 public class UtilsController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UtilsController.class);
+
     @Autowired
     private UserService userService;
     @Autowired
     private QingApiLabManager qingApiLabManager;
     @Autowired
     private BITeacherIndexManager biTeacherIndexManager;
+    @Autowired
+    private PhoneNumberManager phoneNumberManager;
+
+    @RequestMapping("phoneNumber/sync")
+    @ResponseBody
+    public SingleResponse<Integer> encode() throws Exception {
+        long start = System.currentTimeMillis();
+        Integer count = phoneNumberManager.sync();
+        logger.info("cost:" + (System.currentTimeMillis() - start));
+
+        return new SingleResponse<>(count);
+    }
 
     @RequestMapping("order/encode")
     @ResponseBody
@@ -263,4 +280,11 @@ public class UtilsController {
         }
         return new SimpleResponse(baseResponse);
     }
+
+
+    @RequestMapping("ws")
+    public String ws() {
+        return "utils/ws";
+    }
+
 }

@@ -169,6 +169,7 @@ public class EnvClient implements Client {
             case dev:
             case tst:
             case hjl:
+            case pfm:
                 return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
             default:
                 throw new QingQingRuntimeException("unknown env");

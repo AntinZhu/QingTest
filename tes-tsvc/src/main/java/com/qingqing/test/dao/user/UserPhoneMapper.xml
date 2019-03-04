@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.user.UserPhoneMapper" >
+  <resultMap id="BaseResultMap" type="com.qingqing.test.domain.phone.UserAndPhoneNumber" >
+    <result column="user_type" property="userType" javaType="UserType" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="phone_number" property="phoneNumber" jdbcType="INTEGER" />
+  </resultMap>
+
+  <select id="selectStudentList" resultMap="BaseResultMap">
+    select id user_id, 0 user_type, phone_number
+    from t_user_info
+    where id > #{minExcludeId,jdbcType=BIGINT}
+    and #{maxIncludeId,jdbcType=BIGINT} >= id
+  </select>
+
+  <select id="selectTeacherList" resultMap="BaseResultMap">
+    select id user_id, 1 user_type, name phone_number
+    from t_teacher
+   where id > #{minExcludeId,jdbcType=BIGINT}
+    and #{maxIncludeId,jdbcType=BIGINT} >= id
+  </select>
+
+  <select id="selectAssistantList" resultMap="BaseResultMap">
+     select id user_id, 2 user_type, name phone_number
+    from t_assistant
+    where id > #{minExcludeId,jdbcType=BIGINT}
+    and #{maxIncludeId,jdbcType=BIGINT} >= id
+  </select>
+
+  <select id="selectMaxStudentId" resultType="java.lang.Long">
+     select max(id)
+    from t_user_info
+  </select>
+
+  <select id="selectMaxTeacherId" resultType="java.lang.Long">
+    select max(id)
+    from t_teacher
+  </select>
+
+  <select id="selectMaxAssistantId" resultType="java.lang.Long">
+    select max(id)
+    from t_assistant
+  </select>
+
+</mapper>
