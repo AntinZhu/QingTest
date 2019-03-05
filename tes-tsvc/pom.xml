@@ -77,12 +77,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>asm</artifactId>
-                    <groupId>org.ow2.asm</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -108,29 +102,7 @@
                     <artifactId>jcl-over-slf4j</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>mybatis</artifactId>
-                    <groupId>org.mybatis</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>mybatis-spring</artifactId>
-                    <groupId>org.mybatis</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>api-common</artifactId>
-                    <groupId>com.qingqing.api</groupId>
-                </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.qingqing.api</groupId>
-            <artifactId>spring-web-util</artifactId>
-            <version>1.4.4.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
