@@ -38,7 +38,7 @@ function replaceLast(alt, lastNum){
 }
 
 function removeInput(){
-    var valueParent = $(this).parent().parent().parent();
+    var valueParent = $(this).parent().parent();
     var valueParentParent = valueParent.parent();
 
     valueParent.remove();
@@ -214,7 +214,7 @@ add_btn_html = "<div style='margin-bottom: 22px;' class='qing_param_edit hide'><
 
 var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{name} </div>{value}</div>";
 var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "{br}<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' alt='{alt}'>{defaultName}</span></div>";
-var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}<div alt='{alt}'>" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{br}{paramList}</div></div></div></div>";
+var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{br}{paramList}</div></div></div>";
 var first_editable_table_html =  del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div>";
 var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
 
@@ -303,7 +303,6 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr, paramKe
 }
 
 function getBr(key){
-    console.log(key);
     var br = "";
     if(key != null && key.length > 17){
         br = '<br /><div class="hr hr-dotted"></div>';
