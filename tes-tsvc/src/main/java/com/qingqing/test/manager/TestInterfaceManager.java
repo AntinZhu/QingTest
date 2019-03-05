@@ -13,6 +13,7 @@ import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.client.PbClient;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
+import com.qingqing.test.config.TestSourceDataConfig;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.domain.inter.CatelogRefType;
 import com.qingqing.test.domain.inter.ParamEncodeType;
@@ -56,7 +57,7 @@ public class TestInterfaceManager {
     @Autowired
     private TestInterfaceParamService testInterfaceParamService;
 
-    @Transactional
+    @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
     public TestInterfaceCatelog saveCatelog(SaveCatelogBean saveBean, TestInterfaceCatelog parentCatelog){
         Long parentCatelogId;
         if(parentCatelog == null){ // 根目录
@@ -68,7 +69,7 @@ public class TestInterfaceManager {
         return saveCatelog(parentCatelogId, CatelogRefType.cate, "#", saveBean.getCatelogName());
     }
 
-    @Transactional
+    @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
     public Long saveTestInterface(SaveInterfaceBean saveBean, TestInterfaceCatelog parentCatelog){
         TestInterface testInterface = saveBean.getInter();
         if(testInterface.getId() == null){

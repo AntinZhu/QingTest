@@ -247,7 +247,7 @@
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
             });
 
-            var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()";
+            var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h={server}";
             function refreshInterfaceUrl(){
                 var env = $("#env").val();
                 var guid = generateGuid();
@@ -257,10 +257,21 @@
 
                 var logTargetUrl = logUrl.replace("{env}", env);
                 logTargetUrl = logTargetUrl.replace("{guid}", guid);
+                logTargetUrl = logTargetUrl.replace("{server}", getServer(interfaceBean.interfaceUrl))
 
                 $("#interfaceUrl").text(url);
                 $("#guid").val(guid);
                 $("#logUrl").attr("href", logTargetUrl);
+            }
+
+            function getServer(url){
+                if(url.indexOf("/") == 0){
+                    url = url.substr(1, url.length);
+                }
+
+                url = url.substr(0, url.indexOf("/"));
+
+                return url;
             }
 
             var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
