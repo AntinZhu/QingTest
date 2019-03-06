@@ -11,7 +11,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, config_key, config_value, is_default, is_deleted, create_time, last_update_time
+    id, config_key, config_value, is_deleted, create_time, last_update_time
   </sql>
 
   <select id="selectAll" resultMap="BaseResultMap">
