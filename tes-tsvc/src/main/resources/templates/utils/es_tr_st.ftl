@@ -58,10 +58,19 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 实际索引名称</label>
+                                    <label class="col-sm-3 control-label no-padding-right" for="indexName">索引名称</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="indexName" placeholder="可不传 ..." class="col-xs-10 col-sm-5"/>
+                                        <input type="text" id="indexName" placeholder="实际索引名称" class="col-xs-10 col-sm-5" value=""/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="indexNameSelect">选择索引名称</label>
+
+                                    <div class="col-xs-4 col-sm-4">
+                                        <select class="width-80 chosen-select" id="indexNameSelect" data-placeholder="选择索引名称...">
+                                        </select>
                                     </div>
                                 </div>
 
@@ -81,12 +90,28 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group qing_param crm">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> CrmID</label>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" id="customerId" placeholder="CrmID" class="col-xs-10 col-sm-5" value="210878"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group qing_param assistant">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 助教ID</label>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" id="assistantId" placeholder="助教ID" class="col-xs-10 col-sm-5" value="523"/>
+                                    </div>
+                                </div>
+
                                 <div class="space-4"></div>
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-tags">修改字段</label>
 
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9" id="form-field-tags-parent">
                                         <input type="text" name="tags" id="form-field-tags" value="" placeholder="Enter 修改字段 ..." />
                                     </div>
                                 </div>
@@ -95,7 +120,7 @@
                                     <div class="col-md-offset-3 col-md-9">
                                         <button class="btn btn-info" type="button" id="searchBtn">
                                             <i class="icon-ok bigger-110"></i>
-                                            Submit
+                                            查询
                                         </button>
 
                                         &nbsp; &nbsp; &nbsp;
@@ -108,6 +133,12 @@
                                         <button class="btn" type="button" id ="fullUpdateBtn">
                                             <i class="icon-undo bigger-110"></i>
                                             全量更新
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <button class="btn btn-danger" type="button" id ="delBtn">
+                                            <i class="icon-trash icon-only"></i>
+                                            删除
                                         </button>
                                     </div>
                                 </div>
@@ -144,6 +175,8 @@
         {indexPrefix:'bi_tr_stu_all_index',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
         {indexPrefix:'bi_teacher_index',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
         {indexPrefix:'bi_student_index',isRelation:false, userType:'student',uniqueKey:'student', clazz:'student', userName:'学生'},
+        {indexPrefix:'bi_crm_index',isRelation:false, userType:'customer',uniqueKey:'crm', clazz:'crm', userName:'customer'},
+        {indexPrefix:'bi_assistant_index',isRelation:false, userType:'assistant',uniqueKey:'assistant', clazz:'assistant', userName:'助教'},
     ];
     var selectable = [];
     for(var idx in supportIndexArr){
@@ -154,7 +187,14 @@
 
         selectable.push(selectItem);
     }
-    updateOptions("indexType", selectable, selectable[0].value);
+
+    function init(){
+        updateOptions("indexType", selectable, selectable[0].value);
+        updateOptions("indexNameSelect", getEmptyOptions());
+
+        $(".qing_param").addClass("hide");
+        $("." + getIndexInfo($("#indexType").val()).clazz).removeClass("hide");
+    }
 
     function getIndexInfo(indexPrefix){
         for(var idx in supportIndexArr){
@@ -170,12 +210,46 @@
     jQuery(function($) {
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
+        init();
+
+//        $("#form-field-tags-parent").bind("DOMNodeInserted",function(e){
+//            var inputText = $(e.target).html();
+//            if(inputText.indexOf("\<button") > 0){
+//                formatParamInput(getInputLabel(e), null);
+//            }
+//        });
+//
+//        $("#form-field-tags-parent").bind("DOMNodeRemoved",function(e){
+//            var inputText = $(e.target).html();
+//            if(inputText.indexOf("\<button") > 0) {
+//                var tagLen = $("#form-field-tags-parent").children("div").children("span").length;
+//                if (tagLen > 0) {
+//                    formatParamInput(null, getInputLabel(e));
+//                } else {
+//                    $("#paramDiv").addClass("hide");
+//                }
+//            }
+//        });
+
+        function getInputLabel(e){
+            var inputText = $(e.target).html();
+            return inputText.substr(0, inputText.indexOf("\<button"));
+        }
+
+        $("#indexNameSelect").change(function () {
+            $("#indexName").val($(this).val());
+        });
 
         $("#indexType").change(function(){
             $(".qing_param").addClass("hide");
 
             var indexInfo = getIndexInfo($("#indexType").val());
             $("." + indexInfo.clazz).removeClass("hide");
+
+            updateOptions("indexNameSelect", getEmptyOptions());
+            $("#indexName").val("");
+
+//            commonQuery(noConditionQueryString, indexInfo);
         });
 
         $(".env").click(function(){
@@ -204,10 +278,16 @@
                     text : "请输入" + indexInfo.userName + "ID",
                     class_name : 'gritter-error gritter-center'
                 });
+                return;
+            }
+            var indexName = $("#indexName").val();
+            if(indexName == null || indexName == ''){
+                indexName = indexInfo.indexPrefix + "*";
             }
 
-            var queryString = '{"query":{"bool":{"must":[{"term":{"' + userType + '_id":"' + userId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"aggs":{}}';
-            commonQuery(queryString, indexInfo);
+            var queryString = '{"query":{"bool":{"must":[{"term":{"' + userType + '_id":"' + userId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[{"bi_etl_data_time":{"order":"desc"}}],"aggs":{}}';
+            commonQuery(queryString, indexName, handleSearch);
+            commonQuery(queryString, indexInfo.indexPrefix + "*", updateIndexNameSelect);
         }
 
         function searchRelation(indexInfo){
@@ -221,51 +301,84 @@
                     text : "请输入" + indexInfo.userName + "ID",
                     class_name : 'gritter-error gritter-center'
                 });
+                return;
             }
 
-            var queryString = '{"query":{"bool":{"must":[{"term":{"student_id":"' + studentId+ '"}},{"term":{"teacher_id":"' + teacherId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"aggs":{}}';
-            commonQuery(queryString, indexInfo);
-        }
-
-        function commonQuery(queryString, indexInfo){
+            var queryString = '{"query":{"bool":{"must":[{"term":{"student_id":"' + studentId+ '"}},{"term":{"teacher_id":"' + teacherId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[{"bi_etl_data_time":{"order":"desc"}}],"aggs":{}}';
             var indexName = $("#indexName").val();
             if(indexName == null || indexName == ''){
                 indexName = indexInfo.indexPrefix + "*";
             }
+            commonQuery(queryString, indexName, handleSearch);
+            commonQuery(queryString, indexInfo.indexPrefix + "*", updateIndexNameSelect);
+        }
 
+        function commonQuery(queryString, indexName, handleFunction){
             var data = {
                 queryString :queryString,
                 indexName : indexName
             }
-            commonAjaxRequest("${base}/v1/utils/es/query", data, handleSearch, false, "查询接口信息出错:", $("#env").val());
+            commonAjaxRequest("${base}/v1/utils/es/query", data, handleFunction, false, "查询接口信息出错:", $("#env").val());
         }
 
         var indexInfo;
         function handleSearch(resu){
 //            alert(resu.resultList);
             var jsonResult = JSON.parse(resu.resultList);
-            var modifyStr = $("#form-field-tags").val();
-            var modifyArr = modifyStr.split(",");
 
-            var count = jsonResult.total;
+            var count = jsonResult.hits.length;
             if(count > 0){
-                var latest = jsonResult.hits[count -1];
+                var latest = jsonResult.hits[0];
                 indexInfo = latest;
                 var teacherData = latest._source;
 
                 var text = JSON.stringify(teacherData);
                 $("#fullData").val(text);
                 var len = (text.length / 6.5);
-                if(len < 10){
-                    len = 10;
+                if(len < 100){
+                    len = 100;
                 }
                 $('#fullData').css("height",  len + "px");
 
-                if(modifyArr.length == 1 && modifyArr[0] == ""){
+                formatParamInput();
+
+//                updateOptions("indexNameSelect", genOptionsWithEmpty(jsonResult.hits, "_index"), latest._index);
+                $("#indexName").val(latest._index);
+
+                jsonShow(teacherData, "json-interface-detail");
+                //{"key":"end_time","name":"end_time","defaultValue":1}
+            }else{
+                $.gritter.add({
+                    title : '提示:',
+                    text : "没有查询到数据",
+                    class_name : 'gritter-error gritter-center'
+                });
+            }
+        }
+
+        function updateIndexNameSelect(resu){
+            var jsonResult = JSON.parse(resu.resultList);
+
+            var count = jsonResult.hits.length;
+            if(count > 0) {
+                var latest = jsonResult.hits[0];
+
+                updateOptions("indexNameSelect", genOptionsWithEmpty(jsonResult.hits, "_index"), $("#indexName").val());
+            }
+        }
+
+        function formatParamInput(inclu, exclu){
+            if(indexInfo != null){
+                var teacherData = indexInfo._source;
+
+                var modifyStr = $("#form-field-tags").val();
+                var modifyArr = modifyStr.split(",");
+
+                if(modifyArr.length == 1 && modifyArr[0] == "" && inclu != null){
                 }else{
                     var items = [];
                     for(var propName in teacherData){
-                        if(isMatch(modifyArr, propName)){
+                        if(isMatch(modifyArr, propName, inclu, exclu)){
                             var obj = new Object();
                             obj.key = propName;
                             obj.name = propName;
@@ -276,15 +389,20 @@
                     }
                     showParam({paramData:JSON.stringify(items)});
                 }
-
-                jsonShow(teacherData, "json-interface-detail");
-                //{"key":"end_time","name":"end_time","defaultValue":1}
             }
         }
 
-        function isMatch(itemArr, item){
+        function isMatch(itemArr, item, inclu, exclu){
             if(itemArr.length == 1 && itemArr[0] == ""){
                 return true;
+            }
+
+            if(inclu != null && inclu == item){
+                return true;
+            }
+
+            if(exclu != null && exclu == item){
+                return false;
             }
 
             for(var idx in itemArr){
@@ -313,6 +431,30 @@
             updateIndex(indexInfoBean.uniqueKey, getUniqueValue(indexInfoBean), indexInfo._index, $("#fullData").val());
         });
 
+        $("#delBtn").click(function () {
+            var indexInfoBean = getIndexInfo($("#indexType").val());
+            if(indexInfo == null){
+                $.gritter.add({
+                    title : '提示:',
+                    text : "先查询一下吧，少年",
+                    class_name : 'gritter-error gritter-center'
+                });
+                return;
+            }
+
+            deleteIndex(indexInfoBean.uniqueKey, getUniqueValue(indexInfoBean), indexInfo._index);
+        });
+
+        function deleteIndex(uniqueKey, uniqueValue, indexName){
+            var data = {
+                uniqueKey : uniqueKey,
+                uniqueValue : uniqueValue,
+                indexName : indexName,
+            }
+
+            commonAjaxRequest("${base}/v1/utils/es/delete", data, clearData, false, "删除索引数据错误:");
+        }
+
         function getUniqueValue(indexInfoBean){
             var uniqueValue;
             if(indexInfoBean.isRelation){
@@ -335,6 +477,14 @@
             commonAjaxRequest("${base}/v1/utils/es/update", data, handleUpdate, false, "更新索引数据错误:");
         }
 
+        function clearData(){
+            indexInfo = null;
+            $("#fullData").val("");
+            $("#paramDiv").addClass("hide");
+            jsonShow(new Object(), "json-interface-detail");
+            $('#fullData').css("height",  "100px");
+        }
+
         function handleUpdate(){
             $.gritter.add({
                 title : '提示:',
@@ -342,10 +492,9 @@
                 class_name : 'gritter-info gritter-center'
             });
 
-
-            searchData();
+//            sleep(500);
+//            searchData();
         }
-
 
         //we could just set the data-provide="tag" of the element inside HTML, but IE8 fails!
         var tag_input = $('#form-field-tags');

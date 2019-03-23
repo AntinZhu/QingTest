@@ -196,6 +196,27 @@ public class UtilsController {
         return new SimpleResponse(baseResponse);
     }
 
+    @RequestMapping("es/delete")
+    @ResponseBody
+    public SimpleResponse esDelete(@RequestBody IndexUpdateRequestBean requestBean){
+        boolean updateResult = biTeacherIndexManager.deleteIndex(requestBean.getUniqueKey(), requestBean.getUniqueValue(), requestBean.getIndexName());
+
+        BaseResponse baseResponse = BaseResponse.SUCC_RESP;
+        if(!updateResult){
+            baseResponse = new BaseResponse(1001, "update fail", "删除失败");
+        }
+        return new SimpleResponse(baseResponse);
+    }
+
+    @RequestMapping("es/indexs")
+    @ResponseBody
+    public SingleResponse<String> indexs(){
+        biTeacherIndexManager.allIndex();
+
+        return new SingleResponse<>("");
+    }
+
+
     @RequestMapping("ws")
     public String ws() {
         return "utils/ws";

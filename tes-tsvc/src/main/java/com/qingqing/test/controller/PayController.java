@@ -3,6 +3,7 @@ package com.qingqing.test.controller;
 import com.qingqing.api.proto.v1.OrderCommonEnum.OrderType;
 import com.qingqing.api.proto.v1.Pay.PayCheckRequest;
 import com.qingqing.api.proto.v1.Pay.PayCheckResponse;
+import com.qingqing.api.proto.v1.Pay.PayResult;
 import com.qingqing.api.proto.v1.ProtoBufResponse.BaseResponse;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
@@ -63,14 +64,14 @@ public class PayController {
 
     @RequestMapping("ack_pay")
     @ResponseBody
-    public String pay(@RequestBody PayRequestBean request){
-        return JsonUtil.format(orderManager.payForOrder(request));
+    public PayResult pay(@RequestBody PayRequestBean request){
+        return orderManager.payForOrder(request);
     }
 
     @RequestMapping("ack_pay_v2")
     @ResponseBody
-    public String payV2(@RequestBody PayRequestBeanV2 request){
-        return JsonUtil.format(orderManager.payForOrder(request));
+    public PayResult payV2(@RequestBody PayRequestBeanV2 request){
+        return orderManager.payForOrder(request);
     }
 
     @RequestMapping("pre_pay")

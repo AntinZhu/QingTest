@@ -3,17 +3,22 @@ package com.qingqing.test.manager;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.qingqing.common.exception.QingQingRuntimeException;
+import com.qingqing.common.util.JsonUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +26,7 @@ import java.util.Map;
  */
 @Component
 public class BITeacherIndexManager {
+    private static final Logger logger = LoggerFactory.getLogger(BITeacherIndexManager.class);
 
     @Autowired
     private RestClient restClient;
@@ -116,5 +122,27 @@ public class BITeacherIndexManager {
         } catch (IOException e) {
             throw new QingQingRuntimeException("update teacher index error, uniqueValue:" + uniqueValue, e);
         }
+    }
+
+    public boolean deleteIndex(String uniqueKey, String uniqueValue, String indexName){
+        try {
+            Response response = restClient.performRequest("DELETE", "/" + indexName + "/" + uniqueKey + "/" + uniqueValue, params);
+            int respCode = response.getStatusLine().getStatusCode();
+
+            return respCode == 200 || respCode == 201;
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("update teacher index error, uniqueValue:" + uniqueValue, e);
+        }
+    }
+
+    public List<String> allIndex(){
+        try{
+            Response response = restClient.performRequest("GET", "/_cat/indices?v", new BasicHeader("1", "2"));
+            logger.info(JsonUtil.format(response));
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("query all index error:", e);
+        }
+
+        return null;
     }
 }

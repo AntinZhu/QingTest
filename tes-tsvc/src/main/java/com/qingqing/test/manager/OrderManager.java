@@ -12,6 +12,7 @@ import com.qingqing.api.proto.v1.Pay.GeneralOrderPaymentSummaryV3Request;
 import com.qingqing.api.proto.v1.Pay.OrderPayType;
 import com.qingqing.api.proto.v1.Pay.PayGeneralOrderSubmitRequest;
 import com.qingqing.api.proto.v1.Pay.PayResult;
+import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.TeacherProto;
 import com.qingqing.api.proto.v1.Time.TimeParam;
 import com.qingqing.api.proto.v1.app.AppCommon.DeviceIdentification;
@@ -26,6 +27,7 @@ import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.TimeUtil;
+import com.qingqing.common.util.converter.lang.BigDecimalUtil;
 import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.order.AddOrderResultBean;
@@ -43,7 +45,6 @@ import com.qingqing.test.bean.pay.request.PrePayRequestBean;
 import com.qingqing.test.bean.pay.request.PrePayRequestBeanV2;
 import com.qingqing.test.client.ApiPiClient;
 import com.qingqing.test.client.PtClient;
-import com.qingqing.test.controller.converter.BaseConverter;
 import com.qingqing.test.controller.converter.OrderConverter;
 import com.qingqing.test.controller.converter.PayConverter;
 import com.qingqing.test.domain.order.OrderCourseV1;
@@ -251,7 +252,7 @@ public class OrderManager {
                 .setOrderType(OrderType.valueOf(orderType))
                 .setMoney(String.valueOf(balancePayAmount));
 
-        if(DoubleCompareUtil.gtZero(multiMoney)){
+        if(DoubleCompareUtil.gtZero(BigDecimalUtil.notNullTrim(multiMoney))){
             request.setMultiplePayMoney(String.valueOf(multiMoney));
         }
 
@@ -263,25 +264,30 @@ public class OrderManager {
         }
 
         PayResult payResult = ptClient.payForOrder(request.build(), userId, UserType.valueOf(userType));
-        BaseResponse baseResponse = BaseConverter.convertBaseResponse(payResult.getResponse());
-        switch (baseResponse.getError_code()){
+        ProtoBufResponse.BaseResponse.Builder baseResponse = ProtoBufResponse.BaseResponse.newBuilder();
+        baseResponse.setErrorCode(payResult.getResponse().getErrorCode());
+        baseResponse.setErrorMessage(payResult.getResponse().getErrorMessage());
+        baseResponse.setHintMessage(payResult.getResponse().getHintMessage());
+        switch (payResult.getResponse().getErrorCode()){
             case 1001:
-                baseResponse.setHint_message("钱包余额不足");
+                baseResponse.setHintMessage("钱包余额不足");
                 break;
             case 1011:
-                baseResponse.setError_code(0);
+                baseResponse.setErrorCode(0);
                 break;
             case 1031:
-                baseResponse.setHint_message("订单已经支付");
+                baseResponse.setHintMessage("订单已经支付");
                 break;
             case 1131:
-                baseResponse.setHint_message("调用支付服务出错");
+                baseResponse.setHintMessage("调用支付服务出错");
                 break;
             default:
                 break;
         }
 
-        return payResult;
+        PayResult.Builder builder = PayResult.newBuilder().setResponse(baseResponse);
+
+        return builder.build();
     }
 
     public PayBriefListResponse getPayBriefInfo(Integer orderType, Long orderId){

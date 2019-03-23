@@ -458,9 +458,10 @@ function updateOptions(elementId, data, defaultSelectedKey){
     var selector = document.getElementById(elementId);
     selector.length = 0;
 
+    var valueMaxLen = 20;
     var option;
     if(data == null || data.size == 0){
-        option = document.createElement("option")
+        option = document.createElement("option");
 
         option.text = "当前无可用数据";
 
@@ -468,9 +469,13 @@ function updateOptions(elementId, data, defaultSelectedKey){
     }else{
         for(idx in data){
             var siteType = data[idx];
-            option = document.createElement("option")
+            option = document.createElement("option");
             option.value = siteType.key;
             option.text = siteType.value;
+            var valueLen = siteType.value.gblen();
+            if(valueLen > valueMaxLen){
+                valueMaxLen = valueLen;
+            }
 
             if(defaultSelectedKey == null && idx == 0){
                 option.setAttribute("selected", "selected");
@@ -483,7 +488,7 @@ function updateOptions(elementId, data, defaultSelectedKey){
     }
     $("#" + elementId).trigger("chosen:updated");
 
-    $("#" + elementId + "_chosen").css('width','200px');
+    $("#" + elementId + "_chosen").css('width',(valueMaxLen * 10) + 'px');
 };
 
 function emptyFunction(resu){
@@ -496,4 +501,77 @@ function simpleSucc(resu){
         text : "接口调用成功",
         class_name : 'gritter-info gritter-center'
     });
+}
+
+function sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay)
+        ;
+}
+
+function genOptionsWithEmpty(arr, propName){
+    var items = [];
+    var item = new Object();
+    item.key = "";
+    item.value = "空";
+
+    items.push(item);
+    var valueArr = genOptions(arr, propName);
+    for(var idx in valueArr){
+        items.push(valueArr[idx]);
+    }
+
+    return items;
+}
+
+function getEmptyOptions(){
+    var items = [];
+    var item = new Object();
+    item.key = "";
+    item.value = "空";
+
+    items.push(item);
+
+    return items;
+}
+
+function genOptions(arr, propName){
+    var items = [];
+
+    var keyArr = [];
+    for(var idx in arr){
+        var arrItem = arr[idx];
+
+        if(!contain(keyArr, arrItem[propName])){
+            var item = new Object();
+            item.key = arrItem[propName];
+            item.value = arrItem[propName];
+
+            items.push(item);
+        }
+    }
+
+    return items;
+}
+
+function contain(arr, item){
+    for(var idx in arr){
+        if(arr[idx] == item){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+String.prototype.gblen = function() {
+    var len = 0;
+    for (var i=0; i<this.length; i++) {
+        if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) {
+            len += 2;
+        } else {
+            len ++;
+        }
+    }
+    return len;
 }
