@@ -9,6 +9,7 @@ import java.util.List;
  * Created by zhujianxing on 2018/8/30.
  */
 public interface TestInterfaceCatelogService {
+
     List<TestInterfaceCatelog> selectAll();
 
     TestInterfaceCatelog findById(Long id);

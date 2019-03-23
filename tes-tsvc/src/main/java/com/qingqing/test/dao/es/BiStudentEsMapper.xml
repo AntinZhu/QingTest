@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.es.BiStudentEsMapper" >
+
+    <sql id="tb">bi_student_index</sql>
+
+    <resultMap id="test" type="com.qingqing.test.domain.test.TestStudentIndexBean" >
+        <result property="gradeId" column="gradeId" />
+        <result property="gradeRankPoint" column="gradeRankPoint" />
+        <result property="gradeRankRank" column="gradeRankRank" />
+    </resultMap>
+
+    <select id="findPoint" resultMap="test">
+        SELECT stu_course_behave_rank.grade_rank.grade gradeId,stu_course_behave_rank.grade_rank.point gradeRankPoint,stu_course_behave_rank.grade_rank.rank gradeRankRank
+        FROM <include refid="tb"/>
+        order by stu_course_behave_rank.grade_rank.point asc limit 1
+    </select>
+
+    <select id="sunGrade" resultType="java.lang.Double">
+        SELECT sum(stu_course_behave_rank.grade_rank.grade) sumGrade
+        FROM <include refid="tb"/>
+    </select>
+</mapper>

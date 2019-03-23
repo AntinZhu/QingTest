@@ -7,6 +7,7 @@ import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
@@ -22,9 +23,11 @@ import com.qingqing.test.bean.inter.response.TestInterfaceBean;
 import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
+import com.qingqing.test.dao.es.BiStudentEsMapper;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.domain.inter.TestInterfaceParam;
+import com.qingqing.test.domain.test.TestStudentIndexBean;
 import com.qingqing.test.manager.PassportManager;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
@@ -59,6 +62,16 @@ public class TestController {
     private TestInterfaceService testInterfaceService;
     @Autowired
     private PassportManager passportManager;
+    @Autowired
+    private BiStudentEsMapper biStudentEsMapper;
+
+    @RequestMapping("test")
+    @ResponseBody
+    public String show( Model model){
+        TestStudentIndexBean bean = biStudentEsMapper.findPoint();
+        bean.setSumGrade(biStudentEsMapper.sunGrade());
+        return JsonUtil.format(bean);
+    }
 
     @RequestMapping("json_format")
     public String show(@RequestParam("id") Long id, Model model){
@@ -140,7 +153,7 @@ public class TestController {
         Long interfaceId = request.getData();
         TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
         if(interfaceBean.getInter() == null){
-            throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown ytest interface, interfaceId:" + interfaceId);
+            throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown test interface, interfaceId:" + interfaceId);
         }
 
         TestInterfaceResponse interfaceResponse = new TestInterfaceResponse();
@@ -165,6 +178,7 @@ public class TestController {
 
     @RequestMapping("/catelog")
     @ResponseBody
+//    @QingSwitch(key = "false")
     public ListResponse<CatelogBean> catelog(){
         List<CatelogBean> dataList = testInterfaceManager.getCatelogList();
 

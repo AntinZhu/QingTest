@@ -3,6 +3,7 @@ package com.qingqing.test.controller.converter;
 import com.qingqing.api.proto.v1.Pay.GeneralOrderPaymentSummaryV2Response;
 import com.qingqing.api.proto.v1.Pay.OrderPayCmbInstallmentTypeItem;
 import com.qingqing.api.proto.v1.Pay.OrderPayTypeInfo;
+import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.KeyAndValue;
 import com.qingqing.test.bean.pay.OrderPayTypeV3;
@@ -64,6 +65,11 @@ public class PayConverter {
             if(payTypeInfo.getCmdInstallmentItemsCount() > 0){
                 installmentConfigBeans.add(toInstallmentConfigBean(payType, payTypeInfo));
             }
+        }
+
+        Double needPayAmount = response.getAllNeedExtraPay();
+        if(DoubleCompareUtil.gtZero(response.getMultipleRemainPayAmount())){
+            needPayAmount = response.getMultipleRemainPayAmount();
         }
 
         prePayBean.setSupportPayTypeList(supportPayTypeList);

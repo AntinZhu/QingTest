@@ -86,6 +86,22 @@
         </dependency>
 
         <dependency>
+            <groupId>io.shardingjdbc</groupId>
+            <artifactId>sharding-jdbc-core</artifactId>
+            <version>2.0.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>com.qingqing.api</groupId>
             <artifactId>spring-web-util</artifactId>
             <version>1.0.8.5-SNAPSHOT</version>
@@ -148,6 +164,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
             <version>1.3.5.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.qingqing.search</groupId>
+            <artifactId>search-client</artifactId>
+            <version>1.1.5-SNAPSHOT-tst</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>1.7.1</version>
         </dependency>
     </dependencies>
 

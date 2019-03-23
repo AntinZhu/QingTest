@@ -8,6 +8,7 @@
             <button type="button" value="hjl" style="border-radius: 8px" class="btn env">接口测试环境</button>
             <button type="button" value="tst" style="border-radius: 8px" class="btn env">测试环境</button>
             <button type="button" value="pfm" style="border-radius: 8px;display: none" class="btn env">性能测试环境</button>
+            <button type="button" value="on_line" style="border-radius: 8px;display: none" class="btn env">线上环境</button>
         </div>
     </div>
 </div>

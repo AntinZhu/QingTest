@@ -22,6 +22,7 @@ import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
 import com.qingqing.test.service.inter.TestInterfaceService;
+import com.qingqing.test.service.inter.impl.TestInterfaceCatelogReadOnlyServiceImpl;
 import com.qingqing.test.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,6 +57,10 @@ public class TestInterfaceManager {
     private UserService userService;
     @Autowired
     private TestInterfaceParamService testInterfaceParamService;
+    @Autowired
+    private TestInterfaceManager self;
+    @Autowired
+    private TestInterfaceCatelogReadOnlyServiceImpl testInterfaceCatelogReadOnlyService;
 
     @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
     public TestInterfaceCatelog saveCatelog(SaveCatelogBean saveBean, TestInterfaceCatelog parentCatelog){
@@ -174,10 +179,12 @@ public class TestInterfaceManager {
         return resultList;
     }
 
+    @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
     public List<CatelogBean> getCatelogList(){
         List<TestInterfaceCatelog> allCatelogs = testInterfaceCatelogService.selectAll();
         return getCatelogBeanList(allCatelogs);
     }
+
 
     private List<CatelogBean> getCatelogBeanList(List<TestInterfaceCatelog> allCatelogs){
         Collections.sort(allCatelogs, new Comparator<TestInterfaceCatelog>(){

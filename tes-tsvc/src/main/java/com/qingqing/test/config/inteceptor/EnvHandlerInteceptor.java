@@ -16,11 +16,12 @@ import java.util.Map;
 public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
 
     public static final String ENV = "env";
+    public static final String SER = "ser";
     public static final String GUID = "guid";
     public static final String IS_LOCAL_DEBUG = "is_local";
     public static final String LOCAL_PORT = "local_port";
     public static final String IP = "ip";
-    private static final String[] SAVE_PARAM_SET = new String[]{GUID, IS_LOCAL_DEBUG, LOCAL_PORT};
+    private static final String[] SAVE_PARAM_SET = new String[]{GUID, IS_LOCAL_DEBUG, LOCAL_PORT, SER};
     private static final ThreadLocal<Map<String, String>> PARAM_MAPPING = new ThreadLocal<>();
 
     @Override

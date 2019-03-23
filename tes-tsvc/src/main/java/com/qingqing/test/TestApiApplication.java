@@ -8,6 +8,8 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.core.Ordered;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(
 		exclude = {
@@ -17,6 +19,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 )
 @EnableFeignClients
 @EnableCircuitBreaker
+@EnableTransactionManagement(order = Ordered.LOWEST_PRECEDENCE - 1)
 public class TestApiApplication implements EmbeddedServletContainerCustomizer {
 
 	public static void main(String[] args) {

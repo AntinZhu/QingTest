@@ -87,6 +87,12 @@
                                             <input type="number" id="balancePayAmount" value="0" />
                                         </div>
                                     </div>
+                                    <div class="form-group hide" id = "multiPayAmountDiv">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="multiPayAmount">分次支付金额</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <input type="number" id="multiPayAmount" value="0" />
+                                        </div>
+                                    </div>
                                     <div class="form-group hide" id="stageChooseDiv">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="stageConfigId">选择分期数</label>
                                         <div class="col-xs-4 col-sm-4">
@@ -196,6 +202,15 @@
             function handlerPrePay(resu){
                 // 更新支付方式下下拉框
                 updateOptions("payType", resu.supportPayTypeList, "qingqing_balance");
+                for(var idx in resu.supportPayTypeList){
+                    var payTypeSelectable = resu.supportPayTypeList[idx];
+                    if(payTypeSelectable.key == 'multiple_pay'){
+                        $("#multiPayAmountDiv").removeClass("hide");
+                        break;
+                    }
+                }
+
+
                 $("#payType_chosen").css('width','200px');
 
                 $("#orderAmountTxt").text(resu.needPayAmount);
@@ -213,12 +228,21 @@
                 }
             }
 
+            var multiOrderIds = [];
+            var multiOrderIdx = 0;
             function updatePayWayList(){
                 var data = generateJsonParam("#paramListDiv input");
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
                 commonAjaxRequest("${base}/v1/pay/pay_infos_2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val());
+
+//                for(var idx in multiOrderIds){
+//                    var multiSubOrder = multiOrderIds[idx];
+//                    var requestData = {
+//                        order
+//                    }
+//                }
             }
 
             var syncPayWayList;
@@ -271,7 +295,8 @@
                     userType : "student",
                     payType : payType,
                     stageConfigId : stageConfigId,
-                    balancePayAmount : $("#balancePayAmount").val()
+                    balancePayAmount : $("#balancePayAmount").val(),
+                    multiPayAmount : $("#multiPayAmount").val()
                 };
 
                 var isLocalDebug = $("#isLocalDebug").val();
@@ -311,6 +336,10 @@
                     if(checkPayTimer == null){
                         checkPayTimer = setInterval(checkPay, 5000);
                     }
+                }
+
+                if(resu.multiple_pay_info != null && resu.multiple_pay_info.qingqing_multiple_pay_sub_order_id != null){
+                    multiOrderIds[multiOrderIdx ++ ] = resu.multiple_pay_info.qingqing_multiple_pay_sub_order_id;
                 }
 
                 return true;

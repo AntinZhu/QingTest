@@ -6,7 +6,9 @@ import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.client.PiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -29,7 +31,8 @@ public class CommonController {
     }
 
     @RequestMapping("crond_task_page")
-    public String crond(){
+    public String crond(@RequestParam(value = "s", required = false, defaultValue="") String search, Model model){
+        model.addAttribute("search", search);
         return "utils/crond_task";
     }
 

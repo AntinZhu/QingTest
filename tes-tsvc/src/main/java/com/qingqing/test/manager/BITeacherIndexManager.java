@@ -92,17 +92,10 @@ public class BITeacherIndexManager {
         }
     }
 
-    public String queryStudentTeacherIndex(Long teacherId, Long studentId, String indexName){
-        String queryString = "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"student_id\":\"%s\"}},{\"term\":{\"teacher_id\":\"%s\"}}],\"must_not\":[],\"should\":[]}},\"from\":0,\"size\":10,\"sort\":[],\"aggs\":{}}: ";
-        queryString = String.format(queryString, studentId, teacherId);
-
+    public String queryIndex(String queryString, String indexName){
         HttpEntity entity = new NStringEntity(queryString, ContentType.APPLICATION_JSON);
         try {
-            String realIndexName = "bi_tr_stu_index*";
-            if(indexName != null){
-                realIndexName = indexName;
-            }
-            Response response = restClient.performRequest("GET", "/" + realIndexName + "/_search", params, entity);
+            Response response = restClient.performRequest("GET", "/" + indexName + "/_search", params, entity);
 
             String responseBody = EntityUtils.toString(response.getEntity());
             JSONObject jsonObject = JSON.parseObject(responseBody);
@@ -113,15 +106,15 @@ public class BITeacherIndexManager {
         }
     }
 
-    public boolean updateStudentTeacherIndex(Long teacherId, Long studentId, String indexName, String updateString){
+    public boolean updateIndex(String uniqueKey, String uniqueValue, String indexName, String updateString){
         HttpEntity updateEntity = new NStringEntity(updateString, ContentType.APPLICATION_JSON);
         try {
-            Response response = restClient.performRequest("PUT", "/" + indexName + "/student-teacher/" + studentId + "-" + teacherId, params, updateEntity);
+            Response response = restClient.performRequest("PUT", "/" + indexName + "/" + uniqueKey + "/" + uniqueValue, params, updateEntity);
             int respCode = response.getStatusLine().getStatusCode();
 
             return respCode == 200 || respCode == 201;
         } catch (IOException e) {
-            throw new QingQingRuntimeException("update teacher index error, teacherId:" + teacherId, e);
+            throw new QingQingRuntimeException("update teacher index error, uniqueValue:" + uniqueValue, e);
         }
     }
 }

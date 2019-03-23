@@ -36,10 +36,10 @@
                 <div class="page-content">
                     <div class="page-header">
                         <h1>
-                            ES bi_tr_stu_index
+                            ES 老师&学生 数据修改
                             <small>
                                 <i class="icon-double-angle-right"></i>
-                                <label id = "interfaceNameDiv">修改bi_tr_stu_index中的数据</label>
+                                <label id = "interfaceNameDiv">修改Es-老师&学生 中的数据</label>
                             </small>
                         </h1>
                     </div><!-- /.page-header -->
@@ -48,6 +48,16 @@
                         <div class="form-actions">
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="indexType">索引类型</label>
+                                    <div class="col-xs-4 col-sm-4">
+                                        <div>
+                                            <select class="width-80 chosen-select" id="indexType" data-placeholder="选择索引类型...">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 实际索引名称</label>
 
                                     <div class="col-sm-9">
@@ -55,7 +65,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group qing_param relation teacher">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 老师ID</label>
 
                                     <div class="col-sm-3">
@@ -63,7 +73,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group qing_param relation student">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 家长ID</label>
 
                                     <div class="col-sm-3">
@@ -91,7 +101,13 @@
                                         &nbsp; &nbsp; &nbsp;
                                         <button class="btn" type="button" id ="updateBtn">
                                             <i class="icon-undo bigger-110"></i>
-                                            Reset
+                                            增量更新
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <button class="btn" type="button" id ="fullUpdateBtn">
+                                            <i class="icon-undo bigger-110"></i>
+                                            全量更新
                                         </button>
                                     </div>
                                 </div>
@@ -101,6 +117,14 @@
 
                     <div class="row col-xs-12" id="taskList">
                         <#include "/include/paramDetail.ftl" />
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData">全量数据</label>
+
+                            <div class="col-sm-9">
+                                <textarea id="fullData" class="autosize-transition form-control"></textarea>
+                            </div>
+                        </div>
 
                         <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
                             <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
@@ -114,9 +138,45 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
+    // indexPrefix: 索引前缀 isRelation:
+    var supportIndexArr = [
+        {indexPrefix:'bi_tr_stu_index',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
+        {indexPrefix:'bi_tr_stu_all_index',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
+        {indexPrefix:'bi_teacher_index',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
+        {indexPrefix:'bi_student_index',isRelation:false, userType:'student',uniqueKey:'student', clazz:'student', userName:'学生'},
+    ];
+    var selectable = [];
+    for(var idx in supportIndexArr){
+        var item = supportIndexArr[idx];
+        var selectItem = new Object();
+        selectItem.key = item.indexPrefix;
+        selectItem.value = item.indexPrefix;
+
+        selectable.push(selectItem);
+    }
+    updateOptions("indexType", selectable, selectable[0].value);
+
+    function getIndexInfo(indexPrefix){
+        for(var idx in supportIndexArr){
+            var item = supportIndexArr[idx];
+            if(item.indexPrefix == indexPrefix){
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     jQuery(function($) {
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
+
+        $("#indexType").change(function(){
+            $(".qing_param").addClass("hide");
+
+            var indexInfo = getIndexInfo($("#indexType").val());
+            $("." + indexInfo.clazz).removeClass("hide");
+        });
 
         $(".env").click(function(){
             $(".env.btn-primary").removeClass("btn-primary");
@@ -124,18 +184,60 @@
             $("#env").val($(this).val());
         });
 
-        $("#searchBtn").click(function(){
+        $("#searchBtn").click(searchData);
+
+        function searchData(){
+            var indexInfo = getIndexInfo($("#indexType").val());
+            if(indexInfo.isRelation){
+                searchRelation(indexInfo);
+            }else{
+                searchSingle(indexInfo);
+            }
+        }
+
+        function searchSingle(indexInfo){
+            var userType = indexInfo.userType;
+            var userId = $("#" + userType + "Id").val();
+            if(userId == null){
+                $.gritter.add({
+                    title : '提示:',
+                    text : "请输入" + indexInfo.userName + "ID",
+                    class_name : 'gritter-error gritter-center'
+                });
+            }
+
+            var queryString = '{"query":{"bool":{"must":[{"term":{"' + userType + '_id":"' + userId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"aggs":{}}';
+            commonQuery(queryString, indexInfo);
+        }
+
+        function searchRelation(indexInfo){
             var teacherId = $("#teacherId").val();
             var studentId = $("#studentId").val();
 
-            searchTeacher(teacherId, studentId);
-        });
-
-        function searchTeacher(teacherId, studentId){
-            var data = {
-                data : $("#indexName").val()
+            if(teacherId == null || studentId == null){
+                // TODO 提示
+                $.gritter.add({
+                    title : '提示:',
+                    text : "请输入" + indexInfo.userName + "ID",
+                    class_name : 'gritter-error gritter-center'
+                });
             }
-            commonAjaxRequest("${base}/v1/utils/es/student-teacher/" + studentId + "/" + teacherId, data, handleSearch, false, "查询接口信息出错:", $("#env").val());
+
+            var queryString = '{"query":{"bool":{"must":[{"term":{"student_id":"' + studentId+ '"}},{"term":{"teacher_id":"' + teacherId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"aggs":{}}';
+            commonQuery(queryString, indexInfo);
+        }
+
+        function commonQuery(queryString, indexInfo){
+            var indexName = $("#indexName").val();
+            if(indexName == null || indexName == ''){
+                indexName = indexInfo.indexPrefix + "*";
+            }
+
+            var data = {
+                queryString :queryString,
+                indexName : indexName
+            }
+            commonAjaxRequest("${base}/v1/utils/es/query", data, handleSearch, false, "查询接口信息出错:", $("#env").val());
         }
 
         var indexInfo;
@@ -151,22 +253,31 @@
                 indexInfo = latest;
                 var teacherData = latest._source;
 
-                var items = [];
-                for(var propName in teacherData){
-                    if(isMatch(modifyArr, propName)){
-                        var obj = new Object();
-                        obj.key = propName;
-                        obj.name = propName;
-                        obj.defaultValue = teacherData[propName];
-
-                        items.push(obj);
-//                        if(items.length == modifyLength){
-//                            break;
-//                        }
-                    }
+                var text = JSON.stringify(teacherData);
+                $("#fullData").val(text);
+                var len = (text.length / 6.5);
+                if(len < 10){
+                    len = 10;
                 }
+                $('#fullData').css("height",  len + "px");
+
+                if(modifyArr.length == 1 && modifyArr[0] == ""){
+                }else{
+                    var items = [];
+                    for(var propName in teacherData){
+                        if(isMatch(modifyArr, propName)){
+                            var obj = new Object();
+                            obj.key = propName;
+                            obj.name = propName;
+                            obj.defaultValue = teacherData[propName];
+
+                            items.push(obj);
+                        }
+                    }
+                    showParam({paramData:JSON.stringify(items)});
+                }
+
                 jsonShow(teacherData, "json-interface-detail");
-                showParam({paramData:JSON.stringify(items)});
                 //{"key":"end_time","name":"end_time","defaultValue":1}
             }
         }
@@ -193,18 +304,46 @@
                 fullData[propName] = modifyData[propName];
             }
 
-            var data = {
-                studentId : fullData.student_id,
-                teacherId : fullData.teacher_id,
-                indexName : indexInfo._index,
-                data : JSON.stringify(fullData)
-            }
-
-            commonAjaxRequest("${base}/v1/utils/es/student-teacher/update", data, handleUpdate, false, "更新索引数据错误:");
+            var indexInfoBean = getIndexInfo($("#indexType").val());
+            updateIndex(indexInfoBean.uniqueKey, getUniqueValue(indexInfoBean), indexInfo._index, JSON.stringify(fullData));
         });
 
+        $("#fullUpdateBtn").click(function () {
+            var indexInfoBean = getIndexInfo($("#indexType").val());
+            updateIndex(indexInfoBean.uniqueKey, getUniqueValue(indexInfoBean), indexInfo._index, $("#fullData").val());
+        });
+
+        function getUniqueValue(indexInfoBean){
+            var uniqueValue;
+            if(indexInfoBean.isRelation){
+                uniqueValue = $("#studentId").val() + "-" + $("#teacherId").val();
+            }else{
+                uniqueValue = $("#" + indexInfoBean.userType + "Id").val();
+            }
+
+            return uniqueValue;
+        }
+
+        function updateIndex(uniqueKey, uniqueValue, indexName, data){
+            var data = {
+                uniqueKey : uniqueKey,
+                uniqueValue : uniqueValue,
+                indexName : indexName,
+                data : data
+            }
+
+            commonAjaxRequest("${base}/v1/utils/es/update", data, handleUpdate, false, "更新索引数据错误:");
+        }
+
         function handleUpdate(){
-//            searchTeacher(indexInfo._id);
+            $.gritter.add({
+                title : '提示:',
+                text : "更新成功",
+                class_name : 'gritter-info gritter-center'
+            });
+
+
+            searchData();
         }
 
 

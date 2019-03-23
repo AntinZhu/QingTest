@@ -1,7 +1,10 @@
 package com.qingqing.test.config;
 
+import com.google.common.collect.Lists;
 import com.qingqing.common.exception.QingQingRuntimeException;
-import com.qingqing.test.hystrix.SwitchableDateSource;
+import com.qingqing.test.masterslave.QingMasterSlaveDataSource;
+import io.shardingjdbc.core.api.algorithm.masterslave.MasterSlaveLoadBalanceAlgorithmType;
+import io.shardingjdbc.core.api.config.MasterSlaveRuleConfiguration;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -17,6 +20,10 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -45,7 +52,7 @@ public class TestSourceDataConfig {
     private String configPath;
 
     @Bean(name = DATA_SOURCE_NAME)
-    public SwitchableDateSource getDataSource() {
+    public DataSource getDataSource(@Qualifier(BackupSourceDataConfig.DATA_SOURCE_NAME) DataSource slaveDataSource ) throws SQLException {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl(url);
@@ -60,7 +67,17 @@ public class TestSourceDataConfig {
         dataSource.setValidationQuery(validation_query);
         dataSource.setTestOnBorrow(true);
 
-        return new SwitchableDateSource(dataSource);
+        Map<String, DataSource> dataSourceMap = new HashMap<>();
+        dataSourceMap.put(DATA_SOURCE_NAME, dataSource);
+        dataSourceMap.put(BackupSourceDataConfig.DATA_SOURCE_NAME, slaveDataSource);
+
+        MasterSlaveRuleConfiguration rule = new MasterSlaveRuleConfiguration();
+        rule.setMasterDataSourceName(DATA_SOURCE_NAME);
+        rule.setSlaveDataSourceNames(Lists.<String>newArrayList(BackupSourceDataConfig.DATA_SOURCE_NAME));
+        rule.setLoadBalanceAlgorithmType(MasterSlaveLoadBalanceAlgorithmType.ROUND_ROBIN);
+        rule.setName(DATA_SOURCE_NAME + "_master_slave");
+
+        return new QingMasterSlaveDataSource(rule.build(dataSourceMap), Collections.<String, Object>emptyMap());
     }
 
     @Bean(name = TX_MANAGER)

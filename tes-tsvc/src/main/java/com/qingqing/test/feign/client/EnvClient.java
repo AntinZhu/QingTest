@@ -7,6 +7,8 @@ import feign.Client;
 import feign.Request;
 import feign.Request.Options;
 import feign.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -33,6 +35,7 @@ import static java.lang.String.format;
 @Component
 public class EnvClient implements Client {
     public static final String BEAN_NAME = "envClient";
+    private static final Logger logger = LoggerFactory.getLogger(EnvClient.class);
 
     @Override
     public Response execute(Request request, Options options) throws IOException {
@@ -171,6 +174,11 @@ public class EnvClient implements Client {
             case hjl:
             case pfm:
                 return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
+            case on_line:
+                String serValue = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.SER);
+                String onLineHost = serValue + ".prd.svc.idc.cedu.cn:8080";
+                logger.info("on_line host:" + onLineHost);
+                return onLineHost;
             default:
                 throw new QingQingRuntimeException("unknown env");
         }

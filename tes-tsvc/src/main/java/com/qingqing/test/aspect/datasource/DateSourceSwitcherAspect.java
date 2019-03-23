@@ -21,7 +21,7 @@ import org.springframework.transaction.TransactionException;
  * Created by zhujianxing on 2018/10/15.
  */
 @Aspect
-@Component
+//@Component
 public class DateSourceSwitcherAspect implements PriorityOrdered{
     private static final Logger logger = LoggerFactory.getLogger(DateSourceSwitcherAspect.class);
 

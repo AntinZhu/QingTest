@@ -98,7 +98,7 @@
                                                 <div class="timeline-item clearfix">
                                                     <div class="timeline-info">
                                                         <img alt="Susan't Avatar" src="${base}/static/assets/avatars/avatar1.png" />
-                                                        <span class="label label-info label-sm">16:22</span>
+                                                        <span class="label label-info label-sm" id="qingTime">16:22</span>
                                                     </div>
 
                                                     <div class="panel panel-default">
@@ -344,6 +344,13 @@
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
 
             jQuery(function($) {
+                setInterval(refreshTime, 1000);
+
+                function refreshTime(){
+                    var now = new Date();
+                    $("#qingTime").text(now.format("HH:mm"));
+                }
+
                 $('#teacherIdBtn').click(function () {
                     refreshInterfaceUrl();
                     var param = generateJsonParam("#paramListDiv input");
@@ -360,7 +367,7 @@
                             requestUserType : $("#requestUserType").val(),
                             param : JSON.stringify(param)
                         };
-                        commonAjaxRequest("${base}/v1/test/interface/invoke.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                        commonAjaxRequest("${base}/v1/test/interface/invoke.json?is_local=" + isLocalDebug + "&local_port=" + localPort + "&ser=" + getServer(interfaceBean.interfaceUrl), data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
                     }else{
                         if(interfaceBean.interfaceType == "PT" || interfaceBean.interfaceType == "PI"){
                             var user = {
@@ -371,7 +378,7 @@
                             commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerLocalInvoke, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
                         }else{
                             var param = generateJsonParam("#paramListDiv input");
-                            commonAjaxRequest("http://localhost:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), new Object());
+                            commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), new Object());
                         }
                     }
                 });
@@ -389,7 +396,7 @@
                     }
                     var localPort = $("#localDebugPort").val();
 
-                    commonAjaxRequest("http://localhost:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
+                    commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
                 }
 
                 function handlerInvokeResult(resu){

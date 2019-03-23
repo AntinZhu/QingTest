@@ -26,8 +26,8 @@ import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.TimeUtil;
+import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
-import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.order.AddOrderResultBean;
 import com.qingqing.test.bean.order.CoursePriceType;
 import com.qingqing.test.bean.order.StudentAddOrderBean;
@@ -225,20 +225,20 @@ public class OrderManager {
         return omus;
     }
 
-    public SimpleResponse payForOrder(PayRequestBean payRequest) {
+    public PayResult payForOrder(PayRequestBean payRequest) {
         Double orderAmount = payRequest.getOrderAmount();
         PayType payType = PayType.parseKey(payRequest.getPayType());
         CoursePriceType coursePriceType = CoursePriceType.valueOf(payRequest.getCoursePriceType());
 
-        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType, payRequest.getBalancePayAmount());
+        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType, payRequest.getBalancePayAmount(), null);
     }
 
-    public SimpleResponse payForOrder(PayRequestBeanV2 payRequest) {
+    public PayResult payForOrder(PayRequestBeanV2 payRequest) {
         PayType payType = PayType.valueOf(payRequest.getPayType());
-        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType, payRequest.getBalancePayAmount());
+        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType, payRequest.getBalancePayAmount(), payRequest.getMultiPayAmount());
     }
 
-    public SimpleResponse payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType, Double balancePayAmount) {
+    public PayResult payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType, Double balancePayAmount, Double multiMoney) {
         OrderPayType backupPayType = OrderPayType.alipay;
         if(!PayType.qingqing_balance.equals(payType)){
             backupPayType = payType.getOrderPayType();
@@ -250,6 +250,10 @@ public class OrderManager {
                 .setBackupOrderPayType(backupPayType)
                 .setOrderType(OrderType.valueOf(orderType))
                 .setMoney(String.valueOf(balancePayAmount));
+
+        if(DoubleCompareUtil.gtZero(multiMoney)){
+            request.setMultiplePayMoney(String.valueOf(multiMoney));
+        }
 
         if(stageConfigId != null){
             request.setCmbInstallmentId(stageConfigId);
@@ -277,7 +281,7 @@ public class OrderManager {
                 break;
         }
 
-        return new SimpleResponse(baseResponse);
+        return payResult;
     }
 
     public PayBriefListResponse getPayBriefInfo(Integer orderType, Long orderId){

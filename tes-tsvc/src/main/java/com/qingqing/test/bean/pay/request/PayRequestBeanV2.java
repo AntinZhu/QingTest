@@ -12,6 +12,7 @@ public class PayRequestBeanV2 {
     private String payType;
     private Long stageConfigId;
     private Double balancePayAmount;
+    private Double multiPayAmount;
 
     public String getQingqingOrderId() {
         return qingqingOrderId;
@@ -75,5 +76,13 @@ public class PayRequestBeanV2 {
 
     public void setBalancePayAmount(Double balancePayAmount) {
         this.balancePayAmount = balancePayAmount;
+    }
+
+    public Double getMultiPayAmount() {
+        return multiPayAmount;
+    }
+
+    public void setMultiPayAmount(Double multiPayAmount) {
+        this.multiPayAmount = multiPayAmount;
     }
 }
