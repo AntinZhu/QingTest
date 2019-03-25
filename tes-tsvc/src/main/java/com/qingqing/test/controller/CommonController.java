@@ -23,7 +23,7 @@ public class CommonController {
 
     @RequestMapping("crond_task")
     @ResponseBody
-    public SimpleResponse encode(@ProtoRequestBody SimpleStringRequest request){
+    public SimpleResponse encode(@ProtoRequestBody SimpleStringRequest request) {
         String url = request.getData();
 
         piClient.commonRequest(url);
@@ -31,13 +31,13 @@ public class CommonController {
     }
 
     @RequestMapping("crond_task_page")
-    public String crond(@RequestParam(value = "s", required = false, defaultValue="") String search, Model model){
+    public String crond(@RequestParam(value = "s", required = false, defaultValue = "") String search, Model model) {
         model.addAttribute("search", search);
         return "utils/crond_task";
     }
 
     @RequestMapping("haha")
-    public String haha(){
+    public String haha() {
         return "utils/haha";
     }
 }
