@@ -69,7 +69,7 @@ public class PayManager {
 
     private boolean mockAlipayNotify(ThirdPayBrief thirdPayBrief){
         String param = "out_trade_no=" + thirdPayBrief.getQingqingTradeNo() +
-                "&trade_no" + System.currentTimeMillis() +
+                "&trade_no=" + System.currentTimeMillis() +
                 "&seller_email=张大爷" +
                 "&trade_status=TRADE_SUCCESS" +
                 "&total_fee=" + thirdPayBrief.getThirdPaymentAmount();

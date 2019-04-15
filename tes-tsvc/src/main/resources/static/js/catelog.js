@@ -77,8 +77,8 @@ function generateCateLogParam(resultList,defaultSelectId){
     return catelogList;
 }
 
-var item_html = '<li class="{index}"\><a href="{linkUrl}" class="qing_catelog"><i class=""></i>{catelogName}</a></li>';
-var catelog_html = '<li class="{index}"><button type="button"style="display:inline-block;width: 39px;background-color: #fff;"  class="btn-sm qing_catelog_del pull-right hide"><i class="red icon-trash"></i></button><a href="#" style="width: 100%;display:inline-block" class="dropdown-toggle qing_catelog"><i class="{icon}"></i><span class="menu-text">{catelogName}</span><b class="arrow icon-angle-down"></b></a><ul class="submenu">{items}</ul></li>';
+var item_html = '<li class="{index} {clazz}"\><a href="{linkUrl}" class="qing_catelog"><i class=""></i>{catelogName}</a></li>';
+var catelog_html = '<li class="{index} {clazz}"><a href="#" style="width: 100%;display:inline-block" class="dropdown-toggle qing_catelog"><i class="{icon}"></i><span class="menu-text">{catelogName}</span><b class="arrow icon-angle-down"></b></a><ul class="submenu">{items}</ul></li>';
 
 function catelogList(catelogList, baseUrl){11
     var catelogHtml = "";
@@ -103,6 +103,7 @@ function catelogWithSub(catelog, baseUrl){
     thisHtml = thisHtml.replace("{index}", catelog.catelogIndex);
     thisHtml = thisHtml.replace("{icon}", randomIcon());
     thisHtml = thisHtml.replace("{items}", catelogList(catelog.subCategoryList, baseUrl));
+    thisHtml = thisHtml.replace("{clazz}", catelog.catelog.clazz == null? "":catelog.catelog.clazz);
 
     return thisHtml;
 }
@@ -111,6 +112,7 @@ function catelogItem(catelog, baseUrl){
     var thisHtml = item_html;
     thisHtml = thisHtml.replace("{catelogName}", catelog.catelog.catelogName);
     thisHtml = thisHtml.replace("{index}", catelog.catelogIndex);
+    thisHtml = thisHtml.replace("{clazz}", catelog.catelog.clazz == null? "":catelog.catelog.clazz);
     var linkUrl;
     switch (catelog.catelog.refType){
         case "url":

@@ -9,6 +9,7 @@ public class SaveInterfaceBean {
     private TestInterface inter;
     private Long parentCatelogId;
     private String catelogName;
+    private String clazz;
 
     public TestInterface getInter() {
         return inter;
@@ -32,5 +33,13 @@ public class SaveInterfaceBean {
 
     public void setCatelogName(String catelogName) {
         this.catelogName = catelogName;
+    }
+
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
     }
 }

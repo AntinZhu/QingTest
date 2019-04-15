@@ -186,7 +186,7 @@
                     sourceChannel : getParam("source_channel"),
                     userId : getParam("requestUserId"),
                     orderType : getParam("order_type"),
-                    userType : "student"
+                    userType :  $("#requestUserType").val()
                 };
 
                 var isLocalDebug = $("#isLocalDebug").val();
@@ -292,7 +292,7 @@
                     orderType : getParam("order_type"),
                     orderAmount : $("#orderAmountTxt").text(),
                     userId : getParam("requestUserId"),
-                    userType : "student",
+                    userType : $("#requestUserType").val(),
                     payType : payType,
                     stageConfigId : stageConfigId,
                     balancePayAmount : $("#balancePayAmount").val(),
@@ -349,7 +349,7 @@
                 var data = {
                     qingqingOrderId : getParam("qingqing_common_order_id"),
                     userId : getParam("requestUserId"),
-                    userType : "student",
+                    userType :  $("#requestUserType").val(),
                     orderType : getParam("order_type")
                 };
 

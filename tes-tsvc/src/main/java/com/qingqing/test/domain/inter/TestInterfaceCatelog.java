@@ -22,7 +22,7 @@ public class TestInterfaceCatelog {
     private Long parentCatelogId;
     private Boolean isDeleted;
     private Date createTime;
-
+    private String clazz;
     private Date lastUpdateTime;
 
     public Long getId() {
@@ -103,5 +103,13 @@ public class TestInterfaceCatelog {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
     }
 }

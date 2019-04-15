@@ -71,7 +71,7 @@ public class TestInterfaceManager {
             parentCatelogId = parentCatelog.getId();
         }
 
-        return saveCatelog(parentCatelogId, CatelogRefType.cate, "#", saveBean.getCatelogName());
+        return saveCatelog(parentCatelogId, CatelogRefType.cate, "#", saveBean.getCatelogName(), null);
     }
 
     @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
@@ -81,13 +81,13 @@ public class TestInterfaceManager {
             testInterfaceService.save(testInterface);
             Long interfaceId = testInterface.getId();
 
-            saveCatelog(parentCatelog.getId(), CatelogRefType.inter, String.valueOf(interfaceId), saveBean.getCatelogName());
+            saveCatelog(parentCatelog.getId(), CatelogRefType.inter, String.valueOf(interfaceId), saveBean.getCatelogName(), saveBean.getClazz());
         }else{
             Long interfaceId = testInterface.getId();
             testInterfaceService.update(testInterface);
             TestInterfaceCatelog catelog = catelogService.selectByRefTypeAndRefValue(CatelogRefType.inter, String.valueOf(interfaceId));
             if(catelog == null || !catelog.getId().equals(parentCatelog.getId()) || !catelog.getCatelogName().equals(parentCatelog.getCatelogName())){
-                saveCatelog(parentCatelog.getId(), CatelogRefType.inter, String.valueOf(interfaceId), saveBean.getCatelogName());
+                saveCatelog(parentCatelog.getId(), CatelogRefType.inter, String.valueOf(interfaceId), saveBean.getCatelogName(), saveBean.getClazz());
 
                 if(catelog != null){
                     catelogService.deletedById(catelog.getId());
@@ -98,7 +98,7 @@ public class TestInterfaceManager {
         return testInterface.getId();
     }
 
-    private TestInterfaceCatelog saveCatelog(Long parentCatelogId, CatelogRefType refType, String refId, String catelogName){
+    private TestInterfaceCatelog saveCatelog(Long parentCatelogId, CatelogRefType refType, String refId, String catelogName, String clazz){
         TestInterfaceCatelog catelog = new TestInterfaceCatelog();
 
         String catelogIndex;
@@ -122,6 +122,7 @@ public class TestInterfaceManager {
         catelog.setParentCatelogId(parentCatelogId == null? 0L : parentCatelogId);
         catelog.setSortNum(sortNum);
         catelog.setSubItemCnt(0);
+        catelog.setClazz(clazz);
 
         catelogService.save(catelog);
 

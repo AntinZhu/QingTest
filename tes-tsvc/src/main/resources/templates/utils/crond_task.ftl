@@ -86,6 +86,7 @@
         {url:"/svc/api/crontab/v1/teacher_level_change_notify", description:"老师档位变化通知"},
         {url:"/paysvc/api/crontab/v1/auto_sync_third_pay_notify", description:"支付服务-补偿通知"},
         {url:"/spsvc/api/crontab/v1/sync_wait_match_student_pool", description:"补偿待匹配生源宝"},
+        {url:"/svc/api/crontab/v1/share_rate_config_4_1", description:"分成补丁4月1"},
         ];
 
     var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center;word-break: break-all;"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div><div id="link_{idx}" class="hide" style="text-align: center;margin-top: 5px;margin-bottom: 5px;" ><hr style="margin-bottom: 0px;margin-top: 0px;" /><a href="" target="_blank"> 查看日志</a></div></div></div></div>';

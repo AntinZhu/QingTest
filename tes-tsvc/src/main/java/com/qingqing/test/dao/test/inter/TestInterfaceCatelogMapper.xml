@@ -12,10 +12,11 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="clazz" property="clazz" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, catelog_name, sort_num, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time, last_update_time
+    id, catelog_name, sort_num, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time, last_update_time, clazz
   </sql>
 
   <select id="selectByAll" resultMap="BaseResultMap">
@@ -31,9 +32,9 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceCatelog" keyProperty="id" useGeneratedKeys="true">
-    insert into t_interface_catelog (catelog_name, sort_num, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time)
+    insert into t_interface_catelog (catelog_name, sort_num, ref_type, ref_value, sub_item_cnt, parent_catelog_id, is_deleted, create_time, clazz)
     values (#{catelogName,jdbcType=VARCHAR}, #{sortNum,jdbcType=INTEGER}, #{refType,javaType=CatelogRefType}, #{refValue, jdbcType=VARCHAR}, #{subItemCnt, jdbcType=INTEGER},
-      #{parentCatelogId, jdbcType=BIGINT},0, now()
+      #{parentCatelogId, jdbcType=BIGINT},0, now(), #{clazz,jdbcType=VARCHAR}
       )
   </insert>
 

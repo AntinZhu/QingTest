@@ -9,7 +9,7 @@
                 <i class="icon-signal"></i>
             </button>
 
-            <button class="btn btn-info" id="qing_catelog_edit_btn" value="0">
+            <button class="btn btn-info" id="showEdit" value="0">
                 <i class="icon-pencil"></i>
             </button>
 
@@ -87,6 +87,7 @@
 
         $(document).ready(function(){
             refreshCatelog();
+            $(".qing_catelog_hide").addClass("hide");
         });
 
         function refreshCatelog(){
@@ -98,21 +99,15 @@
             activeCatelog("${Request["catelogIndex"]!"2-1"}");
         }
 
-        $("#qing_catelog_edit_btn").click(function () {
-            var nowValue = $("#qing_catelog_edit_btn").val();
-            if(nowValue == 0){
-                $("#qing_catelog_edit_btn").val(1);
-                $("a.qing_catelog").css("width", "150px");
-                $(".qing_catelog_del").removeClass("hide");
+        var catelogHide = true;
+        $("#showEdit").click(function () {
+            if(catelogHide){
+                $(".qing_catelog_hide").removeClass("hide");
+                catelogHide = false;
             }else{
-                $("#qing_catelog_edit_btn").val(0);
-                $("a.qing_catelog").css("width", "100%");
-                $(".qing_catelog_del").addClass("hide");
+                $(".qing_catelog_hide").addClass("hide");
+                catelogHide = true;
             }
-        });
-
-        $(".qing_catelog_del").click(function () {
-            alert("hehe");
         });
     </script>
 </div>
