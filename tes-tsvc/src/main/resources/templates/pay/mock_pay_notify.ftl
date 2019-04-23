@@ -296,7 +296,8 @@
                     payType : payType,
                     stageConfigId : stageConfigId,
                     balancePayAmount : $("#balancePayAmount").val(),
-                    multiPayAmount : $("#multiPayAmount").val()
+                    multiPayAmount : $("#multiPayAmount").val(),
+                    sourceChannel : getParam("source_channel"),
                 };
 
                 var isLocalDebug = $("#isLocalDebug").val();

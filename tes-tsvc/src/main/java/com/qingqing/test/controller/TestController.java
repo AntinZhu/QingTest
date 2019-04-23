@@ -227,4 +227,10 @@ public class TestController {
         response.setResultList(passportManager.getToken(request.getUserId(), UserType.valueOf(request.getUserType().getNumber())));
         return response;
     }
+
+    @RequestMapping("grid")
+    public String grid(){
+        return "test/grid";
+    }
+
 }

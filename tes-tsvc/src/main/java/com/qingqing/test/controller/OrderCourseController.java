@@ -15,6 +15,7 @@ import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.common.request.SimpleLongStudentRequest;
 import com.qingqing.test.bean.ordercourse.request.StartClassRequest;
+import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.manager.OrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class OrderCourseController {
     private OrderManager orderManager;
     @Autowired
     private PtClient ptClient;
+    @Autowired
+    private PiClient piClient;
 
     @RequestMapping("order_course_list")
     @ResponseBody
@@ -49,7 +52,7 @@ public class OrderCourseController {
                 .setQingqingGroupOrderCourseId(OrderIdEncoder.encodeOrderId(request.getGroupOrderCourseId()))
                 .setDeviceIdentification(getDeviceIdentification())
                 .build();
-       return  ptClient.startClass(protoRequest, request.getTeacherId());
+       return  piClient.startClass(protoRequest, request.getTeacherId());
     }
 
     @RequestMapping("student/apply_freeze")

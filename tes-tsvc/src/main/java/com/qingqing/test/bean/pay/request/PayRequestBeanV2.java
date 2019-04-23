@@ -13,6 +13,7 @@ public class PayRequestBeanV2 {
     private Long stageConfigId;
     private Double balancePayAmount;
     private Double multiPayAmount;
+    private String sourceChannel;
 
     public String getQingqingOrderId() {
         return qingqingOrderId;
@@ -84,5 +85,13 @@ public class PayRequestBeanV2 {
 
     public void setMultiPayAmount(Double multiPayAmount) {
         this.multiPayAmount = multiPayAmount;
+    }
+
+    public String getSourceChannel() {
+        return sourceChannel;
+    }
+
+    public void setSourceChannel(String sourceChannel) {
+        this.sourceChannel = sourceChannel;
     }
 }

@@ -12,7 +12,6 @@ import com.qingqing.api.proto.v1.StudentProto.SimpleQingQingStudentIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.SimpleQingQingTeacherIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherBaseInfoForTeacherResponse;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherDetailForStudentToOrderResponse;
-import com.qingqing.api.proto.v1.TeacherProto.TeacherStartEndClassV2;
 import com.qingqing.api.proto.v1.UserAddress.QueryUserAddressResponse;
 import com.qingqing.api.proto.v1.course.OrderCourse.CancelCourseRequestV4;
 import com.qingqing.api.proto.v1.course.OrderCourse.CancelOrFreezeCourseRequestV2;
@@ -62,7 +61,7 @@ public interface PtClient {
     GeneralOrderPaymentSummaryV2Response prePayForGeneralOrder(GeneralOrderPaymentSummaryV3Request request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType UserType);
 
 
-    @RequestMapping(path = "/svc/api/pt/v5/payment/ackpay/for_order", method = RequestMethod.POST)
+    @RequestMapping(path = "/svc/api/pt/v6/payment/ackpay/for_order", method = RequestMethod.POST)
     @ProtoResponseBody
     PayResult payForOrder(PayGeneralOrderSubmitRequest request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType userType);
 
@@ -73,10 +72,6 @@ public interface PtClient {
     @RequestMapping(path = "/svc/api/pt/v4/group_order/sub_order_detail", method = RequestMethod.POST)
     @ProtoResponseBody
     GroupSubOrderInfoDetailV2Response subOrderDetail(SimpleQingqingGroupSubOrderIdRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
-
-    @RequestMapping(path = "/svc/api/pt/v2/teacher/start_class", method = RequestMethod.POST)
-    @ProtoResponseBody
-    ProtoBufResponse.SimpleResponse startClass(TeacherStartEndClassV2 request, @RequestHeader(name = PtRequestInterceptor.TEACHER_ID) Long teacherId);
 
     @RequestMapping(path = "/svc/api/pt/v2/order_course/action/student/apply_freeze", method = RequestMethod.POST)
     @ProtoResponseBody

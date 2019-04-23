@@ -1,3 +1,4 @@
+<form class="form-horizontal">
     <div class="hide" id="paramDiv" >
         <span class="col-sm-12" style="margin-bottom: 10px;">
         <label class="pull-right inline"  title="开启时可删除和编辑参数" data-rel="tooltip" >
@@ -46,5 +47,6 @@
             </div>
         </div>
     </div>
+</form>
 <script type="text/javascript">
 </script>

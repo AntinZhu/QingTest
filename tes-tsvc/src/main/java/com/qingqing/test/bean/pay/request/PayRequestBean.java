@@ -11,6 +11,7 @@ public class PayRequestBean {
     private String payType;
     private Long stageConfigId;
     private Double balancePayAmount;
+    private Integer sourceChannel;
 
     public String getQingqingOrderId() {
         return qingqingOrderId;
@@ -66,5 +67,13 @@ public class PayRequestBean {
 
     public void setBalancePayAmount(Double balancePayAmount) {
         this.balancePayAmount = balancePayAmount;
+    }
+
+    public Integer getSourceChannel() {
+        return sourceChannel;
+    }
+
+    public void setSourceChannel(Integer sourceChannel) {
+        this.sourceChannel = sourceChannel;
     }
 }

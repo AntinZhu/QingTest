@@ -570,7 +570,7 @@
                             </td>
 
                             <td class="center">
-                                <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+                                <div class="btn-group">
                                     <button class="btn btn-xs btn-success start-class">
                                         <input type="hidden" value="{groupOrderCourseId}" />
                                         <i class="icon-ok bigger-120"></i>
@@ -895,7 +895,8 @@
                         coursePriceType : $("#coursePriceType").val(),
                         payType : payType,
                         stageConfigId : stageConfigId,
-                        balancePayAmount : $("#balancePayAmount").val()
+                        balancePayAmount : $("#balancePayAmount").val(),
+                        sourceChannel : $("#sourceChannel").val()
                     };
 
             result = commonAjaxRequest("${base}/v1/pay/ack_pay.json", data, handlerPay, false, "新增支付路径失败:", $("#env").val());

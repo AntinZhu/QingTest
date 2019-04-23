@@ -51,7 +51,11 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
                             builder.setField(pf, ProtoRespGenerator.generateResponse(401, "", "token session校验不通过"));
                         }
                         return builder.build();
-
+                    case 503:
+                        if( pf != null ) {
+                            builder.setField(pf, ProtoRespGenerator.generateResponse(503, "", "小伙子，看看是不是在发服务吧"));
+                        }
+                        return builder.build();
                 }
             }
         }else if(pf == null){

@@ -25,15 +25,16 @@ public class MyErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
-        SimpleResponse result = null;
-        try {
-            result = genSimpleResponse(response);
-        } catch (IOException e) {
-            return new QingQingRuntimeException("parse exception, value:" + response.body().toString());
-        }
+
         switch (response.status()){
             case HttpStatus.SC_UNPROCESSABLE_ENTITY:
             case HttpStatus.SC_NOT_FOUND:
+                SimpleResponse result = null;
+                try {
+                    result = genSimpleResponse(response);
+                } catch (IOException e) {
+                    return new QingQingRuntimeException("parse exception, value:" + response.body().toString());
+                }
                 if(result != null){
                     String errorMsg = result.getResponse().getError_message();
                     String hintMsg = result.getResponse().getHint_message();
@@ -47,6 +48,10 @@ public class MyErrorDecoder implements ErrorDecoder {
                 return new RequestValidateException("forbid request", "服务器返回403,请检查你的参数，请求人，环境是否对应");
             case HttpStatus.SC_UNAUTHORIZED:
                 return new RequestValidateException("unauth request", "服务器返回401,请检查请求人及类型，环境是否对应");
+            case HttpStatus.SC_SERVICE_UNAVAILABLE:
+                return new RequestValidateException("service unavailable", "服务器返回503,估计是有人在重发服务吧");
+            default:
+                break;
         }
 
         return FeignException.errorStatus(methodKey, response);
