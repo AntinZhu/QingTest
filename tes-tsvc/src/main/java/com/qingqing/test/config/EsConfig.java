@@ -3,6 +3,7 @@ package com.qingqing.test.config;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 public class EsConfig {
 
     @Bean
-    public RestClient getClient() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+    public RestClient getClient(@Value("${a}") String value) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         // 如果有多个从节点可以持续在内部new多个HttpHost，参数1是ip,参数2是HTTP端口，参数3是通信协议
         RestClientBuilder clientBuilder = RestClient.builder(new HttpHost("172.20.13.216", 9200, "http"));
 

@@ -307,31 +307,47 @@
                     showParam({paramData:resu.interfaceInfo.inter.paramDetail});
 
                     paramExamples = resu.interfaceInfo.paramList;
-                    initParamChoose(paramExamples);
+                    initParamChoose(paramExamples, ${paramExampleId});
                 }
+
+                var env = '${env}';
+                $("#env").val(env);
+                $(".env.btn-primary").removeClass("btn-primary");
+                $(".env[value='" + env + "']").addClass("btn-primary");
 
                 refreshInterfaceUrl();
             }
 
-            function initParamChoose(paramChooses){
+            function initParamChoose(paramChooses, paramExampleId){
                 if(paramChooses.length == 0){
                     return;
                 }
 
-                var selector = document.getElementById("paramChoose");
-                selector.length = 0;
+                var options = [];
+                var optionIdx = 0;
+                var paramEx;
 
-                var defaultOption = document.createElement("option");
-                defaultOption.id = 0;
-                defaultOption.paramName = "";
-                selector.options.add(defaultOption);
+                var defaultOption = new Object();
+                defaultOption.key = 0;
+                defaultOption.value = "";
+
+                options[optionIdx++] = defaultOption;
                 for(idx in paramChooses){
                     var data = paramChooses[idx];
-                    var option = document.createElement("option")
-                    option.value = data.id;
-                    option.text = data.paramName;
+                    var option = new Object();
+                    option.key = data.id;
+                    option.value = data.paramName;
+                    if(data.id == paramExampleId){
+                        paramEx = data;
+                    }
 
-                    selector.options.add(option);
+                    options[optionIdx++] = option;
+                }
+                updateOptions("paramChoose", options, paramExampleId);
+                if(paramEx != null){
+                    showParam({paramData:paramEx.paramDetail});
+                    $("#requestUserId").val(paramEx.requestUserId);
+                    $("#requestUserIdDiv").text(paramEx.requestUserId);
                 }
 
                 $("#paramChooseDiv").removeClass("hide");

@@ -15,9 +15,11 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -171,5 +173,17 @@ public class FtpResourceConfig {
             throw new QingQingRuntimeException(privateKeyFilePath + " or " + publicKeyFilePath + " +file error");
         }
         return Boolean.TRUE;
+    }
+
+    @Bean(
+            name = {"propertyPlaceholderConfigurer"}
+    )
+    public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        PropertyPlaceholderConfigurer placeholderConfigurer = new PropertyPlaceholderConfigurer();
+        placeholderConfigurer.setIgnoreResourceNotFound(false);
+        placeholderConfigurer.setIgnoreUnresolvablePlaceholders(false);
+        placeholderConfigurer.setLocations(new ClassPathResource("test.properties"),new ClassPathResource("application.properties"));
+
+        return placeholderConfigurer;
     }
 }
