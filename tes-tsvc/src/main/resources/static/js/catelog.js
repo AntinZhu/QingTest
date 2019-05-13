@@ -119,7 +119,7 @@ function catelogItem(catelog, baseUrl){
             linkUrl = baseUrl + catelog.catelog.refValue;
             break;
         case "inter":
-            linkUrl =  baseUrl + "/v1/test/json_format?id=" + catelog.catelog.refValue;
+            linkUrl =  baseUrl + "/v1/test/json_format?cross=1&id=" + catelog.catelog.refValue;
             break;
         default:
             linkUrl = "#";

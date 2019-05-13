@@ -3,7 +3,9 @@ package com.qingqing.test.aspect.masterslave;
 import com.google.common.collect.Lists;
 import io.shardingjdbc.core.api.HintManager;
 import io.shardingjdbc.core.hint.HintManagerHolder;
+import io.shardingjdbc.core.jdbc.core.datasource.NamedDataSource;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -23,6 +25,11 @@ public class QingMasterSlaveDateSourceAspect{
 
     private static final ThreadLocal<HintManagerInfo> hintManagerInfo = new ThreadLocal<>();
 
+    public static boolean isReadSlave(){
+        HintManagerInfo hintManager = hintManagerInfo.get();
+
+        return hintManager != null && hintManager.isSlave();
+    }
 
     @Around(value = "@annotation(readSlaveDataSource)", argNames = "readSlaveDataSource")
     public Object aroundSlave(final ProceedingJoinPoint pjp, QingReadSlaveDataSource readSlaveDataSource) throws Throwable {
@@ -35,12 +42,15 @@ public class QingMasterSlaveDateSourceAspect{
         }
     }
 
+    @AfterReturning(value = "execution(* io.shardingjdbc.core.jdbc.core.datasource.MasterSlaveDataSource.*(..))", returning="dataSource")
+    public void afterGetDataSource(NamedDataSource dataSource){
+        logger.info("MasterSlaveDataSource.getDataSource result:" + dataSource.getName());
+    }
+
     private void newHintManagerInfo(){
         HintManagerInfo previous = hintManagerInfo.get();
-        HintManagerHolder.clear();
 
-        HintManager hitManager = HintManager.getInstance();
-        hintManagerInfo.set(new HintManagerInfo(hitManager, previous));
+        hintManagerInfo.set(new HintManagerInfo(true, previous));
     }
 
     private void resetHintManagerInfo(){
@@ -48,25 +58,19 @@ public class QingMasterSlaveDateSourceAspect{
         HintManagerInfo previousHintManagerInfo = nowHintManageInfo.getPrevious();
 
         hintManagerInfo.set(previousHintManagerInfo);
-        HintManager previousHintManager = null;
-        if(previousHintManagerInfo!= null){
-            previousHintManager = previousHintManagerInfo.getHintManager();
-        }
-        HintManagerHolder.clear();
-        HintManagerHolder.setHintManager(previousHintManager);
     }
 
     public class HintManagerInfo{
-        private final HintManager hintManager;
+        private final boolean isSlave;
         private final HintManagerInfo previous;
 
-        public HintManagerInfo(HintManager hintManager, HintManagerInfo previous) {
-            this.hintManager = hintManager;
+        public HintManagerInfo(boolean isSlave, HintManagerInfo previous) {
+            this.isSlave = isSlave;
             this.previous = previous;
         }
 
-        public HintManager getHintManager() {
-            return hintManager;
+        public boolean isSlave() {
+            return isSlave;
         }
 
         public HintManagerInfo getPrevious() {

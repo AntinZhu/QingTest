@@ -12,8 +12,10 @@
         </div>
     </div>
 </div>
+<#--<#if cross?? && cross == 1>-->
 <div class="form-group">
     <label class="control-label col-xs-12 col-sm-3 no-padding-right" style="text-align: right;" for="env">本地调试开关:</label>
+
 
     <div class="col-xs-12 col-sm-9">
         <label class="pull-left inline"  title="开启会调本地接口" data-rel="tooltip" >
@@ -25,3 +27,4 @@
         </div>
     </div>
 </div>
+<#--</#if>-->

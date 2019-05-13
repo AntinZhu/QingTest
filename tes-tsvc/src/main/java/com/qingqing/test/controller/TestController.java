@@ -74,10 +74,12 @@ public class TestController {
     }
 
     @RequestMapping("json_format")
-    public String show(@RequestParam("id") Long id, @RequestParam(value = "paramId", defaultValue = "0") Long paramId, @RequestParam(value = "env", defaultValue = "dev") String env, Model model){
+    public String show(@RequestParam("id") Long id, @RequestParam(value = "paramId", defaultValue = "0") Long paramId, @RequestParam(value = "env", defaultValue = "dev") String env, @RequestParam(value = "cross", defaultValue = "0") int isCross, Model model){
         model.addAttribute("interfaceId", id);
         model.addAttribute("paramExampleId", paramId);
         model.addAttribute("env", env);
+        model.addAttribute("cross", isCross);
+
         return "interface/jsonformat";
     }
 

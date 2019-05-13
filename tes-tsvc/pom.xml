@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <groupId>com.qingqing.test</groupId>
     <artifactId>test-svc</artifactId>
@@ -183,6 +183,7 @@
             <artifactId>elasticsearch</artifactId>
             <version>1.7.1</version>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -202,6 +203,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>com.qingqing.test.TestApiApplication</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 

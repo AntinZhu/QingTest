@@ -5,6 +5,7 @@ import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
+import com.qingqing.test.aspect.masterslave.QingReadSlaveDataSource;
 import com.qingqing.test.bean.inter.CatelogBean;
 import com.qingqing.test.bean.inter.SaveCatelogBean;
 import com.qingqing.test.bean.inter.SaveInterfaceBean;
@@ -144,6 +145,7 @@ public class TestInterfaceManager {
         return nextCatelogIndex + 1;
     }
 
+    @QingReadSlaveDataSource
     public TestInterfaceBean getInterfaceBean(Long interfaceId){
         TestInterface testInterface = testInterfaceService.findById(interfaceId);
 

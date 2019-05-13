@@ -52,7 +52,7 @@ public class TestSourceDataConfig {
     private String configPath;
 
     @Bean(name = DATA_SOURCE_NAME)
-    public DataSource getDataSource(@Qualifier(BackupSourceDataConfig.DATA_SOURCE_NAME) DataSource slaveDataSource ) throws SQLException {
+    public DataSource getDataSource(@Qualifier(BackupSourceDataConfig.DATA_SOURCE_NAME) DataSource slaveDataSource) throws SQLException {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl(url);

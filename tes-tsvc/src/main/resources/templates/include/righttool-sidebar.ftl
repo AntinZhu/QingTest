@@ -170,7 +170,7 @@
                 <h3 class="accordion-header">线上手机号批量解密</h3>
 
                 <div>
-                    <form id="onlinePhoneDecodeForm" method="post" enctype="multipart/form-data" target="_blank" action="${base}/v1/utils/phone/decode">
+                    <form id="onlinePhoneDecodeForm" method="post" enctype="multipart/form-data" target="_blank" action="${base}/v1/utils/phone/online/decode">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" style="text-align: right">SessionID：</label>
 
@@ -192,6 +192,42 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div class="group">
+                <h3 class="accordion-header">手机号加解密</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">加密串：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" class="phoneNumber_conv" id="qingqingPhoneNumber_conv" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="phoneNumberConverter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">手机号：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" class="phoneNumber_conv" id="phoneNumber_conv" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -396,11 +432,17 @@
     });
 
     function decodeUserCov(dataValue){
-        $.gritter.add({
-            title : "加密结果",
-            text : "暂不支持该操作，等待后续支持",
-            class_name : 'gritter-error gritter-right'
-        });
+//        $.gritter.add({
+//            title : "加密结果",
+//            text : "暂不支持该操作，等待后续支持",
+//            class_name : 'gritter-error gritter-right'
+//        });
+
+        var data = {
+            data : dataValue
+        };
+
+        commonAjaxRequest("${base}/v1/utils/user/decode.json", data, handlerDecodeUserCov, true, "解密结果:", $("#user_env_conv").val());
     }
 
     function encodeUserCov(dataValue){
@@ -410,6 +452,22 @@
             user_type : $("#user_type_conv").val()
         };
         commonAjaxRequest("${base}/v1/utils/user/encode.json", data, handlerEncodeUserCov, true, "解密结果:", $("#user_env_conv").val());
+    }
+
+    function handlerDecodeUserCov(resu){
+        if(resu.resultList == null){
+            $.gritter.add({
+                title : "加密结果",
+                text : "加密失败，请检查用户是否存在",
+                class_name : 'gritter-error gritter-right'
+            });
+        }else{
+            var userType = resu.resultList.userType;
+            $("#userId_conv").val(resu.resultList.userId);
+            $("#user_type_conv").val(userType);
+            $(".user_type_conv.btn-primary").removeClass("btn-primary");
+            $(".user_type_conv[value='" + userType + "']").addClass("btn-primary");
+        }
     }
 
     function handlerEncodeUserCov(resu){
@@ -442,5 +500,51 @@
 
     $("#onlinePhoneDecodeBtn").click(function(){
         $("#onlinePhoneDecodeForm").submit();
+    });
+
+    $("#phoneNumberConverter").click(function(){
+        var qingqingPhoneNumber = $("#qingqingPhoneNumber_conv").val();
+        var phoneNumber = $("#phoneNumber_conv").val();
+
+        if(qingqingPhoneNumber != null && qingqingPhoneNumber != ""){
+            decodePhoneNumber(qingqingPhoneNumber);
+        }else if(phoneNumber != null && phoneNumber != ""){
+            encodePhoneNumber(phoneNumber)
+        }
+    });
+
+    function decodePhoneNumber(qingqingPhoneNumber){
+        var data = {
+            data : qingqingPhoneNumber
+        };
+        commonAjaxRequest("${base}/v1/utils/phone/decode.json", data, handlerPhoneDecode, true, "解密结果:");
+    }
+
+    function handlerPhoneDecode(resu){
+        $("#phoneNumber_conv").val(resu.resultList);
+    }
+
+    function encodePhoneNumber(phoneNumber){
+        var data = {
+            data : phoneNumber
+        };
+        commonAjaxRequest("${base}/v1/utils/phone/encode.json", data, handlerPhoneEncode, true, "解密结果:");
+    }
+
+    function handlerPhoneEncode(resu){
+        $("#qingqingPhoneNumber_conv").val(resu.resultList);
+    }
+
+    $(".phoneNumber_conv").blur(function(){
+        if($(this).val() == ''){
+            return;
+        }
+
+        var valueKey = this.id;
+        $(".phoneNumber_conv").each(function(key,value){
+            if(value.id != valueKey){
+                $(value).val("");
+            }
+        });
     });
 </script>

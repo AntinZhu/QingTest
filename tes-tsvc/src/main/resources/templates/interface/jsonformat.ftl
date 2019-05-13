@@ -240,6 +240,8 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
+            var isCross = ${cross};
+
             $(document).ready(function(){
                 var data = {
                     data : ${interfaceId}
@@ -411,8 +413,21 @@
                         QingqingUser : token.qingqingUserId
                     }
                     var localPort = $("#localDebugPort").val();
+                    var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl;
 
-                    commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
+                    var data = {
+                        url : url,
+                        headers : headers,
+                        params : JSON.stringify(param),
+                        requestType : interfaceBean.requestType
+                    };
+
+                    if(isCross == 1){
+                        commonAjaxRequest("http://127.0.0.1:8009/app/cross", data, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                    }else{
+                        commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
+                    }
+
                 }
 
                 function handlerInvokeResult(resu){

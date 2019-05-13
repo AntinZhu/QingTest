@@ -4,23 +4,22 @@
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
         </Console>
-        <RollingFile name="RollingFile" fileName="logs/strutslog1.log"
+        <RollingFile name="RollingFile" fileName="logs/mylog.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d{MM-dd-yyyy} %p %c{1.} [%t] -%M-%L- %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="1 KB"/>
+                <SizeBasedTriggeringPolicy size="60 MB"/>
             </Policies>
-            <DefaultRolloverStrategy fileIndex="max" max="2"/>
+            <DefaultRolloverStrategy fileIndex="max" max="5"/>
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="com.opensymphony.xwork2" level="WAN"/>
-        <Logger name="org.apache.struts2" level="WAN"/>
         <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="RollingFile"/>
         </Root>
     </Loggers>
 </Configuration>

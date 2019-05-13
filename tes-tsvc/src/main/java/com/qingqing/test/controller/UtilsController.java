@@ -8,6 +8,8 @@ import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.TimeUtil;
+import com.qingqing.common.util.UserIdEncoder;
+import com.qingqing.common.util.encode.TripleDESUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
@@ -65,7 +67,9 @@ public class UtilsController {
         Integer count = phoneNumberManager.sync();
         logger.info("cost:" + (System.currentTimeMillis() - start));
 
-        return new SingleResponse<>(count);
+        SingleResponse<Integer> result = new SingleResponse<Integer>();
+        result.setResultList(count);
+        return result;
     }
 
     @RequestMapping("order/encode")
@@ -104,6 +108,42 @@ public class UtilsController {
         return result;
      }
 
+    @RequestMapping("phone/encode")
+    @ResponseBody
+    public SingleResponse<String> encodePhone(@ProtoRequestBody SimpleStringRequest request){
+        String phoneNumber = request.getData();
+
+        String qingqingPhoneNumber;
+        try{
+            qingqingPhoneNumber = TripleDESUtil.encrypt(phoneNumber);
+        }catch (Exception e){
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "phone number encode error","加密失败，请检查参数"),"convert phone number error, value:" + phoneNumber, e);
+        }
+
+        SingleResponse<String> result = new SingleResponse<String>();
+        result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+        result.setResultList(qingqingPhoneNumber);
+        return result;
+    }
+
+    @RequestMapping("phone/decode")
+    @ResponseBody
+    public SingleResponse<String> decodePhone(@ProtoRequestBody SimpleStringRequest request){
+        String qingqingPhoneNumber = request.getData();
+
+        String phoneNumber;
+        try{
+            phoneNumber = TripleDESUtil.decrypt(qingqingPhoneNumber);
+        }catch (Exception e){
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "phone number encode error","解密失败，请检查参数"),"convert phone number error, value:" + qingqingPhoneNumber, e);
+        }
+
+        SingleResponse<String> result = new SingleResponse<String>();
+        result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+        result.setResultList(phoneNumber);
+        return result;
+    }
+
     @RequestMapping("user_phone/convert")
     @ResponseBody
     public SingleResponse<String> userPhoneConvert(@ProtoRequestBody UserProto.User request){
@@ -133,17 +173,31 @@ public class UtilsController {
     @RequestMapping("user/encode")
     @ResponseBody
     public SingleResponse<String> encodeUserID(@ProtoRequestBody UserProto.User request){
-        String qingqingUserId = userService.encodeUser(UserType.valueOf(request.getUserType().getNumber()), request.getUserId());
-
         SingleResponse<String> result = new SingleResponse<String>();
         result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
-        if(qingqingUserId != null){
-            result.setResultList(qingqingUserId);
+        result.setResultList(UserIdEncoder.encodeUser(UserType.valueOf(request.getUserType().getNumber()), request.getUserId()));
+        return result;
+    }
+
+    @RequestMapping("user/decode")
+    @ResponseBody
+    public SingleResponse<User> decodeUserId(@ProtoRequestBody SimpleStringRequest request){
+        User user = null;
+        try{
+            user = UserIdEncoder.decodeUser(request.getData());
+        }catch(Exception e){
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "", "解码用户ID失败"), "fail decode qingqingUserId:" + request.getData());
+        }
+
+        SingleResponse<User> result = new SingleResponse<User>();
+        result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+        if(user != null){
+            result.setResultList(user);
         }
         return result;
     }
 
-    @RequestMapping("phone/decode")
+    @RequestMapping("phone/online/decode")
     public @ResponseBody void decodePhone(@RequestParam("file") MultipartFile file,
                                           @RequestParam("session") String session,
                                           HttpServletResponse response) throws IOException {
@@ -208,13 +262,13 @@ public class UtilsController {
         return new SimpleResponse(baseResponse);
     }
 
-    @RequestMapping("es/indexs")
-    @ResponseBody
-    public SingleResponse<String> indexs(){
-        biTeacherIndexManager.allIndex();
-
-        return new SingleResponse<>("");
-    }
+//    @RequestMapping("es/indexs")
+//    @ResponseBody
+//    public SingleResponse<String> indexs(){
+//        biTeacherIndexManager.allIndex();
+//
+//        return new SingleResponse<String>("");
+//    }
 
 
     @RequestMapping("ws")
