@@ -154,6 +154,7 @@ public class EnvClient implements Client {
 
         finalUrl = finalUrl.replace("{env}", EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV));
 
+        logger.info("finalUrl:" + finalUrl);
         return finalUrl;
     }
 

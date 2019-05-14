@@ -241,12 +241,10 @@
             $('textarea').numberedtextarea();
 
             var isCross = ${cross};
+            var interfaceBean = new Object()';
 
             $(document).ready(function(){
-                var data = {
-                    data : ${interfaceId}
-                };
-                commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
+               handlerInterface(interfaceBean);
             });
 
             var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h={server}";

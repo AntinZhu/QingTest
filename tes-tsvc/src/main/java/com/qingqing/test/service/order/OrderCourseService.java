@@ -1,5 +1,6 @@
 package com.qingqing.test.service.order;
 
+import com.qingqing.test.domain.order.GroupUserCourseApply;
 import com.qingqing.test.domain.order.OrderCourseV1;
 
 import java.util.List;
@@ -10,4 +11,6 @@ import java.util.List;
 public interface OrderCourseService {
 
     List<OrderCourseV1> selectByOrderId(Long orderId);
+
+    GroupUserCourseApply getFreezeApplyByOrderCourseId(Long orderCourseId);
 }

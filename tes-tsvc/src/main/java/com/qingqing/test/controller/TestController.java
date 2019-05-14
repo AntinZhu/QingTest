@@ -74,8 +74,20 @@ public class TestController {
     }
 
     @RequestMapping("json_format")
-    public String show(@RequestParam("id") Long id, @RequestParam(value = "paramId", defaultValue = "0") Long paramId, @RequestParam(value = "env", defaultValue = "dev") String env, @RequestParam(value = "cross", defaultValue = "0") int isCross, Model model){
-        model.addAttribute("interfaceId", id);
+    public String show(@RequestParam("id") Long interfaceId, @RequestParam(value = "paramId", defaultValue = "0") Long paramId, @RequestParam(value = "env", defaultValue = "dev") String env, @RequestParam(value = "cross", defaultValue = "0") int isCross, Model model){
+        model.addAttribute("interfaceId", interfaceId);
+
+
+        TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
+        if(interfaceBean.getInter() == null){
+            throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown test interface, interfaceId:" + interfaceId);
+        }
+
+        TestInterfaceResponse interfaceResponse = new TestInterfaceResponse();
+        interfaceResponse.setResponse(BaseResponse.SUCC_RESP);
+        interfaceResponse.setInterfaceInfo(interfaceBean);
+
+        model.addAttribute("interfaceBean", JsonUtil.format(interfaceResponse).replace("/r/n", ""));
         model.addAttribute("paramExampleId", paramId);
         model.addAttribute("env", env);
         model.addAttribute("cross", isCross);

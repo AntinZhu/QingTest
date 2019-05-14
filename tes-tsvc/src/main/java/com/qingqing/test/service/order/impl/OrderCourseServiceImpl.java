@@ -1,7 +1,9 @@
 package com.qingqing.test.service.order.impl;
 
 import com.qingqing.test.bean.common.response.ListResponse;
+import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.client.ApiPiClient;
+import com.qingqing.test.domain.order.GroupUserCourseApply;
 import com.qingqing.test.domain.order.OrderCourseV1;
 import com.qingqing.test.service.order.OrderCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +25,12 @@ public class OrderCourseServiceImpl implements OrderCourseService {
         ListResponse<OrderCourseV1> response = apiPiClient.getOrderCourseList(orderId);
         return response.getResultList();
     }
+
+    @Override
+    public GroupUserCourseApply getFreezeApplyByOrderCourseId(Long orderCourseId) {
+        SingleResponse<GroupUserCourseApply> result = apiPiClient.getFreezeApply(orderCourseId);
+
+        return result.getResultList();
+    }
+
 }

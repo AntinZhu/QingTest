@@ -478,7 +478,7 @@
                                                                             <th>价格(含税)</th>
                                                                             <th>价格(不含税)</th>
                                                                             <th class="hidden-480">状态</th>
-                                                                            <th>上课 | 三方赔付 | 删课 | 结课</th>
+                                                                            <th>上课 | 三方赔付 | 删课 | 结课 | </th>
                                                                         </tr>
                                                                         </thead>
 
@@ -760,6 +760,20 @@
             return result;
         }
 
+        var normal_title;
+        document.addEventListener('visibilitychange',function(){ //浏览器切换事件
+            if(document.visibilityState=='hidden') { //状态判断
+                normal_title=document.title;
+                document.title='您的订单在这呢，别忘了';
+            }else {
+                document.title= "来啦，老弟";
+                var qingqingOrderId = $("#qingqingOrderId").text();
+                if(qingqingOrderId != null && qingqingOrderId != ""){
+                    orderCourseList();
+                }
+            }
+        });
+
         function handlerSubOrderDetail(resu){
             var s = $("#orderCourseRow").html();
             s = s.replace("</tbody>","");
@@ -794,9 +808,13 @@
                 var data = {
                     data : orderCourseId,
                     studentId : $("#studentId").val()
-                }
+                };
 
-                commonAjaxRequest("${base}/v1/order_course/student/apply_freeze.json", data, handlerCommonOrderOps, false, "申请三方赔付失败：", $("#env").val());
+                var otherData = {
+                    orderCourseId : orderCourseId
+                };
+
+                commonAjaxRequest("${base}/v1/order_course/student/apply_freeze.json", data, handlerApplyFreeze, false, "申请三方赔付失败：", $("#env").val(), otherData);
             });
 
             $(".finish-class").click(function(){
@@ -804,10 +822,16 @@
                 var data = {
                     data : orderCourseId,
                     studentId : $("#studentId").val()
-                }
+                };
 
                 commonAjaxRequest("${base}/v1/order_course/student/finish_class.json", data, handlerCommonOrderOps, false, "结课失败：", $("#env").val());
             });
+
+           function handlerApplyFreeze(resu, otherData){
+                var orderCourseId = otherData.orderCourseId;
+
+                window.open("${base}/v1/order_course/freeze_apply/page?orderCourseId=" + orderCourseId + "&env=" + $("#env").val());
+            }
 
             $(".apply-cancel").click(function(){
                 var orderCourseId = $(this).find("input").val();

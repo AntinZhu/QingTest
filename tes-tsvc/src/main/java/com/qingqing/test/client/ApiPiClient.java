@@ -5,12 +5,18 @@ import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.RechargeProto.OperateUserWalletRequest;
 import com.qingqing.api.proto.v1.TeacherProto.SimpleQingQingTeacherIdRequest;
 import com.qingqing.api.proto.v1.consult.Consult.GetPhoneNumberResponse;
+import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseFinishMockRequest;
+import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseFinishMockResponse;
+import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseThirdPartyJudgeRequestV4;
+import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.config.feign.MyPiFeignConfiguration;
+import com.qingqing.test.domain.order.GroupUserCourseApply;
 import com.qingqing.test.domain.order.OrderCourseV1;
 import com.qingqing.test.domain.pay.ThirdPayBrief;
+import com.qingqing.test.feign.PtRequestInterceptor;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -44,6 +50,15 @@ public interface ApiPiClient {
 
     @PostMapping(value = "/pi/v1/order_course/list_by_order_id", consumes="application/json", produces="application/json")
     ListResponse<OrderCourseV1> getOrderCourseList(@RequestParam(name = "orderId") Long orderId);
+
+    @PostMapping(value = "/pi/v1/order_course/freeze_apply/query_by_order_course_id", consumes="application/json", produces="application/json")
+    SingleResponse<GroupUserCourseApply> getFreezeApply(@RequestParam(name = "orderCourseId") Long orderCourseId);
+
+    @PostMapping(value = "/pi/v4/order_course/action/process_freeze")
+    SimpleResponse processFreeze(OrderCourseThirdPartyJudgeRequestV4 request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType userType);
+
+    @PostMapping(value = "/pi/v1/order_course/action/mock_finish")
+    OrderCourseFinishMockResponse mockFinish(OrderCourseFinishMockRequest request);
 
     @PostMapping(value = "/pi/v1/teacher/xxxx")
     @ProtoResponseBody
