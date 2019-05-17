@@ -1362,6 +1362,7 @@
         $("#env").val($(this).val());
 
         refreshInterfaceUrl();
+        initOrderParam();
     });
 
     jQuery(function($) {

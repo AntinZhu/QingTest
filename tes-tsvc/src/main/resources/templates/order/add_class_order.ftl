@@ -245,7 +245,7 @@
                                                             <div class="form-group">
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="classHour">课时:</label>
                                                                 <div class="col-xs-12 col-sm-3">
-                                                                    <input type="number" name="classHour" id="classHour" disabled="disabled" value="20" />
+                                                                    <input type="number" name="classHour" id="classHour" value="20" />
                                                                 </div>
                                                             </div>
 
@@ -1081,6 +1081,7 @@
             $("#env").val($(this).val());
 
             refreshInterfaceUrl();
+            showDetailForOrder();
         });
 
         jQuery.validator.addMethod("phone", function (value, element) {

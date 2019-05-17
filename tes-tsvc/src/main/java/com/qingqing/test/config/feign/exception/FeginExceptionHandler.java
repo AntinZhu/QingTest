@@ -43,43 +43,40 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             logger.warn("errorCode Exception : " + JsonUtil.format(((ErrorCodeException)ex).getErrorCodeInterface()));
         }
 
+        BaseResponse baseResponse = null;
         if(ex instanceof FeignException){
             FeignException fex = (FeignException)ex;
-            response.setStatus(fex.status());
-            if( pf != null ) {
-                response.setStatus(fex.status());
-                switch (fex.status()){
-                    case 422:
-                        if( pf != null ) {
-                            SimpleResponse result = JsonUtil.getObjectFromJson(fex.getMessage().substring(fex.getMessage().indexOf("content:\n") + 8), SimpleResponse.class);
-                            builder.setField(pf, ProtoRespGenerator.generateResponse(result.getResponse().getError_code(), result.getResponse().getError_message(), result.getResponse().getHint_message()));
-                        }
-                    case 401:
-                        if( pf != null ) {
-                            builder.setField(pf, ProtoRespGenerator.generateResponse(401, "", "token session校验不通过"));
-                        }
-                        return builder.build();
-                    case 503:
-                        if( pf != null ) {
-                            builder.setField(pf, ProtoRespGenerator.generateResponse(503, "", "小伙子，看看是不是在发服务吧"));
-                        }
-                        return builder.build();
-                }
+            switch (fex.status()){
+                case 422:
+                    SimpleResponse result = JsonUtil.getObjectFromJson(fex.getMessage().substring(fex.getMessage().indexOf("content:\n") + 8), SimpleResponse.class);
+                    baseResponse = new BaseResponse(result.getResponse().getError_code(), result.getResponse().getError_message(), result.getResponse().getHint_message());
+                    break;
+                case 401:
+                   baseResponse = new BaseResponse(401, "", "token session校验不通过");
+                   break;
+                case 503:
+                    baseResponse = new BaseResponse(503, "", "小伙子，看看是不是在发服务吧");
+                    break;
+                default:
+                    break;
             }
-        }else if(pf == null){
-            Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);
-            if(obj != null){
-                logger.info("return Class:" + ((Class<?>)obj).getName());
-                if(ex instanceof ErrorCodeException){
-                    ErrorCodeException ece = (ErrorCodeException) ex;
-                    InterfaceBaseResponse interfaceBaseResponse = new InterfaceBaseResponse();
-                    interfaceBaseResponse.setResponse(new BaseResponse(ece.getErrorCodeInterface().getErrorCode(), ece.getErrorCodeInterface().getMsg(), ece.getErrorCodeInterface().getHintMessage()));
+        }else if (ex instanceof ErrorCodeException){
+            ErrorCodeException ece = (ErrorCodeException) ex;
+            baseResponse = new BaseResponse(ece.getErrorCodeInterface().getErrorCode(), ece.getErrorCodeInterface().getMsg(), ece.getErrorCodeInterface().getHintMessage());
+        }
 
-                    if(String.class.equals(obj)){
-                        return JsonUtil.format(interfaceBaseResponse);
-                    }else {
-                        return interfaceBaseResponse;
-                    }
+        if(baseResponse != null){
+            Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);
+            if(pf != null){
+                builder.setField(pf, ProtoRespGenerator.generateResponse(baseResponse.getError_code(), baseResponse.getError_message(), baseResponse.getHint_message()));
+                return builder;
+            }if(obj != null){
+                InterfaceBaseResponse interfaceBaseResponse = new InterfaceBaseResponse();
+                interfaceBaseResponse.setResponse(baseResponse);
+                if(String.class.equals(obj)){
+                    return JsonUtil.format(interfaceBaseResponse);
+                }else {
+                    return interfaceBaseResponse;
                 }
             }
         }
