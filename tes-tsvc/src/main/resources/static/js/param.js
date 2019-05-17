@@ -629,6 +629,18 @@ $(document).on("change", "#editBtnSwitch", function(){
     editableOff();
 });
 
+$(document).on("change", "#selfParamSwitch", function(){
+    if($(this).val() == 0){
+        $("#paramListDiv").addClass("hide");
+        $("#selfParamDiv").removeClass("hide");
+        $(this).val(1);
+    }else{
+        $("#paramListDiv").removeClass("hide");
+        $("#selfParamDiv").addClass("hide");
+        $(this).val(0);
+    }
+});
+
 $(document).on("change", "#isLocalDebug", function(){
     if($(this).val() == 0){
         $(".isLocalDebug").removeClass("hide");

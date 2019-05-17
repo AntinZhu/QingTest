@@ -310,6 +310,8 @@
 
                     paramExamples = resu.interfaceInfo.paramList;
                     initParamChoose(paramExamples, ${paramExampleId});
+
+                    fillFullParam();
                 }
 
                 var env = '${env}';
@@ -374,6 +376,11 @@
                 $("#paramChoose_chosen").css('width','200px');
             }
 
+            function fillFullParam(){
+                var param = generateJsonParam("#paramListDiv input");
+                $("#fullParam").text(JSON.stringify(param));
+            }
+
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
 
@@ -387,7 +394,7 @@
 
                 $('#teacherIdBtn').click(function () {
                     refreshInterfaceUrl();
-                    var param = generateJsonParam("#paramListDiv input");
+                    var param = getParam();
                     jsonShow(param, "json-request");
                     jsonShow("[]", "json-response");
 
@@ -417,8 +424,19 @@
                     }
                 });
 
+                function getParam(){
+                    var param;
+                    if($("#selfParamSwitch").val() == 1){
+                        param = new Object($("#fullParam").text());
+                    }else{
+                        param = generateJsonParam("#paramListDiv input");
+                    }
+
+                    return param;
+                }
+
                 function handlerLocalInvoke(data){
-                    var param = generateJsonParam("#paramListDiv input");
+                    var param = getParam();
                     var token = data.resultList;
                     var headers = {
                         si : token.session,
@@ -462,6 +480,9 @@
                             showParam({paramData:paramEx.paramDetail});
                             $("#requestUserId").val(paramEx.requestUserId);
                             $("#requestUserIdDiv").text(paramEx.requestUserId);
+
+                            fillFullParam();
+                            break;
                         }
                     }
                 });

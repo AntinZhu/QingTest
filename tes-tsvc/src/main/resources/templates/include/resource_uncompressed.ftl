@@ -83,14 +83,22 @@
 <script src="${base}/static/assets/js/uncompressed/ace-elements.js"></script>
 <script src="${base}/static/assets/js/uncompressed/ace.js"></script>
 <script src="${base}/static/assets/js/uncompressed/chosen.jquery.js"></script>
+<script src="${base}/static/assets/js/uncompressed/bootstrap-wysiwyg.js"></script>
 <script src="${base}/static/assets/js/uncompressed/select2.js"></script>
 <script src="${base}/static/assets/js/uncompressed/fuelux/fuelux.wizard.js"></script>
 <script src="${base}/static/assets/js/uncompressed/jquery.validate.js"></script>
 <script src="${base}/static/assets/js/uncompressed/additional-methods.js"></script>
 <script src="${base}/static/assets/js/uncompressed/bootbox.js"></script>
+<script src="${base}/static/assets/js/uncompressed/jquery.slimscroll.js"></script>
+<script src="${base}/static/assets/js/uncompressed/jquery.easy-pie-chart.js"></script>
+<script src="${base}/static/assets/js/uncompressed/jquery.hotkeys.js"></script>
+
 <script src="${base}/static/assets/js/uncompressed/jquery.maskedinput.js"></script>
 <script src="${base}/static/assets/js/uncompressed/x-editable/bootstrap-editable.js"></script>
 <script src="${base}/static/assets/js/uncompressed/x-editable/ace-editable.js"></script>
+<script src="${base}/static/assets/js/uncompressed/x-editable/bootstrap-editable.js"></script>
+<script src="${base}/static/assets/js/date-time/bootstrap-datetimepicker.js"></script>
+<script src="${base}/static/assets/js/uncompressed/fuelux/fuelux.spinner.js"></script>
 <script src="${base}/static/js/common.js"></script>
 <script src="${base}/static/js/catelog.js"></script>
 
