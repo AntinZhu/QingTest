@@ -1,5 +1,11 @@
 package com.qingqing.test.manager;
 
+import com.qingqing.api.proto.liveclass.ApiLiveClassProto.ApiCreateLiveClassRequest;
+import com.qingqing.api.proto.liveclass.ApiLiveClassProto.ApiCreateLiveClassRequest.LiveClassOutLine;
+import com.qingqing.api.proto.order.ClassOrderProto.CreateClassOrderRequest;
+import com.qingqing.api.proto.order.ClassOrderProto.JoinClassOrderRequest;
+import com.qingqing.api.proto.order.ClassOrderProto.JoinClassOrderResponse;
+import com.qingqing.api.proto.order.ClassOrderProto.TeacherDetailForLiveClassOrderResponse;
 import com.qingqing.api.proto.v1.BankProto.GetSupportBanksResponse;
 import com.qingqing.api.proto.v1.OrderCommonEnum.DiscountType;
 import com.qingqing.api.proto.v1.OrderCommonEnum.OrderCourseChargeType;
@@ -13,7 +19,9 @@ import com.qingqing.api.proto.v1.Pay.OrderPayType;
 import com.qingqing.api.proto.v1.Pay.PayGeneralOrderSubmitRequest;
 import com.qingqing.api.proto.v1.Pay.PayResult;
 import com.qingqing.api.proto.v1.ProtoBufResponse;
+import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleLongDataResponse;
 import com.qingqing.api.proto.v1.TeacherProto;
+import com.qingqing.api.proto.v1.TeacherProto.SimpleTeacherIdRequest;
 import com.qingqing.api.proto.v1.Time.TimeParam;
 import com.qingqing.api.proto.v1.app.AppCommon.DeviceIdentification;
 import com.qingqing.api.proto.v1.app.AppCommon.PlatformType;
@@ -24,13 +32,17 @@ import com.qingqing.api.proto.v1.order.Order.JoinGroupOrderRequest;
 import com.qingqing.api.proto.v1.order.Order.OrderModeUnit;
 import com.qingqing.api.proto.v1.order.Order.StudentAddGroupOrderResponse;
 import com.qingqing.common.auth.domain.UserType;
+import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.exception.SimpleErrorCode;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.TimeUtil;
+import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.converter.lang.BigDecimalUtil;
 import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
+import com.qingqing.test.bean.order.AddClassOrderBean;
 import com.qingqing.test.bean.order.AddOrderResultBean;
 import com.qingqing.test.bean.order.CoursePriceType;
 import com.qingqing.test.bean.order.StudentAddOrderBean;
@@ -45,6 +57,7 @@ import com.qingqing.test.bean.pay.request.PayRequestBeanV2;
 import com.qingqing.test.bean.pay.request.PrePayRequestBean;
 import com.qingqing.test.bean.pay.request.PrePayRequestBeanV2;
 import com.qingqing.test.client.ApiPiClient;
+import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.controller.converter.OrderConverter;
 import com.qingqing.test.controller.converter.PayConverter;
@@ -85,6 +98,8 @@ public class OrderManager {
     private StudentService studentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PiClient piClient;
 
     public String test(){
         GetSupportBanksResponse response = apiPiClient.listBank();
@@ -97,6 +112,80 @@ public class OrderManager {
         TeacherProto.TeacherDetailForStudentToOrderResponse resp = ptClient.detailForOrder(request, studentId);
 
         return OrderConverter.converterToInfoBean(resp);
+    }
+
+    public Long addClass(AddClassOrderBean classOrderBean){
+        ApiCreateLiveClassRequest request = ApiCreateLiveClassRequest.newBuilder()
+                .setName(classOrderBean.getClassName())
+                .setTeacherId(classOrderBean.getTeacherId())
+                .setUnitPrice(classOrderBean.getPrice())
+                .setClassNum(classOrderBean.getCourseTimes())
+                .setClassUnitHourMultiTen(classOrderBean.getClassHour())
+                .setClassFunctionDesc(classOrderBean.getCourseDesc())
+                .setClassTimeDesc(classOrderBean.getTimeDesc())
+                .setMinOpenStudents(classOrderBean.getMinStudentCnt())
+                .setMaxOpenStudents(classOrderBean.getMaxStudentCnt())
+                .setCourseId(classOrderBean.getCourseId())
+                .setGradeId(classOrderBean.getGradeId())
+                .addAllTimeParams(generateTimeParams(classOrderBean.getCourseTimes(), classOrderBean.getClassHour()))
+                .addAllPublishCityIds(classOrderBean.getPublishCityIds())
+                .addAllOutLines(generateLiveClassOutLine(classOrderBean.getCourseTimes()))
+                .setTextbookCatagory(classOrderBean.getTextCategoryId())
+                .build();
+
+        SimpleLongDataResponse response = piClient.addClass(request, classOrderBean.getCreateAssistantId(), UserType.ta);
+        if(!BaseResponse.SUCC_CODE.equals(response.getResponse().getErrorCode())){
+            throw new ErrorCodeException(new SimpleErrorCode(response.getResponse().getErrorCode(), response.getResponse().getErrorMessage(), response.getResponse().getHintMessage()), "创建小组课失败");
+        }
+
+        return response.getData();
+    }
+
+    public Long addClassOrder(Long classId, AddClassOrderBean classOrderBean){
+        CreateClassOrderRequest request = CreateClassOrderRequest.newBuilder()
+                .setClassId(classId)
+                .setName(classOrderBean.getClassName())
+                .setTeacherId(classOrderBean.getTeacherId())
+                .setUnitPricePerPerson(classOrderBean.getPrice())
+                .setClassNum(classOrderBean.getCourseTimes())
+                .setClassUnitHourMultiTen(classOrderBean.getClassHour())
+                .setClassTimeDesc(classOrderBean.getTimeDesc())
+                .setMinStudentCnt(classOrderBean.getMinStudentCnt())
+                .setMaxStudentCnt(classOrderBean.getMaxStudentCnt())
+                .setCourseId(classOrderBean.getCourseId())
+                .setGradeId(classOrderBean.getGradeId())
+                .addAllTimeParams(generateTimeParams(classOrderBean.getCourseTimes(), classOrderBean.getClassHour()))
+                .build();
+
+        SimpleLongDataResponse response = piClient.addClassOrder(request, classOrderBean.getCreateAssistantId(), UserType.ta);
+        if(!BaseResponse.SUCC_CODE.equals(response.getResponse().getErrorCode())){
+            throw new ErrorCodeException(new SimpleErrorCode(response.getResponse().getErrorCode(), response.getResponse().getErrorMessage(), response.getResponse().getHintMessage()), "创建小组课订单失败");
+        }
+
+        return response.getData();
+    }
+
+    public AddOrderResultBean joinClassOrder(Long classOrderId, Long studentId, Long assistantId){
+        JoinClassOrderRequest request = JoinClassOrderRequest.newBuilder()
+                .setClassOrderId(classOrderId)
+                .setQingqingStudentId(UserIdEncoder.encodeUser(UserType.student, studentId))
+                .build();
+
+        JoinClassOrderResponse response = piClient.joinClassOrder(request, assistantId, UserType.ta);
+        AddOrderResultBean result = OrderConverter.convertAddOrderResult(response);
+        result.setClassOrderId(classOrderId);
+
+        return result;
+    }
+
+    private List<LiveClassOutLine> generateLiveClassOutLine(int cnt){
+        List<LiveClassOutLine> resultList = new ArrayList<>();
+
+        for(int i = 0; i < cnt; i++){
+            resultList.add(LiveClassOutLine.newBuilder().setTitle("woshititlewoshititlewoshititlewoshi-" + i).build());
+        }
+
+        return resultList;
     }
 
     public AddOrderResultBean addOrder(StudentAddOrderBean addOrderBean){
@@ -222,6 +311,30 @@ public class OrderManager {
                 builder6.setAddressId(studentAddressId);
             }
             omus.add(builder6.build());
+        }
+
+        return omus;
+    }
+
+    private List<TimeParam> generateTimeParams(int courseTimes, int classHour) {
+        List<TimeParam> omus = new ArrayList<TimeParam>();
+        {
+            TimeParam.Builder timeBuilder = TimeParam.newBuilder();
+            Date courseDate = TimeUtil.dayAfterNow(1);
+            Integer halfHourLength = classHour / 5;
+            Integer start = 0;
+            for (int i = 0; i < courseTimes; i++) {
+                timeBuilder.setDate(TimeUtil.dateToString(courseDate, TimeUtil.DATE_TO_YEAR_MONTH_DAY));
+                timeBuilder.setStartBlock(start);
+                timeBuilder.setEndBlock(start + (halfHourLength - 1));
+                omus.add(timeBuilder.build());
+
+                start = start + halfHourLength;
+                if (start > 28) {
+                    start = 0;
+                    courseDate = TimeUtil.dayAfter(courseDate, 1);
+                }
+            }
         }
 
         return omus;
@@ -407,7 +520,8 @@ public class OrderManager {
                     .setOrderPayType(OrderPayType.qingqing_balance)
                     .setBackupOrderPayType(OrderPayType.alipay)
                     .setOrderType(OrderType.valueOf(orderType))
-                    .setMoney(String.valueOf(prePayResponse.getAllNeedExtraPay()));
+                    .setMoney(String.valueOf(prePayResponse.getAllNeedExtraPay()))
+                    .setSourceChannel(SourceChannel.app_source_channel);
 
             PayResult payResult = ptClient.payForOrder(request.build(), studentId, UserType.student);
             return payResult.getResponse().getErrorCode() == 0;
@@ -417,7 +531,67 @@ public class OrderManager {
         }
     }
 
+    public void madeUpClassOrder(Long groupOrderId, Long studentId, Long createAssistantId){
+        // 1018:满员 1020：状态异常 1025:停止生源供给 1019:已参团
+        int tryTimes = 50;
+        JoinClassOrderRequest.Builder request = JoinClassOrderRequest.newBuilder()
+                .setQingqingGroupOrderId(OrderIdEncoder.encodeOrderId(groupOrderId));
+        while(tryTimes > 0){
+            studentId++;
+            if(!studentService.isUserExist(studentId)){
+                continue;
+            }
+
+            request.setQingqingStudentId(userService.encodeUser(UserType.student, studentId));
+            JoinClassOrderResponse response = null;
+            try{
+                tryTimes--;
+                response = piClient.joinClassOrder(request.build(), createAssistantId, UserType.ta);
+            }catch (Exception e){
+                logger.error("join class order fail, ", e);
+                continue;
+            }
+
+            boolean isMadeUp = false;
+            switch (response.getResponse().getErrorCode()){
+                case 0:
+                    String qingqingSubOrderId = response.getQingqingGroupSubOrderId();
+                    payByBalance(qingqingSubOrderId, OrderType.live_class_order_type.getNumber(), studentId);
+                    break;
+                case 1025:
+                case 1019:
+                    // 该家长无法参团
+                    break;
+                case 1020:
+                    isMadeUp = true;
+                    break;
+                case 1018: // 已满员
+                    // 查询剩余未支付的子订单，使用钱包支付
+                    isMadeUp = true;
+                    break;
+                default:
+                    logger.error("unknown error when join class, resp:" + JsonUtil.format(response.getResponse()));
+                    break;
+            }
+
+            if(isMadeUp){
+                break;
+            }
+        }
+    }
+
     private DeviceIdentification getDeviceIdentification(){
         return DeviceIdentification.newBuilder().setPlatformType(PlatformType.ios).setImei("1").setIdfa("2").build();
     }
+
+    public TeacherInfoForOrderBean detailForAddClassOrder(Long teacherId){
+        SimpleTeacherIdRequest request = SimpleTeacherIdRequest.newBuilder().setTeacherId(teacherId).build();
+        TeacherDetailForLiveClassOrderResponse response =piClient.preAddClassOrder(request);
+        if(response.getCoursePricesCount() < 1){
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "", "未找到该老师开通年级科目信息"), "cannot get price info, teacherId:" + teacherId);
+        }
+
+        return OrderConverter.converterToInfoBean(teacherId, response);
+    }
+
 }

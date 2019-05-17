@@ -1,8 +1,11 @@
 package com.qingqing.test.controller.converter;
 
+import com.qingqing.api.proto.order.ClassOrderProto.JoinClassOrderResponse;
+import com.qingqing.api.proto.order.ClassOrderProto.TeacherDetailForLiveClassOrderResponse;
 import com.qingqing.api.proto.v1.ApiServicePackageProto.ApiServicePackageInfo;
 import com.qingqing.api.proto.v1.ApiServicePackageProto.ApiServicePackageInfoForOrder;
 import com.qingqing.api.proto.v1.GradeCourseProto;
+import com.qingqing.api.proto.v1.GradeCourseProto.TeacherCoursePrice;
 import com.qingqing.api.proto.v1.OrderCommonEnum.GroupSubOrderStatus;
 import com.qingqing.api.proto.v1.TeacherProto;
 import com.qingqing.api.proto.v1.coursecontentpackage.CourseContentPackageProto.CourseContentPackageForOrder;
@@ -12,7 +15,9 @@ import com.qingqing.api.proto.v1.coursepackage.CoursePackageProto.CoursePackageU
 import com.qingqing.api.proto.v1.order.Order.StudentAddGroupOrderResponse;
 import com.qingqing.api.proto.v1.strengthen.ApiStrengthenProto.ApiStrengthenInfo;
 import com.qingqing.api.proto.v1.strengthen.ApiStrengthenProto.ApiTeacherGradeAndSupportStrengthenInfo;
+import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.util.OrderIdEncoder;
+import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.KeyAndValue;
@@ -31,11 +36,60 @@ import com.qingqing.test.bean.order.StrengthenPackage;
 import com.qingqing.test.bean.order.TeacherInfoForOrderBean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class OrderConverter {
+
+    public static TeacherInfoForOrderBean converterToInfoBean(Long teacherId, TeacherDetailForLiveClassOrderResponse response){
+        // 获取所有支持的年级，科目，上门方式
+        Map<String, String> courseMap = new HashMap<String, String>();
+        List<CourseOrderBean> courseOrderBeanList = new ArrayList<CourseOrderBean>();
+
+        for (TeacherCoursePrice teacherCoursePrice : response.getCoursePricesList()) {
+            CoursePriceType coursePriceType = CoursePriceType.valueOf(teacherCoursePrice.getPriceType());
+            if(!CoursePriceType.class_course.equals(coursePriceType)){
+                continue;
+            }
+
+            List<CoursePrice> coursePriceList = new ArrayList<>(teacherCoursePrice.getPriceInfosCount());
+            for (GradeCourseProto.GradeCoursePriceInfoV2 courseInfo :  teacherCoursePrice.getPriceInfosList()){
+                KeyAndValue grade = new KeyAndValue(String.valueOf(courseInfo.getGradeCourse().getGradeId()), courseInfo.getGradeCourse().getGradeName());
+                Integer courseId = courseInfo.getGradeCourse().getCourseId();
+                courseMap.put(String.valueOf(courseId), courseInfo.getGradeCourse().getCourseName());
+
+                List<SiteTypeAndPrice> siteTypeAndPriceList = new ArrayList<>(4);
+//                if(DoubleCompareUtil.gtZero(courseInfo.getPriceInfo().getPriceToStudentHome())){
+//                    siteTypeAndPriceList.add(new SiteTypeAndPrice(OrderSiteType.student_home, courseInfo.getPriceInfo().getPriceToStudentHome()));
+//                }
+//                if(DoubleCompareUtil.gtZero(courseInfo.getPriceInfo().getPriceToTeacherHome())){
+//                    siteTypeAndPriceList.add(new SiteTypeAndPrice(OrderSiteType.teacher_home, courseInfo.getPriceInfo().getPriceToTeacherHome()));
+//                }
+                if(DoubleCompareUtil.gtZero(courseInfo.getPriceInfo().getPriceForLiving())){
+                    siteTypeAndPriceList.add(new SiteTypeAndPrice(OrderSiteType.live, courseInfo.getPriceInfo().getPriceForLiving()));
+                }else{
+                    continue;
+                }
+
+                coursePriceList.add(new CoursePrice(grade, siteTypeAndPriceList));
+            }
+
+            courseOrderBeanList.add(new CourseOrderBean(coursePriceType, coursePriceList));
+        }
+
+        TeacherInfoForOrderBean bean = new TeacherInfoForOrderBean();
+        bean.setResponse(BaseResponse.SUCC_RESP);
+        bean.setSupportCourseList(BaseConverter.convertToKeyAndValue(courseMap));
+        bean.setCourseOrderList(courseOrderBeanList);
+        bean.setQingqingTeacherId(UserIdEncoder.encodeUser(UserType.teacher, teacherId));
+        bean.setCoursePackageList(Collections.<CoursePackage>emptyList());
+        bean.setCourseContentPackageList(Collections.<CourseContentPackage>emptyList());
+        bean.setStrengthenPackageList(Collections.<StrengthenPackage>emptyList());
+
+        return bean;
+    }
 
     public static TeacherInfoForOrderBean converterToInfoBean(TeacherProto.TeacherDetailForStudentToOrderResponse response){
         TeacherInfoForOrderBean bean = new TeacherInfoForOrderBean();
@@ -139,6 +193,23 @@ public class OrderConverter {
     }
 
     public static AddOrderResultBean convertAddOrderResult(StudentAddGroupOrderResponse response){
+        AddOrderResultBean bean = new AddOrderResultBean();
+        bean.setResponse(BaseConverter.convertBaseResponse(response.getResponse()));
+        if(!BaseResponse.SUCC_CODE.equals(bean.getResponse().getError_code())){
+            return bean;
+        }
+
+        bean.setQingqingGroupOrderId(response.getQingqingGroupOrderId());
+        bean.setQingqingOrderId(response.getQingqingGroupSubOrderId());
+
+        bean.setOrderId(String.valueOf(OrderIdEncoder.decodeQingqingOrderId(response.getQingqingGroupSubOrderId())));
+        bean.setGroupOrderId(String.valueOf(OrderIdEncoder.decodeQingqingOrderId(response.getQingqingGroupOrderId())));
+        bean.setOrderBriefStatus(convertOrderBriefStatus(response.getGroupSubOrderStatus()));
+
+        return bean;
+    }
+
+    public static AddOrderResultBean convertAddOrderResult(JoinClassOrderResponse response){
         AddOrderResultBean bean = new AddOrderResultBean();
         bean.setResponse(BaseConverter.convertBaseResponse(response.getResponse()));
         if(!BaseResponse.SUCC_CODE.equals(bean.getResponse().getError_code())){

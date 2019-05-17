@@ -241,10 +241,11 @@
             $('textarea').numberedtextarea();
 
             var isCross = ${cross};
-            var interfaceBean = new Object()';
-
             $(document).ready(function(){
-               handlerInterface(interfaceBean);
+                var data = {
+                    data : ${interfaceId}
+                };
+                commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
             });
 
             var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h={server}";
@@ -304,7 +305,8 @@
 
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
-                    showParam({paramData:resu.interfaceInfo.inter.paramDetail});
+                    var paramDetail = fillDefaultValue(JSON.parse(resu.interfaceInfo.inter.paramDetail));
+                    showParam({paramData:paramDetail});
 
                     paramExamples = resu.interfaceInfo.paramList;
                     initParamChoose(paramExamples, ${paramExampleId});
@@ -316,6 +318,22 @@
                 $(".env[value='" + env + "']").addClass("btn-primary");
 
                 refreshInterfaceUrl();
+            }
+
+            function fillDefaultValue(paramArr){
+                var defaultObj = new Object(${defaultObj});
+                for(var paramIdx in paramArr){
+                    var param = paramArr[paramIdx];
+                    for(var propName in defaultObj){
+                        if(param.key == propName){
+                            param.defaultValue.name = defaultObj[propName];
+                            param.defaultValue.value = defaultObj[propName];
+                            break;
+                        }
+                    }
+                }
+
+                return JSON.stringify(paramArr);
             }
 
             function initParamChoose(paramChooses, paramExampleId){

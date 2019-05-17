@@ -68,18 +68,7 @@
                             <div class="span12">
                                 <div class="widget-box">
                                     <div class="widget-header widget-header-blue widget-header-flat">
-                                        <h4 class="lighter">订单主流程</h4>
-
-                                        <#--<div class="widget-toolbar">-->
-                                            <#--<label>-->
-                                                <#--<small class="green">-->
-                                                    <#--<b>Validation</b>-->
-                                                <#--</small>-->
-
-                                                <#--<input id="skip-validation" type="checkbox" class="ace ace-switch ace-switch-4" />-->
-                                                <#--<span class="lbl"></span>-->
-                                            <#--</label>-->
-                                        <#--</div>-->
+                                        <h4 class="lighter">小组课订单主流程</h4>
                                     </div>
 
                                     <div class="widget-body">
@@ -146,8 +135,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="space-2"></div>
-
                                                         <div class="form-group">
                                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="studentIdIpt">学生ID:</label>
 
@@ -158,42 +145,37 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="hr hr-dotted"></div>
+
+                                                        <div class="space-2"></div>
+
 
                                                         <!-- 年级科目信息 -->
                                                         <div id="orderDetailSelector" class="hide">
                                                             <div class="form-group">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="discountType">优惠类型:</label>
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="className">小组课名称:</label>
                                                                 <div class="col-xs-12 col-sm-3">
-                                                                    <select class="width-80 chosen-select" id="discountType" data-placeholder="选择优惠类型...">
-                                                                        <option value="0">&nbsp;</option>
-                                                                    </select>
+                                                                     <span class="input-icon">
+                                                                        <input type="text" id="className" value="我是小组课" />
+                                                                        <i class="icon-leaf blue"></i>
+                                                                    </span>
                                                                 </div><!-- /span -->
                                                             </div>
-                                                            <div class="form-group hide" id="coursePackageChooseDiv">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="coursePackageId">选择优惠包：</label>
-                                                                <div class="col-xs-4 col-sm-4">
-                                                                    <div>
-                                                                        <select class="width-80 form-control" id="coursePackageId" multiple="multiple">
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group hide" id="contentPackageChooseDiv">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="contentPackageId">选择内容包：</label>
-                                                                <div class="col-xs-4 col-sm-4">
-                                                                    <div>
-                                                                        <select class="width-80 form-control" id="contentPackageId" multiple="multiple">
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="courseDesc">课程简介:</label>
+                                                                <div class="col-xs-12 col-sm-3">
+                                                                     <span class="input-icon">
+                                                                        <input type="text" id="courseDesc" value="我是课程简介" />
+                                                                        <i class="icon-leaf blue"></i>
+                                                                    </span>
+                                                                </div><!-- /span -->
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="coursePriceType">订单类型:</label>
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="timeDesc">课程时间简介:</label>
                                                                 <div class="col-xs-12 col-sm-3">
-                                                                    <select class="width-80 chosen-select" id="coursePriceType" data-placeholder="选择订单类型...">
-                                                                        <option value="0">&nbsp;</option>
-                                                                    </select>
+                                                                     <span class="input-icon">
+                                                                        <input type="text" id="timeDesc" value="我是课程时间简介" />
+                                                                        <i class="icon-leaf blue"></i>
+                                                                    </span>
                                                                 </div><!-- /span -->
                                                             </div>
                                                             <div class="form-group ">
@@ -215,70 +197,61 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group ">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">上门方式:</label>
+                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right">教材:</label>
+
+                                                                    <div class="col-xs-12 col-sm-3">
+                                                                        <select class="width-80 chosen-select" id="textCategoryId" data-placeholder="选择教材...">
+                                                                            <option value="0">&nbsp;</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            <div class="form-group ">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">价格:</label>
 
                                                                 <div class="col-xs-12 col-sm-3">
-                                                                    <select class="width-80 chosen-select" id="siteType" data-placeholder="选择上门方式...">
-                                                                        <option value="0">&nbsp;</option>
-                                                                    </select>
+                                                                    <input type="number" name="price" id="price" value="0" class="col-xs-12 col-sm-3" />
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group hide" id="strengthenTypeDiv">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">搭配巩固课:</label>
+                                                            <div class="form-group ">
+                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right">最小开班学生数:</label>
 
+                                                                    <div class="col-xs-12 col-sm-3">
+                                                                        <input type="number" name="minStudentCnt" id="minStudentCnt" value="2" class="col-xs-12 col-sm-3" />
+                                                                    </div>
+                                                                </div>
+                                                            <div class="form-group ">
+                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right">最大学生数:</label>
+
+                                                                    <div class="col-xs-12 col-sm-3">
+                                                                        <input type="number" name="maxStudentCnt" id="maxStudentCnt" value="5" class="col-xs-12 col-sm-3" />
+                                                                    </div>
+                                                                </div>
+                                                            <!-- 老师的相关信息 -->
+                                                            <div class="form-group hide">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startCourseTime">首次上课时间:</label>
+                                                                <div class="input-group col-xs-12 col-sm-6">
+                                                                    <input class="form-control date-picker" id="id-date-picker-1" type="startCourseTime" data-date-format="yyyy-mm-dd" />
+                                                                    <span class="input-group-addon">
+                                                                                <i class="icon-calendar bigger-110"></i>
+                                                                            </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="courseTimes">课次:</label>
                                                                 <div class="col-xs-12 col-sm-3">
-                                                                    <select class="width-80 chosen-select" id="strengthenType" data-placeholder="选择巩固课...">
-                                                                        <option value="0">&nbsp;</option>
-                                                                    </select>
+                                                                    <input type="number" name="courseTimes" id="courseTimes" value="4" />
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group hide" id="servicePackageDiv">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">选择服务包:</label>
-
+                                                            <div class="form-group">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="classHour">课时:</label>
                                                                 <div class="col-xs-12 col-sm-3">
-                                                                    <select class="width-80 chosen-select" id="servicePackage" data-placeholder="选择服务包...">
-                                                                        <option value="0">&nbsp;</option>
-                                                                    </select>
+                                                                    <input type="number" name="classHour" id="classHour" disabled="disabled" value="20" />
                                                                 </div>
-                                                            </div>
-                                                            <div class="hr hr-dotted"></div>
-                                                        </div>
-
-                                                        <!-- 老师的相关信息 -->
-                                                        <div class="form-group hide">
-                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startCourseTime">首次上课时间:</label>
-                                                            <div class="input-group col-xs-12 col-sm-6">
-                                                                <input class="form-control date-picker" id="id-date-picker-1" type="startCourseTime" data-date-format="yyyy-mm-dd" />
-                                                                <span class="input-group-addon">
-                                                                            <i class="icon-calendar bigger-110"></i>
-                                                                        </span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="courseTimes">课次:</label>
-                                                            <div class="col-xs-12 col-sm-3">
-                                                                <input type="number" name="courseTimes" id="courseTimes" value="4" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="classHour">课时:</label>
-                                                            <div class="col-xs-12 col-sm-3">
-                                                                <input type="number" name="classHour" id="classHour" value="20" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="hr hr-dotted"></div>
-
-                                                        <!-- 学生相关的信息 -->
-                                                        <div class="form-group hide" id="studentAddress">
-                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right">学生可选地址:</label>
-
-                                                            <div class="col-xs-12 col-sm-9" id="addressRadio">
                                                             </div>
 
                                                             <div class="hr hr-dotted"></div>
                                                         </div>
+
                                                     </form>
                                                 </div>
 
@@ -328,6 +301,13 @@
                                                                                 </thead>
 
                                                                                 <tbody>
+                                                                                <tr>
+                                                                                    <td>Class Order ID</td>
+
+                                                                                    <td id="qingqingClassOrderId"></td>
+                                                                                    <td id="classOrderId">alex@email.com</td>
+                                                                                </tr>
+
                                                                                 <tr>
                                                                                     <td>父订单ID</td>
 
@@ -504,46 +484,6 @@
                                         </div><!-- /widget-main -->
                                     </div><!-- /widget-body -->
                                 </div>
-
-                                <div id="accordion" class="accordion-style2 col-xs-6">
-                                    <div class="group">
-                                        <h3 class="accordion-header">大礼包组包参考（DEV）：</h3>
-
-                                        <div>
-                                            <h3>步骤1：生成子订单<br/></h3>
-                                            <blockquote>
-                                                <p>老师：40457  科目：语文 优惠包：买5送1<br/></p>
-                                                <p>老师：2946   科目：数学 优惠包：买5送1<br/></p>
-                                            </blockquote>
-
-                                            <h3>步骤2：生成大礼包<br/></h3>
-                                            <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=100&catelogIndex=2-5-6-1###" target="_blank">接口地址</a> </p>
-                                                <p>传入加密的子订单ID</p>
-                                            </blockquote>
-
-                                            <h3>步骤3：生成合并付订单ID<br/></h3>
-                                            <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=101&catelogIndex=2-5-6-2" target="_blank" >接口地址</a> </p>
-                                                <p>传入步骤二获得的大礼包ID</p>
-                                                <p>结果中可以获得加密的合并付ID，用于支付流程的测试</p>
-                                            </blockquote>
-
-                                            <h3>步骤4：支付前置<br/></h3>
-                                            <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=11&catelogIndex=2-2-1" target="_blank" >接口地址</a> </p>
-                                                <p>传入步骤三获得的合并付ID, 订单类型选择：合并支付订单。</p>
-                                            </blockquote>
-
-                                            <h3>步骤5：请求支付<br/></h3>
-                                            <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=93&catelogIndex=2-2-2-7" target="_blank" >接口地址</a> </p>
-                                                <p>参数示例选择中，选择一种支付方式</p>
-                                                <p>订单类型，选择：combined_pay_order_type</p>
-                                            </blockquote>
-                                        </div>
-                                    </div>
-                                </div><!-- #accordion -->
                             </div>
                         </div>
                     </div><!-- /.col -->
@@ -585,7 +525,7 @@
                                     </button>
 
                                     <button class="btn btn-xs btn-danger apply-cancel">
-                                        <input type="hidden" value="{groupOrderCourseId}" />
+                                        <input type="hidden" value="{orderCourseId}" />
                                         <i class="icon-trash bigger-120"></i>
                                     </button>
 
@@ -604,11 +544,13 @@
         <#include "/include/righttool-sidebar.ftl" />
 </div>
 <script type="text/javascript">
+
     $(document).ready(function(){
         refreshInterfaceUrl();
-
-        initOrderParam();
+        showDetailForOrder();
     });
+
+    var orderTypeValue = 103;
 
     var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h=svc";
     function refreshInterfaceUrl(){
@@ -626,43 +568,6 @@
         $("#logUrl").attr("href", logTargetUrl);
     }
 
-    function initOrderParam() {
-        var teacherId = $('#teacherIdIpt').val();
-        var studentId = $('#studentIdIpt').val();
-        if(!validTeacherId(teacherId)){
-            return;
-        }
-        if(!validStudentId(studentId)){
-            return;
-        }
-
-        $("#studentId").val(studentId);
-        $("#teacherId").val(teacherId);
-        var data = {
-            studentId : studentId,
-            teacherId : teacherId
-        };
-
-        var addressData = {
-            data : new Number(studentId)
-        };
-
-        commonAjaxRequest("${base}/v1/order/teacher/detail_for_order.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:", $("#env").val(), null, $("#guid").val());
-        commonAjaxRequest("${base}/v1/student/addresses.json", addressData, handlerAddress, true, "获取用户地址信息异常:", $("#env").val(), null, $("#guid").val());
-    }
-
-    function validTeacherId(teacherId){
-        if(teacherId == null || teacherId < 1){
-            $.gritter.add({
-                title : '提示:',
-                text : "老师ID非法",
-                class_name : 'gritter-error gritter-center'
-            });
-            return false;
-        }
-        return true;
-    };
-
     function validStudentId(studentId){
         if(studentId == null || studentId < 1){
             $.gritter.add({
@@ -677,88 +582,36 @@
     };
 
     function addOrder(){
-        var result = false;
-
-        var packageCourseId = null;
-        var contentPackageId = null;
-        var discountType = $("#discountType").val();
-        if(discountType == "2"){
-            packageCourseId = $("#coursePackageId").val()[0];
-        }else if(discountType == "3"){
-            contentPackageId = $("#contentPackageId").val()[0];
+        var studentId = $('#studentIdIpt').val();
+        if(!validStudentId(studentId)){
+            return;
         }
 
-        var strengthenType = $("#strengthenType").val();
-        var strengthenData = null;
-        var normalTimes = 0;
-        var strengthenTimes = 0;
-        if(strengthenType > 0){
-            var gradeId = $("#gradeId").val();
-            var strenghtenData = getStrenghtenData(gradeId);
-            for(var idx in strenghtenData){
-                var strengthen = strenghtenData[idx];
-                if(strengthen.strengthenType == strengthenType){
-                    strengthenData = strengthen;
-                    break;
-                }
-            }
-
-            if(strengthenData == null){
-                $.gritter.add({
-                    title : '数据异常:',
-                    text : '巩固课数据异常，看着办吧',
-                    class_name : 'gritter-error gritter-center'
-                });
-                return;
-            }
-
-            normalTimes = strengthenData.normalTimes;
-            strengthenTimes = strengthenData.strengthenTimes;
-        }
-        var servicePackageId = 0;
-        var selectServicePackageId = $("#servicePackage").val();
-        if(selectServicePackageId != null && selectServicePackageId > 0){
-            servicePackageId = selectServicePackageId;
-        }
-
+        $("#studentId").val(studentId);
 
         var data = {
-            studentId : $("#studentId").val(),
-            qingqingTeacherId : $("#qingqingTeacherId").val(),
+            teacherId : $("#teacherId").val(),
             gradeId : $("#gradeId").val(),
             courseId : $("#courseId").val(),
-            orderSiteType : $("#siteType").val(),
+            price : $("#price").val(),
+            className : $("#className").val(),
+            courseDesc : $("#courseDesc").val(),
+            timeDesc : $("#timeDesc").val(),
+            minStudentCnt : $("#minStudentCnt").val(),
+            maxStudentCnt : $("#maxStudentCnt").val(),
             startCourseTime : $("#startCourseTime").val(),
             courseTimes : $("#courseTimes").val(),
             classHour : $("#classHour").val(),
-            addressId : $('input[name="studentAddressId"]:checked').val(),
-            coursePriceType : $("#coursePriceType").val(),
-            packageCourseId : packageCourseId,
-            contentPackageId :contentPackageId,
-            strengthenType :strengthenType,
-            normalTimes :normalTimes,
-            strengthenTimes :strengthenTimes,
-            servicePackageId : servicePackageId
+            publishCityIds : [-1],
+            createAssistantId : 200,
+            textCategoryId : $("#textCategoryId").val(),
+            studentId: studentId
         };
 
-        result = commonAjaxRequest("${base}/v1/order/student/add_order.json", data, handlerAddOrder, false, "生成订单失败:", $("#env").val(), null, $("#guid").val());
+        result = commonAjaxRequest("${base}/v1/order/add_class_order.json", data, handlerAddOrder, false, "生成订单失败:", $("#env").val(), null, $("#guid").val());
 
         return result;
     }
-
-    var normal_title;
-    document.addEventListener('visibilitychange',function(){ //浏览器切换事件
-        if(document.visibilityState=='hidden') { //状态判断
-            normal_title=document.title;
-            document.title='您的订单在这呢，别忘了';
-        }else {
-            document.title= "来啦，老弟";
-            var qingqingOrderId = $("#qingqingOrderId").text();
-            if(qingqingOrderId != null && qingqingOrderId != ""){
-                orderCourseList("${base}", qingqingOrderId, $("#coursePriceType").val());
-            }
-        }
-    });
 
     $(document).on("click", ".start-class", function(){
         var groupOrderCourseId = $(this).find("input").val();
@@ -779,14 +632,28 @@
     });
 
     $(document).on("click", ".apply-cancel", function(){
-        var groupOrderCourseId = $(this).find("input").val();
-       applyCancelOrderCourse("${base}", groupOrderCourseId, 200);
+        var orderCourseId = $(this).find("input").val();
+        deleteClassOrderCourse("${base}", orderCourseId, 200);
     });
 
     function handlerCommonOrderOps(resu){
         var qingqingOrderId = $("#qingqingOrderId").text();
-        orderCourseList("${base}", qingqingOrderId, $("#coursePriceType").val());
+        orderCourseList("${base}", qingqingOrderId, orderTypeValue);
     }
+
+    var normal_title;
+    document.addEventListener('visibilitychange',function(){ //浏览器切换事件
+        if(document.visibilityState=='hidden') { //状态判断
+            normal_title=document.title;
+            document.title='您的订单在这呢，别忘了';
+        }else {
+            document.title= "来啦，老弟";
+            var qingqingOrderId = $("#qingqingOrderId").text();
+            if(qingqingOrderId != null && qingqingOrderId != ""){
+                orderCourseList("${base}", qingqingOrderId, orderTypeValue);
+            }
+        }
+    });
 
     $('#addPayTypeBtn').click(function () {
         return pay();
@@ -816,7 +683,7 @@
             qingqingOrderId : $("#qingqingOrderId").text(),
             orderAmount : $("#orderAmountTxt").text(),
             studentId : $("#studentId").val(),
-            coursePriceType : $("#coursePriceType").val(),
+            coursePriceType : orderTypeValue,
             payType : payType,
             stageConfigId : stageConfigId,
             balancePayAmount : $("#balancePayAmount").val(),
@@ -832,7 +699,7 @@
             qingqingOrderId : $("#qingqingOrderId").text(),
             orderAmount : $("#orderAmountTxt").text(),
             studentId : $("#studentId").val(),
-            coursePriceType : $("#coursePriceType").val(),
+            coursePriceType : orderTypeValue,
             payType : $("#payType").val()
         };
 
@@ -875,7 +742,7 @@
 
     function updatePayWayList(){
         var data = {
-            coursePriceType : $("#coursePriceType").val(),
+            coursePriceType : orderTypeValue,
             qingqingOrderId : $("#qingqingOrderId").text()
         };
 
@@ -916,10 +783,10 @@
             qingqingOrderId : $("#qingqingOrderId").text(),
             sourceChannel : $("#sourceChannel").val(),
             studentId : $("#studentId").val(),
-            coursePriceType : $("#coursePriceType").val()
+            coursePriceType : orderTypeValue
         };
 
-        return commonAjaxRequest("${base}/v1/pay/pre_pay.json", data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val());
+        return commonAjaxRequest("${base}/v1/pay/pre_pay.json", data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val(), null, $("#guid").val());
     }
 
     var installmentConfigs;
@@ -947,7 +814,8 @@
         $("#qingqingOrderId").text(resu.qingqingOrderId);
         $("#orderId").text(resu.orderId);
         $("#orderStatus").text(resu.orderBriefStatus);
-        $("#orderTypeValue").text($("#coursePriceType").find("option:selected").text());
+        $("#orderTypeValue").text(orderTypeValue);
+        $("#classOrderId").text(resu.classOrderId);
 
         prePay(true);
         updatePayWayList();
@@ -995,86 +863,53 @@
         return null;
     }
 
-    function handlerAddress(resu){
-        var txt = '';
-        if(resu.user_address_details == null || resu.user_address_details.size == 0){
-            txt += "<div class=\"radio\"><label><input name=\"studentAddressId\" value=\"0\" type=\"radio\" checked=\"checked\" class=\"ace\" /><span class=\"lbl\">该用户无可用地址</span></label></div>";
-        }else{
-            for (idx in resu.user_address_details) {
-                var address =  resu.user_address_details[idx];
-                var addressStr = address.address;
-                var id = address.id;
-
-                var checkedStr = '';
-                if(idx == 0){
-                    checkedStr = "checked=\"checked\"";
-                }
-                txt += "<div class=\"radio\"><label><input name=\"studentAddressId\" value=\"" + id + "\" type=\"radio\" " + checkedStr + " class=\"ace\" /><span class=\"lbl\">" + addressStr + "</span></label></div>";
-            }
+    function validTeacherId(teacherId){
+        if(teacherId == null || teacherId < 1){
+            $.gritter.add({
+                title : '提示:',
+                text : "老师ID非法",
+                class_name : 'gritter-error gritter-center'
+            });
+            return false;
         }
-        var addressDiv = document.getElementById("addressRadio");
-        addressDiv.innerHTML = txt;
+        return true;
     };
 
-    $('#teacherIdBtn').click(initOrderParam);
+    $('#teacherIdBtn').click(showDetailForOrder);
+
+    function showDetailForOrder() {
+        var teacherId = $('#teacherIdIpt').val();
+        if(!validTeacherId(teacherId)){
+            return;
+        }
+
+        $("#teacherId").val(teacherId);
+        var data = {
+            data : new Number(teacherId)
+        };
+
+        commonAjaxRequest("${base}/v1/order/detail_for_class_order.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:", $("#env").val(), null, $("#guid").val());
+    }
 
     $('#gradeId').change(function(){
         // 更新上门方式选项
         refreshSiteType();
     });
 
-    $('#coursePriceType').change(function(){
-        // 更新上门方式选项
-        refreshSiteType();
-    });
-
     // 普通订单类型的价格信息
     var courseOrderList;
-    // 优惠包
-    var coursePackageList;
-    // 内容包
-    var contentPackageList;
-    // 巩固包
-    var strengthenPackageList;
     function handlerTeacherInfo(resu){
         courseOrderList = resu.courseOrderList;
-        coursePackageList = resu.coursePackageList;
-        contentPackageList = resu.courseContentPackageList;
-        strengthenPackageList = resu.strengthenPackageList;
 
         $("#qingqingTeacherId").val(resu.qingqingTeacherId);
         // 更新下拉款内容
-        updateDiscountType(resu);
         updateOptions("courseId", resu.supportCourseList, null);
         updateOrderSelector();
 
         $("#orderDetailSelector").removeClass("hide");
-
-        if(resu.servicePackage != null){
-            var options = new Array();
-            var optionIdx = 0;
-            if(resu.servicePackage.isForce == false){
-                var option = new Object();
-                option.key = 0;
-                option.value = "不购买";
-                options[optionIdx++] = option;
-            }
-
-            for(idx in resu.servicePackage.servicePackageInfoList){
-                var servicePackage = resu.servicePackage.servicePackageInfoList[idx];
-
-                var option = new Object();
-                option.key = servicePackage.id;
-                option.value = servicePackage.timeLength + "个月-" + servicePackage.price + (servicePackage.isRecommend == true? "(推荐)":"");
-                options[optionIdx++] = option;
-            }
-            updateOptions("servicePackage", options, null);
-            $("#servicePackageDiv").removeClass("hide");
-        }
     };
 
     function updateOrderSelector(){
-        refreshCoursePriceType();
         refreshGradeId();
         // 更新本地数据和上门方式选项
         refreshSiteType();
@@ -1082,287 +917,73 @@
 
     function refreshGradeId(){
         var courseData = getCourseOrderList();
-        var coursePriceType = $("#coursePriceType").val();
 
         var options = new Array();
         var optionIdx = 0;
         for(var idx in courseData) {
             var courseOrder = courseData[idx];
-            if(courseOrder.coursePriceType.value == coursePriceType){
-                for(var gradeIdIdx in courseOrder.supprtGradeAndSiteTypeList){
-                    var price = courseOrder.supprtGradeAndSiteTypeList[gradeIdIdx];
-                    options[optionIdx++] = price.grade;
-                }
-                break;
+            for(var gradeIdIdx in courseOrder.supprtGradeAndSiteTypeList){
+                var price = courseOrder.supprtGradeAndSiteTypeList[gradeIdIdx];
+                options[optionIdx++] = price.grade;
             }
         }
         updateOptions("gradeId", options, null);
-    }
 
-    function updateDiscountType(resu){
-        $("#coursePackageChooseDiv").addClass("hide");
-        $("#contentPackageChooseDiv").addClass("hide");
-
-        var discountTypes = new Array();
-        var siteIdx = 0;
-
-        var discountType = new Object();
-        discountType.key = 1;
-        discountType.value = '普通';
-        discountTypes[siteIdx++] = discountType;
-
-        if(resu.coursePackageList.length > 0){
-            discountType = new Object();
-            discountType.key = 2;
-            discountType.value = '优惠包';
-            discountTypes[siteIdx++] = discountType;
-        }
-
-        if(resu.courseContentPackageList.length > 0){
-            discountType = new Object();
-            discountType.key = 3;
-            discountType.value = '内容包';
-            discountTypes[siteIdx++] = discountType;
-        }
-
-        updateOptions("discountType", discountTypes, 1);
-    }
-
-    $("#discountType").change(function(){
-        $("#coursePackageChooseDiv").addClass("hide");
-        $("#contentPackageChooseDiv").addClass("hide");
-        $("#courseTimes").removeAttr("readonly");
-        $("#courseTimes").val(4);
-        $("#classHour").val(20);
-
-        var discountValue = $(this).val();
-        if(discountValue == "2"){
-            var options = new Array();
-            var optionIdx = 0;
-            for(idx in coursePackageList){
-                var coursePackage = coursePackageList[idx];
-
-                var option = new Object();
-                option.key = coursePackage.packageId;
-                option.value = coursePackage.packageName;
-                options[optionIdx++] = option;
-            }
-            updateOptions("coursePackageId", options, coursePackageList[0].packageId);
-            $("#courseTimes").val(coursePackageList[0].courseTimes);
-            $("#courseTimes").attr("readonly","readonly");
-
-            $("#coursePackageChooseDiv").removeClass("hide");
-        }else if(discountValue == "3"){
-            var options = new Array();
-            var optionIdx = 0;
-            for(idx in contentPackageList){
-                var contentPackage = contentPackageList[idx];
-
-                var option = new Object();
-                option.key = contentPackage.packageId;
-                option.value = contentPackage.packageName;
-                options[optionIdx++] = option;
-            }
-            updateOptions("contentPackageId", options, contentPackageList[0].packageId);
-            $("#courseTimes").val(contentPackageList[0].classCount);
-            $("#classHour").val(contentPackageList[0].classHour);
-            $("#courseTimes").attr("readonly","readonly");
-
-            $("#contentPackageChooseDiv").removeClass("hide");
-        }
-
-
-        updateOrderSelector();
-    });
-
-    $("#coursePackageId").change(function(){
-        var coursePackageId = $(this).val();
-        for(idx in coursePackageList) {
-            var coursePackage = coursePackageList[idx];
-            if(coursePackage.packageId == coursePackageId){
-                $("#courseTimes").val(coursePackage.courseTimes);
-                break;
-            }
-        }
-        updateOrderSelector();
-    });
-
-    $("#contentPackageId").change(function(){
-        var coursePackageId = $(this).val();
-        for(idx in contentPackageList) {
-            var coursePackage = contentPackageList[idx];
-            if(coursePackage.packageId == coursePackageId){
-                $("#courseTimes").val(coursePackage.classCount);
-                $("#classHour").val(coursePackage.classHour);
-                break;
-            }
-        }
-
-        updateOrderSelector();
-    });
-
-
-    function refreshCoursePriceType(){ // 更新订单类型
-        var courseData = getCourseOrderList();
-
-        var options = new Array();
-        var optionIdx = 0;
-        for(var idx in courseData) {
-            var courseOrder = courseData[idx];
-
-            var option = new Object();
-            option.key = courseOrder.coursePriceType.value;
-            option.value = courseOrder.coursePriceType.name;
-            options[optionIdx++] = option;
-        }
-        updateOptions("coursePriceType", options, 1);
+        refreshTextCategory();
     }
 
     function getCourseOrderList(){
-        var discountType = $("#discountType").val();
-        switch(discountType){
-            case "1":
-                return courseOrderList;
-            case "2":
-                return get(courseOrderList);
-            case "3":
-                var contentPackageId = $("#contentPackageId").val();
-                for(var idx in contentPackageList){
-                    var contentPackage = contentPackageList[idx];
-                    if(contentPackage.packageId == contentPackageId){
-                        return contentPackage.courseOrderBeanList;
-                    }
-                }
-                return null;
-        }
-    }
-
-    function get(courseOrderList){
-        var result = new Array();
-        var arrIdx = 0;
-        for(var idx in courseOrderList) {
-            var courseOrder = courseOrderList[idx];
-            if(courseOrder.coursePriceType.value == 1){
-                result[arrIdx++] = courseOrder;
-            }
-        }
-
-        return result;
+        return courseOrderList;
     }
 
     function refreshSiteType(){
         var courseData = getCourseOrderList();
-        var coursePriceType = $("#coursePriceType").val();
         var gradeId = $("#gradeId").val();
-        var siteTypes = new Array();
-        var siteIdx = 0;
         for(var idx in courseData){
             var courseOrder = courseData[idx];
-            if(courseOrder.coursePriceType.value == coursePriceType){
-                for(var gradeIdx in courseOrder.supprtGradeAndSiteTypeList){
-                    var supprtGradeAndSiteType = courseOrder.supprtGradeAndSiteTypeList[gradeIdx];
-                    if(supprtGradeAndSiteType.grade.key == gradeId){
-                        for(var siteTypeIdx in supprtGradeAndSiteType.siteTypeAnsPriceList){
-                            var siteTypeAndPrice = supprtGradeAndSiteType.siteTypeAnsPriceList[siteTypeIdx];
-                            var siteType = new Object();
-                            siteType.key = siteTypeAndPrice.siteType.value;
-                            siteType.value = siteTypeAndPrice.siteType.name + "-(" + siteTypeAndPrice.price +")";
-                            siteTypes[siteIdx++] = siteType;
-                        }
-                        break;
+            for(var gradeIdx in courseOrder.supprtGradeAndSiteTypeList){
+                var supprtGradeAndSiteType = courseOrder.supprtGradeAndSiteTypeList[gradeIdx];
+                if(supprtGradeAndSiteType.grade.key == gradeId){
+                    for(var siteTypeIdx in supprtGradeAndSiteType.siteTypeAnsPriceList){
+                        var siteTypeAndPrice = supprtGradeAndSiteType.siteTypeAnsPriceList[siteTypeIdx];
+                        $("#price").val(siteTypeAndPrice.price);
                     }
+                    break;
                 }
             }
         }
-
-        updateOptions("siteType", siteTypes, null);
-        siteTypeChanged();
     }
 
-    $("#siteType").change(siteTypeChanged);
-
-    function siteTypeChanged(){
-        var siteType = $("#siteType").val();
-        if(siteType == "0"){
-            $('#studentAddress').removeClass('hide');
-        }else{
-            $('#studentAddress').addClass('hide');
+    function refreshTextCategory(){
+        var courseId = $("#courseId").val();
+        var gradeId = $("#gradeId").val();
+        var data = {
+            url : "/svc/api/pb/v1/textbook/categories/query_by_grade_ids.json",
+            param : "{grade_ids:[" + gradeId + "], course_id:" + courseId + "}"
         }
 
-        var strengthens = getSupportStrengthen();
-        updateOptions("strengthenType", strengthens, null);
-        if(strengthens.length > 1){
-            $('#strengthenTypeDiv').removeClass('hide');
-        }else{
-            $('#strengthenTypeDiv').addClass('hide');
-        }
+        commonAjaxRequest("${base}/v1/common/pb.json", data, handlerTextCategory, true, "获取教材信息失败:", $("#env").val(), null, $("#guid").val());
     }
 
-    function getSupportStrengthen(){
-        var strengthens = new Array();
-        var strengthen = new Object();
-        strengthen.key = 0;
-        strengthen.value = "不搭配";
-        strengthens[0] = strengthen;
+    function handlerTextCategory(resu){
+        var options = new Array();
+        var optionIdx = 0;
 
-        var siteType = $("#siteType").val();
-        // 线下上门方式，展现巩固包类型选择
-        if(siteType == "0" || siteType == "1"){
-            var discountType = $("#discountType").val();
-            var coursePriceType = $("#coursePriceType").val();
-            if(discountType == "1" && coursePriceType == "1"){ // 普通1V1订单
-                var gradeId = $("#gradeId").val();
+        for(var idx in resu.textbook_categories){
+            var textbook = resu.textbook_categories[idx];
 
-                var data = getStrenghtenData(gradeId);
-                if(data != null){
-                    for(var sIdx in data){
-                        var stren = data[sIdx];
-                        strengthen = new Object();
-                        strengthen.key = stren.strengthenType;
-                        strengthen.value = stren.normalTimes + ":" + stren.strengthenTimes;
-                        strengthens[sIdx + 1] = strengthen;
-                    }
-                }
-            }
+            var option = new Object();
+            option.key = textbook.textbook_category_id;
+            option.value = textbook.textbook_category_name;
+            options[optionIdx++] = option;
         }
 
-        return strengthens;
+        updateOptions("textCategoryId", options, null);
     }
 
-    function getStrenghtenData(gradeId){
-        for(var idx in strengthenPackageList){
-            var strengthenPackage = strengthenPackageList[idx];
-            if(strengthenPackage.gradeId == gradeId){
-                return strengthenPackage.strengthenInfos;
-            }
-        }
+    function notOps(resu){
 
-        return null;
     }
-
-    $('#skip-validation').removeAttr('checked').on('click', function(){
-        $validation = this.checked;
-        if(this.checked) {
-            $('#sample-form').hide();
-            $('#validation-form').removeClass('hide');
-        }
-        else {
-            $('#validation-form').addClass('hide');
-            $('#sample-form').show();
-        }
-    });
-
-    $('.date-picker').datepicker({autoclose:true,minDate:'02-07-2018',gotoCurrent:true}).next().on(ace.click_event, function(){
-        $(this).prev().focus();
-    });
-
-    $(".env").click(function(){
-        $(".env.btn-primary").removeClass("btn-primary");
-        $(this).addClass("btn-primary");
-        $("#env").val($(this).val());
-
-        refreshInterfaceUrl();
-    });
 
     jQuery(function($) {
         $( "#accordion" ).accordion({
@@ -1395,7 +1016,6 @@
                     $(this).closest('form').validate().element($(this));
                 });
 
-
         var $validation = false;
         $('#fuelux-wizard').ace_wizard().on('change' , function(e, info){
             if(info.step == 1) {
@@ -1412,17 +1032,17 @@
                     return false;
                 }
 
-                var coursePriceType = $("#coursePriceType").val();
-                if(coursePriceType > 1){ // 朋友团
+                if(orderTypeValue > 1){ // 朋友团
                     var data = {
-                        data : $("#groupOrderId").text(),
-                        studentId : $("#studentId").val()
+                        groupOrderId : new Number($("#groupOrderId").text()),
+                        studentId : $("#studentId").val(),
+                        createAssistantId : 200
                     }
-                    result = commonAjaxRequest("${base}/v1/order/made_up.json", data, notOps, false, "成团失败:", $("#env").val(), null, $("#guid").val());
+                    result = commonAjaxRequest("${base}/v1/order/class_order/made_up.json", data, notOps, false, "成团失败:", $("#env").val(), null, $("#guid").val());
                 }
 
                 var qingqingOrderId = $("#qingqingOrderId").text();
-                orderCourseList("${base}", qingqingOrderId, $("#coursePriceType").val());
+                orderCourseList("${base}", qingqingOrderId, orderTypeValue);
                return true;
             }
         }).on('finished', function(e) {
@@ -1437,6 +1057,30 @@
             });
         }).on('stepclick', function(e){
             return false;//prevent clicking on steps
+        });
+
+        $('.date-picker').datepicker({autoclose:true,minDate:'02-07-2018',gotoCurrent:true}).next().on(ace.click_event, function(){
+            $(this).prev().focus();
+        });
+
+        $('#skip-validation').removeAttr('checked').on('click', function(){
+            $validation = this.checked;
+            if(this.checked) {
+                $('#sample-form').hide();
+                $('#validation-form').removeClass('hide');
+            }
+            else {
+                $('#validation-form').addClass('hide');
+                $('#sample-form').show();
+            }
+        });
+
+        $(".env").click(function(){
+            $(".env.btn-primary").removeClass("btn-primary");
+            $(this).addClass("btn-primary");
+            $("#env").val($(this).val());
+
+            refreshInterfaceUrl();
         });
 
         jQuery.validator.addMethod("phone", function (value, element) {
@@ -1541,7 +1185,7 @@
 
         $("th,td").addClass("center");
         $("#payType_chosen").css("width", "331px;");
-    });
+    })
 </script>
         </body>
 </html>

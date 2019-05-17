@@ -102,6 +102,7 @@
 <script src="${base}/static/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
 <script src="${base}/static/assets/js/fuelux/fuelux.spinner.min.js"></script>
 <script src="${base}/static/js/common.js"></script>
+<script src="${base}/static/js/orderCourseCommon.js"></script>
 <script src="${base}/static/js/catelog.js"></script>
 
 <link rel="stylesheet" href="${base}/static/css/adminmain2.css" type="text/css"/>

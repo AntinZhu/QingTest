@@ -5,6 +5,7 @@ import com.qingqing.common.util.TimeUtil;
 import com.qingqing.common.web.util.RequestExtract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -49,7 +50,12 @@ public class IpFilter implements Filter {
             }
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
+        try{
+            MDC.put("ip", requestIp);
+            filterChain.doFilter(servletRequest, servletResponse);
+        }finally {
+            MDC.clear();
+        }
     }
 
     private void addNewIp(String ip){

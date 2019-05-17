@@ -3,10 +3,15 @@ package com.qingqing.test.controller;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.test.bean.base.SimpleResponse;
+import com.qingqing.test.bean.common.UrlAndParam;
+import com.qingqing.test.bean.common.UserCommonRequest;
+import com.qingqing.test.client.PbClient;
 import com.qingqing.test.client.PiClient;
+import com.qingqing.test.client.PtClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,13 +25,17 @@ public class CommonController {
 
     @Autowired
     private PiClient piClient;
+    @Autowired
+    private PbClient pbClient;
+    @Autowired
+    private PtClient ptClient;
 
     @RequestMapping("crond_task")
     @ResponseBody
     public SimpleResponse encode(@ProtoRequestBody SimpleStringRequest request) {
         String url = request.getData();
 
-        piClient.commonRequest(url);
+        piClient.commonRequest(url, "");
         return new SimpleResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
     }
 
@@ -39,5 +48,23 @@ public class CommonController {
     @RequestMapping("haha")
     public String haha() {
         return "utils/haha";
+    }
+
+    @RequestMapping("pb")
+    @ResponseBody
+    public String pbRequest(@RequestBody UrlAndParam request){
+        return pbClient.commonRequest(request.getUrl(), request.getParam());
+    }
+
+    @RequestMapping("pi")
+    @ResponseBody
+    public String piRequest(@RequestBody UserCommonRequest request){
+         return  piClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+    }
+
+    @RequestMapping("pt")
+    @ResponseBody
+    public String ptRequest(@RequestBody UserCommonRequest request){
+        return  ptClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
     }
 }

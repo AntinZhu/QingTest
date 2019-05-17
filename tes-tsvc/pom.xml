@@ -104,7 +104,7 @@
         <dependency>
             <groupId>com.qingqing.api</groupId>
             <artifactId>spring-web-util</artifactId>
-            <version>1.0.8.5-SNAPSHOT</version>
+            <version>1.4.5.6-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>log4j</artifactId>

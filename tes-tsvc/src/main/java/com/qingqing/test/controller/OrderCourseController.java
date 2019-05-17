@@ -1,11 +1,10 @@
 package com.qingqing.test.controller;
 
-import com.qingqing.api.proto.v1.CourseCommonProto.CourseChangeResponsibilityType;
+import com.alibaba.fastjson.JSONObject;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherStartEndClassV2;
 import com.qingqing.api.proto.v1.app.AppCommon.DeviceIdentification;
 import com.qingqing.api.proto.v1.app.AppCommon.PlatformType;
-import com.qingqing.api.proto.v1.course.OrderCourse.CancelCourseRequestV4;
 import com.qingqing.api.proto.v1.course.OrderCourse.CancelOrFreezeCourseReasonType;
 import com.qingqing.api.proto.v1.course.OrderCourse.CancelOrFreezeCourseRequestV2;
 import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseFinishMockRequest;
@@ -19,6 +18,7 @@ import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
+import com.qingqing.test.bean.common.UserCommonRequest;
 import com.qingqing.test.bean.common.request.SimpleLongStudentRequest;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.ordercourse.request.StartClassRequest;
@@ -27,6 +27,7 @@ import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.domain.order.GroupUserCourseApply;
 import com.qingqing.test.manager.OrderManager;
+import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.service.order.OrderCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.UUID;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -53,6 +56,8 @@ public class OrderCourseController {
     private OrderCourseService orderCourseService;
     @Autowired
     private ApiPiClient apiPiClient;
+    @Autowired
+    private TestInterfaceManager testInterfaceManager;
 
     @RequestMapping("order_course_list")
     @ResponseBody
@@ -85,6 +90,21 @@ public class OrderCourseController {
     @ProtoResponseBody
     public SimpleResponse processFreeze(@RequestBody OrderCourseThirdPartyJudgeRequestV4 request) {
         return apiPiClient.processFreeze(request, 120L, UserType.ta);
+    }
+
+    @RequestMapping("cancel_apply/process")
+    public String processCancel(@RequestParam("qingqingBatchApplyId") String qingqingBatchApplyId, @RequestParam(value = "env", defaultValue = "dev") String env, Model model) {
+        JSONObject defaultObj = new JSONObject();
+        defaultObj.put("qingqing_batch_group_apply_id", qingqingBatchApplyId);
+        defaultObj.put("unique_id", UUID.randomUUID());
+
+        model.addAttribute("interfaceId", 183L);
+        model.addAttribute("paramExampleId", 0);
+        model.addAttribute("env", env);
+        model.addAttribute("cross", 1);
+        model.addAttribute("defaultObj", defaultObj.toJSONString());
+
+        return "interface/jsonformat";
     }
 
     @RequestMapping("freeze_apply/mock")
@@ -126,13 +146,8 @@ public class OrderCourseController {
 
     @RequestMapping("student/apply_cancel")
     @ProtoResponseBody
-    public SimpleResponse applyCancel(@RequestBody SimpleLongStudentRequest request) {
-        CancelCourseRequestV4 protoRequest = CancelCourseRequestV4.newBuilder()
-                .addQingqingOrderCourseIds(OrderIdEncoder.encodeOrderId(request.getData()))
-                .setReasonNumber(1)
-                .setResponsibilityType(CourseChangeResponsibilityType.student_change_responsibility_type)
-                .build();
-        return  ptClient.applyCancel(protoRequest, request.getStudentId());
+    public String applyCancel(@RequestBody UserCommonRequest userCommonRequest) {
+        return  piClient.commonRequest(userCommonRequest.getUrl(), userCommonRequest.getParam(), userCommonRequest.getUserId(), userCommonRequest.getUserType());
     }
 
 

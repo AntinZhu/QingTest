@@ -7,6 +7,7 @@ import com.qingqing.test.bean.base.InterfaceBaseResponse;
  */
 public class AddOrderResultBean extends InterfaceBaseResponse {
 
+    private Long classOrderId;
     private String qingqingGroupOrderId;
     private String groupOrderId;
     private String qingqingOrderId;
@@ -51,5 +52,13 @@ public class AddOrderResultBean extends InterfaceBaseResponse {
 
     public void setOrderBriefStatus(String orderBriefStatus) {
         this.orderBriefStatus = orderBriefStatus;
+    }
+
+    public Long getClassOrderId() {
+        return classOrderId;
+    }
+
+    public void setClassOrderId(Long classOrderId) {
+        this.classOrderId = classOrderId;
     }
 }

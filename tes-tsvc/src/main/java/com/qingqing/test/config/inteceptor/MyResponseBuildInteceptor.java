@@ -24,7 +24,7 @@ public class MyResponseBuildInteceptor extends ResponseBuildInteceptor {
             if( handler instanceof HandlerMethod) {
                 HandlerMethod handlerMethod = (HandlerMethod) handler;
                 Class<?> clazz=handlerMethod.getMethod().getReturnType();
-                if(InterfaceBaseResponse.class.isAssignableFrom(clazz)){
+                if(InterfaceBaseResponse.class.isAssignableFrom(clazz) || String.class.equals(clazz)){
                     request.setAttribute(BASE_RESP, clazz);
                 }
             }

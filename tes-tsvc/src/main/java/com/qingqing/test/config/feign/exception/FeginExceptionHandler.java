@@ -12,6 +12,8 @@ import com.qingqing.test.bean.base.InterfaceBaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.config.inteceptor.MyResponseBuildInteceptor;
 import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class FeginExceptionHandler extends ProtoExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(FeginExceptionHandler.class);
+
     @ExceptionHandler(Exception.class)
     public @ResponseBody
     Object errorResponse(Exception ex, HttpServletRequest request, HttpServletResponse response){
@@ -33,6 +37,10 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
         FieldDescriptor pf = null;
         if( builder != null ) {
             pf = builder.getDescriptorForType().findFieldByName(PROTO_RESP_FIELD);
+        }
+
+        if(ex instanceof ErrorCodeException){
+            logger.warn("errorCode Exception : " + JsonUtil.format(((ErrorCodeException)ex).getErrorCodeInterface()));
         }
 
         if(ex instanceof FeignException){
@@ -61,11 +69,17 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
         }else if(pf == null){
             Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);
             if(obj != null){
+                logger.info("return Class:" + ((Class<?>)obj).getName());
                 if(ex instanceof ErrorCodeException){
                     ErrorCodeException ece = (ErrorCodeException) ex;
                     InterfaceBaseResponse interfaceBaseResponse = new InterfaceBaseResponse();
                     interfaceBaseResponse.setResponse(new BaseResponse(ece.getErrorCodeInterface().getErrorCode(), ece.getErrorCodeInterface().getMsg(), ece.getErrorCodeInterface().getHintMessage()));
-                    return interfaceBaseResponse;
+
+                    if(String.class.equals(obj)){
+                        return JsonUtil.format(interfaceBaseResponse);
+                    }else {
+                        return interfaceBaseResponse;
+                    }
                 }
             }
         }

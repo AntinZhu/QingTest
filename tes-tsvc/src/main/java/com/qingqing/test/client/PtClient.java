@@ -8,6 +8,7 @@ import com.qingqing.api.proto.v1.Pay.PayCheckResponse;
 import com.qingqing.api.proto.v1.Pay.PayGeneralOrderSubmitRequest;
 import com.qingqing.api.proto.v1.Pay.PayResult;
 import com.qingqing.api.proto.v1.ProtoBufResponse;
+import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleStringResponse;
 import com.qingqing.api.proto.v1.StudentProto.SimpleQingQingStudentIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.SimpleQingQingTeacherIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherBaseInfoForTeacherResponse;
@@ -81,9 +82,9 @@ public interface PtClient {
     @ProtoResponseBody
     ProtoBufResponse.SimpleResponse finishClass(OrderCourseFinishRequestV3 request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 
-    @RequestMapping(path = "/svc/api/pt/v4/order_course/action/student/apply_cancel", method = RequestMethod.POST)
+    @RequestMapping(path = "/svc/api/pt/v5/order_course/action/student/apply_cancel", method = RequestMethod.POST)
     @ProtoResponseBody
-    ProtoBufResponse.SimpleResponse applyCancel(CancelCourseRequestV4 request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+    SimpleStringResponse applyCancel(CancelCourseRequestV4 request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 
     @RequestMapping(path = "/svc/api/pt/v1/group_order/student/join_group_order", method = RequestMethod.POST)
     @ProtoResponseBody
@@ -92,6 +93,7 @@ public interface PtClient {
     @RequestMapping(path = "{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(PtRequestInterceptor.USER_TYPE)UserType userType);
+
 }
 
 

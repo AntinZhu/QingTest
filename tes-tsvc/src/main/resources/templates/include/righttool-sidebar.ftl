@@ -241,9 +241,9 @@
         var orderId = $("#orderId_conv").val();
 
         if(qingqingOrderId != null && qingqingOrderId != ""){
-            decode(qingqingOrderId);
+            $("#orderId_conv").val(decode(qingqingOrderId));
         }else if(orderId != null && orderId != ""){
-            encode(orderId)
+            $("#qingqingOrderId_conv").val(encode(orderId));
         }
     });
 
@@ -251,18 +251,18 @@
         var data = {
             data : dataValue
         };
-        commonAjaxRequest("${base}/v1/utils/order/decode.json", data, handlerOrderDecode, true, "解密结果:");
+        return commonAjaxRequest("${base}/v1/utils/order/decode.json", data, handlerOrderDecode, false, "解密结果:");
     }
 
     function handlerOrderDecode(resu){
-        $("#orderId_conv").val(resu.resultList)
+        return resu.resultList;
     }
 
     function encode(dataValue){
         var data = {
             data : dataValue
         };
-        commonAjaxRequest("${base}/v1/utils/order/encode.json", data, handlerOrderEncode, true, "加密结果:");
+        return commonAjaxRequest("${base}/v1/utils/order/encode.json", data, handlerOrderEncode, false, "加密结果:");
     }
 
     $("#ace-settings-btn").click(function () {
@@ -274,7 +274,7 @@
     });
 
     function handlerOrderEncode(resu){
-        $("#qingqingOrderId_conv").val(resu.resultList)
+        return resu.resultList;
     }
 
     $(".order_conv").blur(function(){
