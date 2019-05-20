@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @FeignClient(value = "piClient", url = "http://{host}", configuration = MyPiFeignConfiguration.class)
 public interface PiClient {
 
-    @RequestMapping(path = "{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(path = "{url}", method = RequestMethod.POST, produces ={MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(PtRequestInterceptor.USER_TYPE) UserType userType);
 
-    @RequestMapping(path = "{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(path = "{url}", method = RequestMethod.POST, produces ={MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request);
 

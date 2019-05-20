@@ -427,7 +427,7 @@
                 function getParam(){
                     var param;
                     if($("#selfParamSwitch").val() == 1){
-                        param = new Object($("#fullParam").text());
+                        param = JSON.parse($("#fullParam").text());
                     }else{
                         param = generateJsonParam("#paramListDiv input");
                     }

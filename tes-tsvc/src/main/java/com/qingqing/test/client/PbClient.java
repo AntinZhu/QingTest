@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @FeignClient(value = "pbClient", url = "http://{host}", configuration = MyPbFeignConfiguration.class)
 public interface PbClient {
 
-    @RequestMapping(path = "{url}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(path = "{url}", method = RequestMethod.POST, produces ={MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request);
 }
