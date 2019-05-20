@@ -394,33 +394,31 @@
 
                 $('#teacherIdBtn').click(function () {
                     refreshInterfaceUrl();
-                    var param = getParam();
+                    var param;
+                    try{
+                        param  = getParam();
+                    }catch(err){
+                        $.gritter.add({
+                            title : '参数提醒:',
+                            text : '参数格式错误，请检查json格式',
+                            class_name : 'gritter-error gritter-center'
+                        });
+                        var jsonParam = "";
+                        if($("#selfParamSwitch").val() == 1){
+                            jsonParam = $("#fullParam").text();
+                        }
+                        jsonShow(jsonParam, "json-request");
+                        return;
+                    }
+
                     jsonShow(param, "json-request");
                     jsonShow("[]", "json-response");
 
                     var isLocalDebug = $("#isLocalDebug").val();
-                    var localPort = $("#localDebugPort").val();
-
                     if(isLocalDebug != 1){
-                        var data = {
-                            interfaceId : $("#interfaceId").val(),
-                            requestUserId : $("#requestUserId").val(),
-                            requestUserType : $("#requestUserType").val(),
-                            param : JSON.stringify(param)
-                        };
-                        commonAjaxRequest("${base}/v1/test/interface/invoke.json?is_local=" + isLocalDebug + "&local_port=" + localPort + "&ser=" + getServer(interfaceBean.interfaceUrl), data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                        invokeServer(param);
                     }else{
-                        if(interfaceBean.interfaceType == "PT" || interfaceBean.interfaceType == "PI"){
-                            var user = {
-                                user_id :  new Number($("#requestUserId").val()),
-                                user_type  : $("#requestUserType").val()
-                            }
-
-                            commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerLocalInvoke, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
-                        }else{
-                            var param = generateJsonParam("#paramListDiv input");
-                            commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), new Object());
-                        }
+                        invokeLocal(param);
                     }
                 });
 
@@ -435,8 +433,35 @@
                     return param;
                 }
 
-                function handlerLocalInvoke(data){
-                    var param = getParam();
+                function invokeServer(param){
+                    var data = {
+                        interfaceId : $("#interfaceId").val(),
+                        requestUserId : $("#requestUserId").val(),
+                        requestUserType : $("#requestUserType").val(),
+                        param : JSON.stringify(param)
+                    };
+                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                }
+
+                function invokeLocal(param){
+                    if(interfaceBean.interfaceType == "PT" || interfaceBean.interfaceType == "PI"){
+                        var user = {
+                            user_id :  new Number($("#requestUserId").val()),
+                            user_type  : $("#requestUserType").val()
+                        };
+
+                        var othData = {
+                          param : param
+                        };
+
+                        commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerFilterFillInvoke, true, "接口调用异常：:", $("#env").val(), othData, $("#guid").val());
+                    }else{
+                        handlerLocalInvoke(param, null);
+                    }
+                }
+
+                function handlerFilterFillInvoke(data, otherData){
+                    var param = otherData.param;
                     var token = data.resultList;
                     var headers = {
                         si : token.session,
@@ -446,22 +471,26 @@
                         qingqing_debug_mode : 'true',
                         QingqingUser : token.qingqingUserId
                     }
+
+                    handlerLocalInvoke(param, headers);
+                }
+
+                function handlerLocalInvoke(param, headers){
                     var localPort = $("#localDebugPort").val();
                     var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl;
 
-                    var data = {
-                        url : url,
-                        headers : headers,
-                        params : JSON.stringify(param),
-                        requestType : interfaceBean.requestType
-                    };
-
                     if(isCross == 1){
+                        var data = {
+                            url : url,
+                            headers : headers,
+                            params : JSON.stringify(param),
+                            requestType : interfaceBean.requestType
+                        };
+
                         commonAjaxRequest("http://127.0.0.1:8009/app/cross", data, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
                     }else{
                         commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
                     }
-
                 }
 
                 function handlerInvokeResult(resu){
