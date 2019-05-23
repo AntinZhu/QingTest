@@ -18,4 +18,6 @@ public interface TestInterfaceParamService {
     boolean resetDefault(Long interfaceId);
 
     boolean setDefault(Long id);
+
+    void deleteById(Long id);
 }

@@ -12,14 +12,16 @@
             <div class="col-xs-12 col-sm-9">
                 <div class="clearfix">
                     <select class="width-100 chosen-select form-control" id="paramChoose">
-                        <option value="AL">￥567 x 3期（手续费￥81）</option>
-                        <option value="AK">￥567 x 3期（手续费￥81）</option>
-                        <option value="AZ">￥567 x 3期（手续费￥81）</option>
+                        <option value="0">没得选</option>
                     </select>
                 </div>
                 <span class="input-group-btn param-ops hide">
                     <button type="button" class="btn btn-purple btn-xs" id="param_default">
                         default
+                    </button>
+
+                     <button type="button" class="btn btn-purple btn-xs" id="param_del">
+                        delete
                     </button>
                 </span>
             </div>

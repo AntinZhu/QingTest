@@ -45,4 +45,9 @@ public class TestInterfaceParamServiceImpl implements TestInterfaceParamService 
     public boolean setDefault(Long id) {
         return testInterfaceParamMapper.setDefault(id) > 0;
     }
+
+    @Override
+    public void deleteById(Long id) {
+        testInterfaceParamMapper.deleteById(id);
+    }
 }

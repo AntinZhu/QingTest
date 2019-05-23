@@ -131,6 +131,14 @@ public class TestController {
                 .setData(String.valueOf(param.getId())).build();
     }
 
+    @RequestMapping("/interface/param/delete")
+    @ProtoResponseBody
+    public SimpleResponse deleteParam(@RequestBody SimpleLongRequest request){
+        testInterfaceParamService.deleteById(request.getData());
+
+        return ProtoRespGenerator.SIMPLE_SUCC_RESP;
+    }
+
     @RequestMapping("/interface/param/default/set")
     @ProtoResponseBody
     public SimpleResponse setParamDefault(@RequestBody SimpleLongRequest request){

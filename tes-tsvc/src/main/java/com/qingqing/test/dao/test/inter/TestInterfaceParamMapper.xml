@@ -40,6 +40,7 @@
     select <include refid="Base_Column_List" />
     from t_interface_param
     where interface_id = #{interfaceId,jdbcType=BIGINT}
+    and is_deleted = 0
   </select>
 
   <update id="resetDefault">
@@ -51,6 +52,12 @@
   <update id="setDefault">
     update t_interface_param
     set is_default = TRUE
+    where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteById">
+    update t_interface_param
+    set is_deleted = TRUE
     where id = #{id, jdbcType=BIGINT}
   </update>
 </mapper>

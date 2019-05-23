@@ -242,11 +242,15 @@
 
             var isCross = ${cross!1};
             $(document).ready(function(){
+                refreshPage();
+            });
+
+            function refreshPage(){
                 var data = {
                     data : ${interfaceId}
                 };
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
-            });
+            }
 
             var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h={server}";
             function refreshInterfaceUrl(){
@@ -340,6 +344,7 @@
 
             function initParamChoose(paramChooses, paramExampleId){
                 if(paramChooses.length == 0){
+                    $("#paramChooseDiv").addClass("hide");
                     return;
                 }
 
@@ -349,7 +354,7 @@
 
                 var defaultOption = new Object();
                 defaultOption.key = 0;
-                defaultOption.value = "";
+                defaultOption.value = "咱不选";
 
                 options[optionIdx++] = defaultOption;
                 for(idx in paramChooses){
@@ -549,6 +554,16 @@
                     commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
                 });
 
+                $("#param_del").click(function(){
+                    var paramId = $("#paramChoose").val();
+
+                    var data = {
+                        data : new Number(paramId)
+                    };
+
+                    commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
+                });
+
                 $("#resetBtn").on(ace.click_event, function() {
                     bootbox.prompt("取个名字", function(result) {
                         if (result === null) {
@@ -587,6 +602,8 @@
                         text : "保存成功",
                         class_name : 'gritter-info gritter-center'
                     });
+
+                    refreshPage();
                 }
 
                 $(".env").click(function(){

@@ -17,4 +17,6 @@ public interface TestInterfaceParamMapper {
     int resetDefault(@Param("interfaceId") Long interfaceId);
 
     int setDefault(@Param("id") Long id);
+
+    int deleteById(@Param("id") Long id);
 }
