@@ -14,4 +14,8 @@ public interface TestInterfaceParamService {
     TestInterfaceParam findById(Long id);
 
     List<TestInterfaceParam> selectListByInterfaceId(Long interfaceId);
+
+    boolean resetDefault(Long interfaceId);
+
+    boolean setDefault(Long id);
 }

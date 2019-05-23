@@ -631,15 +631,23 @@ $(document).on("change", "#editBtnSwitch", function(){
 
 $(document).on("change", "#selfParamSwitch", function(){
     if($(this).val() == 0){
-        $("#paramListDiv").addClass("hide");
-        $("#selfParamDiv").removeClass("hide");
+        showFull();
         $(this).val(1);
     }else{
-        $("#paramListDiv").removeClass("hide");
-        $("#selfParamDiv").addClass("hide");
+        showFormat();
         $(this).val(0);
     }
 });
+
+function showFull(){
+    $("#paramListDiv").addClass("hide");
+    $("#selfParamDiv").removeClass("hide");
+}
+
+function showFormat(){
+    $("#paramListDiv").removeClass("hide");
+    $("#selfParamDiv").addClass("hide");
+}
 
 $(document).on("change", "#isLocalDebug", function(){
     if($(this).val() == 0){

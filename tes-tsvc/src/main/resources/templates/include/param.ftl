@@ -17,6 +17,11 @@
                         <option value="AZ">￥567 x 3期（手续费￥81）</option>
                     </select>
                 </div>
+                <span class="input-group-btn param-ops hide">
+                    <button type="button" class="btn btn-purple btn-xs" id="param_default">
+                        default
+                    </button>
+                </span>
             </div>
         </div>
 

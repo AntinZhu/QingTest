@@ -240,7 +240,7 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
-            var isCross = ${cross};
+            var isCross = ${cross!1};
             $(document).ready(function(){
                 var data = {
                     data : ${interfaceId}
@@ -303,6 +303,8 @@
                     });
                 }
 
+                $("#selfParamSwitch").val(${full!0});
+
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                     var paramDetail = fillDefaultValue(JSON.parse(resu.interfaceInfo.inter.paramDetail));
@@ -310,11 +312,9 @@
 
                     paramExamples = resu.interfaceInfo.paramList;
                     initParamChoose(paramExamples, ${paramExampleId});
-
-                    fillFullParam();
                 }
 
-                var env = '${env}';
+                var env = '${env!"dev"}';
                 $("#env").val(env);
                 $(".env.btn-primary").removeClass("btn-primary");
                 $(".env[value='" + env + "']").addClass("btn-primary");
@@ -356,8 +356,11 @@
                     var data = paramChooses[idx];
                     var option = new Object();
                     option.key = data.id;
-                    option.value = data.paramName;
-                    if(data.id == paramExampleId){
+                    option.value = data.paramName + "(" + data.id + ")";
+                    if(paramExampleId == 0 && data.default){
+                        paramEx = data;
+                        paramExampleId = data.id;
+                    }else if(data.id == paramExampleId){
                         paramEx = data;
                     }
 
@@ -374,6 +377,16 @@
                 $("#paramChoose").trigger("chosen:updated");
 
                 $("#paramChoose_chosen").css('width','200px');
+
+                if($("#selfParamSwitch").val() == 0){
+                    fillFullParam();
+                }else{
+                    if(paramEx != null){
+                        $("#fullParam").text(paramEx.fullParam);
+                    }
+                    $("#selfParamSwitch").attr("checked", "checked")
+                    showFull();
+                }
             }
 
             function fillFullParam(){
@@ -503,17 +516,37 @@
 
                 $("#paramChoose").change(function(){
                     var id = $(this).val();
-                    for(idx in paramExamples){
-                        var paramEx = paramExamples[idx];
-                        if(paramEx.id == id){
-                            showParam({paramData:paramEx.paramDetail});
-                            $("#requestUserId").val(paramEx.requestUserId);
-                            $("#requestUserIdDiv").text(paramEx.requestUserId);
+                    if(id != 0){
+                        for(idx in paramExamples){
+                            var paramEx = paramExamples[idx];
+                            if(paramEx.id == id){
+                                showParam({paramData:paramEx.paramDetail});
+                                $("#requestUserId").val(paramEx.requestUserId);
+                                $("#requestUserIdDiv").text(paramEx.requestUserId);
 
-                            fillFullParam();
-                            break;
+                                if(paramEx.fullParam == null || paramEx.fullParam == ""){
+                                    fillFullParam();
+                                }else{
+                                    $("#fullParam").text(paramEx.fullParam);
+                                }
+
+                                $(".param-ops").removeClass("hide");
+                                break;
+                            }
                         }
+                    }else{
+                        $(".param-ops").addClass("hide");
                     }
+                });
+
+                $("#param_default").click(function(){
+                    var paramId = $("#paramChoose").val();
+
+                    var data = {
+                        data : new Number(paramId)
+                    };
+
+                    commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
                 });
 
                 $("#resetBtn").on(ace.click_event, function() {
@@ -526,13 +559,21 @@
                             });
                         } else {
                             var paramDetail = generateEditParam("#paramListDiv input");
+                            var fullParam;
+                            if($("#selfParamSwitch").val() == 1){
+                                fullParam = $("#fullParam").text();
+                            }else{
+                                fullParam = JSON.stringify(generateJsonParam("#paramListDiv input"));
+                            }
                             var data = {
+                                id : $("#paramChoose").val(),
                                 interfaceId : $("#interfaceId").val(),
                                 requestUserId : $("#requestUserId").val(),
                                 paramDetail : paramDetail,
                                 deleted : 0,
                                 default : 0,
-                                paramName : result
+                                paramName : result,
+                                fullParam : fullParam
                             };
 
                             commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");

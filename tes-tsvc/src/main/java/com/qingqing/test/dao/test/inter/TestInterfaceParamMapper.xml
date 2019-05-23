@@ -11,10 +11,11 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="full_param" property="fullParam" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, interface_id, param_name, request_user_id, param_detail, is_default, is_deleted, create_time, last_update_time
+    id, interface_id, param_name, request_user_id, param_detail, is_default, is_deleted, create_time, last_update_time, full_param
   </sql>
 
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -24,14 +25,32 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" keyProperty="id" useGeneratedKeys="true">
-    insert into t_interface_param (interface_id, param_name, request_user_id, param_detail, is_default, is_deleted, create_time)
+    insert into t_interface_param (interface_id, param_name, request_user_id, param_detail, is_default, is_deleted, create_time, full_param)
     values (#{interfaceId,jdbcType=BIGINT}, #{paramName,jdbcType=VARCHAR}, #{requestUserId,jdbcType=BIGINT}, #{paramDetail, jdbcType=VARCHAR}, #{isDefault,jdbcType=TINYINT},
-    #{isDeleted,jdbcType=TINYINT}, now())
+    #{isDeleted,jdbcType=TINYINT}, now(), #{fullParam,jdbcType=VARCHAR} )
   </insert>
+
+  <update id="update" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" >
+      update t_interface_param
+      set param_name = #{paramName,jdbcType=VARCHAR}, request_user_id = #{requestUserId,jdbcType=BIGINT}, param_detail = #{paramDetail, jdbcType=VARCHAR}, full_param = #{fullParam,jdbcType=VARCHAR}
+      where id = #{id,jdbcType=BIGINT}
+  </update>
 
   <select id="selectByInterfaceId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select <include refid="Base_Column_List" />
     from t_interface_param
     where interface_id = #{interfaceId,jdbcType=BIGINT}
   </select>
+
+  <update id="resetDefault">
+    update t_interface_param
+    set is_default = FALSE
+    where interface_id = #{interfaceId,jdbcType=BIGINT} and is_default = TRUE
+  </update>
+
+  <update id="setDefault">
+    update t_interface_param
+    set is_default = TRUE
+    where id = #{id, jdbcType=BIGINT}
+  </update>
 </mapper>

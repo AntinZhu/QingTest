@@ -1,11 +1,13 @@
 package com.qingqing.test.controller;
 
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleDataResponse;
+import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.exception.ForbiddenException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
@@ -74,12 +76,18 @@ public class TestController {
     }
 
     @RequestMapping("json_format")
-    public String show(@RequestParam("id") Long interfaceId, @RequestParam(value = "paramId", defaultValue = "0") Long paramId, @RequestParam(value = "env", defaultValue = "dev") String env, @RequestParam(value = "cross", defaultValue = "0") int isCross, Model model){
+    public String show(@RequestParam("id") Long interfaceId,
+                       @RequestParam(value = "paramId", defaultValue = "0") Long paramId,
+                       @RequestParam(value = "env", defaultValue = "dev") String env,
+                       @RequestParam(value = "cross", defaultValue = "0") int isCross,
+                       @RequestParam(value = "full", defaultValue = "0") int isFull,
+                       Model model){
         model.addAttribute("interfaceId", interfaceId);
         model.addAttribute("paramExampleId", paramId);
         model.addAttribute("env", env);
         model.addAttribute("cross", isCross);
         model.addAttribute("defaultObj", "{}");
+        model.addAttribute("full", isFull);
 
         return "interface/jsonformat";
     }
@@ -121,6 +129,18 @@ public class TestController {
 
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(String.valueOf(param.getId())).build();
+    }
+
+    @RequestMapping("/interface/param/default/set")
+    @ProtoResponseBody
+    public SimpleResponse setParamDefault(@RequestBody SimpleLongRequest request){
+        TestInterfaceParam param = testInterfaceParamService.findById(request.getData());
+        if(param != null){
+            testInterfaceParamService.resetDefault(param.getInterfaceId());
+            testInterfaceParamService.setDefault(param.getId());
+        }
+
+        return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }
 
     @RequestMapping("/catelog/edit")

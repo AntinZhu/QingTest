@@ -19,7 +19,11 @@ public class TestInterfaceParamServiceImpl implements TestInterfaceParamService 
 
     @Override
     public void save(TestInterfaceParam testInterface) {
-        testInterfaceParamMapper.insert(testInterface);
+        if(testInterface.getId() != null && testInterface.getId() > 0){
+            testInterfaceParamMapper.update(testInterface);
+        }else{
+            testInterfaceParamMapper.insert(testInterface);
+        }
     }
 
     @Override
@@ -30,5 +34,15 @@ public class TestInterfaceParamServiceImpl implements TestInterfaceParamService 
     @Override
     public List<TestInterfaceParam> selectListByInterfaceId(Long interfaceId) {
         return testInterfaceParamMapper.selectByInterfaceId(interfaceId);
+    }
+
+    @Override
+    public boolean resetDefault(Long interfaceId) {
+        return testInterfaceParamMapper.resetDefault(interfaceId) > 0;
+    }
+
+    @Override
+    public boolean setDefault(Long id) {
+        return testInterfaceParamMapper.setDefault(id) > 0;
     }
 }

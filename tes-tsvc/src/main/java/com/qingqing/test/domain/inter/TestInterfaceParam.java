@@ -12,6 +12,7 @@ public class TestInterfaceParam {
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
+    private String fullParam;
 
     public Long getId() {
         return id;
@@ -83,5 +84,13 @@ public class TestInterfaceParam {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public String getFullParam() {
+        return fullParam;
+    }
+
+    public void setFullParam(String fullParam) {
+        this.fullParam = fullParam;
     }
 }

@@ -1053,12 +1053,12 @@
         if(resu.servicePackage != null){
             var options = new Array();
             var optionIdx = 0;
-            if(resu.servicePackage.isForce == false){
+//            if(resu.servicePackage.isForce == false){
                 var option = new Object();
                 option.key = 0;
                 option.value = "不购买";
                 options[optionIdx++] = option;
-            }
+//            }
 
             for(idx in resu.servicePackage.servicePackageInfoList){
                 var servicePackage = resu.servicePackage.servicePackageInfoList[idx];
