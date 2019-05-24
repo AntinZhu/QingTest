@@ -81,6 +81,7 @@ public class TestController {
                        @RequestParam(value = "env", defaultValue = "dev") String env,
                        @RequestParam(value = "cross", defaultValue = "0") int isCross,
                        @RequestParam(value = "full", defaultValue = "0") int isFull,
+                       @RequestParam(value = "inv", defaultValue = "0") int inv,
                        Model model){
         model.addAttribute("interfaceId", interfaceId);
         model.addAttribute("paramExampleId", paramId);
@@ -88,6 +89,7 @@ public class TestController {
         model.addAttribute("cross", isCross);
         model.addAttribute("defaultObj", "{}");
         model.addAttribute("full", isFull);
+        model.addAttribute("inv", inv);
 
         return "interface/jsonformat";
     }

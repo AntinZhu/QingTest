@@ -117,7 +117,7 @@
                                                         <div id="faq-0-1">
                                                             <div id="accordion" class="accordion-style2">
                                                                 <div class="group">
-                                                                    <h3 class="accordion-header">接口参数选择</h3>
+                                                                    <h3 id="param-step-1" class="accordion-header">接口参数选择</h3>
 
                                                                     <div>
                                                                         <div class="col-xs-12">
@@ -142,8 +142,8 @@
                                                                     </div>
                                                                 </div>
 
-                                                            <div class="group">
-                                                                <h3 class="accordion-header">请求参数</h3>
+                                                                <div class="group">
+                                                                <h3  id="param-step-2" class="accordion-header">请求参数</h3>
                                                                 <div>
                                                                     <div class="col-md-12" style="padding:0;position:relative;height:100%;">
                                                                         <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
@@ -155,8 +155,8 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="group">
-                                                                    <h3 class="accordion-header">返回值</h3>
+                                                                <div class="group">
+                                                                    <h3 id="param-step-3" class="accordion-header">返回值</h3>
 
                                                                     <div>
                                                                         <div class="col-md-12" style="padding:0;position:relative;height:100%;">
@@ -324,6 +324,10 @@
                 $(".env[value='" + env + "']").addClass("btn-primary");
 
                 refreshInterfaceUrl();
+
+                if(${inv!0} == 1){
+                    invoke();
+                }
             }
 
             function fillDefaultValue(paramArr){
@@ -402,6 +406,214 @@
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
 
+            function invoke () {
+                refreshInterfaceUrl();
+                var param;
+                try{
+                    param  = getParam();
+                }catch(err){
+                    $.gritter.add({
+                        title : '参数提醒:',
+                        text : '参数格式错误，请检查json格式',
+                        class_name : 'gritter-error gritter-center'
+                    });
+                    var jsonParam = "";
+                    if($("#selfParamSwitch").val() == 1){
+                        jsonParam = $("#fullParam").text();
+                    }
+                    jsonShow(jsonParam, "json-request");
+                    return;
+                }
+
+                jsonShow(param, "json-request");
+                jsonShow("[]", "json-response");
+
+                var isLocalDebug = $("#isLocalDebug").val();
+                if(isLocalDebug != 1){
+                    invokeServer(param);
+                }else{
+                    invokeLocal(param);
+                }
+
+                $("#param-step-3").trigger("click");
+            }
+
+            function getParam(){
+                var param;
+                if($("#selfParamSwitch").val() == 1){
+                    param = JSON.parse($("#fullParam").text());
+                }else{
+                    param = generateJsonParam("#paramListDiv input");
+                }
+
+                return param;
+            }
+
+            function invokeServer(param){
+                var data = {
+                    interfaceId : $("#interfaceId").val(),
+                    requestUserId : $("#requestUserId").val(),
+                    requestUserType : $("#requestUserType").val(),
+                    param : JSON.stringify(param)
+                };
+                commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+            }
+
+            function invokeLocal(param){
+                if(interfaceBean.interfaceType == "PT" || interfaceBean.interfaceType == "PI"){
+                    var user = {
+                        user_id :  new Number($("#requestUserId").val()),
+                        user_type  : $("#requestUserType").val()
+                    };
+
+                    var othData = {
+                        param : param
+                    };
+
+                    commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerFilterFillInvoke, true, "接口调用异常：:", $("#env").val(), othData, $("#guid").val());
+                }else{
+                    handlerLocalInvoke(param, null);
+                }
+            }
+
+            function handlerFilterFillInvoke(data, otherData){
+                var param = otherData.param;
+                var token = data.resultList;
+                var headers = {
+                    si : token.session,
+                    tk : token.token,
+                    Timestamp : token.timestamp,
+                    Authkey : token.authkey,
+                    qingqing_debug_mode : 'true',
+                    QingqingUser : token.qingqingUserId
+                }
+
+                handlerLocalInvoke(param, headers);
+            }
+
+            function handlerLocalInvoke(param, headers){
+                var localPort = $("#localDebugPort").val();
+                var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl;
+
+                if(isCross == 1){
+                    var data = {
+                        url : url,
+                        headers : headers,
+                        params : JSON.stringify(param),
+                        requestType : interfaceBean.requestType
+                    };
+
+                    commonAjaxRequest("http://127.0.0.1:8009/app/cross", data, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                }else{
+                    commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
+                }
+            }
+
+            function handlerInvokeResult(resu){
+                jsonShow(resu.data, "json-response");
+            };
+
+            function handlerLocalInvokeResult(resu){
+                jsonShow(resu, "json-response");
+            };
+
+            $("#paramChoose").change(function(){
+                var id = $(this).val();
+                if(id != 0){
+                    for(idx in paramExamples){
+                        var paramEx = paramExamples[idx];
+                        if(paramEx.id == id){
+                            showParam({paramData:paramEx.paramDetail});
+                            $("#requestUserId").val(paramEx.requestUserId);
+                            $("#requestUserIdDiv").text(paramEx.requestUserId);
+
+                            if(paramEx.fullParam == null || paramEx.fullParam == ""){
+                                fillFullParam();
+                            }else{
+                                $("#fullParam").text(paramEx.fullParam);
+                            }
+
+                            $(".param-ops").removeClass("hide");
+                            break;
+                        }
+                    }
+                }else{
+                    $(".param-ops").addClass("hide");
+                }
+            });
+
+            $("#param_default").click(function(){
+                var paramId = $("#paramChoose").val();
+
+                var data = {
+                    data : new Number(paramId)
+                };
+
+                commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
+            });
+
+            $("#param_del").click(function(){
+                var paramId = $("#paramChoose").val();
+
+                var data = {
+                    data : new Number(paramId)
+                };
+
+                commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
+            });
+
+            $("#resetBtn").on(ace.click_event, function() {
+                bootbox.prompt("取个名字", function(result) {
+                    if (result === null) {
+                        $.gritter.add({
+                            title : "参数示例",
+                            text : "这个名字还是要有的",
+                            class_name : 'gritter-error gritter-center'
+                        });
+                    } else {
+                        var paramDetail = generateEditParam("#paramListDiv input");
+                        var fullParam;
+                        if($("#selfParamSwitch").val() == 1){
+                            fullParam = $("#fullParam").text();
+                        }else{
+                            fullParam = JSON.stringify(generateJsonParam("#paramListDiv input"));
+                        }
+                        var data = {
+                            id : $("#paramChoose").val(),
+                            interfaceId : $("#interfaceId").val(),
+                            requestUserId : $("#requestUserId").val(),
+                            paramDetail : paramDetail,
+                            deleted : 0,
+                            default : 0,
+                            paramName : result,
+                            fullParam : fullParam
+                        };
+
+                        commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");
+                    }
+                });
+            });
+
+            function handlerParamSave(resu){
+                $.gritter.add({
+                    title : "参数示例",
+                    text : "保存成功",
+                    class_name : 'gritter-info gritter-center'
+                });
+
+                refreshPage();
+            }
+
+            $(".env").click(function(){
+                $(".env.btn-primary").removeClass("btn-primary");
+                $(this).addClass("btn-primary");
+                $("#env").val($(this).val());
+
+                refreshInterfaceUrl();
+            });
+
+            $('#teacherIdBtn').click(invoke);
+
             jQuery(function($) {
                 setInterval(refreshTime, 1000);
 
@@ -409,210 +621,6 @@
                     var now = new Date();
                     $("#qingTime").text(now.format("HH:mm"));
                 }
-
-                $('#teacherIdBtn').click(function () {
-                    refreshInterfaceUrl();
-                    var param;
-                    try{
-                        param  = getParam();
-                    }catch(err){
-                        $.gritter.add({
-                            title : '参数提醒:',
-                            text : '参数格式错误，请检查json格式',
-                            class_name : 'gritter-error gritter-center'
-                        });
-                        var jsonParam = "";
-                        if($("#selfParamSwitch").val() == 1){
-                            jsonParam = $("#fullParam").text();
-                        }
-                        jsonShow(jsonParam, "json-request");
-                        return;
-                    }
-
-                    jsonShow(param, "json-request");
-                    jsonShow("[]", "json-response");
-
-                    var isLocalDebug = $("#isLocalDebug").val();
-                    if(isLocalDebug != 1){
-                        invokeServer(param);
-                    }else{
-                        invokeLocal(param);
-                    }
-                });
-
-                function getParam(){
-                    var param;
-                    if($("#selfParamSwitch").val() == 1){
-                        param = JSON.parse($("#fullParam").text());
-                    }else{
-                        param = generateJsonParam("#paramListDiv input");
-                    }
-
-                    return param;
-                }
-
-                function invokeServer(param){
-                    var data = {
-                        interfaceId : $("#interfaceId").val(),
-                        requestUserId : $("#requestUserId").val(),
-                        requestUserType : $("#requestUserType").val(),
-                        param : JSON.stringify(param)
-                    };
-                    commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
-                }
-
-                function invokeLocal(param){
-                    if(interfaceBean.interfaceType == "PT" || interfaceBean.interfaceType == "PI"){
-                        var user = {
-                            user_id :  new Number($("#requestUserId").val()),
-                            user_type  : $("#requestUserType").val()
-                        };
-
-                        var othData = {
-                          param : param
-                        };
-
-                        commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerFilterFillInvoke, true, "接口调用异常：:", $("#env").val(), othData, $("#guid").val());
-                    }else{
-                        handlerLocalInvoke(param, null);
-                    }
-                }
-
-                function handlerFilterFillInvoke(data, otherData){
-                    var param = otherData.param;
-                    var token = data.resultList;
-                    var headers = {
-                        si : token.session,
-                        tk : token.token,
-                        Timestamp : token.timestamp,
-                        Authkey : token.authkey,
-                        qingqing_debug_mode : 'true',
-                        QingqingUser : token.qingqingUserId
-                    }
-
-                    handlerLocalInvoke(param, headers);
-                }
-
-                function handlerLocalInvoke(param, headers){
-                    var localPort = $("#localDebugPort").val();
-                    var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl;
-
-                    if(isCross == 1){
-                        var data = {
-                            url : url,
-                            headers : headers,
-                            params : JSON.stringify(param),
-                            requestType : interfaceBean.requestType
-                        };
-
-                        commonAjaxRequest("http://127.0.0.1:8009/app/cross", data, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
-                    }else{
-                        commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
-                    }
-                }
-
-                function handlerInvokeResult(resu){
-                    jsonShow(resu.data, "json-response");
-                };
-
-                function handlerLocalInvokeResult(resu){
-                    jsonShow(resu, "json-response");
-                };
-
-                $("#paramChoose").change(function(){
-                    var id = $(this).val();
-                    if(id != 0){
-                        for(idx in paramExamples){
-                            var paramEx = paramExamples[idx];
-                            if(paramEx.id == id){
-                                showParam({paramData:paramEx.paramDetail});
-                                $("#requestUserId").val(paramEx.requestUserId);
-                                $("#requestUserIdDiv").text(paramEx.requestUserId);
-
-                                if(paramEx.fullParam == null || paramEx.fullParam == ""){
-                                    fillFullParam();
-                                }else{
-                                    $("#fullParam").text(paramEx.fullParam);
-                                }
-
-                                $(".param-ops").removeClass("hide");
-                                break;
-                            }
-                        }
-                    }else{
-                        $(".param-ops").addClass("hide");
-                    }
-                });
-
-                $("#param_default").click(function(){
-                    var paramId = $("#paramChoose").val();
-
-                    var data = {
-                        data : new Number(paramId)
-                    };
-
-                    commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
-                });
-
-                $("#param_del").click(function(){
-                    var paramId = $("#paramChoose").val();
-
-                    var data = {
-                        data : new Number(paramId)
-                    };
-
-                    commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
-                });
-
-                $("#resetBtn").on(ace.click_event, function() {
-                    bootbox.prompt("取个名字", function(result) {
-                        if (result === null) {
-                            $.gritter.add({
-                                title : "参数示例",
-                                text : "这个名字还是要有的",
-                                class_name : 'gritter-error gritter-center'
-                            });
-                        } else {
-                            var paramDetail = generateEditParam("#paramListDiv input");
-                            var fullParam;
-                            if($("#selfParamSwitch").val() == 1){
-                                fullParam = $("#fullParam").text();
-                            }else{
-                                fullParam = JSON.stringify(generateJsonParam("#paramListDiv input"));
-                            }
-                            var data = {
-                                id : $("#paramChoose").val(),
-                                interfaceId : $("#interfaceId").val(),
-                                requestUserId : $("#requestUserId").val(),
-                                paramDetail : paramDetail,
-                                deleted : 0,
-                                default : 0,
-                                paramName : result,
-                                fullParam : fullParam
-                            };
-
-                            commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");
-                        }
-                    });
-                });
-
-                function handlerParamSave(resu){
-                    $.gritter.add({
-                        title : "参数示例",
-                        text : "保存成功",
-                        class_name : 'gritter-info gritter-center'
-                    });
-
-                    refreshPage();
-                }
-
-                $(".env").click(function(){
-                    $(".env.btn-primary").removeClass("btn-primary");
-                    $(this).addClass("btn-primary");
-                    $("#env").val($(this).val());
-
-                    refreshInterfaceUrl();
-                });
 
                 //editables on first profile page
                 $.fn.editable.defaults.mode = 'inline';
