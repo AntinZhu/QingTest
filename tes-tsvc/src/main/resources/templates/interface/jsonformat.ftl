@@ -316,6 +316,9 @@
 
                     paramExamples = resu.interfaceInfo.paramList;
                     initParamChoose(paramExamples, ${paramExampleId});
+                    if(${paramExampleId} == 0){
+                        fillFullParam();
+                    }
                 }
 
                 var env = '${env!"dev"}';

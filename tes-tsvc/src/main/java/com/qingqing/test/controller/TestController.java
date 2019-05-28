@@ -32,6 +32,7 @@ import com.qingqing.test.domain.inter.TestInterfaceParam;
 import com.qingqing.test.domain.test.TestStudentIndexBean;
 import com.qingqing.test.manager.PassportManager;
 import com.qingqing.test.manager.TestInterfaceManager;
+import com.qingqing.test.manager.TestProtoClassNameManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
 import com.qingqing.test.service.inter.TestInterfaceService;

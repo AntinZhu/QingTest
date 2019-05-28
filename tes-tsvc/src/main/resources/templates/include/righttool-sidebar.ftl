@@ -166,7 +166,7 @@
                 </div>
                 </div>
 
-            <div class="group">
+            <div class="group qing_catelog_hide">
                 <h3 class="accordion-header">线上手机号批量解密</h3>
 
                 <div>
@@ -223,6 +223,63 @@
                             <div class="col-sm-9">
                                         <span class="input-icon">
                                             <input type="text" class="phoneNumber_conv" id="phoneNumber_conv" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group qing_catelog_hide">
+                <h3 class="accordion-header">这是啥</h3>
+
+                <div>
+                    <form id="qing_sql_file_form" method="post" enctype="multipart/form-data" target="_blank" action="${base}/v1/utils/sql/run">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="file" name = "file" id="qing_sql_file" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button type="button" class="btn btn-grey btn-sm" id="qing_sql_file_btn">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="group">
+                <h3 class="accordion-header">类全名查找</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">类名：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" class="protoClassName_conv" id="protoClassName_simple_conv" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="protoClassNameConverter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">全名：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" class="protoClassName_conv" id="protoClassName_full_conv" />
                                             <i class="icon-unlock blue"></i>
                                         </span>
                             </div>
@@ -301,6 +358,23 @@
         //blacklist:'exe|php'
         //onchange:''
         //
+    });
+
+    $('#qing_sql_file').ace_file_input({
+        no_file:'No File ...',
+        btn_choose:'Choose',
+        btn_change:'Change',
+        droppable:false,
+        onchange:null,
+        thumbnail:false //| true | large
+        //whitelist:'gif|png|jpg|jpeg'
+        //blacklist:'exe|php'
+        //onchange:''
+        //
+    });
+
+    $("#qing_sql_file_btn").click(function(){
+        $("#qing_sql_file_form").submit();
     });
 
     //jquery accordion
@@ -547,4 +621,33 @@
             }
         });
     });
+
+    $("#protoClassNameConverter").click(function(){
+        var simpleClassName = $("#protoClassName_simple_conv").val();
+        if(simpleClassName == null || simpleClassName == ""){
+            $.gritter.add({
+                title : "查询结果",
+                text : "请输入类名",
+                class_name : 'gritter-error gritter-right'
+            });
+            return;
+        }
+
+        var data = {
+            data : simpleClassName
+        };
+        commonAjaxRequest("${base}/v1/utils/get_full_name.json", data, handlerFullClassName, true, "查询结果:");
+    });
+
+    function handlerFullClassName(resp){
+        if(resp.resultList != null && resp.resultList.length > 0){
+            $("#protoClassName_full_conv").val(resp.resultList[0]);
+        }else{
+            $.gritter.add({
+                title : "查询结果",
+                text : "未找到该类",
+                class_name : 'gritter-error gritter-right'
+            });
+        }
+    }
 </script>

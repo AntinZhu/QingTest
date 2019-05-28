@@ -14,6 +14,7 @@ import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.UserWithDataBean;
+import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.index.IndexQueryRequestBean;
 import com.qingqing.test.bean.index.IndexUpdateRequestBean;
@@ -21,6 +22,8 @@ import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.manager.BITeacherIndexManager;
 import com.qingqing.test.manager.PhoneNumberManager;
 import com.qingqing.test.manager.QingApiLabManager;
+import com.qingqing.test.manager.TestProtoClassNameManager;
+import com.qingqing.test.service.common.CommonService;
 import com.qingqing.test.service.user.UserService;
 import com.qingqing.test.util.QingFileUtils;
 import org.slf4j.Logger;
@@ -59,6 +62,10 @@ public class UtilsController {
     private BITeacherIndexManager biTeacherIndexManager;
     @Autowired
     private PhoneNumberManager phoneNumberManager;
+    @Autowired
+    private TestProtoClassNameManager testProtoClassNameManager;
+    @Autowired
+    private CommonService commonService;
 
     @RequestMapping("phoneNumber/sync")
     @ResponseBody
@@ -274,5 +281,24 @@ public class UtilsController {
     @RequestMapping("ws")
     public String ws() {
         return "utils/ws";
+    }
+
+    @RequestMapping("/get_full_name")
+    @ResponseBody
+    public ListResponse<String> getFullClassName(@RequestBody SimpleStringRequest request){
+        List<String> fullClassName = testProtoClassNameManager.getFullClassName(request.getData());
+
+        ListResponse<String> result = new ListResponse<>();
+        result.setResponse(BaseResponse.SUCC_RESP);
+        result.setResultList(fullClassName);
+        return result;
+    }
+
+    @RequestMapping("sql/run")
+    public @ResponseBody void fullNameUpdate(@RequestParam("file") MultipartFile file) throws IOException {
+        List<String> encodeList = QingFileUtils.readLines(file.getInputStream());
+        for (String sql : encodeList) {
+            commonService.insert(sql);
+        }
     }
 }
