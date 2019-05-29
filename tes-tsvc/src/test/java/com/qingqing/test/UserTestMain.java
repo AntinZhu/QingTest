@@ -1,6 +1,7 @@
 package com.qingqing.test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qingqing.common.exception.QingQingRuntimeException;
 import org.apache.http.HttpEntity;
@@ -72,6 +73,20 @@ public class UserTestMain {
             JSONObject jsonObject = JSON.parseObject(responseBody);
 
             System.out.println(jsonObject.getString("hits"));
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("", e);
+        }
+    }
+
+    @Test
+    public void testAlias(){
+        try {
+            Response response = restClient.performRequest("GET", "/_cat/aliases?v&format=json&pretty", Collections.<String, String>emptyMap());
+
+            String responseBody = EntityUtils.toString(response.getEntity());
+            JSONArray jsonObject = JSON.parseArray(responseBody);
+
+            System.out.println(responseBody);
         } catch (IOException e) {
             throw new QingQingRuntimeException("", e);
         }

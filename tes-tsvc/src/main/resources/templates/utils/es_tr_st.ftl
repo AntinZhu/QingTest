@@ -61,16 +61,7 @@
                                     <label class="col-sm-3 control-label no-padding-right" for="indexName">索引名称</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="indexName" placeholder="实际索引名称" class="col-xs-10 col-sm-5" value=""/>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="indexNameSelect">选择索引名称</label>
-
-                                    <div class="col-xs-4 col-sm-4">
-                                        <select class="width-80 chosen-select" id="indexNameSelect" data-placeholder="选择索引名称...">
-                                        </select>
+                                        <input type="text" id="indexName" placeholder="实际索引名称" class="col-xs-10 col-sm-5" value="" disabled="disabled"/>
                                     </div>
                                 </div>
 
@@ -177,23 +168,34 @@
         {indexPrefix:'bi_student_index',isRelation:false, userType:'student',uniqueKey:'student', clazz:'student', userName:'学生'},
         {indexPrefix:'bi_crm_index',isRelation:false, userType:'customer',uniqueKey:'crm', clazz:'crm', userName:'customer'},
         {indexPrefix:'bi_assistant_index',isRelation:false, userType:'assistant',uniqueKey:'assistant', clazz:'assistant', userName:'助教'},
+        {indexPrefix:'bi_tr_stu_index_last_day',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
+        {indexPrefix:'bi_teacher_index_last_day',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
+        {indexPrefix:'bi_crm_index_last_day',isRelation:false, userType:'customer',uniqueKey:'crm', clazz:'crm', userName:'customer'},
     ];
     var selectable = [];
+    var aliasArr = ${alias};
     for(var idx in supportIndexArr){
         var item = supportIndexArr[idx];
         var selectItem = new Object();
-        selectItem.key = item.indexPrefix;
         selectItem.value = item.indexPrefix;
+        selectItem.key = item.indexPrefix;
+        for(var aliaIdx in aliasArr){
+            var alia = aliasArr[aliaIdx];
+            if(alia.key == item.indexPrefix){
+                item.indexName = alia.value;
+                break;
+            }
+        }
 
         selectable.push(selectItem);
     }
 
     function init(){
         updateOptions("indexType", selectable, selectable[0].value);
-        updateOptions("indexNameSelect", getEmptyOptions());
+        $("#indexName").val(supportIndexArr[0].indexName);
 
         $(".qing_param").addClass("hide");
-        $("." + getIndexInfo($("#indexType").val()).clazz).removeClass("hide");
+        $("." + supportIndexArr[0].clazz).removeClass("hide");
     }
 
     function getIndexInfo(indexPrefix){
@@ -236,20 +238,18 @@
             return inputText.substr(0, inputText.indexOf("\<button"));
         }
 
-        $("#indexNameSelect").change(function () {
-            $("#indexName").val($(this).val());
-        });
-
         $("#indexType").change(function(){
             $(".qing_param").addClass("hide");
 
             var indexInfo = getIndexInfo($("#indexType").val());
             $("." + indexInfo.clazz).removeClass("hide");
 
-            updateOptions("indexNameSelect", getEmptyOptions());
-            $("#indexName").val("");
-
-//            commonQuery(noConditionQueryString, indexInfo);
+            $("#indexName").val(indexInfo.indexName);
+            $("#fullData").val("");
+            $('#fullData').css("height", "50px");
+            indexInfo = null;
+            jsonShow("{}", "json-interface-detail");
+            $("#paramDiv").addClass("hide");
         });
 
         $(".env").click(function(){
@@ -287,7 +287,6 @@
 
             var queryString = '{"query":{"bool":{"must":[{"term":{"' + userType + '_id":"' + userId + '"}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[{"bi_etl_data_time":{"order":"desc"}}],"aggs":{}}';
             commonQuery(queryString, indexName, handleSearch);
-            commonQuery(queryString, indexInfo.indexPrefix + "*", updateIndexNameSelect);
         }
 
         function searchRelation(indexInfo){
@@ -310,7 +309,6 @@
                 indexName = indexInfo.indexPrefix + "*";
             }
             commonQuery(queryString, indexName, handleSearch);
-            commonQuery(queryString, indexInfo.indexPrefix + "*", updateIndexNameSelect);
         }
 
         function commonQuery(queryString, indexName, handleFunction){
@@ -323,7 +321,6 @@
 
         var indexInfo;
         function handleSearch(resu){
-//            alert(resu.resultList);
             var jsonResult = JSON.parse(resu.resultList);
 
             var count = jsonResult.hits.length;
@@ -343,7 +340,7 @@
                 formatParamInput();
 
 //                updateOptions("indexNameSelect", genOptionsWithEmpty(jsonResult.hits, "_index"), latest._index);
-                $("#indexName").val(latest._index);
+//                $("#indexName").val(latest._index);
 
                 jsonShow(teacherData, "json-interface-detail");
                 //{"key":"end_time","name":"end_time","defaultValue":1}
@@ -353,17 +350,6 @@
                     text : "没有查询到数据",
                     class_name : 'gritter-error gritter-center'
                 });
-            }
-        }
-
-        function updateIndexNameSelect(resu){
-            var jsonResult = JSON.parse(resu.resultList);
-
-            var count = jsonResult.hits.length;
-            if(count > 0) {
-                var latest = jsonResult.hits[0];
-
-                updateOptions("indexNameSelect", genOptionsWithEmpty(jsonResult.hits, "_index"), $("#indexName").val());
             }
         }
 

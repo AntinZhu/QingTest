@@ -6,6 +6,7 @@ import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.User;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.TimeUtil;
 import com.qingqing.common.util.UserIdEncoder;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -232,7 +234,9 @@ public class UtilsController {
     }
 
     @RequestMapping("es/student-teacher")
-    public String biStudentTeacherIndexPage() {
+    public String biStudentTeacherIndexPage(Model model) {
+        model.addAttribute("alias", JsonUtil.format(biTeacherIndexManager.allIndex()));
+
         return "utils/es_tr_st";
     }
 
