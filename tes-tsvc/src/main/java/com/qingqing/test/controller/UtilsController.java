@@ -20,6 +20,8 @@ import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.index.IndexQueryRequestBean;
 import com.qingqing.test.bean.index.IndexUpdateRequestBean;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
+import com.qingqing.test.dao.mock.MockRuleMapper;
+import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.manager.BITeacherIndexManager;
 import com.qingqing.test.manager.PhoneNumberManager;
 import com.qingqing.test.manager.QingApiLabManager;
@@ -68,6 +70,8 @@ public class UtilsController {
     private TestProtoClassNameManager testProtoClassNameManager;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private MockRuleMapper mockRuleMapper;
 
     @RequestMapping("phoneNumber/sync")
     @ResponseBody
@@ -304,5 +308,14 @@ public class UtilsController {
         for (String sql : encodeList) {
             commonService.insert(sql);
         }
+    }
+
+    @RequestMapping("mock")
+    public @ResponseBody ListResponse<MockRule> mock() {
+        ListResponse<MockRule> result = new ListResponse<>();
+        result.setResponse(BaseResponse.SUCC_RESP);
+        result.setResultList(mockRuleMapper.selectAll());
+
+        return result;
     }
 }

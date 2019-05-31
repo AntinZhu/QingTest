@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.mock.MockOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.qingqing.test.bean.mock.MockOrder" >
+  <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="qingqing_order_id" property="qingqingOrderId" jdbcType="VARCHAR" />
+      <result column="amount" property="amount" javaType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, qingqing_order_id, amount, create_time, last_update_time
+  </sql>
+
+  <insert id="insert" parameterType="com.qingqing.test.bean.mock.MockOrder" useGeneratedKeys="true" keyProperty="id">
+    insert into t_mock_order(qingqing_order_id, amount, create_time)
+    value(
+    #{qingqingOrderId, jdbcType=VARCHAR},
+    #{amount, jdbcType=DOUBLE},
+    now()
+    )
+  </insert>
+  
+  <select id="findByQingQingOrderId" resultMap="BaseResultMap">
+    select 
+  	  <include refid="Base_Column_List" />
+    	from t_mock_order
+    where qingqing_order_id = #{qingqingOrderId, jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

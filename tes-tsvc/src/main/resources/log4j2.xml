@@ -2,11 +2,11 @@
 <Configuration>
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d %-5 p |%X{ip}| [%t] %C{2} (%F:%L) - %m%n"/>
+            <PatternLayout charset="UTF-8" pattern="%d %-5 p |%X{ip}| [%t] %C{2} (%F:%L) - %m%n"/>
         </Console>
         <RollingFile name="RollingFile" fileName="logs/mylog.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout>
+            <PatternLayout charset="UTF-8">
                 <Pattern>%d{MM-dd-yyyy} %p %c{1.} |%X{ip}| [%t] -%M-%L- %m%n</Pattern>
             </PatternLayout>
             <Policies>

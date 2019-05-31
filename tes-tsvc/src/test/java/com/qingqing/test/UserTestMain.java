@@ -1,7 +1,6 @@
 package com.qingqing.test;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qingqing.common.exception.QingQingRuntimeException;
 import org.apache.http.HttpEntity;
@@ -84,7 +83,58 @@ public class UserTestMain {
             Response response = restClient.performRequest("GET", "/_cat/aliases?v&format=json&pretty", Collections.<String, String>emptyMap());
 
             String responseBody = EntityUtils.toString(response.getEntity());
-            JSONArray jsonObject = JSON.parseArray(responseBody);
+
+            System.out.println(responseBody);
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("", e);
+        }
+    }
+
+    @Test
+    public void testAlias_2(){
+        try {
+            Response response = restClient.performRequest("GET", "/_cat/aliases/bi_tr_stu_index?v&format=json&pretty", Collections.<String, String>emptyMap());
+
+            String responseBody = EntityUtils.toString(response.getEntity());
+
+            System.out.println(responseBody);
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("", e);
+        }
+    }
+
+    @Test
+    public void testAllocation(){
+        try {
+            Response response = restClient.performRequest("GET", "/_cat/allocation?v&format=json&pretty", Collections.<String, String>emptyMap());
+
+            String responseBody = EntityUtils.toString(response.getEntity());
+
+            System.out.println(responseBody);
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("", e);
+        }
+    }
+
+    @Test
+    public void testCount_1(){
+        try {
+            Response response = restClient.performRequest("GET", "/_cat/count?v&format=json&pretty", Collections.<String, String>emptyMap());
+
+            String responseBody = EntityUtils.toString(response.getEntity());
+
+            System.out.println(responseBody);
+        } catch (IOException e) {
+            throw new QingQingRuntimeException("", e);
+        }
+    }
+
+    @Test
+    public void testCount_2(){
+        try {
+            Response response = restClient.performRequest("GET", "/_cat/count/bi_tr_stu_index?v&format=json&pretty", Collections.<String, String>emptyMap());
+
+            String responseBody = EntityUtils.toString(response.getEntity());
 
             System.out.println(responseBody);
         } catch (IOException e) {

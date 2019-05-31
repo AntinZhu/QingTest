@@ -11,6 +11,8 @@
         <typeAlias alias="HtmlElementType" type="com.qingqing.test.domain.inter.HtmlElementType" />
         <typeAlias alias="ParamEncodeType" type="com.qingqing.test.domain.inter.ParamEncodeType" />
         <typeAlias alias="CatelogRefType" type="com.qingqing.test.domain.inter.CatelogRefType" />
+        <typeAlias alias="RuleInterfaceType" type="com.qingqing.test.domain.mock.InterfaceType"/>
+        <typeAlias alias="RuleType" type="com.qingqing.test.domain.mock.RuleType"/>
     </typeAliases>
 
     <typeHandlers>
@@ -22,5 +24,7 @@
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.HtmlElementType" />
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.ParamEncodeType" />
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.CatelogRefType" />
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.mock.InterfaceType"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.mock.RuleType"/>
     </typeHandlers>
 </configuration>
