@@ -24,4 +24,9 @@ public class MockOrderServiceImpl implements MockOrderService {
     public MockOrder findByQingQingOrderId(String qingqingOrderId) {
         return mockOrderMapper.findByQingQingOrderId(qingqingOrderId);
     }
+
+    @Override
+    public MockOrder findById(Long id) {
+        return mockOrderMapper.findById(id);
+    }
 }

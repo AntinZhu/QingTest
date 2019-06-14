@@ -45,6 +45,13 @@ public class WxRefundMockController {
             case wx_refund_apply:
                 MockOrder mockOrder = convertToOrder(requestXml);
                 return mock(interfaceType, mockOrder);
+            case wx_refund_query:
+                Long id = getRefundId(requestXml);
+                MockOrder mockOrderInDB = mockOrderService.findById(id);
+                if(mockOrderInDB == null){
+                    throw new RequestValidateException("unknown order for orderId:" + id);
+                }
+                return mock(interfaceType, mockOrderInDB);
             default:
                 throw new QingQingRuntimeException("unknown interface type for mock, interfaceType:" + interfaceType);
         }
@@ -75,10 +82,18 @@ public class WxRefundMockController {
         return result;
     }
 
+    private Long getRefundId(String requestXml){
+        Map<String, String> resultMap = XMLUtil.getElementsInTopLevel(requestXml);
+
+        return Long.valueOf(resultMap.get("refund_id"));
+    }
+
     private InterfaceType convertToInterfaceType(String method){
         switch (method){
             case "apply":
                 return InterfaceType.wx_refund_apply;
+            case "query":
+                return InterfaceType.wx_refund_query;
             default:
                 throw new RequestValidateException("unknown method for mock, method:" + method);
         }

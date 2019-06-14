@@ -127,7 +127,7 @@ public class OrderManager {
                 .setMaxOpenStudents(classOrderBean.getMaxStudentCnt())
                 .setCourseId(classOrderBean.getCourseId())
                 .setGradeId(classOrderBean.getGradeId())
-                .addAllTimeParams(generateTimeParams(classOrderBean.getCourseTimes(), classOrderBean.getClassHour()))
+                .addAllTimeParams(generateTimeParams(classOrderBean.getStartCourseTime(), classOrderBean.getCourseTimes(), classOrderBean.getClassHour()))
                 .addAllPublishCityIds(classOrderBean.getPublishCityIds())
                 .addAllOutLines(generateLiveClassOutLine(classOrderBean.getCourseTimes()))
                 .setTextbookCatagory(classOrderBean.getTextCategoryId())
@@ -154,7 +154,7 @@ public class OrderManager {
                 .setMaxStudentCnt(classOrderBean.getMaxStudentCnt())
                 .setCourseId(classOrderBean.getCourseId())
                 .setGradeId(classOrderBean.getGradeId())
-                .addAllTimeParams(generateTimeParams(classOrderBean.getCourseTimes(), classOrderBean.getClassHour()))
+                .addAllTimeParams(generateTimeParams(classOrderBean.getStartCourseTime(), classOrderBean.getCourseTimes(), classOrderBean.getClassHour()))
                 .build();
 
         SimpleLongDataResponse response = piClient.addClassOrder(request, classOrderBean.getCreateAssistantId(), UserType.ta);
@@ -290,7 +290,7 @@ public class OrderManager {
         {
             OrderModeUnit.Builder builder6 = OrderModeUnit.newBuilder();
             TimeParam.Builder timeBuilder = TimeParam.newBuilder();
-            Date courseDate = TimeUtil.dayAfterNow(1);
+            Date courseDate = addOrderBean.getStartCourseTime();
             Integer halfHourLength = classHour / 5;
             Integer start = 0;
             for(int i = 0; i < courseTimes; i++){
@@ -316,11 +316,10 @@ public class OrderManager {
         return omus;
     }
 
-    private List<TimeParam> generateTimeParams(int courseTimes, int classHour) {
+    private List<TimeParam> generateTimeParams(Date courseDate, int courseTimes, int classHour) {
         List<TimeParam> omus = new ArrayList<TimeParam>();
         {
             TimeParam.Builder timeBuilder = TimeParam.newBuilder();
-            Date courseDate = TimeUtil.dayAfterNow(1);
             Integer halfHourLength = classHour / 5;
             Integer start = 0;
             for (int i = 0; i < courseTimes; i++) {

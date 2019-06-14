@@ -11,4 +11,6 @@ public interface MockOrderService {
     boolean insert(MockOrder mockOrder);
 
     MockOrder findByQingQingOrderId(String qingqingOrderId);
+
+    MockOrder findById(Long id);
 }

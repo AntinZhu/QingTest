@@ -12,6 +12,7 @@ public enum InterfaceType implements HasDefaultInterface<InterfaceType> {
     ahm_order_sync(3, "projectNo", "applyAmt"), // 爱海米同步订单接口
     ahm_order_query(4, "projectNo"), // 爱海米订单查询接口
     wx_refund_apply(5, ""),
+    wx_refund_query(6, ""),
     ;
 
     private Integer value;

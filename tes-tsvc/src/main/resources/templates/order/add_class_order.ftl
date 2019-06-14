@@ -24,7 +24,7 @@
         }
     </style>
 </head>
-<body>
+<body>start
 <#include "/include/topbar.ftl" />
 <div class="main-container" id="main-container">
     <script type="text/javascript">
@@ -227,10 +227,10 @@
                                                                     </div>
                                                                 </div>
                                                             <!-- 老师的相关信息 -->
-                                                            <div class="form-group hide">
+                                                            <div class="form-group">
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startCourseTime">首次上课时间:</label>
                                                                 <div class="input-group col-xs-12 col-sm-6">
-                                                                    <input class="form-control date-picker" id="id-date-picker-1" type="startCourseTime" data-date-format="yyyy-mm-dd" />
+                                                                    <input class="form-control date-picker" id="startCourseTime" type="text" data-date-format="yyyy-mm-dd" />
                                                                     <span class="input-group-addon">
                                                                                 <i class="icon-calendar bigger-110"></i>
                                                                             </span>
@@ -1059,10 +1059,6 @@
             return false;//prevent clicking on steps
         });
 
-        $('.date-picker').datepicker({autoclose:true,minDate:'02-07-2018',gotoCurrent:true}).next().on(ace.click_event, function(){
-            $(this).prev().focus();
-        });
-
         $('#skip-validation').removeAttr('checked').on('click', function(){
             $validation = this.checked;
             if(this.checked) {
@@ -1186,6 +1182,13 @@
 
         $("th,td").addClass("center");
         $("#payType_chosen").css("width", "331px;");
+        var startDate = new Date();
+        startDate.setDate(startDate.getDate() + 1);
+        $(".date-picker").datepicker({format : 'yyyy-mm-dd', startDate: formatDate(startDate.getTime()),autoclose:true}).next().on(ace.click_event, function(){
+            $(this).prev().focus();
+        });
+
+        $("#startCourseTime").val(startDate.format("yyyy-MM-dd"));
     })
 </script>
         </body>

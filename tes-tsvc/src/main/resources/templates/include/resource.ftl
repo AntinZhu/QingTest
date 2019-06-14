@@ -100,6 +100,7 @@
 <script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
 <script src="${base}/static/assets/js/date-time/bootstrap-datetimepicker.min.js"></script>
+<script src="${base}/static/assets/js/date-time/bootstrap-datepicker.min.js"></script>
 <script src="${base}/static/assets/js/fuelux/fuelux.spinner.min.js"></script>
 <script src="${base}/static/js/common.js"></script>
 <script src="${base}/static/js/orderCourseCommon.js"></script>

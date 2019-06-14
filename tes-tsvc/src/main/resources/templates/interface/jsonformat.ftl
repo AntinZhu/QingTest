@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Hello World!</title>
+    <title id = "qing_title">Hello World!</title>
     <#include "/include/resource_uncompressed.ftl" />
 
     <style>
@@ -292,6 +292,7 @@
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 interfaceBean = resu.interfaceInfo.inter;
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
+                $("#qing_title").text(resu.interfaceInfo.inter.interfaceName);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
                     $("#requestUserIdDev").removeClass("hide");
                     $("#requestUserTypeDiv").text(resu.interfaceInfo.inter.requestUserType);
@@ -565,7 +566,7 @@
                 commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
             });
 
-            $("#resetBtn").on(ace.click_event, function() {
+            $("#resetBtn").click(function() {
                 bootbox.prompt("取个名字", function(result) {
                     if (result === null) {
                         $.gritter.add({
@@ -573,6 +574,7 @@
                             text : "这个名字还是要有的",
                             class_name : 'gritter-error gritter-center'
                         });
+                        return;
                     } else {
                         var paramDetail = generateEditParam("#paramListDiv input");
                         var fullParam;

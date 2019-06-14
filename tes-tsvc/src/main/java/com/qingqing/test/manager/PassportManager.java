@@ -9,6 +9,7 @@ import com.qingqing.common.web.util.ServerAuthUtil;
 import com.qingqing.test.bean.inter.UserRequestParam;
 import com.qingqing.test.client.PassportPiClient;
 import com.qingqing.test.controller.errorcode.BaseInterfaceErrorCode;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ public class PassportManager {
     @Autowired
     private PassportPiClient passportPiClient;
 
+    @Test
     public UserRequestParam getToken(Long userId, UserType userType){
         String token;
         String session;

@@ -28,5 +28,11 @@
     	from t_mock_order
     where qingqing_order_id = #{qingqingOrderId, jdbcType=VARCHAR}
   </select>
-  
+
+  <select id="findById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_mock_order
+    where id = #{id, jdbcType=BIGINT}
+  </select>
 </mapper>

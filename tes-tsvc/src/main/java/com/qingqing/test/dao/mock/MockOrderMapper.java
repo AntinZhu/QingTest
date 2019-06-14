@@ -7,4 +7,6 @@ public interface MockOrderMapper {
 	int insert(MockOrder mockOrder);
 
 	MockOrder findByQingQingOrderId(String qingqingOrderId);
+
+	MockOrder findById(Long id);
 }
