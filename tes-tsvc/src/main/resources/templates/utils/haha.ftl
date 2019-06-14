@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Hello World!</title>
+    <title>查找接口</title>
     <#include "/include/resource.ftl" />
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
