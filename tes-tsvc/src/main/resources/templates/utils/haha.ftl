@@ -75,7 +75,7 @@
             var html = task_html;
             html = html.replace(new RegExp("{idx}","gm"), task.id);
             html = html.replace(new RegExp("{desc}","gm"), task.interfaceName);
-            html = html.replace(new RegExp("{url}","gm"), "${base}/v1/test/json_format?id=" + task.id);
+            html = html.replace(new RegExp("{url}","gm"), "${base}/v1/test/json_format?cross=1&id=" + task.id);
             html = html.replace(new RegExp("{content}","gm"), task.interfaceUrl);
 
             $("#taskList").append(html);

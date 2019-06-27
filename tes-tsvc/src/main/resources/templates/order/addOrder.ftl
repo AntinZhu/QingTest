@@ -518,26 +518,26 @@
 
                                             <h3>步骤2：生成大礼包<br/></h3>
                                             <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=100&catelogIndex=2-5-6-1###" target="_blank">接口地址</a> </p>
+                                                <p><a href="${base}/v1/test/json_format?cross=1&id=100&catelogIndex=2-5-6-1###" target="_blank">接口地址</a> </p>
                                                 <p>传入加密的子订单ID</p>
                                             </blockquote>
 
                                             <h3>步骤3：生成合并付订单ID<br/></h3>
                                             <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=101&catelogIndex=2-5-6-2" target="_blank" >接口地址</a> </p>
+                                                <p><a href="${base}/v1/test/json_format?cross=1&id=101&catelogIndex=2-5-6-2" target="_blank" >接口地址</a> </p>
                                                 <p>传入步骤二获得的大礼包ID</p>
                                                 <p>结果中可以获得加密的合并付ID，用于支付流程的测试</p>
                                             </blockquote>
 
                                             <h3>步骤4：支付前置<br/></h3>
                                             <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=11&catelogIndex=2-2-1" target="_blank" >接口地址</a> </p>
+                                                <p><a href="${base}/v1/test/json_format?cross=1&id=11&catelogIndex=2-2-1" target="_blank" >接口地址</a> </p>
                                                 <p>传入步骤三获得的合并付ID, 订单类型选择：合并支付订单。</p>
                                             </blockquote>
 
                                             <h3>步骤5：请求支付<br/></h3>
                                             <blockquote>
-                                                <p><a href="${base}/v1/test/json_format?id=93&catelogIndex=2-2-2-7" target="_blank" >接口地址</a> </p>
+                                                <p><a href="${base}/v1/test/json_format?cross=1&id=93&catelogIndex=2-2-2-7" target="_blank" >接口地址</a> </p>
                                                 <p>参数示例选择中，选择一种支付方式</p>
                                                 <p>订单类型，选择：combined_pay_order_type</p>
                                             </blockquote>

@@ -179,6 +179,7 @@ public class TestController {
         TestInterfaceCatelog catelog = testInterfaceManager.saveCatelog(saveBean, parentCatelog);
 
         SingleResponse<TestInterfaceCatelog> result = new SingleResponse<>();
+        result.setResponse(BaseResponse.SUCC_RESP);
         result.setResultList(catelog);
         return result;
     }

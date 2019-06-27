@@ -1,10 +1,6 @@
 package com.qingqing.test.util;
 
-import com.googlecode.protobuf.format.JsonFormat;
-import com.qingqing.api.proto.v1.im.ImProto.AddChatGroupMemberRequest;
-import com.qingqing.api.proto.v1.util.Common.SimpleBoolRequest;
 import com.qingqing.common.exception.ErrorCodeException;
-import com.qingqing.common.util.JsonUtil;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 
 import java.beans.IntrospectionException;
@@ -34,12 +30,11 @@ public class QingParamUtil {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
 //        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        System.out.println(generateParamJson(AddChatGroupMemberRequest.class.getName()));
-        System.out.println(JsonUtil.format(JsonFormat
-                .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
+//        System.out.println(generateParamJson(com.qingqing.api.proto.bi.BiDataProviderProto.BIDataUnit.class.getName()));
+//        System.out.println(JsonUtil.format(JsonFormat
+//                .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
 
         genProtoClassName("F:\\work\\student_pool_svc\\protobean\\src\\main\\resources\\proto-sub", "D:\\sql\\full-proto.sql");
-
     }
 
     private static void genProtoClassName(String dirPath, String outputFileName) throws IOException {
@@ -210,7 +205,7 @@ public class QingParamUtil {
     }
 
     private static String toProperties(String properties, Class propertiesType, boolean isArray) throws IntrospectionException, ClassNotFoundException {
-        if(String.class.equals(propertiesType) || propertiesType.isPrimitive() || Number.class.isAssignableFrom(propertiesType)){
+        if(isSimpleType(propertiesType)){
             if(String.class.equals(propertiesType)){
                 return toStringProperties(properties, isArray);
             }else if(boolean.class.equals(propertiesType)){
@@ -316,5 +311,9 @@ public class QingParamUtil {
         public void setInnerClassNames(List<String> innerClassNames) {
             this.innerClassNames = innerClassNames;
         }
+    }
+
+    private static boolean isSimpleType(Class<?> enumClazz){
+        return String.class.equals(enumClazz) || enumClazz.isPrimitive() || Number.class.isAssignableFrom(enumClazz);
     }
 }

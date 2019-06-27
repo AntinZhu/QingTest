@@ -23,7 +23,7 @@ import java.util.Set;
 public class QingJavaParser {
 
     public static void main(String[] args) throws Exception{
-//        FileInputStream in = new FileInputStream("F:\\work\\Github\\QingTest\\tes-tsvc\\src\\main\\java\\com\\qingqing\\test\\util\\QingJavaParser.java");
+//        FileInputStream in = new FileInputStream("F:\\work\\Github\\QingTest\\tes-tsvc\\src\\main\\java\\com\\qingqing\\test\\service\\config\\TestConfigService.java");
 //
 //        // parse the file
 //        CompilationUnit cu = JavaParser.parse(in);
@@ -118,6 +118,15 @@ public class QingJavaParser {
 //            System.out.println("extends:"+n.getExtends());
 //            System.out.println("implements:"+n.getImplements());
             className = n.getName();
+
+            if(!n.isInterface() && n.getName().contains("Manager")){
+                if(CollectionsUtil.isNullOrEmpty(n.getAnnotations())){
+                    System.out.println("-----------Manager上无注解-----------");
+                    System.out.println("路径：" + packageName + "." + className);
+                    System.out.println("类名：" + n.getName());
+                    System.out.println("注解名称：" + n.getAnnotations());
+                }
+            }
 
             super.visit(n, arg);
         }

@@ -1,6 +1,9 @@
 package com.qingqing.test.util;
 
+import com.qingqing.common.util.TimeUtil;
+
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.TreeMap;
 
 /**
@@ -27,5 +30,14 @@ public class ObjectUtil {
         }
 
         return map;
+    }
+
+    public static void main(String[] args) {
+        Date date = TimeUtil.getMonthStartTime(new Date());
+        Date startTime = TimeUtil.getServalMinsLater(date, 14 * 60);
+        Date endTime = TimeUtil.getServalMinsLater(TimeUtil.dayAfter(date, 5), 83);
+
+        System.out.println(TimeUtil.dateToString(startTime, TimeUtil.DEFAULT_TIME_FORMAT));
+        System.out.println(TimeUtil.dateToString(endTime, TimeUtil.DEFAULT_TIME_FORMAT));
     }
 }
