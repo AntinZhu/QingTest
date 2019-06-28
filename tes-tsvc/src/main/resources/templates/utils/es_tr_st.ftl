@@ -97,13 +97,25 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="fieldExample">字段示例</label>
+                                    <div class="col-xs-4 col-sm-4">
+                                        <div>
+                                            <select class="width-80 chosen-select" id="fieldExample" data-placeholder="选择字段示例...">
+                                                <option value="0">俺不选</option>
+                                                <option value="1">月度小轻评级</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="space-4"></div>
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-tags">修改字段</label>
 
                                     <div class="col-sm-9" id="form-field-tags-parent">
-                                        <input type="text" name="tags" id="form-field-tags" value="" placeholder="Enter 修改字段 ..." />
+                                        <input type="text" id="form-field-tags" value="" placeholder="Enter 修改字段 ..." />
                                     </div>
                                 </div>
 
@@ -160,6 +172,8 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
+    var paramArr = [{id:1, name:'小轻评级-每日',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_rating','tr_reward_level','tr_reward_level_standardline','tr_reward_level_isprotected','tr_reward_level_protectedreason','tr_reward_level_firstorderdate','tr_reward_level_protectedenddate','tr_reward_level_rankid']},
+        {id:2, name:'小轻评级-每月',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_mon_rating','tr_reward_level_mon','tr_reward_level_standardline','tr_reward_level_mon_isprotected','tr_reward_level_mon_protectedreason','tr_reward_level_mon_firstorderdate','tr_reward_level_mon_protectedenddate','tr_reward_level_mon_rankid']}];
     // indexPrefix: 索引前缀 isRelation:
     var supportIndexArr = [
         {indexPrefix:'bi_tr_stu_index',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
@@ -190,12 +204,34 @@
         selectable.push(selectItem);
     }
 
+    function getParamExampleName(indexType){
+        var paramSelectable = [];
+        var selectItem = new Object();
+        selectItem.value = '俺不选';
+        selectItem.key = 0;
+        paramSelectable.push(selectItem);
+        for(var idx in paramArr){
+            var item = paramArr[idx];
+            if(indexType == item.indexName){
+                selectItem = new Object();
+                selectItem.value = item.name;
+                selectItem.key = item.id;
+                paramSelectable.push(selectItem);
+            }
+        }
+
+        return paramSelectable;
+    }
+
+
     function init(){
         updateOptions("indexType", selectable, selectable[0].value);
         $("#indexName").val(supportIndexArr[0].indexName);
 
         $(".qing_param").addClass("hide");
         $("." + supportIndexArr[0].clazz).removeClass("hide");
+
+        updateOptions("fieldExample", getParamExampleName($("#indexType").val()), 0);
     }
 
     function getIndexInfo(indexPrefix){
@@ -209,29 +245,47 @@
         return null;
     }
 
+    function clearField(){
+        var tags = $("#form-field-tags").data("tag");
+        for (var i = 100; i >= 0; i--) {
+            tags.remove(i);
+        }
+
+        $("#form-field-tags").val("");
+    }
+
+    $("#fieldExample").change(function() {
+        var value = $(this).val();
+        var tags = $("#form-field-tags").data("tag");
+        clearField();
+
+        if (value != "0") {
+            // TODO
+            var paramValue = null;
+            for(var idx in paramArr){
+                var param =  paramArr[idx];
+                if(value == param.id){
+                    for(var paramIdx in param.paramNames){
+                        var paramName = param.paramNames[paramIdx];
+                        tags.add(paramName);
+
+                        if(paramValue == null){
+                            paramValue = paramName;
+                        }else{
+                            paramValue += "," + paramName;
+                        }
+                    }
+                    $("#form-field-tags").val(paramValue);
+                    break;
+                }
+            }
+        }
+    });
+
     jQuery(function($) {
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
         init();
-
-//        $("#form-field-tags-parent").bind("DOMNodeInserted",function(e){
-//            var inputText = $(e.target).html();
-//            if(inputText.indexOf("\<button") > 0){
-//                formatParamInput(getInputLabel(e), null);
-//            }
-//        });
-//
-//        $("#form-field-tags-parent").bind("DOMNodeRemoved",function(e){
-//            var inputText = $(e.target).html();
-//            if(inputText.indexOf("\<button") > 0) {
-//                var tagLen = $("#form-field-tags-parent").children("div").children("span").length;
-//                if (tagLen > 0) {
-//                    formatParamInput(null, getInputLabel(e));
-//                } else {
-//                    $("#paramDiv").addClass("hide");
-//                }
-//            }
-//        });
 
         function getInputLabel(e){
             var inputText = $(e.target).html();
@@ -250,6 +304,9 @@
             indexInfo = null;
             jsonShow("{}", "json-interface-detail");
             $("#paramDiv").addClass("hide");
+
+            updateOptions("fieldExample", getParamExampleName($("#indexType").val()), 0);
+            clearField();
         });
 
         $(".env").click(function(){
@@ -353,7 +410,7 @@
             }
         }
 
-        function formatParamInput(inclu, exclu){
+        function formatParamInput(){
             if(indexInfo != null){
                 var teacherData = indexInfo._source;
 
@@ -361,44 +418,24 @@
                 var modifyArr = modifyStr.split(",");
 
                 if(modifyArr.length == 1 && modifyArr[0] == "" && inclu != null){
+                    $("#paramDiv").addClass("hide");
                 }else{
                     var items = [];
-                    for(var propName in teacherData){
-                        if(isMatch(modifyArr, propName, inclu, exclu)){
-                            var obj = new Object();
-                            obj.key = propName;
-                            obj.name = propName;
-                            obj.defaultValue = teacherData[propName];
+                    for(var arrIdx in modifyArr){
+                        for(var propName in teacherData){
+                            if(propName == modifyArr[arrIdx]){
+                                var obj = new Object();
+                                obj.key = propName;
+                                obj.name = propName;
+                                obj.defaultValue = teacherData[propName];
 
-                            items.push(obj);
+                                items.push(obj);
+                            }
                         }
                     }
                     showParam({paramData:JSON.stringify(items)});
                 }
             }
-        }
-
-        function isMatch(itemArr, item, inclu, exclu){
-            if(itemArr.length == 1 && itemArr[0] == ""){
-                return true;
-            }
-
-            if(inclu != null && inclu == item){
-                return true;
-            }
-
-            if(exclu != null && exclu == item){
-                return false;
-            }
-
-            for(var idx in itemArr){
-                var arrItem = itemArr[idx].trim();
-                if(item == arrItem || arrItem == "*"){
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         $("#updateBtn").click(function () {
