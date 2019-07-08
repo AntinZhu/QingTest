@@ -1,6 +1,7 @@
 package com.qingqing.test.bean.base;
 
 public class SimpleResponse {
+
     private BaseResponse response;
 
     public SimpleResponse(){}

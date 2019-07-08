@@ -103,8 +103,10 @@
                                         <div>
                                             <select class="width-80 chosen-select" id="fieldExample" data-placeholder="选择字段示例...">
                                                 <option value="0">俺不选</option>
-                                                <option value="1">月度小轻评级</option>
                                             </select>
+                                        </div>
+                                        <div class="col-xs-12 label label-lg label-light arrowed-in arrowed-right qing_input_tip" style="color: #333;text-align: left;">
+                                            如果有经常需要查询的一组指标，可联系管理员将其放置<b class="red">字段示例</b>中
                                         </div>
                                     </div>
                                 </div>
@@ -173,12 +175,14 @@
 
 <script type="text/javascript">
     var paramArr = [{id:1, name:'小轻评级-每日',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_rating','tr_reward_level','tr_reward_level_standardline','tr_reward_level_isprotected','tr_reward_level_protectedreason','tr_reward_level_firstorderdate','tr_reward_level_protectedenddate','tr_reward_level_rankid']},
-        {id:2, name:'小轻评级-每月',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_mon_rating','tr_reward_level_mon','tr_reward_level_standardline','tr_reward_level_mon_isprotected','tr_reward_level_mon_protectedreason','tr_reward_level_mon_firstorderdate','tr_reward_level_mon_protectedenddate','tr_reward_level_mon_rankid']}];
+        {id:2, name:'小轻评级-每月',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_mon_rating','tr_reward_level_mon','tr_reward_level_standardline','tr_reward_level_mon_isprotected','tr_reward_level_mon_protectedreason','tr_reward_level_mon_firstorderdate','tr_reward_level_mon_protectedenddate','tr_reward_level_mon_rankid']},
+        {id:3, name:'小轻评级-每日',indexName:'bi_tr_stu_all_index', paramNames:['teacher_id','student_id','bi_etl_date','rl_t_s_valid_stu','rl_t_s_negative_appraise','rl_t_s_renew_fail']},
+        {id:4, name:'小轻评级-每月',indexName:'bi_tr_stu_all_index', paramNames:['teacher_id','student_id','bi_etl_date','rl_t_s_valid_stu_mon','rl_t_s_negative_appraise_mon','rl_t_s_renew_fail_mon']}];
     // indexPrefix: 索引前缀 isRelation:
     var supportIndexArr = [
+        {indexPrefix:'bi_teacher_index',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
         {indexPrefix:'bi_tr_stu_index',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
         {indexPrefix:'bi_tr_stu_all_index',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
-        {indexPrefix:'bi_teacher_index',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
         {indexPrefix:'bi_student_index',isRelation:false, userType:'student',uniqueKey:'student', clazz:'student', userName:'学生'},
         {indexPrefix:'bi_crm_index',isRelation:false, userType:'customer',uniqueKey:'crm', clazz:'crm', userName:'customer'},
         {indexPrefix:'bi_assistant_index',isRelation:false, userType:'assistant',uniqueKey:'assistant', clazz:'assistant', userName:'助教'},
@@ -417,7 +421,7 @@
                 var modifyStr = $("#form-field-tags").val();
                 var modifyArr = modifyStr.split(",");
 
-                if(modifyArr.length == 1 && modifyArr[0] == "" && inclu != null){
+                if(modifyArr.length == 1 && modifyArr[0] == ""){
                     $("#paramDiv").addClass("hide");
                 }else{
                     var items = [];

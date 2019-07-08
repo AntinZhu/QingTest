@@ -88,10 +88,33 @@
         {url:"/spsvc/api/crontab/v1/sync_wait_match_student_pool", description:"补偿待匹配生源宝"},
         {url:"/svc/api/crontab/v1/share_rate_config_4_1", description:"分成补丁4月1"},
         {url:"/svc/api/crontab/v1/teacher_forewarning_sync", description:"预警线同步"},
+        {url:"/svc/api/crontab/v1/teacher/sex_correct", description:"性别校正"},
         ];
-
     var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center;word-break: break-all;"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div><div id="link_{idx}" class="hide" style="text-align: center;margin-top: 5px;margin-bottom: 5px;" ><hr style="margin-bottom: 0px;margin-top: 0px;" /><a href="" target="_blank"> 查看日志</a></div></div></div></div>';
+
     $(document).ready(function(){
+        refreshPage();
+    });
+
+    function refreshPage(){
+        commonAjaxRequest("${base}/v1/utils/cron_task/all.json", null, handlerInterface, true, "获取信息失败:");
+    }
+
+    function handlerInterface(resu){
+        var resultList = resu.resultList;
+        if(resu.resultList != null && resu.resultList.length >0){
+            var cronTaskArrIdx = 0;
+            cronTaskArr = [];
+            for(var resultIdx in resultList){
+                var result = resultList[resultIdx];
+                var cronTaskItem = new Object();
+                cronTaskItem.url = result.url;
+                cronTaskItem.description = result.name;
+
+                cronTaskArr[cronTaskArrIdx++] = cronTaskItem;
+            }
+        }
+
         for(var taskIdx in cronTaskArr){
             var task = cronTaskArr[taskIdx];
             var html = task_html;
@@ -100,7 +123,7 @@
 
             $("#taskList").append(html);
         }
-    });
+    }
 
     function cronTaskIdx(idx){
         cronTask(idx, cronTaskArr[idx].url);

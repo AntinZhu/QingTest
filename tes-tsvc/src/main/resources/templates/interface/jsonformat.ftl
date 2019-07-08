@@ -497,7 +497,7 @@
 
             function handlerLocalInvoke(param, headers){
                 var localPort = $("#localDebugPort").val();
-                var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl;
+                var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl + "?guid=" + $("#guid").val();
 
                 if(isCross == 1){
                     var data = {

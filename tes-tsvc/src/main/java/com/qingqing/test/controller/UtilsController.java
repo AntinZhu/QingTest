@@ -1,6 +1,7 @@
 package com.qingqing.test.controller;
 
 import com.google.common.collect.Sets;
+import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.User;
@@ -12,6 +13,7 @@ import com.qingqing.common.util.TimeUtil;
 import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.encode.TripleDESUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
+import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.UserWithDataBean;
@@ -22,11 +24,13 @@ import com.qingqing.test.bean.index.IndexUpdateRequestBean;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.dao.mock.MockRuleMapper;
 import com.qingqing.test.domain.mock.MockRule;
+import com.qingqing.test.domain.tool.TestCronTask;
 import com.qingqing.test.manager.BITeacherIndexManager;
 import com.qingqing.test.manager.PhoneNumberManager;
 import com.qingqing.test.manager.QingApiLabManager;
 import com.qingqing.test.manager.TestProtoClassNameManager;
 import com.qingqing.test.service.common.CommonService;
+import com.qingqing.test.service.tool.TestCronTaskService;
 import com.qingqing.test.service.user.UserService;
 import com.qingqing.test.util.QingFileUtils;
 import org.slf4j.Logger;
@@ -72,6 +76,8 @@ public class UtilsController {
     private CommonService commonService;
     @Autowired
     private MockRuleMapper mockRuleMapper;
+    @Autowired
+    private TestCronTaskService testCronTaskService;
 
     @RequestMapping("phoneNumber/sync")
     @ResponseBody
@@ -317,5 +323,23 @@ public class UtilsController {
         result.setResultList(mockRuleMapper.selectAll());
 
         return result;
+    }
+
+    @RequestMapping("cron_task/all")
+    public @ResponseBody ListResponse<TestCronTask> allCronTask() {
+        List<TestCronTask> resultList = testCronTaskService.selectAll();
+
+        ListResponse<TestCronTask> result = new ListResponse<>();
+        result.setResponse(BaseResponse.SUCC_RESP);
+        result.setResultList(resultList);
+        return result;
+    }
+
+    @RequestMapping("cron_task/add")
+    public @ResponseBody
+    ProtoBufResponse.SimpleResponse addCronTask(TestCronTask cronTask) {
+        testCronTaskService.add(cronTask);
+
+        return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }
 }

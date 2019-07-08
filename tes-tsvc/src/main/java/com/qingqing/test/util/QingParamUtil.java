@@ -1,5 +1,6 @@
 package com.qingqing.test.util;
 
+import com.qingqing.api.proto.v1.protocol.ApiSignProtocol.SimpleRepeatedApiProtocolTypeRequest;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 
@@ -29,12 +30,12 @@ public class QingParamUtil {
     public static void main(String[] args) throws ClassNotFoundException, IntrospectionException, IOException {
 //        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
 //        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
-//        System.out.println(generateParamJson(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
+        System.out.println(generateParamJson(Class.forName(SimpleRepeatedApiProtocolTypeRequest.class.getName()), ""));
 //        System.out.println(generateParamJson(com.qingqing.api.proto.bi.BiDataProviderProto.BIDataUnit.class.getName()));
 //        System.out.println(JsonUtil.format(JsonFormat
 //                .printToString(SimpleBoolRequest.newBuilder().setData(true).build())));
 
-        genProtoClassName("F:\\work\\student_pool_svc\\protobean\\src\\main\\resources\\proto-sub", "D:\\sql\\full-proto.sql");
+//        genProtoClassName("F:\\work\\student_pool_svc\\protobean\\src\\main\\resources\\proto-sub", "D:\\sql\\full-proto.sql");
     }
 
     private static void genProtoClassName(String dirPath, String outputFileName) throws IOException {

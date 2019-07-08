@@ -78,4 +78,14 @@ public class UrlUtil {
 
         return result;
     }
+
+    public static void main(String[] args) {
+        String requestUrl = "a/b/n_q/";
+        int lastSplitIdx = requestUrl.lastIndexOf("/");
+        if(lastSplitIdx > -1 && lastSplitIdx < requestUrl.length() - 1){
+            System.out.println(requestUrl.substring(lastSplitIdx + 1));
+        }else{
+            System.out.println(requestUrl);
+        }
+    }
 }
