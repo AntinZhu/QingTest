@@ -12,4 +12,10 @@ public interface TestCronTaskService {
     List<TestCronTask> selectAll();
 
     void add(TestCronTask task);
+
+    TestCronTask findById(Long id);
+
+    boolean update(Long id, String name, String url);
+
+    boolean deleted(Long id);
 }

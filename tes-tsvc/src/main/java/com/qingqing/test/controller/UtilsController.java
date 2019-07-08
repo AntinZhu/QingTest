@@ -33,6 +33,7 @@ import com.qingqing.test.service.common.CommonService;
 import com.qingqing.test.service.tool.TestCronTaskService;
 import com.qingqing.test.service.user.UserService;
 import com.qingqing.test.util.QingFileUtils;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -337,8 +338,30 @@ public class UtilsController {
 
     @RequestMapping("cron_task/add")
     public @ResponseBody
-    ProtoBufResponse.SimpleResponse addCronTask(TestCronTask cronTask) {
-        testCronTaskService.add(cronTask);
+    ProtoBufResponse.SimpleResponse addCronTask(@RequestBody TestCronTask cronTask) {
+        if(cronTask.getId() == null || cronTask.getId() == 0){
+            cronTask.setDeleted(false);
+            testCronTaskService.add(cronTask);
+        }else{
+            testCronTaskService.update(cronTask.getId(), cronTask.getName(), cronTask.getUrl());
+        }
+
+        return ProtoRespGenerator.SIMPLE_SUCC_RESP;
+    }
+
+    @RequestMapping("cron_task/edit")
+    public String editCronTask(@RequestParam(value="id", defaultValue = "0") Long id, Model model){
+        if(id > 0){
+            TestCronTask task = testCronTaskService.findById(id);
+            model.addAttribute("task", task);
+        }
+        return "utils/edit_cron_task";
+    }
+
+    @RequestMapping("cron_task/del")
+    public @ResponseBody
+    ProtoBufResponse.SimpleResponse delCronTask(@Param("id") Long id) {
+        testCronTaskService.deleted(id);
 
         return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }

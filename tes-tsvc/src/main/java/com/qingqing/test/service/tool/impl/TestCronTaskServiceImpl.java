@@ -26,4 +26,19 @@ public class TestCronTaskServiceImpl implements TestCronTaskService {
     public void add(TestCronTask task) {
         mapper.add(task);
     }
+
+    @Override
+    public TestCronTask findById(Long id) {
+        return mapper.findById(id);
+    }
+
+    @Override
+    public boolean update(Long id, String name, String url) {
+        return mapper.update(id, name, url) > 0;
+    }
+
+    @Override
+    public boolean deleted(Long id) {
+        return mapper.delete(id) > 0;
+    }
 }
