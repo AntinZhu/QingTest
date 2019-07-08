@@ -110,6 +110,7 @@
                 var cronTaskItem = new Object();
                 cronTaskItem.url = result.url;
                 cronTaskItem.description = result.name;
+                cronTaskItem.id = result.id;
 
                 cronTaskArr[cronTaskArrIdx++] = cronTaskItem;
             }
@@ -119,7 +120,7 @@
             var task = cronTaskArr[taskIdx];
             var html = task_html;
             html = html.replace(new RegExp("{idx}","gm"), taskIdx);
-            html = html.replace(new RegExp("{desc}","gm"), task.description);
+            html = html.replace(new RegExp("{desc}","gm"), task.description + "(" + task.id + ")");
 
             $("#taskList").append(html);
         }

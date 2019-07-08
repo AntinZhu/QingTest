@@ -13,6 +13,8 @@ import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
 import org.apache.commons.httpclient.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,10 +24,11 @@ import java.io.IOException;
  */
 @Component
 public class MyErrorDecoder implements ErrorDecoder {
+    private static final Logger logger = LoggerFactory.getLogger(MyErrorDecoder.class);
 
     @Override
     public Exception decode(String methodKey, Response response) {
-
+        logger.info("status code:" + response.status());
         switch (response.status()){
             case HttpStatus.SC_UNPROCESSABLE_ENTITY:
             case HttpStatus.SC_NOT_FOUND:

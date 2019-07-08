@@ -112,7 +112,7 @@
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" id="url" placeholder="地址..." />
+                                                                                            <input class="col-xs-10" type="text" id="url" placeholder="地址..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>

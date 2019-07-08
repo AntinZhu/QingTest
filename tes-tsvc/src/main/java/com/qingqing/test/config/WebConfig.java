@@ -5,6 +5,7 @@ import com.qingqing.common.web.protobuf.ProtobufReturnValueHandler;
 import com.qingqing.common.web.protobuf.ResponseBuildInteceptor;
 import com.qingqing.test.config.inteceptor.CatelogHandlerInteceptor;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
+import com.qingqing.test.spring.interceptor.IpHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
@@ -40,12 +41,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private EnvHandlerInteceptor envHandlerInteceptor;
     @Autowired
     private CatelogHandlerInteceptor catelogHandlerInteceptor;
+    @Autowired
+    private IpHandlerInterceptor ipHandlerInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(responseBuildInteceptor).addPathPatterns("/**");
         registry.addInterceptor(envHandlerInteceptor).addPathPatterns("/**");
         registry.addInterceptor(catelogHandlerInteceptor).addPathPatterns("/**");
+        registry.addInterceptor(ipHandlerInterceptor).addPathPatterns("/**");
         super.addInterceptors(registry);
     }
 

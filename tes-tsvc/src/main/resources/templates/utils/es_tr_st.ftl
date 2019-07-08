@@ -106,7 +106,7 @@
                                             </select>
                                         </div>
                                         <div class="col-xs-12 label label-lg label-light arrowed-in arrowed-right qing_input_tip" style="color: #333;text-align: left;">
-                                            如果有经常需要查询的一组指标，可联系管理员将其放置<b class="red">字段示例</b>中
+                                            如果有经常需要查询的一组指标，可联系管理员将其放置<b class="red">字段示例</b>中 <a href="#" onclick="feedback()">我要反馈</a>
                                         </div>
                                     </div>
                                 </div>
@@ -285,6 +285,38 @@
             }
         }
     });
+
+    function feedback(){
+        bootbox.prompt("请输入索引字段名称", function(result) {
+            if (result === null) {
+//                $.gritter.add({
+//                    title : "参数示例",
+//                    text : "不反馈了？",
+//                    class_name : 'gritter-error gritter-center'
+//                });
+                return;
+            } else {
+                var userIp = $("#qing_ip").text();
+                var indexType = $("#indexType").val();
+                var content = {
+                    msgtype : "markdown",
+                    markdown :{
+                        content : "有用户请求在ES数据更新功能中新增字段示例\n                >用户: <font color=\"comment\">" + userIp + "</font> \n                >索引类型: <font color=\"comment\">" + indexType + "</font> \n                >索引字段: <font color=\"comment\">" + result + "</font>"
+                    }
+                };
+
+                commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "反馈出错:");
+            }
+        });
+    }
+
+    function handlerParamSave(){
+        $.gritter.add({
+            title : '提示:',
+            text : "反馈成功",
+            class_name : 'gritter-info gritter-center'
+        });
+    }
 
     jQuery(function($) {
         $(".chosen-select").chosen();

@@ -1,10 +1,13 @@
 package com.qingqing.test.controller;
 
+import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
+import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.UrlAndParam;
 import com.qingqing.test.bean.common.UserCommonRequest;
+import com.qingqing.test.client.CommonPbClient;
 import com.qingqing.test.client.PbClient;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
@@ -29,6 +32,8 @@ public class CommonController {
     private PbClient pbClient;
     @Autowired
     private PtClient ptClient;
+    @Autowired
+    private CommonPbClient commonPbClient;
 
     @RequestMapping("crond_task")
     @ResponseBody
@@ -66,5 +71,13 @@ public class CommonController {
     @ResponseBody
     public String ptRequest(@RequestBody UserCommonRequest request){
         return  ptClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+    }
+
+    @RequestMapping("wx_notify")
+    @ResponseBody
+    public ProtoBufResponse.SimpleResponse wxNotify(@RequestParam("content") String content){
+        commonPbClient.wxNotify(content);
+
+        return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }
 }

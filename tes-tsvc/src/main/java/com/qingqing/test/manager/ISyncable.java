@@ -5,7 +5,7 @@ package com.qingqing.test.manager;
  */
 public interface ISyncable {
     public static enum SyncType{
-        all, proto_name;
+        all, proto_name, user_ip;
     }
 
     void sync();

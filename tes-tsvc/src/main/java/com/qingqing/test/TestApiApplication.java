@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 		exclude = {
 				RabbitAutoConfiguration.class,
 				DataSourceAutoConfiguration.class
+		},
+		scanBasePackages = {
+				"com.qingqing.test"
 		}
 )
 @EnableFeignClients

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.test.user.TestUserIpMapper" >
+  <resultMap id="BaseResultMap" type="com.qingqing.test.domain.user.TestUserIp" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result property="userName" column="user_name" jdbcType="VARCHAR" />
+    <result property="userIp" column="user_ip" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, user_name, user_ip, is_deleted, create_time, last_update_time
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_user_ip
+    where is_deleted = FALSE
+  </select>
+
+</mapper>
