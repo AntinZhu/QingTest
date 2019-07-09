@@ -16,11 +16,11 @@
                     </select>
                 </div>
                 <span class="input-group-btn param-ops hide">
-                    <button type="button" class="btn btn-purple btn-xs" id="param_default">
+                    <button type="button" class="btn btn-purple btn-xs qing_catelog_hide" id="param_default">
                         default
                     </button>
 
-                     <button type="button" class="btn btn-purple btn-xs" id="param_del">
+                     <button type="button" class="btn btn-purple btn-xs qing_catelog_hide" id="param_del">
                         delete
                     </button>
                 </span>

@@ -365,4 +365,11 @@ public class UtilsController {
 
         return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }
+
+    @RequestMapping("ip/up")
+    public String upIp(@Param("userName") String userName, Model model) {
+        model.addAttribute("userName", userName);
+
+        return "utils/up_ip";
+    }
 }
