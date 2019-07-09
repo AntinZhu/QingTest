@@ -25,7 +25,8 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
         String requestIp = RequestExtract.getServerIpByRequest((HttpServletRequest)httpServletRequest);
         if(modelAndView != null){
-            modelAndView.addObject("qing_ip", userIpManager.getUserNameByIp(requestIp));
+            modelAndView.addObject("qing_user_name", userIpManager.getUserNameByIp(requestIp));
+            modelAndView.addObject("qing_user_ip", requestIp);
             logger.info("add qing_ip:" + requestIp);
         }
     }

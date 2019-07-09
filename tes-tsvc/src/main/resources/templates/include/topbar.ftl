@@ -229,7 +229,8 @@
                         <img class="nav-user-photo" src="${base}/static/assets/avatars/user.jpg" alt="Jason's Photo" />
                         <span class="user-info">
 									<small>Welcome,</small>
-                                    <div id="qing_ip">${qing_ip!'俺'}</div>
+                                    <div id="qing_ip">${qing_user_name!'俺'}</div>
+                                    <input type="hidden" id="qing_user_ip" value="${qing_user_ip!''}" />
 								</span>
 
                         <i class="icon-caret-down"></i>

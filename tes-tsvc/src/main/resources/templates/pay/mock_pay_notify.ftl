@@ -44,6 +44,14 @@
 
                         <div class="row">
                             <div class="col-xs-12">
+                                <h4 class="lighter">
+                                    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+                                    <input type="hidden" id="guid" >
+                                    <a target="_blank" title="点击链接可查看调用日志" data-rel="tooltip" id = "logUrl" href="">
+                                        <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
+                                    </a>
+                                </h4>
+
                                 <div class="hr hr-dotted"></div>
                                 <div class="hr hr-dotted"></div>
 
@@ -58,9 +66,9 @@
                                         </button>
 
                                         &nbsp; &nbsp; &nbsp;
-                                        <button class="btn" style="border-radius: 8px" type="reset">
+                                        <button class="btn" style="border-radius: 8px" type="reset" id="resetBtn">
                                             <i class="icon-undo bigger-110"></i>
-                                            Reset
+                                            Save Example
                                         </button>
                                     </div>
                                 </div>
@@ -165,6 +173,22 @@
             <#include "/include/righttool-sidebar.ftl" />
 
         <script type="text/javascript">
+            var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h=svc";
+            function refreshInterfaceUrl(){
+                var env = $("#env").val();
+                var guid = generateGuid();
+
+                var url = "查看日志（guid={guid} && env={env}）".replace("{env}", env);
+                url = url.replace("{guid}", guid);
+
+                var logTargetUrl = logUrl.replace("{env}", env);
+                logTargetUrl = logTargetUrl.replace("{guid}", guid);
+
+                $("#interfaceUrl").text(url);
+                $("#guid").val(guid);
+                $("#logUrl").attr("href", logTargetUrl);
+            }
+
             $('#payNotifyBtn').click(payNotify);
 
             function payNotify(){
@@ -174,7 +198,7 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, emptyFunction, false, "支付服务-交易补偿通知:", $("#env").val());
+                commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, emptyFunction, false, "支付服务-交易补偿通知:", $("#env").val(), null, $("#guid").val());
             }
 
 
@@ -191,7 +215,7 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                return commonAjaxRequest("${base}/v1/pay/pre_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val());
+                return commonAjaxRequest("${base}/v1/pay/pre_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val(), null, $("#guid").val());
             }
 
             function getParam(name){
@@ -235,7 +259,7 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/pay/pay_infos_2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val());
+                commonAjaxRequest("${base}/v1/pay/pay_infos_2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val(), null, $("#guid").val());
 
 //                for(var idx in multiOrderIds){
 //                    var multiSubOrder = multiOrderIds[idx];
@@ -302,7 +326,7 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                result = commonAjaxRequest("${base}/v1/pay/ack_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPay, false, "新增支付路径失败:", $("#env").val());
+                result = commonAjaxRequest("${base}/v1/pay/ack_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPay, false, "新增支付路径失败:", $("#env").val(), null, $("#guid").val());
                 return result;
             }
 
@@ -356,7 +380,7 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/pay/check_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerCheckPay, false, "查询支付状态失败:", $("#env").val());
+                commonAjaxRequest("${base}/v1/pay/check_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerCheckPay, false, "查询支付状态失败:", $("#env").val(), null, $("#guid").val());
             }
 
             function handlerCheckPay(data){
@@ -402,7 +426,7 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:", $("#env").val());
+                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:", $("#env").val(), null, $("#guid").val());
 
 
                 if(syncPayWayList == null){
@@ -419,16 +443,22 @@
             }
 
             $(document).ready(function(){
+                refreshPage();
+            });
+
+            function refreshPage(){
                 var data = {
                     data : 1
                 };
                 commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
-            });
+            }
 
             $(".env").click(function(){
                 $(".env.btn-primary").removeClass("btn-primary");
                 $(this).addClass("btn-primary");
                 $("#env").val($(this).val());
+
+                refreshInterfaceUrl();
             });
 
             var userTypeArr = [];
@@ -452,6 +482,27 @@
                             $(this).prev("input").val(newValue);
                         }
                     });
+
+                    $("#selfParamSwitch").val(${full!0});
+
+                    if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
+                        jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
+                        var paramDetail = fillDefaultValue(JSON.parse(resu.interfaceInfo.inter.paramDetail));
+                        showParam({paramData:paramDetail});
+
+                        paramExamples = resu.interfaceInfo.paramList;
+                        initParamChoose(paramExamples, ${paramExampleId!0});
+                        if(${paramExampleId!0} == 0){
+                            fillFullParam();
+                        }
+                    }
+
+                    var env = '${env!"dev"}';
+                    $("#env").val(env);
+                    $(".env.btn-primary").removeClass("btn-primary");
+                    $(".env[value='" + env + "']").addClass("btn-primary");
+
+                    refreshInterfaceUrl();
                 }
 
                 if(params != ""){
@@ -464,6 +515,167 @@
                 }
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
             }
+
+            function fillDefaultValue(paramArr){
+                var defaultObj = new Object(${defaultObj!"{}"});
+                for(var paramIdx in paramArr){
+                    var param = paramArr[paramIdx];
+                    for(var propName in defaultObj){
+                        if(param.key == propName){
+                            param.defaultValue.name = defaultObj[propName];
+                            param.defaultValue.value = defaultObj[propName];
+                            break;
+                        }
+                    }
+                }
+
+                return JSON.stringify(paramArr);
+            }
+
+            function fillFullParam(){
+                var param = generateJsonParam("#paramListDiv input");
+                $("#fullParam").text(JSON.stringify(param));
+            }
+
+            function initParamChoose(paramChooses, paramExampleId){
+                if(paramChooses.length == 0){
+                    $("#paramChooseDiv").addClass("hide");
+                    return;
+                }
+
+                var options = [];
+                var optionIdx = 0;
+                var paramEx;
+
+                var defaultOption = new Object();
+                defaultOption.key = 0;
+                defaultOption.value = "咱不选";
+
+                options[optionIdx++] = defaultOption;
+                for(idx in paramChooses){
+                    var data = paramChooses[idx];
+                    var option = new Object();
+                    option.key = data.id;
+                    option.value = data.paramName + "(" + data.id + ")";
+                    if(paramExampleId == 0 && data.default){
+                        paramEx = data;
+                        paramExampleId = data.id;
+                    }else if(data.id == paramExampleId){
+                        paramEx = data;
+                    }
+
+                    options[optionIdx++] = option;
+                }
+                updateOptions("paramChoose", options, paramExampleId);
+                if(paramEx != null){
+                    showParam({paramData:paramEx.paramDetail});
+                    $("#requestUserId").val(paramEx.requestUserId);
+                    $("#requestUserIdDiv").text(paramEx.requestUserId);
+                }
+
+                $("#paramChooseDiv").removeClass("hide");
+                $("#paramChoose").trigger("chosen:updated");
+
+                $("#paramChoose_chosen").css('width','200px');
+
+                if($("#selfParamSwitch").val() == 0){
+                    fillFullParam();
+                }else{
+                    if(paramEx != null){
+                        $("#fullParam").text(paramEx.fullParam);
+                    }
+                    $("#selfParamSwitch").attr("checked", "checked")
+                    showFull();
+                }
+            }
+
+            $("#paramChoose").change(function(){
+                var id = $(this).val();
+                if(id != 0){
+                    for(idx in paramExamples){
+                        var paramEx = paramExamples[idx];
+                        if(paramEx.id == id){
+                            showParam({paramData:paramEx.paramDetail});
+                            $("#requestUserId").val(paramEx.requestUserId);
+                            $("#requestUserIdDiv").text(paramEx.requestUserId);
+
+                            if(paramEx.fullParam == null || paramEx.fullParam == ""){
+                                fillFullParam();
+                            }else{
+                                $("#fullParam").text(paramEx.fullParam);
+                            }
+
+                            $(".param-ops").removeClass("hide");
+                            break;
+                        }
+                    }
+                }else{
+                    $(".param-ops").addClass("hide");
+                }
+            });
+
+            $("#resetBtn").click(function() {
+                bootbox.prompt("取个名字", function(result) {
+                    if (result === null) {
+                        $.gritter.add({
+                            title : "参数示例",
+                            text : "这个名字还是要有的",
+                            class_name : 'gritter-error gritter-center'
+                        });
+                        return;
+                    } else {
+                        var paramDetail = generateEditParam("#paramListDiv input");
+                        var fullParam;
+                        if($("#selfParamSwitch").val() == 1){
+                            fullParam = $("#fullParam").text();
+                        }else{
+                            fullParam = JSON.stringify(generateJsonParam("#paramListDiv input"));
+                        }
+                        var data = {
+                            id : $("#paramChoose").val(),
+                            interfaceId : 1,
+                            requestUserId : $("#requestUserId").val(),
+                            paramDetail : paramDetail,
+                            deleted : 0,
+                            default : 0,
+                            paramName : result,
+                            fullParam : fullParam
+                        };
+
+                        commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");
+                    }
+                });
+            });
+
+            function handlerParamSave(resu){
+                $.gritter.add({
+                    title : "参数示例",
+                    text : "保存成功",
+                    class_name : 'gritter-info gritter-center'
+                });
+
+                refreshPage();
+            }
+
+            $("#param_del").click(function(){
+                var paramId = $("#paramChoose").val();
+
+                var data = {
+                    data : new Number(paramId)
+                };
+
+                commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
+            });
+
+            $("#param_default").click(function(){
+                var paramId = $("#paramChoose").val();
+
+                var data = {
+                    data : new Number(paramId)
+                };
+
+                commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
+            });
 
             jQuery(function($) {
                 $(".chosen-select").chosen();

@@ -13,7 +13,7 @@
                 <i class="icon-pencil"></i>
             </button>
 
-            <button class="btn btn-warning">
+            <button class="btn btn-warning" id="upIp" >
                 <i class="icon-group"></i>
             </button>
 
@@ -107,6 +107,32 @@
             }else{
                 $(".qing_catelog_hide").addClass("hide");
                 catelogHide = true;
+            }
+        });
+
+        $("#upIp").click(function(){
+            bootbox.prompt("IP上传", function(result) {
+                if (result === null) {
+                    return;
+                } else {
+                    var userIp = $("#qing_user_ip").val();
+                    var content = {
+                        msgtype : "markdown",
+                        markdown :{
+                            content : "用户IP上传\n                >用户IP: <font color=\"comment\">" + userIp + "</font> \n                >用户名: <font color=\"comment\">" + result + "</font> "
+                        }
+                    };
+
+                    commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "IP上传出错:");
+                }
+            });
+
+            function handlerParamSave(){
+                $.gritter.add({
+                    title : '提示:',
+                    text : "反馈成功",
+                    class_name : 'gritter-info gritter-center'
+                });
             }
         });
     </script>
