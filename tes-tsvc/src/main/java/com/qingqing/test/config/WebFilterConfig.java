@@ -1,6 +1,7 @@
 package com.qingqing.test.config;
 
 import com.qingqing.test.spring.filter.IpFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,14 +11,15 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class WebFilterConfig {
+    @Autowired
+    private IpFilter ipFilter;
 
     @Bean
     public FilterRegistrationBean setCharacterEncodingFilterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setName("setCharacterEncodingFilter");
-        IpFilter greetingFilter = new IpFilter();
-        registrationBean.setFilter(greetingFilter);
-        registrationBean.addUrlPatterns("/*");  // 原始 /apns/*
+        registrationBean.setName("ipFilter");
+        registrationBean.setFilter(ipFilter);
+        registrationBean.addUrlPatterns("/*");
         registrationBean.setOrder(10);
         return registrationBean;
     }

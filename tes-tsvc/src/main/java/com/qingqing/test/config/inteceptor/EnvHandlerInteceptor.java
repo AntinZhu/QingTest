@@ -56,7 +56,11 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
     }
 
     public static final String getParam(String paramName){
-        return PARAM_MAPPING.get().get(paramName);
+        if(PARAM_MAPPING.get() != null){
+            return PARAM_MAPPING.get().get(paramName);
+        }
+
+        return null;
     }
 
     public static final boolean isLocalDebug(){

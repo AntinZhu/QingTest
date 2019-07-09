@@ -17,4 +17,10 @@ public interface CommonPbClient {
     @RequestMapping(path = "qyapi.weixin.qq.com/cgi-bin/webhook/send?key=42f74199-9edb-418c-b950-33f00fa1274a", method = RequestMethod.GET, consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     String wxNotify(@RequestBody String param);
+
+    @RequestMapping(path = "qyapi.weixin.qq.com/cgi-bin/webhook/send?key=50022fb1-2204-449d-aae3-dbe5906acc45", method = RequestMethod.GET, consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    String selfNotify(@RequestBody String param);
+
+
 }

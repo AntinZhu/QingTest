@@ -152,22 +152,27 @@ public class EnvClient implements Client {
             finalUrl = finalUrl + "&guid=" + guid;
         }
 
-        finalUrl = finalUrl.replace("{env}", EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV));
+        String env = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV);
+        finalUrl = finalUrl.replace("{env}", env == null? "":env);
 
-        logger.info("finalUrl:" + finalUrl);
+//        logger.info("finalUrl:" + finalUrl);
         return finalUrl;
     }
 
     protected String getHost(){
-        if(EnvHandlerInteceptor.isLocalDebug()){
-            return EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.IP) + ":" + EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.LOCAL_PORT);
-        }else{
+//        if(EnvHandlerInteceptor.isLocalDebug()){
+//            return EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.IP) + ":" + EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.LOCAL_PORT);
+//        }else{
             return getEnvHost();
-        }
+//        }
     }
 
     private String getEnvHost(){
         String envValue = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV);
+        if(envValue == null){
+            return "";
+        }
+
         Env env = Env.valueOf(envValue);
         switch (env){
             case dev:

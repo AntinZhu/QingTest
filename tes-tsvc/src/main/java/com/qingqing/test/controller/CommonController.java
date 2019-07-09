@@ -76,7 +76,7 @@ public class CommonController {
     @RequestMapping("wx_notify")
     @ResponseBody
     public ProtoBufResponse.SimpleResponse wxNotify(@RequestParam("content") String content){
-        commonPbClient.wxNotify(content);
+        commonPbClient.selfNotify(content);
 
         return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }

@@ -5,7 +5,7 @@
 
     <div class="sidebar-shortcuts" id="sidebar-shortcuts">
         <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-            <button class="btn btn-success">
+            <button class="btn btn-success" id="qing_report">
                 <i class="icon-signal"></i>
             </button>
 
@@ -126,14 +126,21 @@
                     commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "IP上传出错:");
                 }
             });
-
-            function handlerParamSave(){
-                $.gritter.add({
-                    title : '提示:',
-                    text : "反馈成功",
-                    class_name : 'gritter-info gritter-center'
-                });
-            }
         });
+
+        function handlerParamSave(){
+            $.gritter.add({
+                title : '提示:',
+                text : "反馈成功",
+                class_name : 'gritter-info gritter-center'
+            });
+        }
+
+        $("#qing_report").click(function(){
+            commonAjaxRequest("${base}/v1/report/daily.json?", null, emp, true, "报告出错:");
+        });
+
+        function emp(){
+        }
     </script>
 </div>
