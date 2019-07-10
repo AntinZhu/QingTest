@@ -37,8 +37,13 @@
 
             <div class="col-xs-12 col-sm-9">
                 <div class="clearfix">
+                <#if (userId!0) gt 0>
+                    <input type="hidden" name="requestUserId" id="requestUserId" value="${userId?c}" class="col-xs-12 col-sm-3" />
+                    <span class="editable editable-click editable-unsaved" id="requestUserIdDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">${userId?c}</span>
+                <#else>
                     <input type="hidden" name="requestUserId" id="requestUserId" value="22367" class="col-xs-12 col-sm-3" />
                     <span class="editable editable-click editable-unsaved" id="requestUserIdDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">22367</span>
+                </#if>
                 </div>
             </div>
         </div>
@@ -47,8 +52,14 @@
 
             <div class="col-xs-12 col-sm-9">
                 <div class="clearfix">
+                <#if (userType!'') != ''>
+                    <input type="hidden" name="requestUserType" id="requestUserType" value="${userType}" class="col-xs-12 col-sm-3" />
+                    <span class="editable editable-click editable-unsaved" id="requestUserTypeDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">${userType}</span>
+                <#else>
                     <input type="hidden" name="requestUserType" id="requestUserType" value="student" class="col-xs-12 col-sm-3" />
                     <span class="editable editable-click editable-unsaved" id="requestUserTypeDiv" style="display: inline-block; background-color: rgba(0, 0, 0, 0);">student</span>
+                </#if>
+
                 </div>
             </div>
         </div>

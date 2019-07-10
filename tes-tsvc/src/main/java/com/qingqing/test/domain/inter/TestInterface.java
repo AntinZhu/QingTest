@@ -15,6 +15,7 @@ public class TestInterface {
     private String catelogIndex;
     private String paramDetail;
     private Boolean isDeleted;
+    private String nextPageUrl;
     private Date createTime;
     private Date lastUpdateTime;
     private String paramClassName;
@@ -121,5 +122,13 @@ public class TestInterface {
 
     public void setParamClassName(String paramClassName) {
         this.paramClassName = paramClassName;
+    }
+
+    public String getNextPageUrl() {
+        return nextPageUrl;
+    }
+
+    public void setNextPageUrl(String nextPageUrl) {
+        this.nextPageUrl = nextPageUrl;
     }
 }

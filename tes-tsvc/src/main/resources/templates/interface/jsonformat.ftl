@@ -515,11 +515,32 @@
 
             function handlerInvokeResult(resu){
                 jsonShow(resu.data, "json-response");
+                afterInv(resu.data);
             };
 
             function handlerLocalInvokeResult(resu){
                 jsonShow(resu, "json-response");
+
+                afterInv(resu);
             };
+
+            function afterInv(responseData){
+                var goToNextPage = ${goToNextPage?c!0};
+                responseData = JSON.parse(responseData)
+                if(responseData.response.error_code == 0){
+                    if(goToNextPage == 1 && interfaceBean.nextPageUrl != null && interfaceBean.nextPageUrl != ""){
+                        var naxtPageUrl = interfaceBean.nextPageUrl;
+                        naxtPageUrl = naxtPageUrl.replace("{env}", $("#env").val());
+                        naxtPageUrl = naxtPageUrl.replace("{userId}", new Number($("#requestUserId").val()));
+                        naxtPageUrl = naxtPageUrl.replace("{userType}", $("#requestUserType").val());
+                        naxtPageUrl = qingReplaceStringWithObj(naxtPageUrl, responseData);
+
+                        <#--window.loca("${base}" + naxtPageUrl);-->
+
+                        window.location.href= "${base}" + naxtPageUrl;
+                    }
+                }
+            }
 
             $("#paramChoose").change(function(){
                 var id = $(this).val();

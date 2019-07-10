@@ -591,3 +591,29 @@ function formatDate(shijianchuo){
 function notOps(resu){
 
 }
+
+function qingReplaceStringWithObj(value, obj){
+    for(propName in obj){
+        var prop = obj[propName];
+        if(Object.prototype.toString.call(prop) === '[Object Object]'){
+            qingReplaceStringWithObjAndPrefix(propName, value, prop);
+        }else{
+            value = value.replace("{" + propName + "}", prop);
+        }
+    }
+
+    return value;
+}
+
+function qingReplaceStringWithObjAndPrefix(propPrefix, value, obj){
+    for(propName in obj){
+        var prop = obj[propName];
+        var fullPropName = propPrefix + "." + propName;
+
+        if(Object.prototype.toString.call(prop) === '[Object Object]'){
+            qingReplaceStringWithObjAndPrefix(fullPropName, value, prop);
+        }else{
+            value = value.replace("{" + fullPropName + "}", prop);
+        }
+    }
+}

@@ -176,6 +176,18 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div class="form-group qing_catelog_hide">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="nextPageUrl">跳转地址:</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <input class="col-xs-10" type="text" id="nextPageUrl" placeholder="输入跳转地址..." />
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+                                                                                    </div>
+                                                                                </div>
+
                                                                                 <div class="form-group">
                                                                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="interfaceType">接口类型:</label>
 
@@ -347,6 +359,7 @@
                 $("#parentCatelogId").val("${interfaceBean.catelog.id}");
                 $("#interfaceName").val("${interfaceBean.inter.interfaceName}");
                 $("#interfaceUrl").val("${interfaceBean.inter.interfaceUrl}");
+                $("#nextPageUrl").val("${interfaceBean.inter.nextPageUrl}");
                 var paramDetail ='${interfaceBean.inter.paramDetail!""}';
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){
@@ -482,6 +495,8 @@
                     });
                     return;
                 }
+
+                var nextPageUrl = $("#nextPageUrl").val();
                 var interfaceType = $("#interfaceType").val();
                 if(interfaceType == null || interfaceType == ""){
                     $.gritter.add({
@@ -525,6 +540,7 @@
                         id : $("#interfaceId").val(),
                         interfaceName : interfaceName,
                         interfaceUrl : interfaceUrl,
+                        nextPageUrl :nextPageUrl,
                         interfaceType : interfaceType,
                         requestType : 1,
                         requestUserType : requestUserType,

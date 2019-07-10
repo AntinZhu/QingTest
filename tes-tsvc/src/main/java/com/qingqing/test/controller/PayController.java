@@ -26,8 +26,10 @@ import com.qingqing.test.manager.OrderManager;
 import com.qingqing.test.manager.PayManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -58,7 +60,22 @@ public class PayController {
     }
 
     @RequestMapping("mock_pay_notify")
-    public String mockPay(){
+    public String mockPay(
+            @RequestParam(value = "env", defaultValue = "dev") String env,
+            @RequestParam(value = "uid", defaultValue = "0") Long userId,
+            @RequestParam(value = "uty", defaultValue = "") String userType,
+            @RequestParam(value = "def", defaultValue = "{}") String defaultObj,
+            @RequestParam(value = "paramId", defaultValue = "0") Long paramId,
+            @RequestParam(value = "inv", defaultValue = "0") String inv,
+            Model model
+    ){
+        model.addAttribute("paramExampleId", paramId);
+        model.addAttribute("env", env);
+        model.addAttribute("userId", userId);
+        model.addAttribute("userType", userType);
+        model.addAttribute("defaultObj", defaultObj);
+        model.addAttribute("inv", inv);
+
         return "pay/mock_pay_notify";
     }
 

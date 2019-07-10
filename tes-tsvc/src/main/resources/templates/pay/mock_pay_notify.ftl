@@ -469,10 +469,12 @@
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
                     $("#requestUserIdDev").removeClass("hide");
-                    $("#requestUserTypeDiv").text(resu.interfaceInfo.inter.requestUserType);
-                    $("#requestUserType").val(resu.interfaceInfo.inter.requestUserType);
-                    $("#requestUserTypeDiv").text(resu.interfaceInfo.inter.requestUserType);
-                    $("#requestUserType").val(resu.interfaceInfo.inter.requestUserType);
+                    var userType = "${userType!''}";
+                    if(userType == ''){
+                        userType = resu.interfaceInfo.inter.requestUserType;
+                    }
+                    $("#requestUserTypeDiv").text(userType);
+                    $("#requestUserType").val(userType);
 
                     $('#requestUserTypeDiv').editable({
                         type: 'select2',
@@ -503,16 +505,13 @@
                     $(".env[value='" + env + "']").addClass("btn-primary");
 
                     refreshInterfaceUrl();
+
+                    if(${inv!0} == 1){
+                        prePayV2();
+                    }
                 }
 
-                if(params != ""){
-                    interfaceParam = params;
-                    var paramHtmls = genHtml("", params, null);
-                    $("#paramListDiv").html(paramHtmls);
-
-                    initHtml("", params);
-                    $("#paramDiv").removeClass("hide");
-                }
+                interfaceParam = params;
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);
             }
 
@@ -522,8 +521,12 @@
                     var param = paramArr[paramIdx];
                     for(var propName in defaultObj){
                         if(param.key == propName){
-                            param.defaultValue.name = defaultObj[propName];
-                            param.defaultValue.value = defaultObj[propName];
+                            if(param.defaultValue.name != null){
+                                param.defaultValue.name = defaultObj[propName];
+                                param.defaultValue.value = defaultObj[propName];
+                            }else{
+                                param.defaultValue = defaultObj[propName];
+                            }
                             break;
                         }
                     }

@@ -83,14 +83,21 @@ public class TestController {
                        @RequestParam(value = "cross", defaultValue = "0") int isCross,
                        @RequestParam(value = "full", defaultValue = "0") int isFull,
                        @RequestParam(value = "inv", defaultValue = "0") int inv,
+                       @RequestParam(value = "def", defaultValue = "{}") String defaultObj,
+                       @RequestParam(value = "uid", defaultValue = "0") Long userId,
+                       @RequestParam(value = "uty", defaultValue = "") String userType,
+                       @RequestParam(value = "gnp", defaultValue = "0") int goToNextPage,
                        Model model){
         model.addAttribute("interfaceId", interfaceId);
         model.addAttribute("paramExampleId", paramId);
         model.addAttribute("env", env);
         model.addAttribute("cross", isCross);
-        model.addAttribute("defaultObj", "{}");
+        model.addAttribute("defaultObj", defaultObj);
         model.addAttribute("full", isFull);
         model.addAttribute("inv", inv);
+        model.addAttribute("userId", userId);
+        model.addAttribute("userType", userType);
+        model.addAttribute("goToNextPage", goToNextPage);
 
         return "interface/jsonformat";
     }

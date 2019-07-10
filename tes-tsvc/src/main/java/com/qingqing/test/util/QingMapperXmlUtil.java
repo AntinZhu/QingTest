@@ -1,5 +1,6 @@
 package com.qingqing.test.util;
 
+import com.google.common.collect.Sets;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -11,11 +12,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhujianxing on 2019/6/4.
  */
 public class QingMapperXmlUtil {
+
+    private static final Set<String> EXCLUDED_MAPPER_ID = Sets.newHashSet(
+            "com.qingqing.api.dao.mybatis.data.fanta.FantaResultMapper.countPeepedByAnswerer",
+            "com.qingqing.api.dao.mybatis.data.fanta.FantaInfoMapper.queryListByAnswererAndStatus",
+            "com.qingqing.api.dao.mybatis.data.fanta.FantaInfoMapper.queryPopularListByStatus",
+            "com.qingqing.api.dao.mybatis.data.fanta.FantaInfoMapper.queryLatestListByStatus",
+            "com.qingqing.api.dao.mybatis.data.fanta.FantaInfoMapper.queryListByStatus",
+            "com.qingqing.api.dao.mybatis.data.CommentInfoMapper.findByTypesAndUserComment",
+            "com.qingqing.api.dao.mybatis.data.appraise.OrderCourseAppraisePhraseMapper.selectList",
+            "com.qingqing.api.dao.mybatis.data.order.OrderCourseMapperV1.findAddGrowthValueListByRange",
+            "com.qingqing.api.dao.mybatis.data.phrase.TeacherPhraseMapper.findTopPhrasesByStar",
+            "com.qingqing.api.dao.mybatis.data.StudyTraceMapper.queryStudyTrace"
+            );
     /**
      * @param args
      */
@@ -32,9 +47,12 @@ public class QingMapperXmlUtil {
                         System.err.println("问题mapper:" + namespace + "." + methodName);
                         System.err.println("语句：" + content);
                     }else if(content.contains(" join\n") || content.contains(" join ")){
-                        System.err.println("-----------select中包含join------------");
-                        System.err.println("问题mapper:" + namespace + "." + methodName);
-                        System.err.println("语句：" + content);
+                        String mapperId = namespace + "." + methodName;
+                        if(!EXCLUDED_MAPPER_ID.contains(mapperId)){
+                            System.err.println("-----------select中包含join------------");
+                            System.err.println("问题mapper:" + mapperId);
+                            System.err.println("语句：" + content);
+                        }
                     }
                 }
 
@@ -60,11 +78,11 @@ public class QingMapperXmlUtil {
 //                }
 //            });
 
-//            File dir = new File("F:\\work\\backup\\svc\\QQ\\src\\main\\java\\com\\qingqing\\api\\dao\\mybatis\\data\\grouppurchase\\GroupPurchaseMapper.xml");
-//            checkDir(dir, parser, handler);
+            File dir = new File("F:\\work\\backup\\svc\\QQ\\src\\main\\java\\com\\qingqing\\api\\dao\\mybatis\\data");
+            checkDir(dir, parser, handler);
 
-            File file = new File("F:\\work\\backup\\svc\\QQ\\src\\main\\java\\com\\qingqing\\api\\dao\\mybatis\\lecture\\LectureSeriesMapper.xml");
-            parser.parse(file, handler);
+//            File file = new File("F:\\work\\backup\\svc\\QQ\\src\\main\\java\\com\\qingqing\\api\\dao\\mybatis\\lecture\\LectureSeriesMapper.xml");
+//            parser.parse(file, handler);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {

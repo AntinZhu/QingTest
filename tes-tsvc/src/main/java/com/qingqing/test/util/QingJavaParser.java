@@ -119,14 +119,14 @@ public class QingJavaParser {
 //            System.out.println("implements:"+n.getImplements());
             className = n.getName();
 
-            if(!n.isInterface() && n.getName().contains("Manager")){
-                if(CollectionsUtil.isNullOrEmpty(n.getAnnotations())){
-                    System.out.println("-----------Manager上无注解-----------");
-                    System.out.println("路径：" + packageName + "." + className);
-                    System.out.println("类名：" + n.getName());
-                    System.out.println("注解名称：" + n.getAnnotations());
-                }
-            }
+//            if(!n.isInterface() && n.getName().contains("Manager")){
+//                if(CollectionsUtil.isNullOrEmpty(n.getAnnotations())){
+//                    System.out.println("-----------Manager上无注解-----------");
+//                    System.out.println("路径：" + packageName + "." + className);
+//                    System.out.println("类名：" + n.getName());
+//                    System.out.println("注解名称：" + n.getAnnotations());
+//                }
+//            }
 
             super.visit(n, arg);
         }
