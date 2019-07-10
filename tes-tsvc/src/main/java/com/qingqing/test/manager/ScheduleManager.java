@@ -43,7 +43,7 @@ public class ScheduleManager {
         }
     }
 
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 21 * * *")
     public void reportTotalUse(){
         CommonLink<QingScheduleable> dailyScheduleable = scheduleTypeCommonLinkMap.get(QingScheduleType.daily);
         do{
