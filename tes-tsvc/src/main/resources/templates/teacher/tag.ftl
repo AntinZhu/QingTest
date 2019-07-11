@@ -285,7 +285,7 @@
                             <div class="col-xs-12 col-sm-3 widget-container-span">
                                 <div class="widget-box">
                                     <div class="widget-header">
-                                        <h5 class="smaller">在线授课工具</h5>
+                                        <h5 class="smaller">26-在线授课工具</h5>
 
                                         <div class="widget-toolbar">
 													<span class="label label-success">
@@ -311,7 +311,7 @@
                             <div class="col-xs-12 col-sm-3 widget-container-span">
                                 <div class="widget-box">
                                     <div class="widget-header">
-                                        <h5 class="smaller">被限制的上门方式</h5>
+                                        <h5 class="smaller">36-被限制的上门方式</h5>
 
                                         <div class="widget-toolbar">
 													<span class="label label-success">
@@ -337,7 +337,7 @@
                             <div class="col-xs-12 col-sm-3 widget-container-span">
                                 <div class="widget-box">
                                     <div class="widget-header">
-                                        <h5 class="smaller">最大可授课学生数</h5>
+                                        <h5 class="smaller">35-最大可授课学生数</h5>
 
                                         <div class="widget-toolbar">
 													<span class="label label-success">
@@ -377,11 +377,39 @@
         });
 
         function getTag(teacherId){
+            reset();
             var data = {
                 data:teacherId
             };
 
             commonAjaxRequest("${base}/v1/teacher/tag/list.json", data, init, true, "查询失败", $("#env").val(), null, "test-api-tag");
+        }
+
+        function reset(){
+            var switchEles = $(".qing_tag_switch[checked='checked']");
+            var switchIdx = 0;
+            while(switchIdx < switchEles.length){
+                var switchEle = $(switchEles[switchIdx]).children("input").first();
+                $(switchEle).val(0);
+                $(switchEle).removeAttr("checked")
+
+                switchIdx++;
+            }
+
+            $("#use_live_tool").val("-1");
+            $(".use_live_tool.btn-primary").removeClass("btn-primary");
+            $(".use_live_tool[value='-1']").addClass("btn-primary");
+
+            $("#teacher_limited_site_types").val(0);
+            var limitEles = $(".teacher_limited_site_types");
+            var limitIdx = 0;
+            while(limitIdx < limitEles.length){
+                $(limitEles[limitIdx]).removeClass("btn-primary");
+                $(limitEles[limitIdx]).attr("sel", 0);
+                limitIdx++;
+            }
+
+            $("#teacher_max_teachable_student_count").val(0);
         }
 
         function init(resu){
@@ -436,7 +464,7 @@
            }
            $(inputEle).val(newValue);
 
-           setTag(3856, $(inputEle).attr("id"), newValue);
+           setTag(getTeacherId(), $(inputEle).attr("id"), newValue);
        });
 
         function setTag(teacherId, tagType, tagValue){
@@ -459,7 +487,7 @@
             $(this).addClass("btn-primary");
             $("#use_live_tool").val(newValue);
 
-            setTag(3856, "use_live_tool", newValue);
+            setTag(getTeacherId(), "use_live_tool", newValue);
         });
 
         $(".teacher_limited_site_types").click(function() {
@@ -478,11 +506,11 @@
                     finalValue = finalValue + new Number($(eles[idx++]).val());
                 }
             }
-            setTag(3856, "teacher_limited_site_types", finalValue);
+            setTag(getTeacherId(), "teacher_limited_site_types", finalValue);
         });
 
         $('#teacher_max_teachable_student_count').change(function(){
-            setTag(3856, "teacher_max_teachable_student_count", $(this).val());
+            setTag(getTeacherId(), "teacher_max_teachable_student_count", $(this).val());
         });
 
         $(".env").click(function(){
@@ -492,10 +520,14 @@
         });
 
         $("#teacherIdBtn").click(function(){
+            getTag(getTeacherId())
+        });
+
+        function getTeacherId(){
             var param = generateJsonParam("#paramListDiv input");
 
-            getTag(param.teacher_id)
-        });
+            return param.teacher_id;
+        }
     });
 </script>
     </div>
