@@ -8,6 +8,7 @@ import com.qingqing.api.proto.v1.consult.Consult.GetPhoneNumberResponse;
 import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseFinishMockRequest;
 import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseFinishMockResponse;
 import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseThirdPartyJudgeRequestV4;
+import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.common.response.ListResponse;
@@ -16,6 +17,7 @@ import com.qingqing.test.config.feign.MyPiFeignConfiguration;
 import com.qingqing.test.domain.order.GroupUserCourseApply;
 import com.qingqing.test.domain.order.OrderCourseV1;
 import com.qingqing.test.domain.pay.ThirdPayBrief;
+import com.qingqing.test.domain.teacher.TeacherAttributeTag;
 import com.qingqing.test.feign.PtRequestInterceptor;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,4 +69,11 @@ public interface ApiPiClient {
     @PostMapping(value = "/pi/v1/studentwallet/admin_operate")
     @ProtoResponseBody
     SimpleResponse studentWalletOps(OperateUserWalletRequest request);
+
+    @PostMapping(value = "/pi/v1/test/teacher/tag/set", consumes="application/json", produces="application/json")
+    com.qingqing.test.bean.base.SimpleResponse setTag(@RequestParam(name = "teacherId") Long teacherId, @RequestParam(name = "tagType") String tagType, @RequestParam(name = "tagValue") String tagValue);
+
+    @PostMapping(value = "/pi/v1/test/teacher/tag/list", consumes="application/json", produces="application/json")
+    ListResponse<TeacherAttributeTag> tagList(SimpleLongRequest request);
+
 }
