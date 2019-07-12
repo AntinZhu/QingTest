@@ -240,6 +240,7 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
+            var paramInfo;
             var isCross = ${cross!1};
             $(document).ready(function(){
                 refreshPage();
@@ -313,7 +314,7 @@
                 if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                     var paramDetail = fillDefaultValue(JSON.parse(resu.interfaceInfo.inter.paramDetail));
-                    showParam({paramData:paramDetail});
+                    paramInfo = showParam({paramData:paramDetail});
 
                     paramExamples = resu.interfaceInfo.paramList;
                     initParamChoose(paramExamples, ${paramExampleId});
@@ -381,7 +382,7 @@
                 }
                 updateOptions("paramChoose", options, paramExampleId);
                 if(paramEx != null){
-                    showParam({paramData:paramEx.paramDetail});
+                    paramInfo = showParam({paramData:paramEx.paramDetail});
                     $("#requestUserId").val(paramEx.requestUserId);
                     $("#requestUserIdDiv").text(paramEx.requestUserId);
                 }
@@ -403,7 +404,7 @@
             }
 
             function fillFullParam(){
-                var param = generateJsonParam("#paramListDiv input");
+                var param = generateJsonParam("#paramListDiv input", paramInfo);
                 $("#fullParam").text(JSON.stringify(param));
             }
 
@@ -447,7 +448,7 @@
                 if($("#selfParamSwitch").val() == 1){
                     param = JSON.parse($("#fullParam").text());
                 }else{
-                    param = generateJsonParam("#paramListDiv input");
+                    param = generateJsonParam("#paramListDiv input", paramInfo);
                 }
 
                 return param;
@@ -548,7 +549,7 @@
                     for(idx in paramExamples){
                         var paramEx = paramExamples[idx];
                         if(paramEx.id == id){
-                            showParam({paramData:paramEx.paramDetail});
+                            paramInfo = showParam({paramData:paramEx.paramDetail});
                             $("#requestUserId").val(paramEx.requestUserId);
                             $("#requestUserIdDiv").text(paramEx.requestUserId);
 
@@ -602,7 +603,7 @@
                         if($("#selfParamSwitch").val() == 1){
                             fullParam = $("#fullParam").text();
                         }else{
-                            fullParam = JSON.stringify(generateJsonParam("#paramListDiv input"));
+                            fullParam = JSON.stringify(generateJsonParam("#paramListDiv input", paramInfo));
                         }
                         var data = {
                             id : $("#paramChoose").val(),

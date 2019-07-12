@@ -208,6 +208,8 @@
         selectable.push(selectItem);
     }
 
+    var paramInfo;
+
     function getParamExampleName(indexType){
         var paramSelectable = [];
         var selectItem = new Object();
@@ -469,13 +471,13 @@
                             }
                         }
                     }
-                    showParam({paramData:JSON.stringify(items)});
+                    paramInfo = showParam({paramData:JSON.stringify(items)});
                 }
             }
         }
 
         $("#updateBtn").click(function () {
-            var modifyData = generateJsonParam("#paramListDiv input");
+            var modifyData = generateJsonParam("#paramListDiv input", paramInfo);
             var fullData = indexInfo._source;
             for(var propName in modifyData){
                 fullData[propName] = modifyData[propName];

@@ -372,4 +372,9 @@ public class UtilsController {
 
         return "utils/up_ip";
     }
+
+    @RequestMapping("common/config")
+    public String commonConfigPage(){
+        return "utils/common_config";
+    }
 }

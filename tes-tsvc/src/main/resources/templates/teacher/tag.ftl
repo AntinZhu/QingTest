@@ -36,6 +36,12 @@
                 <div class="page-content">
                     <div class="page-header">
                         <div class="row">
+                            <div class="col-xs-12 label label-lg label-light arrowed-in arrowed-right qing_input_tip center" style="color: #333;text-align: left;">
+                                如果有经常需要使用的配置，可联系<b class="red"><a  href="#" onclick="feedback()">管理员</a></b>加入该页面
+                            </div>
+                            <div class="hr hr-dotted"></div>
+                            <div class="hr hr-dotted"></div>
+
                             <div class="col-xs-12">
 
                             <#include "/include/param.ftl" />
@@ -364,14 +370,42 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
+
+    function feedback(){
+        bootbox.prompt("输入你想加入的TagType", function(result) {
+            if (result === null) {
+                return;
+            } else {
+                var userIp = $("#qing_ip").text();
+                var content = {
+                    msgtype : "markdown",
+                    markdown :{
+                        content : "有用户请求在TeacherTag页面中加入新配置\n                >用户: <font color=\"comment\">" + userIp + "</font> \n                >tagType: <font color=\"comment\">" + result + "</font>"
+                    }
+                };
+
+                commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "反馈出错:");
+            }
+        });
+    }
+
+    function handlerParamSave(){
+        $.gritter.add({
+            title : '提示:',
+            text : "申请成功",
+            class_name : 'gritter-info gritter-center'
+        });
+    }
+
     jQuery(function($) {
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
         $('#teacher_max_teachable_student_count').ace_spinner({value:0,min:0,max:1000,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
 
+        var paramInfo;
         $(document).ready(function(){
             var paramDetail = '[{"key":"teacher_id","name":"老师ID","defaultValue":{"name":"3856","value":3856}}]';
-            showParam({paramData:paramDetail});
+            paramInfo = showParam({paramData:paramDetail});
 
             getTag(3856);
         });
@@ -524,7 +558,7 @@
         });
 
         function getTeacherId(){
-            var param = generateJsonParam("#paramListDiv input");
+            var param = generateJsonParam("#paramListDiv input", paramInfo);
 
             return param.teacher_id;
         }

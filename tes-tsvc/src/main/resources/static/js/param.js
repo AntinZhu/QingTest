@@ -46,11 +46,20 @@ function removeInput(){
         valueParentParent.remove();
     }
 
-    notifyParamChanged();
+    // notifyParamChanged();
 }
 
 var paramInfo = new Object();
 function initHtml(parentKey, params, valueChangedNotifyId){
+    paramInfo = initParamInfo(parentKey, params, valueChangedNotifyId);
+
+    editableInit(paramInfo);
+
+    return paramInfo;
+}
+
+function initParamInfo(parentKey, params, valueChangedNotifyId){
+    var paramInfo = new Object();
     if(parentKey != ''){
         parentKey += "-";
     }
@@ -110,7 +119,7 @@ function initHtml(parentKey, params, valueChangedNotifyId){
         }
     }
 
-    editableInit();
+    return paramInfo;
 }
 
 function isNumber(value){
@@ -118,7 +127,7 @@ function isNumber(value){
 }
 
 var notParamPropertiesArr = ["valueChangedNotifyId"];
-function editableInit(){
+function editableInit(paramInfo){
     for(var prop in paramInfo){
         if($.inArray(prop, notParamPropertiesArr) != -1){
             continue;
@@ -134,7 +143,7 @@ function editableInit(){
                 disabled : getEditDisableStatus("#editBtnSwitch"),
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
-                    notifyParamChanged();
+                    notifyParamChanged($(this).prev("input").attr("trig"));
                 }
             });
         }
@@ -157,7 +166,7 @@ function editableInit(){
             },
             success: function(response, newValue) {
                 $(this).prev("input").val(newValue.getTime());
-                notifyParamChanged();
+                notifyParamChanged($(this).prev("input").attr("trig"));
             }
         });
 
@@ -180,7 +189,7 @@ function editableInit(){
                 },
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
-                    notifyParamChanged();
+                    notifyParamChanged($(this).prev("input").attr("trig"));
                 }
             });
         }else{
@@ -189,17 +198,15 @@ function editableInit(){
                 disabled : getEditDisableStatus("#editBtnSwitch"),
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
-                    notifyParamChanged();
+                    notifyParamChanged($(this).prev("input").attr("trig"));
                 }
             });
         }
     });
 }
 
-function notifyParamChanged(){
-    if(paramInfo["valueChangedNotifyId"] != null){
-        $("#" + paramInfo["valueChangedNotifyId"]).trigger("change");
-    }
+function notifyParamChanged(notifyId){
+    $("#" + notifyId).trigger("change");
 }
 
 function getEditDisableStatus(statusLocation){
@@ -212,25 +219,21 @@ var add_btn_html = "<div class='spinner-buttons input-group-btn addInputDiv' sty
 del_btn_html = "<div class='pull-right action-buttons'><a class='red delInputBtn hide qing_param_edit' isMulti='{isMulti}' href='###'><i class='icon-trash bigger-130'></i></a></div>";
 add_btn_html = "<div style='margin-bottom: 22px;' class='qing_param_edit hide'><div class='pull-right action-buttons'><a class='blue addInputBtn' href='###'><i class='icon-plus bigger-130'></i></a></div></div>";
 
-var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{name} </div>{value}</div>";
-var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "{br}<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' style='word-break: break-all;' alt='{alt}'>{defaultName}</span></div>";
+var input_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' trig='{notifyId}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/>{name} </div>{value}</div>";
+var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "{br}<input key='{key}' type='hidden' name='{key}' alt='{alt}' trig='{notifyId}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' style='word-break: break-all;' alt='{alt}'>{defaultName}</span></div>";
 var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{br}{paramList}</div></div></div>";
 var first_editable_table_html =  del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div>";
-var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
+var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input trig='{notifyId}' key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
 
 var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit_1 hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
 number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span></span></span><!-- /span -->";
 
-var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span> </div>{value}</div>";
-var input_editable_value_edit = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "<input key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' style='word-break: break-all;'alt='{alt}'>{defaultName}</span>{valueType}</div>";
-var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'>  <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div><div class='profile-info-value'>" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
-sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div>{paramList}</div>";
+var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input trig='{notifyId}' key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span> </div>{value}</div>";
+var input_editable_value_edit = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "<input trig='{notifyId}' key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' style='word-break: break-all;'alt='{alt}'>{defaultName}</span>{valueType}</div>";
+var sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'>  <input trig='{notifyId}' key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div><div class='profile-info-value'>" + del_btn_html + "<div style='margin-right: 13px;'>{paramList}</div></div></div>";
+sub_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input trig='{notifyId}' key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span>  </div>{paramList}</div>";
 
-function genHtml(parentKey, params, paramAlt){
-    return genHtml(parentKey, params, paramAlt, false, "");
-}
-
-function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr, paramKey){
+function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr, paramKey, notifyId){
     if(parentKey != ''){
         parentKey += "-";
     }
@@ -257,10 +260,10 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr, paramKe
             var subTableHtml = "";
             if(isArray){
                 for(var detailItemIndex in param.detail){
-                    subTableHtml += genHtml(parentKey + param.key, param.detail[detailItemIndex], parentAlt_ + detailItemIndex, isEditStatus, isArray, param.name);
+                    subTableHtml += genHtml(parentKey + param.key, param.detail[detailItemIndex], parentAlt_ + detailItemIndex, isEditStatus, isArray, param.name, notifyId);
                 }
             }else{
-                subTableHtml += genHtml(parentKey + param.key, param.detail, parentAlt_ +  "0", isEditStatus, isArray, param.name);
+                subTableHtml += genHtml(parentKey + param.key, param.detail, parentAlt_ +  "0", isEditStatus, isArray, param.name, notifyId);
             }
 
             var br = getBr(param.name);
@@ -278,8 +281,9 @@ function genHtml(parentKey, params, parentAlt, isEditStatus, isTableArr, paramKe
                 paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), "true");
             }
             paramHtml = paramHtml.replace(new RegExp("{paramList}","gm"), subTableHtml);
+            paramHtml = paramHtml.replace(new RegExp("{notifyId}","gm"), notifyId);
         }else{
-            paramHtml = initInput(parentKey, param, parentAlt, isArray, isEditStatus);
+            paramHtml = initInput(parentKey, param, parentAlt, isArray, isEditStatus, notifyId);
         }
         paramHtmls += paramHtml;
     }
@@ -311,7 +315,7 @@ function getBr(key){
     return br;
 }
 
-function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
+function initInput(paramKey, param, parentAlt, isArray, isEditStatus, notifyId){
     if(parentAlt != null){
         parentAlt = parentAlt + "-";
     }else{
@@ -322,10 +326,10 @@ function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
     var valueHtml = "";
     if(isArray){
         for(var defaultIndex in param.defaultValue){
-            valueHtml += genValueInput(key, param, param.defaultValue[defaultIndex], isArray, parentAlt + defaultIndex, isEditStatus, param.name);
+            valueHtml += genValueInput(key, param, param.defaultValue[defaultIndex], isArray, parentAlt + defaultIndex, isEditStatus, param.name, notifyId);
         }
     }else{
-        valueHtml += genValueInput(key, param, param.defaultValue, isArray, parentAlt + "0", isEditStatus, param.name);
+        valueHtml += genValueInput(key, param, param.defaultValue, isArray, parentAlt + "0", isEditStatus, param.name, notifyId);
     }
 
     var br = getBr(param.name);
@@ -337,11 +341,12 @@ function initInput(paramKey, param, parentAlt, isArray, isEditStatus){
     paramHtml = paramHtml.replace(new RegExp("{key}","gm"), key);
     paramHtml = paramHtml.replace(new RegExp("{isMulti}","gm"), isArray);
     paramHtml = paramHtml.replace(new RegExp("{br}","gm"), br);
+    paramHtml = paramHtml.replace(new RegExp("{notifyId}","gm"), notifyId);
 
     return paramHtml;
 }
 
-function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, paramName){
+function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, paramName, notifyId){
     var valueHtml = isEditStatus? input_editable_value_edit:input_editable_value;
     valueHtml = valueHtml.replace(new RegExp("{key}","gm"), key);
     var valueName = "";
@@ -383,11 +388,12 @@ function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, par
         valueHtml = valueHtml.replace(new RegExp("{editable}","gm"), add_btn_html);
     }
     valueHtml = valueHtml.replace(new RegExp("{isMulti}","gm"), isArray);
+    valueHtml = valueHtml.replace(new RegExp("{notifyId}","gm"), notifyId);
 
     return valueHtml;
 }
 
-function generateJsonParam(localtion){
+function generateJsonParam(localtion, paramInfo){
     var param = new Object();
     fromIdxInfo = new Object();
     destIdxInfo = new Object();
@@ -481,15 +487,27 @@ function showParam(options){
     if("valueChangedNotifyId" in options){
         valueChangedNotifyId = options.valueChangedNotifyId;
     }
+    var htmlDiv = "paramListDiv";
+    if("htmlDiv" in options){
+        htmlDiv = options.htmlDiv;
+    }
 
+    var hideDiv = "paramDiv";
+    if("hideDiv" in options){
+        hideDiv = options.hideDiv;
+    }
+
+    var paramInfo;
     if(paramData != null && paramData != "") {
         var params = JSON.parse(paramData);
-        var paramHtmls = genHtml("", params, null, isEditStatus);
-        $("#paramListDiv").html(paramHtmls);
+        var paramHtmls = genHtml("", params, null, isEditStatus, false, "", valueChangedNotifyId);
+        $("#" + htmlDiv).html(paramHtmls);
 
-        initHtml("", params, valueChangedNotifyId);
-        $("#paramDiv").removeClass("hide");
+        paramInfo = initHtml("", params, valueChangedNotifyId);
+        $("#" + hideDiv).removeClass("hide");
     }
+
+    return paramInfo;
 }
 
 function generateEditParam(localtion){
@@ -682,7 +700,7 @@ $(document).on("click", ".qing_value_type", function(){
     $("input[name='" + key + "']").attr("clazz", clazz);
 
     changeDefaultValue(key, clazz);
-    notifyParamChanged();
+    notifyParamChanged($(this).prev("input").attr("trig"));
 });
 
 function changeDefaultValue(key, clazz){
@@ -704,7 +722,7 @@ function changeDefaultValue(key, clazz){
                 disabled : getEditDisableStatus("#editBtnSwitch"),
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue);
-                    notifyParamChanged();
+                    notifyParamChanged($(this).prev("input").attr("trig"));
                 }
             });
 
@@ -724,7 +742,7 @@ function changeDefaultValue(key, clazz){
                 },
                 success: function(response, newValue) {
                     $(this).prev("input").val(newValue.getTime());
-                    notifyParamChanged();
+                    notifyParamChanged($(this).prev("input").attr("trig"));
                 }
             });
             break;
