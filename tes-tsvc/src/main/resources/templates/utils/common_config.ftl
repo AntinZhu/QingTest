@@ -303,14 +303,14 @@
 
     function init_api_selective_order_promise_amount_config(configValue){
         $("#api_selective_order_promise_amount_config").val(configValue);
-        var paramsTemplate = '[{"key":"isEnable","name":"是否开启","selectable":[{"name":"否","value":"false"},{"name":"是","value":"true"}],"class":"select_editable","defaultValue":{enableDefaultValue}},{"key":"deductRate","name":"比例","defaultValue":{"name":{rateDefaultValue},"value":{rateDefaultValue}}}]';
+        var paramsTemplate = '[{"key":"isEnable","name":"是否开启","selectable":[{"name":"否","value":false},{"name":"是","value":true}],"class":"switch_editable","defaultValue":{enableDefaultValue}},{"key":"deductRate","name":"比例","defaultValue":{"name":{rateDefaultValue},"value":{rateDefaultValue}}}]';
         var params = paramsTemplate;
 
         var configObj = JSON.parse(configValue);
         if(configObj.isEnable){
             params = params.replace(new RegExp("{enableDefaultValue}","gm"), '{"name":"是","value":true}');
         }else{
-            params = params.replace(new RegExp("{enableDefaultValue}","gm"), '{"name":"否","value":"false"}');
+            params = params.replace(new RegExp("{enableDefaultValue}","gm"), '{"name":"否","value":false}');
         }
         if(configObj.deductRate != null){
             params = params.replace(new RegExp("{rateDefaultValue}","gm"), configObj.deductRate);

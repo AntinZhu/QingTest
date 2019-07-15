@@ -629,7 +629,7 @@
                         });
                         return;
                     } else {
-                        var paramDetail = generateEditParam("#paramListDiv input");
+                        var paramDetail = generateEditParam("#paramListDiv input", paramInfo);
                         var fullParam;
                         if($("#selfParamSwitch").val() == 1){
                             fullParam = $("#fullParam").text();

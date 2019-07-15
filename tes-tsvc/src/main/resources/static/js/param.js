@@ -49,9 +49,8 @@ function removeInput(){
     // notifyParamChanged();
 }
 
-var paramInfo = new Object();
 function initHtml(parentKey, params, valueChangedNotifyId){
-    paramInfo = initParamInfo(parentKey, params, valueChangedNotifyId);
+    var paramInfo = initParamInfo(parentKey, params, valueChangedNotifyId);
 
     editableInit(paramInfo);
 
@@ -110,6 +109,7 @@ function initParamInfo(parentKey, params, valueChangedNotifyId){
                 paramInfo[paramKey]["is_selectable"] = true;
                 paramInfo[paramKey]["selectable"] = param.selectable;
                 paramInfo[paramKey]["defaultValue"] = param.defaultValue.value;
+                paramInfo[paramKey]["isBoolean"] = isBoolean(param.defaultValue.value);
             }else{
                 paramInfo[paramKey]["is_selectable"] = false;
             }
@@ -124,6 +124,10 @@ function initParamInfo(parentKey, params, valueChangedNotifyId){
 
 function isNumber(value){
     return Object.prototype.toString.call(value) == "[object Number]";
+}
+
+function isBoolean(value){
+    return Object.prototype.toString.call(value) == "[object Boolean]";
 }
 
 var notParamPropertiesArr = ["valueChangedNotifyId"];
@@ -203,6 +207,13 @@ function editableInit(paramInfo){
             });
         }
     });
+
+    $(document).find(".switch_editable").each(function(key,value){
+        var selected = $(value).val();
+        if(selected == "true"){
+            $(value).attr("checked", "checked");
+        }
+    });
 }
 
 function notifyParamChanged(notifyId){
@@ -224,6 +235,7 @@ var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editabl
 var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{br}{paramList}</div></div></div>";
 var first_editable_table_html =  del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div>";
 var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input trig='{notifyId}' key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
+var switch_editable_html = "<div class='profile-info-value' alt='{alt}' style='height: 34px;'><label class='pull-left inline' title='' data-rel='tooltip' data-original-title='{name}'><input  key='{key}' type='checkbox' name='{key}' alt='{alt}' trig='{notifyId}' value='{defaultValue}' class='ace ace-switch ace-switch-5 {class}'><span class='lbl'></span></label></div>";
 
 var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit_1 hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
 number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span></span></span><!-- /span -->";
@@ -347,8 +359,6 @@ function initInput(paramKey, param, parentAlt, isArray, isEditStatus, notifyId){
 }
 
 function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, paramName, notifyId){
-    var valueHtml = isEditStatus? input_editable_value_edit:input_editable_value;
-    valueHtml = valueHtml.replace(new RegExp("{key}","gm"), key);
     var valueName = "";
     var value = "";
     var valueType = "";
@@ -366,16 +376,19 @@ function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, par
         }
     }
     var classes = "";
-    if(param.selectable == null){
-        if(param.class != null){
-            classes = param.class;
-        }else{
-            classes = "input_editable";
-        }
+    if(param.class != null){
+        classes = param.class;
     }else{
-        classes = "select_editable";
+        if(param.selectable == null){
+            classes = "input_editable";
+        }else{
+            classes = "select_editable";
+        }
     }
 
+    var valueHtml = getValueInputTemplate(isEditStatus, classes);
+    valueHtml = valueHtml.replace(new RegExp("{key}","gm"), key);
+    valueHtml = valueHtml.replace(new RegExp("{name}","gm"), param.name);
     valueHtml = valueHtml.replace(new RegExp("{alt}","gm"), alt);
     valueHtml = valueHtml.replace(new RegExp("{class}","gm"), classes);
     valueHtml = valueHtml.replace(new RegExp("{valueType}","gm"), valueType);
@@ -391,6 +404,17 @@ function genValueInput(key, param, defaultValue, isArray, alt, isEditStatus, par
     valueHtml = valueHtml.replace(new RegExp("{notifyId}","gm"), notifyId);
 
     return valueHtml;
+}
+
+function getValueInputTemplate(isEditStatus, calsses){
+    var templateHtml;
+    if("switch_editable" == calsses){
+        templateHtml = switch_editable_html;
+    }else{
+        templateHtml = isEditStatus? input_editable_value_edit:input_editable_value;
+    }
+
+    return templateHtml;
 }
 
 function generateJsonParam(localtion, paramInfo){
@@ -483,7 +507,7 @@ function showParam(options){
     if("isEditStatus" in options){
         isEditStatus = options.isEditStatus;
     }
-    var valueChangedNotifyId;
+    var valueChangedNotifyId = "";
     if("valueChangedNotifyId" in options){
         valueChangedNotifyId = options.valueChangedNotifyId;
     }
@@ -510,7 +534,7 @@ function showParam(options){
     return paramInfo;
 }
 
-function generateEditParam(localtion){
+function generateEditParam(localtion, paramInfo){
     var param = new Array();
     var allObject = new Object();
 
@@ -521,13 +545,13 @@ function generateEditParam(localtion){
 
         var paramNameArr = value.name.split("-");
         var altArr = value.alt.split("-");
-        formatEditParam(param, "", paramNameArr, 0, value, allObject, altArr);
+        formatEditParam(param, "", paramNameArr, 0, value, allObject, altArr, paramInfo);
     });
 
     return JSON.stringify(param);
 }
 
-function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allObject, altArr){
+function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allObject, altArr, paramInfo){
     var propName = paramNameArr[arrIdx];
     //console.log(value.name + "->" + propName);
     paramName = paramName == ""? propName:paramName + "-" + propName;
@@ -537,7 +561,7 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
     var idx = altArr[arrIdx];
 
     if(isLast){
-        var obj = formatEditParamObject(propName, paramName, value, allObject);
+        var obj = formatEditParamObject(propName, paramName, value, allObject, paramInfo);
         if(obj != null){
             if(isArray){
                 var objArr = new Array();
@@ -581,7 +605,7 @@ function formatEditParam(paramObj, paramName, paramNameArr, arrIdx, value, allOb
             detailArr = detailArr[idx];
         }
 
-        formatEditParam(detailArr, paramName, paramNameArr, arrIdx + 1, value, allObject, altArr);
+        formatEditParam(detailArr, paramName, paramNameArr, arrIdx + 1, value, allObject, altArr, paramInfo);
     }
 }
 
@@ -596,7 +620,7 @@ function clearSubItem(allObject, paramName){
     }
 }
 
-function formatEditParamObject(propName, paramName, value, allObject){
+function formatEditParamObject(propName, paramName, value, allObject, paramInfo){
     var newInit = false;
     var isArray = $("#" + paramName + "--name").attr("isMulti") == "true";
 
@@ -607,7 +631,12 @@ function formatEditParamObject(propName, paramName, value, allObject){
         obj.name = $("#" + paramName + "--name").val();
         if(paramInfo[paramName]["selectable"] != null) {
             obj.selectable = paramInfo[paramName]["selectable"];
-            obj.class = "select_editable";
+            if(paramInfo[paramName]["isBoolean"]){
+                obj.class = "switch_editable";
+            }else{
+                obj.class = "select_editable";
+            }
+
         }else{
             obj.class = $(value).attr("clazz");
         }
@@ -701,6 +730,16 @@ $(document).on("click", ".qing_value_type", function(){
 
     changeDefaultValue(key, clazz);
     notifyParamChanged($(this).prev("input").attr("trig"));
+});
+
+$(document).on("click", ".switch_editable", function(){
+    if($(this).val() == "true"){
+        $(this).val("false");
+    }else{
+        $(this).val("true");
+    }
+
+    notifyParamChanged($(this).attr("trig"));
 });
 
 function changeDefaultValue(key, clazz){

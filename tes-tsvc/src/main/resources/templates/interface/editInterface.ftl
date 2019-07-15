@@ -340,11 +340,12 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
+            var paramInfo;
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
             //输入框的值改变时触发
             $(document).on("change", "#paramDetail",function(e){
-                $("#paramDetail").val(generateEditParam("#paramListDiv input"));
+                $("#paramDetail").val(generateEditParam("#paramListDiv input", paramInfo));
             });
 
 //            $(document).on("change", "#paramListDiv :input:not(.qing_editable)",function(e){
@@ -363,7 +364,7 @@
                 var paramDetail ='${interfaceBean.inter.paramDetail!""}';
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){
-                    showParam({paramData:paramDetail, isEditStatus:true, valueChangedNotifyId:"paramDetail"});
+                    paramInfo = showParam({paramData:paramDetail, isEditStatus:true, valueChangedNotifyId:"paramDetail"});
                 }else{
                     $("#hasParam").removeAttr("checked");
                     $("#hasParam").val(0);
@@ -405,12 +406,12 @@
             function handlerConvert(resu){
                 jsonShow(resu, "json-interface");
                 jsonShow(resu.data, "json-interface-detail");
-                showParam({paramData:resu.data, isEditStatus:true,valueChangedNotifyId:"paramDetail"});
+                paramInfo = showParam({paramData:resu.data, isEditStatus:true,valueChangedNotifyId:"paramDetail"});
                 $("#paramDetail").val(resu.data);
             }
 
             $("#resetBtn").click(function () {
-                jsonShow(generateEditParam("#paramListDiv input"), "json-interface");
+                jsonShow(generateEditParam("#paramListDiv input", paramInfo), "json-interface");
             });
 
             $(".qing_interfaceType").click(function(){
@@ -523,7 +524,7 @@
 
                 var paramDetail = "";
                 if($("#hasParam").val() == 1){
-                    $("#paramDetail").val(generateEditParam("#paramListDiv input"));
+                    $("#paramDetail").val(generateEditParam("#paramListDiv input", paramInfo));
                     paramDetail = $("#paramDetail").val();;
                     if(paramDetail == null || paramDetail == ""){
                         $.gritter.add({
