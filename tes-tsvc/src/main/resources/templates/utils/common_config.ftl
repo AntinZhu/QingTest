@@ -49,7 +49,7 @@
                             <div class="hr hr-dotted"></div>
 
                             <!-- 开关类 -->
-                            <div class="col-xs-12 col-sm-6 widget-container-span">
+                            <div class="col-xs-12 col-sm-6 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header header-color-blue">
                                         <h5 class="bigger lighter">
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                             <!-- 严选课程承诺金 -->
-                            <div class="col-xs-6 col-sm-3 widget-container-span">
+                            <div class="col-xs-6 col-sm-3 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h5 class="smaller">严选课程承诺金开关及比例</h5>
@@ -139,7 +139,7 @@
                                 </div>
                             </div>
                             <!-- 老师授课时间设置 -->
-                            <div class="col-xs-6 col-sm-3 widget-container-span">
+                            <div class="col-xs-6 col-sm-3 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h5 class="smaller">老师授课时间设置限制</h5>
@@ -153,55 +153,6 @@
                                             <input type="hidden" id="api_teacher_time_config_notify" />
                                             <div id="api_teacher_time_config_div">
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 限制的上门方式 -->
-                            <div class="col-xs-12 col-sm-3 widget-container-span hide">
-                                <div class="widget-box">
-                                    <div class="widget-header">
-                                        <h5 class="smaller">36-被限制的上门方式</h5>
-
-                                        <div class="widget-toolbar">
-													<span class="label label-success">
-														16%
-														<i class="icon-arrow-up"></i>
-													</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="widget-body">
-                                        <div class="widget-main padding-6">
-                                            <div class="alert alert-info">
-                                                <input type="hidden" id="teacher_limited_site_types" />
-                                                <button type="button" value="1" sel = "0" style="border-radius: 8px" class="btn teacher_limited_site_types"> 老师上门 </button>
-                                                <button type="button" value="2" sel = "0" style="border-radius: 8px" class="btn teacher_limited_site_types"> 家长上门 </button>
-                                                <button type="button" value="8" sel = "0" style="border-radius: 8px" class="btn teacher_limited_site_types"> 在线授课 </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 最大可授课学生数 -->
-                            <div class="col-xs-12 col-sm-3 widget-container-span hide">
-                                <div class="widget-box">
-                                    <div class="widget-header">
-                                        <h5 class="smaller">35-最大可授课学生数</h5>
-
-                                        <div class="widget-toolbar">
-													<span class="label label-success">
-														16%
-														<i class="icon-arrow-up"></i>
-													</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="widget-body">
-                                        <div class="widget-main padding-6">
-                                            <div class="alert alert-info center">
-                                                <input type="text" class="input-mini" id="teacher_max_teachable_student_count" />
                                             </div>
                                         </div>
                                     </div>
@@ -323,6 +274,13 @@
 
     $(document).ready(function(){
         initAll();
+        if(window.screen.width < 1200){
+            $(".qing_resize.col-sm-6").addClass("col-sm-12");
+            $(".qing_resize.col-sm-6").removeClass("col-sm-6");
+
+            $(".qing_resize.col-sm-3").addClass("col-sm-6");
+            $(".qing_resize.col-sm-3").removeClass("col-sm-3");
+        }
     });
 
     function initAll(){

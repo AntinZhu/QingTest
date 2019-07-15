@@ -63,7 +63,7 @@
                             </div>
 
                             <!-- 开关类 -->
-                            <div class="col-xs-12 col-sm-6 widget-container-span">
+                            <div class="col-xs-12 col-sm-6 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header header-color-blue">
                                         <h5 class="bigger lighter">
@@ -288,7 +288,7 @@
                                 </div>
                             </div>
                             <!-- 在线授课工具 -->
-                            <div class="col-xs-12 col-sm-3 widget-container-span">
+                            <div class="col-xs-12 col-sm-3 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h5 class="smaller">26-在线授课工具</h5>
@@ -314,7 +314,7 @@
                                 </div>
                             </div>
                             <!-- 限制的上门方式 -->
-                            <div class="col-xs-12 col-sm-3 widget-container-span">
+                            <div class="col-xs-12 col-sm-3 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h5 class="smaller">36-被限制的上门方式</h5>
@@ -340,7 +340,7 @@
                                 </div>
                             </div>
                             <!-- 最大可授课学生数 -->
-                            <div class="col-xs-12 col-sm-3 widget-container-span">
+                            <div class="col-xs-12 col-sm-3 widget-container-span qing_resize">
                                 <div class="widget-box">
                                     <div class="widget-header">
                                         <h5 class="smaller">35-最大可授课学生数</h5>
@@ -408,6 +408,14 @@
             paramInfo = showParam({paramData:paramDetail});
 
             getTag(3856);
+
+            if(window.screen.width < 1200){
+                $(".qing_resize.col-sm-6").addClass("col-sm-12");
+                $(".qing_resize.col-sm-6").removeClass("col-sm-6");
+
+                $(".qing_resize.col-sm-3").addClass("col-sm-6");
+                $(".qing_resize.col-sm-3").removeClass("col-sm-3");
+            }
         });
 
         function getTag(teacherId){
