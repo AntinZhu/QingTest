@@ -178,6 +178,7 @@
 
     var api_selective_order_promise_amount_config_param_info;
     var api_teacher_time_config_param_info;
+    var resizeChanged = false;
 
     function initDefault(){
         var fullSwitchTrs = "";
@@ -230,6 +231,10 @@
         setConfig("api_teacher_time_config", JSON.stringify(result));
     });
 
+    window.onresize = function(){
+        resizeChanged = qingResize(resizeChanged);
+    }
+
     function setConfig(configKey, configValue){
         var obj = new Object();
         obj.configKey = configKey;
@@ -274,13 +279,8 @@
 
     $(document).ready(function(){
         initAll();
-        if(window.screen.width < 1200){
-            $(".qing_resize.col-sm-6").addClass("col-sm-12");
-            $(".qing_resize.col-sm-6").removeClass("col-sm-6");
 
-            $(".qing_resize.col-sm-3").addClass("col-sm-6");
-            $(".qing_resize.col-sm-3").removeClass("col-sm-3");
-        }
+        resizeChanged = qingResize(resizeChanged);
     });
 
     function initAll(){

@@ -370,6 +370,10 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
+    var resizeChanged = false;
+    window.onresize = function(){
+        resizeChanged = qingResize(resizeChanged);
+    }
 
     function feedback(){
         bootbox.prompt("输入你想加入的TagType", function(result) {
@@ -409,13 +413,7 @@
 
             getTag(3856);
 
-            if(window.screen.width < 1200){
-                $(".qing_resize.col-sm-6").addClass("col-sm-12");
-                $(".qing_resize.col-sm-6").removeClass("col-sm-6");
-
-                $(".qing_resize.col-sm-3").addClass("col-sm-6");
-                $(".qing_resize.col-sm-3").removeClass("col-sm-3");
-            }
+            resizeChanged = qingResize(resizeChanged);
         });
 
         function getTag(teacherId){

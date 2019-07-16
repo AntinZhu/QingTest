@@ -617,3 +617,25 @@ function qingReplaceStringWithObjAndPrefix(propPrefix, value, obj){
         }
     }
 }
+
+function qingResize(hasChanged){
+    if(window.screen.width < 1200){
+        if(!hasChanged){
+            $(".qing_resize.col-sm-6").addClass("col-sm-12");
+            $(".qing_resize.col-sm-6").removeClass("col-sm-6");
+
+            $(".qing_resize.col-sm-3").addClass("col-sm-6");
+            $(".qing_resize.col-sm-3").removeClass("col-sm-3");
+        }
+        return true;
+    }else{
+        if(hasChanged){
+            $(".qing_resize.col-sm-6").addClass("col-sm-3");
+            $(".qing_resize.col-sm-6").removeClass("col-sm-6");
+
+            $(".qing_resize.col-sm-12").addClass("col-sm-6");
+            $(".qing_resize.col-sm-12").removeClass("col-sm-12");
+        }
+        return false;
+    }
+}

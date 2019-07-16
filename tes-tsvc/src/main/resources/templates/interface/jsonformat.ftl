@@ -247,6 +247,8 @@
             });
 
             function refreshPage(){
+                $("#qing_local_switch_div").removeClass("hide");
+
                 var data = {
                     data : ${interfaceId}
                 };
