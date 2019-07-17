@@ -360,21 +360,23 @@ public class UtilsController {
 
     @RequestMapping("cron_task/del")
     public @ResponseBody
-    ProtoBufResponse.SimpleResponse delCronTask(@Param("id") Long id) {
+    ProtoBufResponse.SimpleResponse delCronTask(@RequestParam("id") Long id) {
         testCronTaskService.deleted(id);
 
         return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }
 
     @RequestMapping("ip/up")
-    public String upIp(@Param("userName") String userName, Model model) {
+    public String upIp(@RequestParam("userName") String userName, Model model) {
         model.addAttribute("userName", userName);
 
         return "utils/up_ip";
     }
 
     @RequestMapping("common/config")
-    public String commonConfigPage(){
+    public String commonConfigPage(@RequestParam(value = "key", defaultValue = "") String configKey, Model model){
+        model.addAttribute("configKey", configKey);
+
         return "utils/common_config";
     }
 }

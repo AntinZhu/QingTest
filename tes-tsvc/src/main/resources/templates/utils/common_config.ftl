@@ -47,59 +47,53 @@
                             </div>
                             <div class="hr hr-dotted"></div>
                             <div class="hr hr-dotted"></div>
+                            <div class="col-xs-12 col-sm-6 qing_resize">
+                                <!-- 开关类 -->
+                                <div class="col-xs-12 col-sm-12 widget-container-span qing_config_switch qing_common_config hide">
+                                <#if configKey == "qing_config_switch">
+                                    <div class="widget-box">
+                                <#else >
+                                    <div class="widget-box collapsed">
+                                </#if>
+                                        <div class="widget-header header-color-blue">
+                                            <h5 class="bigger lighter">
+                                                <i class="icon-table"></i>
+                                                开关类
+                                            </h5>
 
-                            <!-- 开关类 -->
-                            <div class="col-xs-12 col-sm-6 widget-container-span qing_resize">
-                                <div class="widget-box">
-                                    <div class="widget-header header-color-blue">
-                                        <h5 class="bigger lighter">
-                                            <i class="icon-table"></i>
-                                            开关类
-                                        </h5>
-
-                                        <div class="widget-toolbar widget-toolbar-light no-border">
-                                            <select id="simple-colorpicker-1" class="hide">
-                                                <option selected="" data-class="blue" value="#307ECC">#307ECC</option>
-                                                <option data-class="blue2" value="#5090C1">#5090C1</option>
-                                                <option data-class="blue3" value="#6379AA">#6379AA</option>
-                                                <option data-class="green" value="#82AF6F">#82AF6F</option>
-                                                <option data-class="green2" value="#2E8965">#2E8965</option>
-                                                <option data-class="green3" value="#5FBC47">#5FBC47</option>
-                                                <option data-class="red" value="#E2755F">#E2755F</option>
-                                                <option data-class="red2" value="#E04141">#E04141</option>
-                                                <option data-class="red3" value="#D15B47">#D15B47</option>
-                                                <option data-class="orange" value="#FFC657">#FFC657</option>
-                                                <option data-class="purple" value="#7E6EB0">#7E6EB0</option>
-                                                <option data-class="pink" value="#CE6F9E">#CE6F9E</option>
-                                                <option data-class="dark" value="#404040">#404040</option>
-                                                <option data-class="grey" value="#848484">#848484</option>
-                                                <option data-class="default" value="#EEE">#EEE</option>
-                                            </select>
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "qing_config_switch">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="widget-body">
-                                        <div class="widget-main no-padding">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead class="thin-border-bottom">
-                                                <tr>
-                                                    <th>
-                                                        <i class="icon-user"></i>
-                                                        配置项
-                                                    </th>
+                                        <div class="widget-body">
+                                            <div class="widget-main no-padding">
+                                                <table class="table table-striped table-bordered table-hover">
+                                                    <thead class="thin-border-bottom">
+                                                    <tr>
+                                                        <th>
+                                                            <i class="icon-user"></i>
+                                                            配置项
+                                                        </th>
 
-                                                    <th>
-                                                        config_key
-                                                    </th>
+                                                        <th>
+                                                            config_key
+                                                        </th>
 
-                                                    <th>
-                                                        <i>@</i>
-                                                        开关状态
-                                                    </th>
-                                                </tr>
-                                                </thead>
+                                                        <th>
+                                                            <i>@</i>
+                                                            开关状态
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
 
-                                                <tbody id="qing_config_switch_div">
+                                                    <tbody id="qing_config_switch_div">
                                                     <tr>
                                                         <td class="">银行卡校验开关</td>
                                                         <td class="">api_user_bank_card_validate_enable_switch_key</td>
@@ -111,48 +105,150 @@
                                                             </label>
                                                         </td>
                                                     </tr>
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- 严选课程承诺金 -->
-                            <div class="col-xs-6 col-sm-3 widget-container-span qing_resize">
-                                <div class="widget-box">
-                                    <div class="widget-header">
-                                        <h5 class="smaller">严选课程承诺金开关及比例</h5>
-                                        <div class="hr hr-dotted"></div>
-                                        <h5 class="smaller">(api_selective_order_promise_amount_config)</h5>
-                                    </div>
 
-                                    <div class="widget-body">
-                                        <div class="widget-main padding-6">
-                                            <input id="editBtnSwitch" type="hidden" value="1" />
-                                            <input type="hidden" id="api_selective_order_promise_amount_config" />
-                                            <input type="hidden" id="api_selective_order_promise_amount_config_notify" />
-                                            <div id="api_selective_order_promise_amount_config_div">
+                                <!-- 分期支付配置 -->
+                                <div class="col-xs-6 col-sm-12 widget-container-span qing_common_config installment_pay_config_v2 hide">
+                                <#if configKey == "installment_pay_config_v2">
+                                    <div class="widget-box">
+                                <#else >
+                                    <div class="widget-box collapsed">
+                                </#if>
+                                        <div class="widget-header header-color-orange">
+                                            <h5 class="smaller">分期支付方式配置</h5>
+                                            <div class="hr hr-dotted"></div>
+                                            <h5 class="smaller">(installment_pay_config_v2)</h5>
 
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "installment_pay_config_v2">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input type="hidden" id="installment_pay_config_v2" />
+                                                <input type="hidden" id="installment_pay_config_v2_notify" />
+                                                <div id="installment_pay_config_v2_div">
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- 老师授课时间设置 -->
-                            <div class="col-xs-6 col-sm-3 widget-container-span qing_resize">
-                                <div class="widget-box">
-                                    <div class="widget-header">
-                                        <h5 class="smaller">老师授课时间设置限制</h5>
-                                        <div class="hr hr-dotted"></div>
-                                        <h5 class="smaller">(api_teacher_time_config)</h5>
+
+                            <div class="col-xs-12 col-sm-6 qing_resize">
+                                <!-- 严选课程承诺金 -->
+                                <div class="col-xs-6 col-sm-6 widget-container-span qing_common_config api_selective_order_promise_amount_config hide">
+                                    <#if configKey == "api_selective_order_promise_amount_config">
+                                        <div class="widget-box">
+                                    <#else >
+                                        <div class="widget-box collapsed">
+                                    </#if>
+                                        <div class="widget-header header-color-pink">
+                                            <h5 class="smaller">严选课程承诺金开关及比例</h5>
+                                            <div class="hr hr-dotted"></div>
+                                            <h5 class="smaller">(api_selective_order_promise_amount_config)</h5>
+
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "api_selective_order_promise_amount_config">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input id="editBtnSwitch" type="hidden" value="1" />
+                                                <input type="hidden" id="api_selective_order_promise_amount_config" />
+                                                <input type="hidden" id="api_selective_order_promise_amount_config_notify" />
+                                                <div id="api_selective_order_promise_amount_config_div">
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                                <!-- 老师授课时间设置 -->
+                                <div class="col-xs-6 col-sm-6 widget-container-span qing_common_config api_teacher_time_config hide">
+                                <#if configKey == "api_teacher_time_config">
+                                    <div class="widget-box">
+                                <#else >
+                                    <div class="widget-box collapsed">
+                                </#if>
+                                        <div class="widget-header header-color-pink">
+                                            <h5 class="smaller">老师授课时间设置限制</h5>
+                                            <div class="hr hr-dotted"></div>
+                                            <h5 class="smaller">(api_teacher_time_config)</h5>
 
-                                    <div class="widget-body">
-                                        <div class="widget-main padding-6">
-                                            <input type="hidden" id="api_teacher_time_config" />
-                                            <input type="hidden" id="api_teacher_time_config_notify" />
-                                            <div id="api_teacher_time_config_div">
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "api_teacher_time_config">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
 
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input type="hidden" id="api_teacher_time_config" />
+                                                <input type="hidden" id="api_teacher_time_config_notify" />
+                                                <div id="api_teacher_time_config_div">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 月度排课任务设置 -->
+                                <div class="col-xs-6 col-sm-6 widget-container-span qing_common_config api_moon_arrange_course_config hide">
+                                <#if configKey == "api_moon_arrange_course_config">
+                                    <div class="widget-box">
+                                <#else >
+                                    <div class="widget-box collapsed">
+                                </#if>
+                                        <div class="widget-header header-color-pink">
+                                            <h5 class="smaller">月度排课任务设置</h5>
+                                            <div class="hr hr-dotted"></div>
+                                            <h5 class="smaller">(api_moon_arrange_course_config)</h5>
+
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "api_moon_arrange_course_config">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input type="hidden" id="api_moon_arrange_course_config" />
+                                                <input type="hidden" id="api_moon_arrange_course_config_notify" />
+                                                <div id="api_moon_arrange_course_config_div">
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -178,6 +274,8 @@
 
     var api_selective_order_promise_amount_config_param_info;
     var api_teacher_time_config_param_info;
+    var installment_pay_config_v2_paramInfo;
+    var api_moon_arrange_course_config_param_info;
     var resizeChanged = false;
 
     function initDefault(){
@@ -203,6 +301,24 @@
 
         api_selective_order_promise_amount_config_param_info = init_api_selective_order_promise_amount_config('{"isEnable":false,"deductRate":0}');
         api_teacher_time_config_param_info = init_api_teacher_time_config('{"teachingHours":6, "weekendTeachingHours":2}');
+        installment_pay_config_v2_paramInfo = init_installment_pay_config_v2("{}");
+        api_moon_arrange_course_config_param_info = init_api_moon_arrange_course_config('{"isOpen":false,"startUpdateDay":3,"endUpdateDay":25,"expriedDay":20,"deduction":{"moreHalf":3.0,"lessHalf":5.0,"none":8.0}}');
+
+        <#if configKey != "">
+            $(".qing_common_config.${configKey}").removeClass("hide");
+            var resizeEles = $(".qing_resize");
+            var eleIdx = 0;
+            while(eleIdx < resizeEles.length){
+                var ele = resizeEles[eleIdx];
+                if($(ele).children(".qing_common_config").length == $(ele).children(".qing_common_config.hide").length){
+                    $(ele).addClass("hide");
+                }
+
+                eleIdx++;
+            }
+        <#else>
+            $(".qing_common_config").removeClass("hide");
+        </#if>
     }
 
     function init_api_teacher_time_config(configValue){
@@ -215,6 +331,52 @@
         params = params.replace(new RegExp("{weekendTeachingHoursDefaultValue}","gm"), configObj.weekendTeachingHours);
 
         return showParam({paramData:params, htmlDiv:"api_teacher_time_config_div", "valueChangedNotifyId":"api_teacher_time_config_notify", "isEditStatus":false});
+    }
+
+    function init_installment_pay_config_v2(configValue){
+        $("#installment_pay_config_v2").val(configValue);
+
+        var paramsTemplate = '[{"key":"configMap", "name":"分期配置", "detail":[{"key":"9", "name":"招行分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{9_open_defaultValue},"value":{9_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{9_limit_defaultValue_name},"value":{9_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{9_max_defaultValue_name},"value":{9_max_defaultValue}}}]} ,{"key":"10", "name":"花呗分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{10_open_defaultValue},"value":{10_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{10_limit_defaultValue_name},"value":{10_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{10_max_defaultValue_name},"value":{10_max_defaultValue}}}]} ,{"key":"11", "name":"京东支付", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{11_open_defaultValue},"value":{11_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{11_limit_defaultValue_name},"value":{11_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{11_max_defaultValue_name},"value":{11_max_defaultValue}}}]} ,{"key":"12", "name":"百度支付", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{12_open_defaultValue},"value":{12_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{12_limit_defaultValue_name},"value":{12_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{12_max_defaultValue_name},"value":{12_max_defaultValue}}}]} ,{"key":"16", "name":"爱海米分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":"是","value":true}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{16_limit_defaultValue_name},"value":{16_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{16_max_defaultValue_name},"value":{16_max_defaultValue}}}]}]}]';
+
+        var params = paramsTemplate;
+        var configObj = JSON.parse(configValue);
+        var keys = ["9","10","11","12","16"];
+        for(var keyIdx in keys){
+            var key = keys[keyIdx];
+            var value = configObj.configMap == null? null : configObj.configMap[key];
+            if(value == null){
+                params = params.replace(new RegExp("{" + key + "_open_defaultValue}","gm"), "false");
+                params = params.replace(new RegExp("{" + key + "_limit_defaultValue_name}","gm"), "0.0");
+                params = params.replace(new RegExp("{" + key + "_limit_defaultValue}","gm"), "0.0");
+                params = params.replace(new RegExp("{" + key + "_max_defaultValue_name}","gm"), '"无限制"');
+                params = params.replace(new RegExp("{" + key + "_max_defaultValue}","gm"), "null");
+            }else{
+                params = params.replace(new RegExp("{" + key + "_open_defaultValue}","gm"), value.open);
+                params = params.replace(new RegExp("{" + key + "_limit_defaultValue_name}","gm"), (value.limitAmount == null? 0.0:value.limitAmount));
+                params = params.replace(new RegExp("{" + key + "_limit_defaultValue}","gm"), (value.limitAmount == null? 0.0:value.limitAmount));
+                params = params.replace(new RegExp("{" + key + "_max_defaultValue_name}","gm"), ((value.maxAmount == null || "null" == value.maxAmount)? '"无限制"':value.maxAmount));
+                params = params.replace(new RegExp("{" + key + "_max_defaultValue}","gm"), ((value.maxAmount == null || "null" == value.maxAmount)? "null":value.maxAmount));
+            }
+        }
+
+        return showParam({paramData:params, htmlDiv:"installment_pay_config_v2_div", "valueChangedNotifyId":"installment_pay_config_v2_notify", "isEditStatus":false});
+    }
+
+    function init_api_moon_arrange_course_config(configValue){
+        $("#api_moon_arrange_course_config").val(configValue);
+        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":{open_defaultValue},"value":{open_defaultValue}}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":{start_defaultValue},"value":{start_defaultValue}}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":{end_defaultValue},"value":{end_defaultValue}}},{"key":"expriedDay","name":"几号过期","defaultValue":{"name":{expried_defaultValue},"value":{expried_defaultValue}}},{"key":"deduction","name":"扣费配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":{more_half_defaultValue},"value":{more_half_defaultValue}}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":{less_half_defaultValue},"value":{less_half_defaultValue}}},{"key":"none","name":"未做任务","defaultValue":{"name":{none_defaultValue},"value":{none_defaultValue}}}]}]';
+        var params = paramsTemplate;
+
+        var configObj = JSON.parse(configValue);
+        params = params.replace(new RegExp("{open_defaultValue}","gm"), (configObj.isOpen == null? false:configObj.isOpen));
+        params = params.replace(new RegExp("{start_defaultValue}","gm"), (configObj.startUpdateDay == null? 0:configObj.startUpdateDay));
+        params = params.replace(new RegExp("{end_defaultValue}","gm"), (configObj.endUpdateDay == null? 0:configObj.endUpdateDay));
+        params = params.replace(new RegExp("{expried_defaultValue}","gm"), (configObj.expriedDay == null? 0:configObj.expriedDay));
+        params = params.replace(new RegExp("{more_half_defaultValue}","gm"), (configObj.deduction.moreHalf == null? 0:configObj.deduction.moreHalf));
+        params = params.replace(new RegExp("{less_half_defaultValue}","gm"), (configObj.deduction.lessHalf == null? 0:configObj.deduction.lessHalf));
+        params = params.replace(new RegExp("{none_defaultValue}","gm"), (configObj.deduction.none == null? 0:configObj.deduction.none));
+
+        return showParam({paramData:params, htmlDiv:"api_moon_arrange_course_config_div", "valueChangedNotifyId":"api_moon_arrange_course_config_notify", "isEditStatus":false});
     }
 
     //输入框的值改变时触发
@@ -231,11 +393,30 @@
         setConfig("api_teacher_time_config", JSON.stringify(result));
     });
 
+    //输入框的值改变时触发
+    $(document).on("change", "#installment_pay_config_v2_notify",function(e){
+        var result = generateJsonParam("#installment_pay_config_v2_div input", installment_pay_config_v2_paramInfo);
+
+        setConfig("installment_pay_config_v2", JSON.stringify(result));
+    });
+
+    //输入框的值改变时触发
+    $(document).on("change", "#api_moon_arrange_course_config_notify",function(e){
+        var result = generateJsonParam("#api_moon_arrange_course_config_div input", api_moon_arrange_course_config_param_info);
+
+        setConfig("api_moon_arrange_course_config", JSON.stringify(result));
+    });
+
+
     window.onresize = function(){
         resizeChanged = qingResize(resizeChanged);
     }
 
     function setConfig(configKey, configValue){
+        if(configKey == "" || configKey == null){
+            return;
+        }
+
         var obj = new Object();
         obj.configKey = configKey;
         obj.configValue = configValue;
@@ -323,6 +504,12 @@
             }
             if("api_teacher_time_config" == config.key){
                 api_teacher_time_config_param_info = init_api_teacher_time_config(config.value);
+            }
+            if("installment_pay_config_v2" == config.key){
+                installment_pay_config_v2_paramInfo = init_installment_pay_config_v2(config.value);
+            }
+            if("api_moon_arrange_course_config" == config.key){
+                api_moon_arrange_course_config_param_info = init_api_moon_arrange_course_config(config.value);
             }
         }
     }

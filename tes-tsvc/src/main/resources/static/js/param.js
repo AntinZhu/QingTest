@@ -49,16 +49,22 @@ function removeInput(){
     // notifyParamChanged();
 }
 
-function initHtml(parentKey, params, valueChangedNotifyId){
-    var paramInfo = initParamInfo(parentKey, params, valueChangedNotifyId);
+function initHtml_ret(parentKey, params, valueChangedNotifyId){
+    var paramInfo = new Object();
+    initHtml(parentKey, params, valueChangedNotifyId, paramInfo);
+
+    return paramInfo;
+}
+
+function initHtml(parentKey, params, valueChangedNotifyId, paramInfo){
+    initParamInfo(parentKey, params, valueChangedNotifyId, paramInfo);
 
     editableInit(paramInfo);
 
     return paramInfo;
 }
 
-function initParamInfo(parentKey, params, valueChangedNotifyId){
-    var paramInfo = new Object();
+function initParamInfo(parentKey, params, valueChangedNotifyId, paramInfo){
     if(parentKey != ''){
         parentKey += "-";
     }
@@ -77,9 +83,9 @@ function initParamInfo(parentKey, params, valueChangedNotifyId){
 
         if(param.detail != null){
             if(isMulti){
-                initHtml(paramKey, param.detail[0]);
+                initHtml(paramKey, param.detail[0], valueChangedNotifyId, paramInfo);
             }else{
-                initHtml(paramKey, param.detail);
+                initHtml(paramKey, param.detail, valueChangedNotifyId, paramInfo);
             }
         }else{
             var defaultName = "";
@@ -489,7 +495,11 @@ function formatParam(paramInfo, fromIdxInfo,destIdxInfo, paramObj, paramName, pa
 
 function formatValue(paramInfo, paramKey, value){
     if(paramInfo[paramKey]["type"] == "[object Number]"){
-        return new Number(value);
+        if(value == "" || value == null){
+            return null;
+        }else{
+            return new Number(value);
+        }
     }else{
         if(value=="true"){
             return true;
@@ -527,7 +537,7 @@ function showParam(options){
         var paramHtmls = genHtml("", params, null, isEditStatus, false, "", valueChangedNotifyId);
         $("#" + htmlDiv).html(paramHtmls);
 
-        paramInfo = initHtml("", params, valueChangedNotifyId);
+        paramInfo = initHtml_ret("", params, valueChangedNotifyId);
         $("#" + hideDiv).removeClass("hide");
     }
 
