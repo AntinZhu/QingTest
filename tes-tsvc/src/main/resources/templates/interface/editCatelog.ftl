@@ -95,11 +95,37 @@
                                                                         <div class="col-xs-12">
                                                                             <form class="form-horizontal">
                                                                                 <div class="form-group">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="refType">目录类型:</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <input type="hidden" id="refType" value="cate" />
+                                                                                            <button type="button" value="cate" style="border-radius: 8px" class="btn qing_cate_ref_type btn-primary">目录</button>
+                                                                                            <button type="button" value="url" style="border-radius: 8px" class="btn qing_cate_ref_type">页面</button>
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
                                                                                     <label class="col-sm-3 control-label no-padding-right" for="catelogName">目录显示名称:</label>
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
                                                                                             <input class="col-xs-3" type="text" id="catelogName" placeholder="目录显示名称..." />
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group hide" id="refValueDiv">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="refValue">页面链接:</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <input class="col-xs-10" type="text" id="refValue" placeholder="页面链接地址..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -233,15 +259,41 @@
                     });
                     return;
                 }
+                var refValue = $("#refValue").val();
+                if(refValue == null || refValue == ""){
+                    $.gritter.add({
+                        title : '参数错误:',
+                        text : "页面链接不能为空",
+                        class_name : 'gritter-error gritter-center'
+                    });
+                    return;
+                }
 
                 var parentCatelogId = $("#parentCatelogId").val();
 
                 var data = {
                     catelogName : catelogName,
-                    parentCatelogId : parentCatelogId
+                    parentCatelogId : parentCatelogId,
+                    refType : $("#refType").val(),
+                    refValue : refValue
                 };
 
                 commonAjaxRequest("${base}/v1/test/catelog/save.json", data, handlerSave, true, "保存失败:");
+            });
+
+            $(".qing_cate_ref_type").click(function(){
+                $(".qing_cate_ref_type.btn-primary").removeClass("btn-primary");
+                $(this).addClass("btn-primary");
+                var refTypeValue = $(this).val();
+                $("#refType").val(refTypeValue);
+
+                if(refTypeValue == "cate"){
+                    $("#refValue").val("#");
+                    $("#refValueDiv").addClass("hide");
+                }else if(refTypeValue == "url"){
+                    $("#refValue").val("");
+                    $("#refValueDiv").removeClass("hide");
+                }
             });
 
             function handlerSave(resu){

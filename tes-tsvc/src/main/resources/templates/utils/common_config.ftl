@@ -220,7 +220,7 @@
                                 </div>
 
                                 <!-- 月度排课任务设置 -->
-                                <div class="col-xs-6 col-sm-6 widget-container-span qing_common_config api_moon_arrange_course_config hide">
+                                <div class="col-xs-6 col-sm-12 widget-container-span qing_common_config api_moon_arrange_course_config hide">
                                 <#if configKey == "api_moon_arrange_course_config">
                                     <div class="widget-box">
                                 <#else >
@@ -364,17 +364,32 @@
 
     function init_api_moon_arrange_course_config(configValue){
         $("#api_moon_arrange_course_config").val(configValue);
-        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":{open_defaultValue},"value":{open_defaultValue}}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":{start_defaultValue},"value":{start_defaultValue}}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":{end_defaultValue},"value":{end_defaultValue}}},{"key":"expriedDay","name":"几号过期","defaultValue":{"name":{expried_defaultValue},"value":{expried_defaultValue}}},{"key":"deduction","name":"扣费配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":{more_half_defaultValue},"value":{more_half_defaultValue}}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":{less_half_defaultValue},"value":{less_half_defaultValue}}},{"key":"none","name":"未做任务","defaultValue":{"name":{none_defaultValue},"value":{none_defaultValue}}}]}]';
+        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":{open_defaultValue},"value":{open_defaultValue}}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":{start_defaultValue},"value":{start_defaultValue}}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":{end_defaultValue},"value":{end_defaultValue}}},{"key":"deductionConfig","name":"扣费配置","detail":[{"key":"deductionIsOpen","name":"是否扣费", "class": "switch_editable","defaultValue":{"name":{deduct_open_defaultValue},"value":{deduct_open_defaultValue}}},{"key":"deductionDay","name":"几号扣费","defaultValue":{"name":{deduction_defaultValue},"value":{deduction_defaultValue}}},{"key":"deduction","name":"扣费比例配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":{more_half_defaultValue},"value":{more_half_defaultValue}}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":{less_half_defaultValue},"value":{less_half_defaultValue}}},{"key":"none","name":"未做任务","defaultValue":{"name":{none_defaultValue},"value":{none_defaultValue}}}]}]}]';
         var params = paramsTemplate;
 
         var configObj = JSON.parse(configValue);
         params = params.replace(new RegExp("{open_defaultValue}","gm"), (configObj.isOpen == null? false:configObj.isOpen));
         params = params.replace(new RegExp("{start_defaultValue}","gm"), (configObj.startUpdateDay == null? 0:configObj.startUpdateDay));
         params = params.replace(new RegExp("{end_defaultValue}","gm"), (configObj.endUpdateDay == null? 0:configObj.endUpdateDay));
-        params = params.replace(new RegExp("{expried_defaultValue}","gm"), (configObj.expriedDay == null? 0:configObj.expriedDay));
-        params = params.replace(new RegExp("{more_half_defaultValue}","gm"), (configObj.deduction.moreHalf == null? 0:configObj.deduction.moreHalf));
-        params = params.replace(new RegExp("{less_half_defaultValue}","gm"), (configObj.deduction.lessHalf == null? 0:configObj.deduction.lessHalf));
-        params = params.replace(new RegExp("{none_defaultValue}","gm"), (configObj.deduction.none == null? 0:configObj.deduction.none));
+        if(configObj.deductionConfig != null){
+            params = params.replace(new RegExp("{deduction_defaultValue}","gm"), (configObj.deductionConfig.deductionDay == null? 0:configObj.deductionConfig.deductionDay));
+            params = params.replace(new RegExp("{deduct_open_defaultValue}","gm"), (configObj.deductionConfig.deductionIsOpen == null? false:configObj.deductionConfig.deductionIsOpen));
+            if(configObj.deductionConfig.deduction != null){
+                params = params.replace(new RegExp("{more_half_defaultValue}","gm"), (configObj.deductionConfig.deduction.moreHalf == null? 0:configObj.deductionConfig.deduction.moreHalf));
+                params = params.replace(new RegExp("{less_half_defaultValue}","gm"), (configObj.deductionConfig.deduction.lessHalf == null? 0:configObj.deductionConfig.deduction.lessHalf));
+                params = params.replace(new RegExp("{none_defaultValue}","gm"), (configObj.deductionConfig.deduction.none == null? 0:configObj.deductionConfig.deduction.none));
+            }else{
+                params = params.replace(new RegExp("{more_half_defaultValue}","gm"), 0);
+                params = params.replace(new RegExp("{less_half_defaultValue}","gm"), 0);
+                params = params.replace(new RegExp("{none_defaultValue}","gm"), 0);
+            }
+        }else{
+            params = params.replace(new RegExp("{deduction_defaultValue}","gm"), 0);
+            params = params.replace(new RegExp("{deduct_open_defaultValue}","gm"), false);
+            params = params.replace(new RegExp("{more_half_defaultValue}","gm"), 0);
+            params = params.replace(new RegExp("{less_half_defaultValue}","gm"), 0);
+            params = params.replace(new RegExp("{none_defaultValue}","gm"), 0);
+        }
 
         return showParam({paramData:params, htmlDiv:"api_moon_arrange_course_config_div", "valueChangedNotifyId":"api_moon_arrange_course_config_notify", "isEditStatus":false});
     }

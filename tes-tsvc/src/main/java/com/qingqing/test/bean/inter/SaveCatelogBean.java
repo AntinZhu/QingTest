@@ -1,6 +1,6 @@
 package com.qingqing.test.bean.inter;
 
-import com.qingqing.test.domain.inter.TestInterface;
+import com.qingqing.test.domain.inter.CatelogRefType;
 
 /**
  * Created by zhujianxing on 2018/9/28.
@@ -8,6 +8,8 @@ import com.qingqing.test.domain.inter.TestInterface;
 public class SaveCatelogBean {
     private Long parentCatelogId;
     private String catelogName;
+    private CatelogRefType refType;
+    private String refValue;
 
     public Long getParentCatelogId() {
         return parentCatelogId;
@@ -23,5 +25,21 @@ public class SaveCatelogBean {
 
     public void setCatelogName(String catelogName) {
         this.catelogName = catelogName;
+    }
+
+    public CatelogRefType getRefType() {
+        return refType;
+    }
+
+    public void setRefType(CatelogRefType refType) {
+        this.refType = refType;
+    }
+
+    public String getRefValue() {
+        return refValue;
+    }
+
+    public void setRefValue(String refValue) {
+        this.refValue = refValue;
     }
 }

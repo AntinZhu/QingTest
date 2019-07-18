@@ -72,7 +72,7 @@ public class TestInterfaceManager {
             parentCatelogId = parentCatelog.getId();
         }
 
-        return saveCatelog(parentCatelogId, CatelogRefType.cate, "#", saveBean.getCatelogName(), null);
+        return saveCatelog(parentCatelogId, saveBean.getRefType(), saveBean.getRefValue(), saveBean.getCatelogName(), null);
     }
 
     @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
