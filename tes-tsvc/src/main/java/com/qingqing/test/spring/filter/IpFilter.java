@@ -35,6 +35,7 @@ public class IpFilter implements Filter, QingScheduleable {
 
     private String today;
     private Set<String> ipSet;
+    private static ThreadLocal<String> requestUserIp = new ThreadLocal<>();
 
     @Autowired
     private WxNotifyManager wxNotifyManager;
@@ -65,9 +66,11 @@ public class IpFilter implements Filter, QingScheduleable {
 
         try{
             MDC.put("ip", requestIp);
+            requestUserIp.set(requestIp);
             filterChain.doFilter(servletRequest, servletResponse);
         }finally {
             MDC.clear();
+            requestUserIp.remove();
         }
     }
 
@@ -119,5 +122,9 @@ public class IpFilter implements Filter, QingScheduleable {
     @Override
     public QingScheduleType[] getScheduleTypes() {
         return new QingScheduleType[]{QingScheduleType.daily};
+    }
+
+    public static String getRequestUserIp(){
+        return requestUserIp.get();
     }
 }

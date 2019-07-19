@@ -360,7 +360,7 @@
                 $("#parentCatelogId").val("${interfaceBean.catelog.id}");
                 $("#interfaceName").val("${interfaceBean.inter.interfaceName}");
                 $("#interfaceUrl").val("${interfaceBean.inter.interfaceUrl}");
-                $("#nextPageUrl").val("${interfaceBean.inter.nextPageUrl}");
+                $("#nextPageUrl").val('${interfaceBean.inter.nextPageUrl!""}');
                 var paramDetail ='${interfaceBean.inter.paramDetail!""}';
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){

@@ -7,13 +7,13 @@ import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
-import com.qingqing.common.exception.ForbiddenException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
+import com.qingqing.test.bean.base.KeyAndValue;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.inter.CatelogBean;
@@ -32,10 +32,12 @@ import com.qingqing.test.domain.inter.TestInterfaceParam;
 import com.qingqing.test.domain.test.TestStudentIndexBean;
 import com.qingqing.test.manager.PassportManager;
 import com.qingqing.test.manager.TestInterfaceManager;
-import com.qingqing.test.manager.TestProtoClassNameManager;
+import com.qingqing.test.manager.UserIpManager;
+import com.qingqing.test.manager.WxNotifyManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
 import com.qingqing.test.service.inter.TestInterfaceService;
+import com.qingqing.test.spring.filter.IpFilter;
 import com.qingqing.test.util.QingParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,6 +69,10 @@ public class TestController {
     private PassportManager passportManager;
     @Autowired
     private BiStudentEsMapper biStudentEsMapper;
+    @Autowired
+    private WxNotifyManager wxNotifyManager;
+    @Autowired
+    private UserIpManager userIpManager;
 
     @RequestMapping("test")
     @ResponseBody
@@ -127,6 +133,7 @@ public class TestController {
         }
 
         Long interfaceId = testInterfaceManager.saveTestInterface(saveBean, testInterfaceCatelog);
+        wxNotifyManager.markdown("有用户新增了接口", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("接口名称", saveBean.getInter().getInterfaceName()));
 
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(String.valueOf(interfaceId)).build();
@@ -136,6 +143,7 @@ public class TestController {
     @ProtoResponseBody
     public SimpleDataResponse saveParam(@RequestBody TestInterfaceParam param){
         testInterfaceParamService.save(param);
+        wxNotifyManager.markdown("有用户新增了目录", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("示例名称", param.getParamName()));
 
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(String.valueOf(param.getId())).build();
@@ -184,6 +192,7 @@ public class TestController {
         }
 
         TestInterfaceCatelog catelog = testInterfaceManager.saveCatelog(saveBean, parentCatelog);
+        wxNotifyManager.markdown("有用户新增了目录", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("目录名称", saveBean.getCatelogName()));
 
         SingleResponse<TestInterfaceCatelog> result = new SingleResponse<>();
         result.setResponse(BaseResponse.SUCC_RESP);

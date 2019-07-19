@@ -15,6 +15,7 @@ import com.qingqing.common.util.encode.TripleDESUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.test.bean.base.BaseResponse;
+import com.qingqing.test.bean.base.KeyAndValue;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.UserWithDataBean;
 import com.qingqing.test.bean.common.response.ListResponse;
@@ -29,9 +30,12 @@ import com.qingqing.test.manager.BITeacherIndexManager;
 import com.qingqing.test.manager.PhoneNumberManager;
 import com.qingqing.test.manager.QingApiLabManager;
 import com.qingqing.test.manager.TestProtoClassNameManager;
+import com.qingqing.test.manager.UserIpManager;
+import com.qingqing.test.manager.WxNotifyManager;
 import com.qingqing.test.service.common.CommonService;
 import com.qingqing.test.service.tool.TestCronTaskService;
 import com.qingqing.test.service.user.UserService;
+import com.qingqing.test.spring.filter.IpFilter;
 import com.qingqing.test.util.QingFileUtils;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
@@ -79,6 +83,10 @@ public class UtilsController {
     private MockRuleMapper mockRuleMapper;
     @Autowired
     private TestCronTaskService testCronTaskService;
+    @Autowired
+    private WxNotifyManager wxNotifyManager;
+    @Autowired
+    private UserIpManager userIpManager;
 
     @RequestMapping("phoneNumber/sync")
     @ResponseBody
@@ -342,6 +350,7 @@ public class UtilsController {
         if(cronTask.getId() == null || cronTask.getId() == 0){
             cronTask.setDeleted(false);
             testCronTaskService.add(cronTask);
+            wxNotifyManager.markdown("有用户新增定时任务", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("任务名称", cronTask.getName()));
         }else{
             testCronTaskService.update(cronTask.getId(), cronTask.getName(), cronTask.getUrl());
         }

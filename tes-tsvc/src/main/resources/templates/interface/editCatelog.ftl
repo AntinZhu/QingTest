@@ -125,7 +125,7 @@
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-10" type="text" id="refValue" placeholder="页面链接地址..." />
+                                                                                            <input class="col-xs-10" type="text" id="refValue" value="#" placeholder="页面链接地址..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>

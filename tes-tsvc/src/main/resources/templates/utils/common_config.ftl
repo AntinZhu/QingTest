@@ -364,7 +364,7 @@
 
     function init_api_moon_arrange_course_config(configValue){
         $("#api_moon_arrange_course_config").val(configValue);
-        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":{open_defaultValue},"value":{open_defaultValue}}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":{start_defaultValue},"value":{start_defaultValue}}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":{end_defaultValue},"value":{end_defaultValue}}},{"key":"deductionConfig","name":"扣费配置","detail":[{"key":"deductionIsOpen","name":"是否扣费", "class": "switch_editable","defaultValue":{"name":{deduct_open_defaultValue},"value":{deduct_open_defaultValue}}},{"key":"deductionDay","name":"几号扣费","defaultValue":{"name":{deduction_defaultValue},"value":{deduction_defaultValue}}},{"key":"deduction","name":"扣费比例配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":{more_half_defaultValue},"value":{more_half_defaultValue}}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":{less_half_defaultValue},"value":{less_half_defaultValue}}},{"key":"none","name":"未做任务","defaultValue":{"name":{none_defaultValue},"value":{none_defaultValue}}}]}]}]';
+        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":{open_defaultValue},"value":{open_defaultValue}}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":{start_defaultValue},"value":{start_defaultValue}}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":{end_defaultValue},"value":{end_defaultValue}}},{"key":"deductionConfig","name":"扣费配置","detail":[{"key":"deductionIsOpen","name":"是否扣费", "class": "switch_editable","defaultValue":{"name":{deduct_open_defaultValue},"value":{deduct_open_defaultValue}}},{"key":"deductionDay","name":"几号扣费","defaultValue":{"name":{deduction_defaultValue},"value":{deduction_defaultValue}}},{"key":"endGenerateDay","name":"几号停止生成","defaultValue":{"name":{stop_defaultValue},"value":{stop_defaultValue}}},{"key":"deduction","name":"扣费比例配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":{more_half_defaultValue},"value":{more_half_defaultValue}}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":{less_half_defaultValue},"value":{less_half_defaultValue}}},{"key":"none","name":"未做任务","defaultValue":{"name":{none_defaultValue},"value":{none_defaultValue}}}]}]}]';
         var params = paramsTemplate;
 
         var configObj = JSON.parse(configValue);
@@ -374,6 +374,7 @@
         if(configObj.deductionConfig != null){
             params = params.replace(new RegExp("{deduction_defaultValue}","gm"), (configObj.deductionConfig.deductionDay == null? 0:configObj.deductionConfig.deductionDay));
             params = params.replace(new RegExp("{deduct_open_defaultValue}","gm"), (configObj.deductionConfig.deductionIsOpen == null? false:configObj.deductionConfig.deductionIsOpen));
+            params = params.replace(new RegExp("{stop_defaultValue}","gm"), (configObj.deductionConfig.endGenerateDay == null? 0:configObj.deductionConfig.endGenerateDay));
             if(configObj.deductionConfig.deduction != null){
                 params = params.replace(new RegExp("{more_half_defaultValue}","gm"), (configObj.deductionConfig.deduction.moreHalf == null? 0:configObj.deductionConfig.deduction.moreHalf));
                 params = params.replace(new RegExp("{less_half_defaultValue}","gm"), (configObj.deductionConfig.deduction.lessHalf == null? 0:configObj.deductionConfig.deduction.lessHalf));
@@ -386,6 +387,7 @@
         }else{
             params = params.replace(new RegExp("{deduction_defaultValue}","gm"), 0);
             params = params.replace(new RegExp("{deduct_open_defaultValue}","gm"), false);
+            params = params.replace(new RegExp("{stop_defaultValue}","gm"), 0);
             params = params.replace(new RegExp("{more_half_defaultValue}","gm"), 0);
             params = params.replace(new RegExp("{less_half_defaultValue}","gm"), 0);
             params = params.replace(new RegExp("{none_defaultValue}","gm"), 0);
