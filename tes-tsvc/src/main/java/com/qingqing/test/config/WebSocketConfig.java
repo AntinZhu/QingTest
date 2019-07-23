@@ -1,7 +1,9 @@
 package com.qingqing.test.config;
 
 import com.qingqing.test.controller.MyWebSocket;
+import com.qingqing.test.controller.websocket.UpIpWebSocket;
 import com.qingqing.test.manager.PhoneNumberManager;
+import com.qingqing.test.manager.UserIpManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
@@ -23,5 +25,10 @@ public class WebSocketConfig {
         socket.setPhoneNumberManager(manager);
 
         return socket;
+    }
+
+    @Bean
+    public UpIpWebSocket upIpWebSocket(){
+        return new UpIpWebSocket();
     }
 }

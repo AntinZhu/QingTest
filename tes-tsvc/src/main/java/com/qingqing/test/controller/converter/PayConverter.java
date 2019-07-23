@@ -31,8 +31,14 @@ public class PayConverter {
         List<InstallmentConfigBean> installmentConfigBeans = new ArrayList<>(response.getUncollapsedPayTypeCount() + response.getCollapsedPayTypeCount());
 
         String balanceAmount = "0";
+        boolean isSupportMultiple = false;
         for(OrderPayTypeInfo payTypeInfo : response.getUncollapsedPayTypeList()){
             String payType = payTypeInfo.getPayType().name();
+            if("multiple_pay".equals(payType)){
+                isSupportMultiple = true;
+                continue;
+            }
+
             String payTypeName = PayType.getName(payType);
             if(payTypeName != null){
                 supportPayTypeList.add(new KeyAndValue(payType, payTypeName));
@@ -51,6 +57,11 @@ public class PayConverter {
 
         for(OrderPayTypeInfo payTypeInfo : response.getCollapsedPayTypeList()){
             String payType = payTypeInfo.getPayType().name();
+            if("multiple_pay".equals(payType)){
+                isSupportMultiple = true;
+                continue;
+            }
+
             String payTypeName = PayType.getName(payType);
             if(payTypeName != null){
                 supportPayTypeList.add(new KeyAndValue(payType, payTypeName + "-(折叠)"));
@@ -67,15 +78,19 @@ public class PayConverter {
             }
         }
 
+        String multipleMode = "";
         Double needPayAmount = response.getAllNeedExtraPay();
         if(DoubleCompareUtil.gtZero(response.getMultipleRemainPayAmount())){
             needPayAmount = response.getMultipleRemainPayAmount();
+            multipleMode = response.getMultipleInfoForSummary().getMultipleMode().name();
         }
 
         prePayBean.setSupportPayTypeList(supportPayTypeList);
-        prePayBean.setNeedPayAmount(String.valueOf(response.getAllNeedExtraPay()));
+        prePayBean.setNeedPayAmount(String.valueOf(needPayAmount));
         prePayBean.setBalanceAmount(balanceAmount);
         prePayBean.setInstallmentConfigs(installmentConfigBeans);
+        prePayBean.setMultipleMode(multipleMode);
+        prePayBean.setSupportMultiple(isSupportMultiple);
 
         return prePayBean;
     }
@@ -83,6 +98,7 @@ public class PayConverter {
     private static InstallmentConfigBean toInstallmentConfigBean(String payType, OrderPayTypeInfo payTypeInfo){
         InstallmentConfigBean installmentConfigBean = new InstallmentConfigBean();
         installmentConfigBean.setPayType(payType);
+        installmentConfigBean.setPayTypeName(PayType.getName(payType));
         List<InstallmentConfigItemBean> itemList = new ArrayList<>(payTypeInfo.getCmdInstallmentItemsCount());
         for (OrderPayCmbInstallmentTypeItem orderPayCmbInstallmentTypeItem : payTypeInfo.getCmdInstallmentItemsList()) {
             InstallmentConfigItemBean item = new InstallmentConfigItemBean();
@@ -94,6 +110,8 @@ public class PayConverter {
             itemList.add(item);
         }
         installmentConfigBean.setItems(itemList);
+        installmentConfigBean.setFirstPayAmount(String.valueOf(payTypeInfo.getFirstPayMultipleAmountInfo().getFirstPayAmount()));
+        installmentConfigBean.setLastPayAmount(String.valueOf(payTypeInfo.getFirstPayMultipleAmountInfo().getLastPayAmount()));
 
         return installmentConfigBean;
     }

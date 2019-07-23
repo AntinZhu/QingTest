@@ -57,7 +57,7 @@ public interface PtClient {
     @ProtoResponseBody
     TeacherDetailForStudentToOrderResponse detailForOrder(SimpleQingQingTeacherIdRequest request, @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 
-    @RequestMapping(path = "/svc/api/pt/v6/payment/summary/for_order", method = RequestMethod.POST)
+    @RequestMapping(path = "/svc/api/pt/v7/payment/summary/for_order", method = RequestMethod.POST)
     @ProtoResponseBody
     GeneralOrderPaymentSummaryV2Response prePayForGeneralOrder(GeneralOrderPaymentSummaryV3Request request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(name = PtRequestInterceptor.USER_TYPE) UserType UserType);
 

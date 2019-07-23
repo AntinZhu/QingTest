@@ -382,6 +382,11 @@ public class UtilsController {
         return "utils/up_ip";
     }
 
+    @RequestMapping("/new")
+    public String newFun() {
+        return "utils/new";
+    }
+
     @RequestMapping("common/config")
     public String commonConfigPage(@RequestParam(value = "key", defaultValue = "") String configKey, Model model){
         model.addAttribute("configKey", configKey);

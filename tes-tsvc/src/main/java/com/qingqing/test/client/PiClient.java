@@ -40,6 +40,10 @@ public interface PiClient {
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request);
 
+    @RequestMapping(path = "{url}", method = RequestMethod.GET, produces ={MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    String commonGetRequest(@PathVariable("url") String url, @RequestBody String request);
+
     @RequestMapping(path = "/svc/api/pi/v4/live_order_course/start_class", method = RequestMethod.POST)
     @ProtoResponseBody
     ProtoBufResponse.SimpleResponse startClass(TeacherStartEndClassV2 request, @RequestHeader(name = PtRequestInterceptor.TEACHER_ID) Long teacherId);

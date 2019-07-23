@@ -95,12 +95,6 @@
                                             <input type="number" id="balancePayAmount" value="0" />
                                         </div>
                                     </div>
-                                    <div class="form-group hide" id = "multiPayAmountDiv">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="multiPayAmount">分次支付金额</label>
-                                        <div class="col-xs-12 col-sm-3">
-                                            <input type="number" id="multiPayAmount" value="0" />
-                                        </div>
-                                    </div>
                                     <div class="form-group hide" id="stageChooseDiv">
                                         <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="stageConfigId">选择分期数</label>
                                         <div class="col-xs-4 col-sm-4">
@@ -111,6 +105,43 @@
                                                     <option value="AZ">￥567 x 3期（手续费￥81）</option>
                                                 </select>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group qing_multiple qing_fix_multiple hide">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="useMultiple">使用分次支付</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <label class="pull-left inline"  title="使用分次支付" data-rel="tooltip" >
+                                                <input id="useMultiple" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group qing_multiple_param qing_fix_multiple hide">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="multipleMode">分次支付方式</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div>
+                                                <select class="width-80 chosen-select" id="multipleMode" data-placeholder="选择支付方式...">
+                                                    <option value="">不选</option>
+                                                    <option value="general_multiple_mode">普通分次</option>
+                                                    <option value="first_multiple_mode">首付分次</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group hide" id = "nextPayTypeDiv">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="nextPayType">下一次支付方式</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div>
+                                                <select class="width-80 chosen-select" id="nextPayType" data-placeholder="选择下一次支付方式...">
+                                                    <option value="">不选</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group qing_multiple_param qing_fix_multiple hide" id = "multiPayAmountDiv">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="multiPayAmount">分次支付金额</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <input type="number" id="multiPayAmount" value="0" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -224,10 +255,16 @@
                 return $("input[name = '" + name + "']").val();
             }
 
+            var localResu;
             var installmentConfigs;
             function handlerPrePay(resu){
+                localResu = resu;
+                installmentConfigs = resu.installmentConfigs;
+                $(".qing_multiple").addClass("hide");
+
                 // 更新支付方式下下拉框
                 updateOptions("payType", resu.supportPayTypeList, "qingqing_balance");
+                payTypeChanged();
                 for(var idx in resu.supportPayTypeList){
                     var payTypeSelectable = resu.supportPayTypeList[idx];
                     if(payTypeSelectable.key == 'multiple_pay'){
@@ -244,7 +281,19 @@
                 var balanceAmount = new Number(resu.balanceAmount)
                 $("#balanceAmountTxt").text(balanceAmount.toLocaleString());
 
-                installmentConfigs = resu.installmentConfigs;
+                var nextPayTypes = new Array();
+                var nextPayType = new Object();
+                nextPayType.key = "";
+                nextPayType.value = "不选";
+                nextPayTypes[0] = nextPayType;
+
+
+                var insIdx = 0;
+                while(insIdx < installmentConfigs.length){
+                    nextPayTypes.push(installmentConfigs[insIdx])
+                    insIdx++;
+                }
+                updateOptions("nextPayType", nextPayTypes, "");
 
                 $("#resultShow").removeClass("hide");
 
@@ -252,7 +301,57 @@
                 if(payType == "qingqing_balance"){
                     $("#balancePayAmount").val($("#orderAmountTxt").text());
                 }
+
+                if(resu.supportMultiple){
+                    $("#multipleMode_chosen").css('width','200px');
+                    $("#nextPayType_chosen").css('width','200px');
+                    $(".qing_multiple").removeClass("hide");
+                }
+
+                if(resu.multipleMode != ""){
+                    var multipleModeSelects = new Array();
+                    var multipleModeSelect = new Object();
+                    multipleModeSelect.key = resu.multipleMode;
+                    multipleModeSelect.value = (resu.multipleMode == "first_multiple_mode") ? "首付分次" : "普通分次";
+                    multipleModeSelects[0] = multipleModeSelect;
+
+                    updateOptions("multipleMode", multipleModeSelects, resu.multipleMode);
+                    $(".qing_fix_multiple").removeClass("hide");
+                    $("#useMultiple").attr("checked", "checked");
+                    $("#useMultiple").attr("disabled", "disabled");
+                    $("#useMultiple").val("1");
+                    $("#multiPayAmount").val(resu.needPayAmount);
+                }else{
+                    $("#useMultiple").removeAttr("checked");
+                    $("#useMultiple").removeAttr("disabled");
+                    $("#useMultiple").val("0");
+                    $("#multiPayAmount").val("0");
+                }
             }
+
+            $("#useMultiple").click(function(){
+                if($(this).val() == "1"){
+                    $(".qing_multiple_param").addClass("hide");
+                    $(this).val("0");
+                }else{
+                    $(".qing_multiple_param").removeClass("hide");
+                    $(this).val("1");
+                }
+            });
+
+            $("#multipleMode").change(function(){
+                var mode = $(this).val();
+                if(mode == 'first_multiple_mode'){
+                    $("#nextPayTypeDiv").removeClass("hide");
+                }else{
+                    $("#nextPayTypeDiv").addClass("hide");
+                }
+            });
+
+            $("#nextPayType").change(function(){
+                var installmentInfo = getInstallmentInfo($(this).val());
+                $("#multiPayAmount").val(installmentInfo.firstPayAmount);
+            });
 
             var multiOrderIds = [];
             var multiOrderIdx = 0;
@@ -312,6 +411,31 @@
                 if(stageConfigIds != null){
                     stageConfigId = stageConfigIds[0];
                 }
+                var multipleMode = localResu.multipleMode;
+                var nextPayType;
+                if($("#useMultiple").val() == "1"){
+                    multipleMode = $("#multipleMode").val();
+                    if(multipleMode == ""){
+                        $.gritter.add({
+                            title : '字段未选择:',
+                            text : '请选择分次方式',
+                            class_name : 'gritter-error gritter-center'
+                        });
+                        return false;
+                    }
+
+                    if(multipleMode == "first_multiple_mode" && localResu.multipleMode == ""){
+                        nextPayType = $("#nextPayType").val();
+                        if(nextPayType == ""){
+                            $.gritter.add({
+                                title : '字段未选择:',
+                                text : '请选择下一次支付方式',
+                                class_name : 'gritter-error gritter-center'
+                            });
+                            return false;
+                        }
+                    }
+                }
 
                 var data = {
                     qingqingOrderId : getParam("qingqing_common_order_id"),
@@ -324,6 +448,8 @@
                     balancePayAmount : $("#balancePayAmount").val(),
                     multiPayAmount : $("#multiPayAmount").val(),
                     sourceChannel : getParam("source_channel"),
+                    multipleMode: multipleMode,
+                    nextPayType : nextPayType
                 };
 
                 var isLocalDebug = $("#isLocalDebug").val();
@@ -333,19 +459,28 @@
             }
 
             function getStageInfo(payType){
+                var installmentConfig = getInstallmentInfo(payType);
+                if(installmentConfig != null){
+                    var stageConfigs = new Array();
+                    var siteIdx = 0;
+                    for(var itemIdx in installmentConfig.items){
+                        var item = installmentConfig.items[itemIdx];
+                        var stageConfig = new Object();
+                        stageConfig.key = item.configId;
+                        stageConfig.value = "￥" + item.stageAmount +  " x " + item.stageNum + "期（手续费￥" + item.serviceAmount + "）";
+                        stageConfigs[siteIdx++] = stageConfig;
+                    }
+                    return stageConfigs;
+                }
+
+                return null;
+            }
+
+            function getInstallmentInfo(payType){
                 for(idx in installmentConfigs){
                     var installmentConfig = installmentConfigs[idx];
                     if(installmentConfig.payType == payType){
-                        var stageConfigs = new Array();
-                        var siteIdx = 0;
-                        for(var itemIdx in installmentConfig.items){
-                            var item = installmentConfig.items[itemIdx];
-                            var stageConfig = new Object();
-                            stageConfig.key = item.configId;
-                            stageConfig.value = "￥" + item.stageAmount +  " x " + item.stageNum + "期（手续费￥" + item.serviceAmount + "）";
-                            stageConfigs[siteIdx++] = stageConfig;
-                        }
-                        return stageConfigs;
+                       return installmentConfig;
                     }
                 }
 
@@ -404,6 +539,10 @@
             }
 
             $("#payType").change(function () {
+                payTypeChanged();
+            });
+
+            function payTypeChanged(){
                 var payType = $("#payType").val();
                 var stageList = getStageInfo(payType);
                 if(stageList != null){
@@ -418,7 +557,7 @@
                 }else{
                     $("#balancePayAmount").val(0);
                 }
-            });
+            }
 
             $(document).off("click", '.mockPayBtn').on('click', '.mockPayBtn',function(){
                 var qinqqingTradeNo = $(this).parent().parent().prev("td").prev("td").prev("td").text().trim();

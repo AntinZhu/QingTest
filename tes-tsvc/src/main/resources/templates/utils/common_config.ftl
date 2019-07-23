@@ -120,9 +120,7 @@
                                     <div class="widget-box collapsed">
                                 </#if>
                                         <div class="widget-header header-color-orange">
-                                            <h5 class="smaller">分期支付方式配置</h5>
-                                            <div class="hr hr-dotted"></div>
-                                            <h5 class="smaller">(installment_pay_config_v2)</h5>
+                                            <h5 class="smaller">分期支付方式配置(installment_pay_config_v2)</h5>
 
                                             <div class="widget-toolbar no-border">
                                                 <a href="#" data-action="collapse">
@@ -227,9 +225,7 @@
                                     <div class="widget-box collapsed">
                                 </#if>
                                         <div class="widget-header header-color-pink">
-                                            <h5 class="smaller">月度排课任务设置</h5>
-                                            <div class="hr hr-dotted"></div>
-                                            <h5 class="smaller">(api_moon_arrange_course_config)</h5>
+                                            <h5 class="smaller">月度排课任务设置(api_moon_arrange_course_config)</h5>
 
                                             <div class="widget-toolbar no-border">
                                                 <a href="#" data-action="collapse">

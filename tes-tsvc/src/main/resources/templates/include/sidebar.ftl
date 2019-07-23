@@ -111,7 +111,11 @@
         });
 
         $("#upIp").click(function(){
-            bootbox.prompt("IP上传", function(result) {
+            upIp();
+        });
+
+        function upIp(){
+            bootbox.prompt("IP上传:请输入你的姓名", function(result) {
                 if (result === null) {
                     return;
                 } else {
@@ -126,7 +130,7 @@
                     commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "IP上传出错:");
                 }
             });
-        });
+        }
 
         function handlerParamSave(){
             $.gritter.add({

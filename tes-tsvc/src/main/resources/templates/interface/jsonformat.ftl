@@ -528,10 +528,10 @@
             };
 
             function afterInv(responseData){
-                var goToNextPage = ${goToNextPage?c!0};
+                var goToNextPage = ${goToNextPage!0};
                 responseData = JSON.parse(responseData)
                 if(responseData.response.error_code == 0){
-                    if(goToNextPage == 1 && interfaceBean.nextPageUrl != null && interfaceBean.nextPageUrl != ""){
+                    if(goToNextPage == "1" && interfaceBean.nextPageUrl != null && interfaceBean.nextPageUrl != ""){
                         var naxtPageUrl = interfaceBean.nextPageUrl;
                         naxtPageUrl = naxtPageUrl.replace("{env}", $("#env").val());
                         naxtPageUrl = naxtPageUrl.replace("{userId}", new Number($("#requestUserId").val()));

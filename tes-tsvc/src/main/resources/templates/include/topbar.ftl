@@ -265,3 +265,120 @@
         </div><!-- /.navbar-header -->
     </div><!-- /.container -->
 </div>
+
+<div class="row col-xs-12 col-sm-4 hide" style="z-index: 100;position: fixed;left: 40%;top: 90%;" id="qing_message_div">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4>Message</h4>
+
+            <span class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </span>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main" style="height: 63px;">
+                <div>
+                    <div class="input-group">
+                        <input class="form-control input-mask-date" type="text" id="qing_message_input" />
+                        <span class="input-group-btn">
+                        <button class="btn btn-sm btn-default" id="qing_message_input_btn" type="button">
+                            Go!
+                        </button>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var websocket = null;
+    //输入框的值改变时触发
+    $(document).on("click", "#qing_message_input_btn",function(e){
+        var msg = $("#qing_message_input").val();
+        if(msg == null || msg == ''){
+            return;
+        }
+
+        var assignIp = "";
+        var splits = msg.split("#");
+        if(splits.length > 1 && isValidIP(splits[0])){
+            assignIp = splits[0];
+            msg = msg.replace(assignIp + "#", "")
+        }
+
+        var userName = $("#qing_ip").text();
+        var userIp = $("#qing_user_ip").val();
+        var msg = {
+            userIp: userIp,
+            userName : userName,
+            msg : msg,
+            assignIp : assignIp
+        }
+
+        websocket.send(JSON.stringify(msg));
+    });
+
+    function isValidIP(ip) {
+        var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+        return reg.test(ip);
+    }
+
+    $(document).ready(function() {
+        //判断当前浏览器是否支持WebSocket
+        if ('WebSocket' in window) {
+            var domain = window.location.host;
+            websocket = new WebSocket("ws://" + domain + "${base}/websocket/ip_up");
+        } else {
+            alert('Not support websocket')
+        }
+
+        //连接发生错误的回调方法
+        websocket.onerror = function () {
+        };
+
+        //连接成功建立的回调方法
+        websocket.onopen = function (event) {
+            $("#qing_message_div").removeClass("hide");
+        }
+
+        //接收到消息的回调方法
+        websocket.onmessage = function (event) {
+            if(event.data != null){
+                var msg = JSON.parse(event.data);
+                if(msg.msg != null){
+                    var userIp = $("#qing_user_ip").val();
+                    if(msg.userIp != userIp && (msg.assignIp == "" ||  msg.assignIp == userIp)){
+                        if(msg.msg == "{up_ip}"){
+                            upIp();
+                        }else{
+                            $.gritter.add({
+                                title: '新消息',
+                                text: msg.userName + ":" + msg.msg,
+                                class_name: 'gritter-info'
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        //连接关闭的回调方法
+        websocket.onclose = function () {
+            $("#qing_message_div").addClass("hide");
+            websocket.close();
+        }
+
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function () {
+            websocket.close();
+        }
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(data) {
+        }
+    });
+</script>

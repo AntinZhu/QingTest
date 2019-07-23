@@ -14,6 +14,8 @@ public class PayRequestBeanV2 {
     private Double balancePayAmount;
     private Double multiPayAmount;
     private String sourceChannel;
+    private String multipleMode;
+    private String nextPayType;
 
     public String getQingqingOrderId() {
         return qingqingOrderId;
@@ -93,5 +95,21 @@ public class PayRequestBeanV2 {
 
     public void setSourceChannel(String sourceChannel) {
         this.sourceChannel = sourceChannel;
+    }
+
+    public String getMultipleMode() {
+        return multipleMode;
+    }
+
+    public void setMultipleMode(String multipleMode) {
+        this.multipleMode = multipleMode;
+    }
+
+    public String getNextPayType() {
+        return nextPayType;
+    }
+
+    public void setNextPayType(String nextPayType) {
+        this.nextPayType = nextPayType;
     }
 }

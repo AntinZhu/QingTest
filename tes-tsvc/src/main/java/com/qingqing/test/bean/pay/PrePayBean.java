@@ -13,6 +13,24 @@ public class PrePayBean extends InterfaceBaseResponse {
     private String balanceAmount;
     private List<KeyAndValue> supportPayTypeList;
     private List<InstallmentConfigBean> installmentConfigs;
+    private boolean isSupportMultiple;
+    private String multipleMode;
+
+    public boolean isSupportMultiple() {
+        return isSupportMultiple;
+    }
+
+    public void setSupportMultiple(boolean supportMultiple) {
+        isSupportMultiple = supportMultiple;
+    }
+
+    public String getMultipleMode() {
+        return multipleMode;
+    }
+
+    public void setMultipleMode(String multipleMode) {
+        this.multipleMode = multipleMode;
+    }
 
     public String getNeedPayAmount() {
         return needPayAmount;
@@ -48,7 +66,26 @@ public class PrePayBean extends InterfaceBaseResponse {
 
     public static class InstallmentConfigBean{
         private String payType;
+        private String payTypeName;
         private List<InstallmentConfigItemBean> items;
+        private String firstPayAmount;
+        private String lastPayAmount;
+
+        public String getFirstPayAmount() {
+            return firstPayAmount;
+        }
+
+        public void setFirstPayAmount(String firstPayAmount) {
+            this.firstPayAmount = firstPayAmount;
+        }
+
+        public String getLastPayAmount() {
+            return lastPayAmount;
+        }
+
+        public void setLastPayAmount(String lastPayAmount) {
+            this.lastPayAmount = lastPayAmount;
+        }
 
         public String getPayType() {
             return payType;
@@ -58,12 +95,28 @@ public class PrePayBean extends InterfaceBaseResponse {
             this.payType = payType;
         }
 
+        public String getPayTypeName() {
+            return payTypeName;
+        }
+
+        public void setPayTypeName(String payTypeName) {
+            this.payTypeName = payTypeName;
+        }
+
         public List<InstallmentConfigItemBean> getItems() {
             return items;
         }
 
         public void setItems(List<InstallmentConfigItemBean> items) {
             this.items = items;
+        }
+
+        public String getKey(){
+            return payType;
+        }
+
+        public String getValue(){
+            return payTypeName;
         }
     }
 

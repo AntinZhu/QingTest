@@ -6,6 +6,7 @@ import com.qingqing.api.proto.order.ClassOrderProto.CreateClassOrderRequest;
 import com.qingqing.api.proto.order.ClassOrderProto.JoinClassOrderRequest;
 import com.qingqing.api.proto.order.ClassOrderProto.JoinClassOrderResponse;
 import com.qingqing.api.proto.order.ClassOrderProto.TeacherDetailForLiveClassOrderResponse;
+import com.qingqing.api.proto.v1.ApiMultipleEnumProto.ApiMultipleMode;
 import com.qingqing.api.proto.v1.BankProto.GetSupportBanksResponse;
 import com.qingqing.api.proto.v1.OrderCommonEnum.DiscountType;
 import com.qingqing.api.proto.v1.OrderCommonEnum.OrderCourseChargeType;
@@ -17,6 +18,7 @@ import com.qingqing.api.proto.v1.Pay.GeneralOrderPaymentSummaryV2Response;
 import com.qingqing.api.proto.v1.Pay.GeneralOrderPaymentSummaryV3Request;
 import com.qingqing.api.proto.v1.Pay.OrderPayType;
 import com.qingqing.api.proto.v1.Pay.PayGeneralOrderSubmitRequest;
+import com.qingqing.api.proto.v1.Pay.PayGeneralOrderSubmitRequest.ApiMultipleInfoForAckPay;
 import com.qingqing.api.proto.v1.Pay.PayResult;
 import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleLongDataResponse;
@@ -37,6 +39,7 @@ import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.exception.SimpleErrorCode;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
+import com.qingqing.common.util.StringUtils;
 import com.qingqing.common.util.TimeUtil;
 import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.converter.lang.BigDecimalUtil;
@@ -227,7 +230,6 @@ public class OrderManager {
         }
 
         StudentAddGroupOrderResponse response = ptClient.studentAddOrderV2(builder.build(), addOrderBean.getStudentId());
-
         return OrderConverter.convertAddOrderResult(response);
     }
 
@@ -344,15 +346,15 @@ public class OrderManager {
         PayType payType = PayType.parseKey(payRequest.getPayType());
         CoursePriceType coursePriceType = CoursePriceType.valueOf(payRequest.getCoursePriceType());
 
-        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType, payRequest.getBalancePayAmount(), null, SourceChannel.valueOf(payRequest.getSourceChannel()));
+        return payForOrder(payRequest.getQingqingOrderId(), coursePriceType.getOrderType().name(), orderAmount, payRequest.getStageConfigId(), payRequest.getStudentId(), "student", payType, payRequest.getBalancePayAmount(), null, SourceChannel.valueOf(payRequest.getSourceChannel()), "", "");
     }
 
     public PayResult payForOrder(PayRequestBeanV2 payRequest) {
         PayType payType = PayType.valueOf(payRequest.getPayType());
-        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType, payRequest.getBalancePayAmount(), payRequest.getMultiPayAmount(), SourceChannel.valueOf(payRequest.getSourceChannel()));
+        return payForOrder(payRequest.getQingqingOrderId(), payRequest.getOrderType(), payRequest.getOrderAmount(), payRequest.getStageConfigId(), payRequest.getUserId(), payRequest.getUserType(), payType, payRequest.getBalancePayAmount(), payRequest.getMultiPayAmount(), SourceChannel.valueOf(payRequest.getSourceChannel()), payRequest.getMultipleMode(), payRequest.getNextPayType());
     }
 
-    public PayResult payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType, Double balancePayAmount, Double multiMoney, SourceChannel sourceChannel) {
+    public PayResult payForOrder(String qingqingOrderId, String orderType, Double orderAmount, Long stageConfigId, Long userId, String userType,  PayType payType, Double balancePayAmount, Double multiMoney, SourceChannel sourceChannel, String multipleMode, String nextPayType) {
         OrderPayType backupPayType = OrderPayType.alipay;
         if(!PayType.qingqing_balance.equals(payType)){
             backupPayType = payType.getOrderPayType();
@@ -380,6 +382,18 @@ public class OrderManager {
         if(SourceChannel.h5_browser_source_channel.equals(sourceChannel) || SourceChannel.h5_weixin_source_channnel.equals(sourceChannel)){
             request.setEncodedWeixinOpenid(getEncodeWeixinOpenId(userType, orderType));
             request.setWeixinPublicAccountRequestUrl("https://m-tst.changingedu.com/coursewareweb/teacher/courseware/pay?courseware_onshelf_ids=4976&source_channel=1340&courseware_serial_id=16");
+        }
+
+        if(!StringUtils.isEmpty(multipleMode)){
+            ApiMultipleInfoForAckPay.Builder multipleBuilder = ApiMultipleInfoForAckPay.
+                    newBuilder().
+                    setMultipleMode(ApiMultipleMode.valueOf(multipleMode));
+
+            if("first_multiple_mode".equals(multipleMode) && !StringUtils.isEmpty(nextPayType)){
+                multipleBuilder.setNextOrderPayType(OrderPayType.valueOf(nextPayType));
+            }
+
+            request.setMultipleInfoForAckPay(multipleBuilder);
         }
 
         PayResult payResult = ptClient.payForOrder(request.build(), userId, UserType.valueOf(userType));

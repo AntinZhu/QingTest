@@ -40,7 +40,7 @@ public class CommonController {
     public SimpleResponse encode(@ProtoRequestBody SimpleStringRequest request) {
         String url = request.getData();
 
-        piClient.commonRequest(url, "");
+        piClient.commonGetRequest(url, "");
         return new SimpleResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
     }
 
