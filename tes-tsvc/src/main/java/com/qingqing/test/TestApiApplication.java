@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(
 		exclude = {
 				RabbitAutoConfiguration.class,
-				DataSourceAutoConfiguration.class
+				DataSourceAutoConfiguration.class,
+				RabbitAutoConfiguration.class,
 		},
 		scanBasePackages = {
 				"com.qingqing.test"

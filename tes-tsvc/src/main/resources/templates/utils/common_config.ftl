@@ -536,31 +536,6 @@
         setConfig($(inputEle).attr("id"), newValue);
     });
 
-    $(".use_live_tool").click(function(){
-        var newValue = $(this).val();
-        $(".use_live_tool.btn-primary").removeClass("btn-primary");
-        $(this).addClass("btn-primary");
-        $("#use_live_tool").val(newValue);
-    });
-
-    $(".teacher_limited_site_types").click(function() {
-        if($(this).attr("sel") == 0){
-            $(this).attr("sel", 1);
-            $(this).addClass("btn-primary");
-        }else{
-            $(this).attr("sel", 0);
-            $(this).removeClass("btn-primary");
-        }
-        var finalValue = 0;
-        var eles = $(".teacher_limited_site_types.btn-primary");
-        if(eles){
-            var idx = 0;
-            while(idx < eles.length){
-                finalValue = finalValue + new Number($(eles[idx++]).val());
-            }
-        }
-    });
-
     $('#teacher_max_teachable_student_count').change(function(){
     });
 

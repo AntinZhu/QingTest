@@ -3,12 +3,16 @@ package com.qingqing.test.controller;
 import com.google.common.collect.Sets;
 import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.UserProto;
+import com.qingqing.api.proto.v1.util.Common.SimpleRepeatedStringRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.User;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
+import com.qingqing.common.util.MixedEncryption;
 import com.qingqing.common.util.OrderIdEncoder;
+import com.qingqing.common.util.StringUtils;
 import com.qingqing.common.util.TimeUtil;
 import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.encode.TripleDESUtil;
@@ -37,7 +41,6 @@ import com.qingqing.test.service.tool.TestCronTaskService;
 import com.qingqing.test.service.user.UserService;
 import com.qingqing.test.spring.filter.IpFilter;
 import com.qingqing.test.util.QingFileUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +56,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +91,11 @@ public class UtilsController {
     private WxNotifyManager wxNotifyManager;
     @Autowired
     private UserIpManager userIpManager;
+
+    private final static String ENCODE_KEY = "erahsQqx";
+    private final static String VERSION_V1 = "v1";
+    private static final String MIX_CODE = "Report";
+    private static final String v1 = "v1";
 
     @RequestMapping("phoneNumber/sync")
     @ResponseBody
@@ -392,5 +401,110 @@ public class UtilsController {
         model.addAttribute("configKey", configKey);
 
         return "utils/common_config";
+    }
+
+    @RequestMapping("report/teacher/encode")
+    @ResponseBody
+    public SingleResponse<String> encodeStudentReportId(@ProtoRequestBody SimpleStringRequest request) {
+        String reportId = request.getData();
+        String encodeId = null;
+        try {
+            encodeId = MixedEncryption.encode(ENCODE_KEY, VERSION_V1, OrderIdEncoder.encodeOrderId(Long.valueOf(reportId)));
+        } catch (Exception e) {
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "report id encode error", "加密失败，请检查参数"),
+                    "encode report id error, value:" + reportId, e);
+        }
+
+        SingleResponse<String> result = new SingleResponse<String>();
+        result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+        result.setResultList(encodeId);
+        return result;
+    }
+
+
+    @RequestMapping("report/teacher/decode")
+    @ResponseBody
+    public SingleResponse<String> decodeTeacherReportId(@ProtoRequestBody SimpleStringRequest request){
+        String shareCode = request.getData();
+        Long reportId=null;
+
+        try {
+            String[] decodeValues = MixedEncryption.decode(shareCode, ENCODE_KEY);
+            if (decodeValues.length == 2) {
+                String version = decodeValues[0];
+                String reportIdStr = decodeValues[1];
+                if (!VERSION_V1.equals(version)) {
+                    throw new RequestValidateException("decode code fail, version not match. version:" + version
+                            + ", encodeString:" + shareCode,
+                            "unknown encodeString");
+                }
+                if (org.apache.commons.lang3.StringUtils.isNumeric(reportIdStr)) {
+                    reportId = OrderIdEncoder.decodeQingqingOrderId(reportIdStr);
+                    SingleResponse<String> result = new SingleResponse<String>();
+                    result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+                    result.setResultList(String.valueOf(reportId));
+                    return result;
+                }
+            }
+            throw new RequestValidateException("decode code fail, encodeString:" + shareCode, "unknown encodeString");
+
+        } catch (ErrorCodeException ex) {
+            throw ex;
+        } catch (RequestValidateException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new RequestValidateException("decode code fail, encodeString:" + shareCode, "unknown encodeString");
+        }
+
+    }
+
+    @RequestMapping("report/student/encode")
+    @ResponseBody
+    public SingleResponse<String> encodeTeacherReportId(@ProtoRequestBody SimpleRepeatedStringRequest request) {
+        String reportId = request.getData(0);
+        String studentId = request.getData(1);
+        String encodeId = null;
+        try {
+            encodeId = MixedEncryption.encode(MIX_CODE, "v1", reportId, studentId);
+        } catch (Exception e) {
+            throw new ErrorCodeException(new SimpleErrorCode(1001, "report id encode error", "加密失败，请检查参数"),
+                    "encode report id error, value:" + reportId, e);
+        }
+
+        SingleResponse<String> result = new SingleResponse<String>();
+        result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+        result.setResultList(encodeId);
+        return result;
+    }
+
+    @RequestMapping("report/student/decode")
+    @ResponseBody
+    public ListResponse<Long> decodeStudentReportId(@ProtoRequestBody SimpleStringRequest request){
+        String shareCode = request.getData();
+
+        if (StringUtils.isEmpty(shareCode)) {
+            throw new RequestValidateException("unknown share code:" + shareCode, "code error");
+        }
+
+        try {
+            String[] arr = MixedEncryption.decode(shareCode, MIX_CODE);
+            if (arr == null || arr.length != 3) {
+                throw new RequestValidateException("parse array is null or length mismatch", "code error");
+            }
+
+            if (!v1.equals(arr[0])) {
+                throw new RequestValidateException("version mismatch. version:" + arr[0], "code error");
+            }
+            Long reportId = Long.valueOf(arr[1]);
+            Long studentId = Long.valueOf(arr[2]);
+
+            ListResponse<Long> result = new ListResponse<Long>();
+            result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
+            result.setResultList(Arrays.asList(reportId, studentId));
+            return result;
+        } catch (RuntimeException ex) {
+            throw new RequestValidateException("code parse failed. code:" + shareCode, "code error", ex);
+        }
+
     }
 }

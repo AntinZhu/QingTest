@@ -2,6 +2,7 @@ package com.qingqing.test.config.inteceptor;
 
 import com.qingqing.common.util.StringUtils;
 import com.qingqing.common.web.util.ServletUtil;
+import com.qingqing.test.bean.common.Env;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -85,5 +86,14 @@ public class EnvHandlerInteceptor extends HandlerInterceptorAdapter {
              ip = request.getRemoteAddr();
          }
         return ip;
+    }
+
+    public static void setEnv(Env env){
+        Map<String, String> params = PARAM_MAPPING.get();
+        if(params == null){
+            params = new HashMap<>();
+            PARAM_MAPPING.set(params);
+        }
+        params.put(ENV, env.name());
     }
 }

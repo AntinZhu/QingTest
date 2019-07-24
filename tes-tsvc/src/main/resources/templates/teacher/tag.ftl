@@ -426,7 +426,7 @@
         }
 
         function reset(){
-            var switchEles = $(".qing_tag_switch[checked='checked']");
+            var switchEles = $(".qing_tag_switch");
             var switchIdx = 0;
             while(switchIdx < switchEles.length){
                 var switchEle = $(switchEles[switchIdx]).children("input").first();
@@ -452,14 +452,18 @@
             $("#teacher_max_teachable_student_count").val(0);
         }
 
+        var inInit = false;
         function init(resu){
+            inInit = true;
             for( var idx in resu.resultList){
                 var tag = resu.resultList[idx];
 
                 var ele = $(".qing_tag_switch." + tag.tagType).children("input").first();
-                $(ele).val(tag.tagValue);
-                if(tag.tagValue == 1){
-                    $(ele).attr("checked", "checked")
+                if(ele.length > 0){
+                    $(ele).val(tag.tagValue);
+                    if(tag.tagValue == 1){
+                        $(ele).trigger("click");
+                    }
                 }
 
                 if("use_live_tool" == tag.tagType){
@@ -491,9 +495,14 @@
                     $("#teacher_max_teachable_student_count").val(tag.tagValue);
                 }
             }
+
+            inInit = false;
         }
 
        $(".qing_tag_switch").click(function(){
+           if(inInit){
+               return;
+           }
            var inputEle = $(this).children("input").first();
            var switchValue = $(inputEle).val();
            var newValue;
@@ -557,6 +566,8 @@
             $(".env.btn-primary").removeClass("btn-primary");
             $(this).addClass("btn-primary");
             $("#env").val($(this).val());
+
+            getTag(getTeacherId());
         });
 
         $("#teacherIdBtn").click(function(){

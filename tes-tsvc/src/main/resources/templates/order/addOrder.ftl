@@ -362,6 +362,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr />
 
                                                         <hr />
                                                         <div class="form-group">
@@ -505,7 +506,7 @@
                                     </div><!-- /widget-body -->
                                 </div>
 
-                                <div id="accordion" class="accordion-style2 col-xs-6">
+                                <div id="accordion" class="accordion-style2 col-xs-6 hide">
                                     <div class="group">
                                         <h3 class="accordion-header">大礼包组包参考（DEV）：</h3>
 

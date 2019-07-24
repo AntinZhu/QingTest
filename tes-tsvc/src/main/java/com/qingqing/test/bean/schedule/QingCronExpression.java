@@ -1471,9 +1471,9 @@ public class QingCronExpression {
     }
 
     public static void main(String[] args) throws ParseException {
-        QingCronExpression ex = new QingCronExpression("0 01 12 ? * * *");
-        Date nextCheckDate = ex.getNextValidTimeAfter(new Date());
-        System.out.println(TimeUtil.dateToString(nextCheckDate));
+        String cron = "0 0 13,15 * * ?";
+        QingCronExpression expression = new QingCronExpression(cron);
+        System.out.println(TimeUtil.dateToString(expression.getNextValidTimeAfter(new Date()), TimeUtil.TIME_IN_DETAIL_STRING_FORMAT));
     }
 }
 

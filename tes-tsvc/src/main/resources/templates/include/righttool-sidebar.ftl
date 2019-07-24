@@ -287,6 +287,90 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="group">
+                <h3 class="accordion-header">学生端课程报告加解密</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">加密串：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" id="studentEncodeReportId_input" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="studentReportIdBtn">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">报告id：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" id="studentReportId_input" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">学生id：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" id="studentReportIdStudentId_input" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h3 class="accordion-header">老师端课程报告加解密</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">加密串：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" id="teacherEncodeReportId_input" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="teacherReportIdConverter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">报告id：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" id="teacherReportId_input" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
         </div>
     </div>
@@ -649,5 +733,73 @@
                 class_name : 'gritter-error gritter-right'
             });
         }
+    }
+
+    $("#teacherReportIdConverter").click(function(){
+        var encodeReportId = $("#teacherEncodeReportId_input").val();
+        var reportId = $("#teacherReportId_input").val();
+
+        if(encodeReportId != null && encodeReportId != ""){
+            decodeTeacherReportId(encodeReportId);
+        }else if(reportId != null && reportId != ""){
+            encodeTeacherReportId(reportId);
+        }
+    });
+
+    function encodeTeacherReportId(reportId) {
+        var data = {
+            data : reportId
+        };
+        commonAjaxRequest("${base}/v1/utils/report/teacher/encode.json", data, handleTeacherReportEncode, true, "加密结果:");
+    }
+
+    function decodeTeacherReportId(shareCode) {
+        var data = {
+            data : shareCode
+        };
+        commonAjaxRequest("${base}/v1/utils/report/teacher/decode.json", data, handleTeacherReportDecode, true, "解密结果:");
+    }
+
+    function handleTeacherReportEncode(r){
+        $("#teacherEncodeReportId_input").val(r.resultList);
+    }
+
+    function handleTeacherReportDecode(r) {
+        $("#teacherReportId_input").val(r.resultList);
+    }
+
+    $("#studentReportIdBtn").click(function(){
+        var encodeReportId = $("#studentEncodeReportId_input").val();
+        var reportId = $("#studentReportId_input").val();
+        var studentId=$("#studentReportIdStudentId_input").val();
+
+        if (encodeReportId != null && encodeReportId != "") {
+            decodeStudentReportId(encodeReportId);
+        } else if (reportId != null && reportId != "" && studentId != null && studentId != "") {
+            encodeStudentReportId(reportId, studentId);
+        }
+    });
+
+    function encodeStudentReportId(reportId, studentId) {
+        var data = {
+            data: [reportId,studentId]
+        };
+        commonAjaxRequest("${base}/v1/utils/report/student/encode.json", data, handleStudentReportEncode, true, "加密结果:");
+    }
+
+    function decodeStudentReportId(shareCode) {
+        var data = {
+            data : shareCode
+        };
+        commonAjaxRequest("${base}/v1/utils/report/student/decode.json", data, handleStudentReportDecode, true, "解密结果:");
+    }
+
+    function handleStudentReportEncode(r){
+        $("#studentEncodeReportId_input").val(r.resultList);
+    }
+
+    function handleStudentReportDecode(r) {
+        $("#studentReportId_input").val(r.resultList[0]);
+        $("#studentReportIdStudentId_input").val(r.resultList[1]);
     }
 </script>
