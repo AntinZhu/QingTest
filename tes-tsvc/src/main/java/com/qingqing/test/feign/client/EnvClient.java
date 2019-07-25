@@ -14,8 +14,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -138,8 +140,9 @@ public class EnvClient implements Client {
                 .build();
     }
 
-    private String formatUrl(String url){
+    private String formatUrl(String url) throws UnsupportedEncodingException {
         String host = getHost();
+        url = URLDecoder.decode(url, "utf-8");
 
         String finalUrl = url.replace("{host}", host);
         String guid = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.GUID);
@@ -168,6 +171,11 @@ public class EnvClient implements Client {
     }
 
     private String getEnvHost(){
+        String host = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.HOST);
+        if(host != null){
+            return host;
+        }
+
         String envValue = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV);
         if(envValue == null){
             return "";

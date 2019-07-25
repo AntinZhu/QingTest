@@ -58,6 +58,9 @@ public class OrderCourseV1{
     private Integer courseId;
     private String priceType;
     private List<FreezeType> freezeTypes;
+    private Integer startBlock;
+    private Integer endBlock;
+    private Date date;
 
     public Long getId() {
         return id;
@@ -270,5 +273,29 @@ public class OrderCourseV1{
         }
 
         return freeze;
+    }
+
+    public Integer getStartBlock() {
+        return startBlock;
+    }
+
+    public void setStartBlock(Integer startBlock) {
+        this.startBlock = startBlock;
+    }
+
+    public Integer getEndBlock() {
+        return endBlock;
+    }
+
+    public void setEndBlock(Integer endBlock) {
+        this.endBlock = endBlock;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

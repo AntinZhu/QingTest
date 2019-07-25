@@ -64,7 +64,11 @@ public class CommonController {
     @RequestMapping("pi")
     @ResponseBody
     public String piRequest(@RequestBody UserCommonRequest request){
-         return  piClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+        if(request.getUserId() != null){
+            return  piClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+        }else{
+            return piClient.commonRequest(request.getUrl(), request.getParam());
+        }
     }
 
     @RequestMapping("pt")

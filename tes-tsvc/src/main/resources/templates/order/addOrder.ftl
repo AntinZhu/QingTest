@@ -594,6 +594,11 @@
                                         <input type="hidden" value="{orderCourseId}" />
                                         <i class="icon-flag bigger-120"></i>
                                     </button>
+
+                                    <button class="btn btn-xs btn-warning change-class">
+                                        <input type="hidden" value="{groupOrderCourseId}" />
+                                        <i class="icon-fire bigger-120"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -770,6 +775,12 @@
     $(document).on("click", ".finish-class", function(){
         var orderCourseId = $(this).find("input").val();
         finishClass("${base}", orderCourseId, $("#studentId").val());
+    });
+
+    $(document).on("click", ".change-class", function(){
+        var groupOrderCourseId = $(this).find("input").val();
+        var orderId = $("#orderId").text();
+        applyChange("${base}", groupOrderCourseId, orderId);
     });
 
     $(document).on("click", ".apply-freeze", function(){

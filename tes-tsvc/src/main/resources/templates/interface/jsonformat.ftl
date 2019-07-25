@@ -341,16 +341,52 @@
                 var defaultObj = new Object(${defaultObj});
                 for(var paramIdx in paramArr){
                     var param = paramArr[paramIdx];
+                    if(param instanceof Array){
+                        param = param[0];
+                    }
+                    // alert(JSON.stringify(param));
                     for(var propName in defaultObj){
                         if(param.key == propName){
-                            param.defaultValue.name = defaultObj[propName];
-                            param.defaultValue.value = defaultObj[propName];
+                            if(param.defaultValue == null){
+                                fillDefaultValueWithDefault(param.detail, defaultObj[propName]);
+                            }else{
+                                param.defaultValue.name = defaultObj[propName];
+                                param.defaultValue.value = defaultObj[propName];
+                            }
+
                             break;
                         }
                     }
                 }
 
                 return JSON.stringify(paramArr);
+            }
+
+            function fillDefaultValueWithDefault(paramObj, defaultObj){
+                if(paramObj == null || defaultObj == null){
+                    return;
+                }
+
+                for(var paramIdx in paramObj){
+                    var param = paramObj[paramIdx];
+                    if(param instanceof Array){
+                        fillDefaultValueWithDefault(param, defaultObj[0]);
+                        return;
+                    }
+
+                    for(var propName in defaultObj){
+                        if(param.key == propName){
+                            if(param.defaultValue == null){
+                                fillDefaultValueWithDefault(param.detail, defaultObj[propName]);
+                            }else{
+                                param.defaultValue.name = defaultObj[propName];
+                                param.defaultValue.value = defaultObj[propName];
+                            }
+
+                            break;
+                        }
+                    }
+                }
             }
 
             function initParamChoose(paramChooses, paramExampleId){

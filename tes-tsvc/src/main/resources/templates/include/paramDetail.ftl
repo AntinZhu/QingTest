@@ -1,5 +1,5 @@
 <form class="form-horizontal">
-    <div class="hide" id="paramDiv" >
+    <div class="hide" id="${paramDiv!'paramDiv'}" >
         <span class="col-sm-12" style="margin-bottom: 10px;">
             <label class="pull-right inline"  title="开启时可删除和编辑参数" data-rel="tooltip" >
                 <small class="muted">编辑模式:</small>
@@ -20,7 +20,7 @@
             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求参数:</label>
 
             <div class="col-xs-12 col-sm-9">
-                <div id="paramListDiv">
+                <div id="${paramListDiv!'paramListDiv'}">
                     <div class="profile-user-info profile-user-info-striped" >
                         <div class="profile-info-row">
                             <div class="profile-info-name"> Username </div>

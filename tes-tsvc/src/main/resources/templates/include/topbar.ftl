@@ -266,7 +266,7 @@
     </div><!-- /.container -->
 </div>
 
-<div class="row col-xs-12 col-sm-4 hide" style="z-index: 100;position: fixed;left: 40%;top: 90%;" id="qing_message_div">
+<div class="row col-xs-12 col-sm-4 qing_catelog_hide" style="z-index: 100;position: fixed;left: 40%;top: 90%;" id="qing_message_div">
     <div class="widget-box">
         <div class="widget-header">
             <h4>Message</h4>
@@ -342,7 +342,6 @@
 
         //连接成功建立的回调方法
         websocket.onopen = function (event) {
-            $("#qing_message_div").removeClass("hide");
         }
 
         //接收到消息的回调方法

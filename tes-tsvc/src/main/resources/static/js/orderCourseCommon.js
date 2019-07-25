@@ -151,6 +151,16 @@ function handlerApplyCancel(resu, otherData) {
     handlerCommonOrderOps();
 }
 
+function applyChange(base, groupOrderCourseId, orderId){
+    window.open(base +"/v1/order_course/change_apply/page?groupOrderCourseId=" + groupOrderCourseId + "&env=" + $("#env").val() + "&orderId=" + orderId);
+};
+
+function handlerApplyFreeze(resu, otherData){
+    var orderCourseId = otherData.orderCourseId;
+
+    window.open(otherData.base +"/v1/order_course/freeze_apply/page?orderCourseId=" + orderCourseId + "&env=" + $("#env").val());
+}
+
 function deleteClassOrderCourse(base, orderCourseId, assistantId){
     var data = {
         url : "/svc/api/pi/v5/order_course/action/live_class/delegate_process_delete.json",

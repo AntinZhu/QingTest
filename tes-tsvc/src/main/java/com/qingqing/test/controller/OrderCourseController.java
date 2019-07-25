@@ -1,5 +1,6 @@
 package com.qingqing.test.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherStartEndClassV2;
@@ -14,8 +15,11 @@ import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseThirdPartyJudgeRe
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.UserType;
+import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
+import com.qingqing.common.util.TimeUtil;
+import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.common.UserCommonRequest;
@@ -26,6 +30,7 @@ import com.qingqing.test.client.ApiPiClient;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
 import com.qingqing.test.domain.order.GroupUserCourseApply;
+import com.qingqing.test.domain.order.OrderCourseV1;
 import com.qingqing.test.manager.OrderManager;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.service.order.OrderCourseService;
@@ -37,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -153,5 +159,45 @@ public class OrderCourseController {
 
     private DeviceIdentification getDeviceIdentification(){
         return DeviceIdentification.newBuilder().setPlatformType(PlatformType.ios).setImei("1").setIdfa("2").build();
+    }
+
+    @RequestMapping("change_apply/page")
+    public String changeApplyPage(@RequestParam("groupOrderCourseId") Long groupOrderCourseId, @RequestParam("orderId") Long orderId, @RequestParam(value = "env", defaultValue = "dev") String env, Model model){
+        List<OrderCourseV1> orderCourseV1s = orderCourseService.selectByOrderId(orderId);
+        OrderCourseV1 applyOne = null;
+        for (OrderCourseV1 orderCourseV1 : orderCourseV1s) {
+            if(orderCourseV1.getGroupOrderCourseId().equals(groupOrderCourseId)){
+                applyOne = orderCourseV1;
+            }
+        }
+
+        if(applyOne == null){
+            throw new RequestValidateException("unknown groupOrderCourse", "unknown groupOrderCourse");
+        }
+
+        JSONObject newTime = new JSONObject();
+        newTime.put("date", TimeUtil.dateToString(TimeUtil.dayAfter(applyOne.getDate(), 1), TimeUtil.DATE_TO_YEAR_MONTH_DAY));
+        newTime.put("start_block", applyOne.getStartBlock());
+        newTime.put("end_block", applyOne.getEndBlock());
+
+        JSONObject item = new JSONObject();
+        item.put("qingqing_group_order_course_id", OrderIdEncoder.encodeOrderId(groupOrderCourseId));
+        item.put("qingqing_teacher_id", UserIdEncoder.encodeUser(UserType.teacher, applyOne.getTeacherId()));
+        item.put("new_time_param", newTime);
+        item.put("site_type", applyOne.getSiteType() + "_ost");
+
+        JSONArray array = new JSONArray();
+        array.add(item);
+
+        JSONObject defaultObj = new JSONObject();
+        defaultObj.put("items", array);
+
+        model.addAttribute("interfaceId", 259L);
+        model.addAttribute("paramExampleId", 0);
+        model.addAttribute("env", env);
+        model.addAttribute("cross", 1);
+        model.addAttribute("defaultObj", defaultObj.toJSONString());
+
+        return "interface/jsonformat";
     }
 }

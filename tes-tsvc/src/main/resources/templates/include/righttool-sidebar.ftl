@@ -605,11 +605,16 @@
 
     function encodeUserCov(dataValue){
         $("#qingqingUser_conv").val("");
+
+        encodeUser(dataValue, $("#user_type_conv").val());
+    }
+    
+    function encodeUser(userId, userType) {
         var data = {
-            user_id : new Number(dataValue),
-            user_type : $("#user_type_conv").val()
+            user_id : new Number(userId),
+            user_type : userType
         };
-        commonAjaxRequest("${base}/v1/utils/user/encode.json", data, handlerEncodeUserCov, true, "解密结果:", $("#user_env_conv").val());
+        return commonAjaxRequest("${base}/v1/utils/user/encode.json", data, handlerEncodeUserCov, false, "解密结果:", $("#user_env_conv").val());
     }
 
     function handlerDecodeUserCov(resu){
@@ -637,6 +642,8 @@
             });
         }else{
             $("#qingqingUser_conv").val(resu.resultList);
+
+            return resu.resultList;
         }
     }
 
