@@ -362,32 +362,7 @@
                 return JSON.stringify(paramArr);
             }
 
-            function fillDefaultValueWithDefault(paramObj, defaultObj){
-                if(paramObj == null || defaultObj == null){
-                    return;
-                }
 
-                for(var paramIdx in paramObj){
-                    var param = paramObj[paramIdx];
-                    if(param instanceof Array){
-                        fillDefaultValueWithDefault(param, defaultObj[0]);
-                        return;
-                    }
-
-                    for(var propName in defaultObj){
-                        if(param.key == propName){
-                            if(param.defaultValue == null){
-                                fillDefaultValueWithDefault(param.detail, defaultObj[propName]);
-                            }else{
-                                param.defaultValue.name = defaultObj[propName];
-                                param.defaultValue.value = defaultObj[propName];
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
 
             function initParamChoose(paramChooses, paramExampleId){
                 if(paramChooses.length == 0){
@@ -409,7 +384,7 @@
                     var option = new Object();
                     option.key = data.id;
                     option.value = data.paramName + "(" + data.id + ")";
-                    if(paramExampleId == 0 && data.default){
+                    if(paramExampleId == -1 && data.default){
                         paramEx = data;
                         paramExampleId = data.id;
                     }else if(data.id == paramExampleId){
@@ -602,6 +577,7 @@
                         }
                     }
                 }else{
+                    paramInfo = showParam({paramData:interfaceBean.paramDetail});
                     $(".param-ops").addClass("hide");
                 }
             });

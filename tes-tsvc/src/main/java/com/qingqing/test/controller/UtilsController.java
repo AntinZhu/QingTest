@@ -393,7 +393,9 @@ public class UtilsController {
     }
 
     @RequestMapping("jump/test/{path}")
-    public String jump(@PathVariable("path") String path) {
+    public String jump(@PathVariable("path") String path, @RequestParam(value = "serIp", defaultValue = "172.22.7.82") String serIp, Model model) {
+        model.addAttribute("serIp", serIp);
+
         return "test/" + path;
     }
 

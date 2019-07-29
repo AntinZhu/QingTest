@@ -197,6 +197,44 @@ public class OrderCourseController {
         model.addAttribute("env", env);
         model.addAttribute("cross", 1);
         model.addAttribute("defaultObj", defaultObj.toJSONString());
+        model.addAttribute("userId", applyOne.getAssistantId());
+        model.addAttribute("userType", "ta");
+
+        return "interface/jsonformat";
+    }
+
+    @RequestMapping("change_apply/apply_page")
+    public String changeApplyPageApply(@RequestParam("groupOrderCourseId") Long groupOrderCourseId, @RequestParam("orderId") Long orderId, @RequestParam(value = "env", defaultValue = "dev") String env, Model model){
+        List<OrderCourseV1> orderCourseV1s = orderCourseService.selectByOrderId(orderId);
+        OrderCourseV1 applyOne = null;
+        for (OrderCourseV1 orderCourseV1 : orderCourseV1s) {
+            if(orderCourseV1.getGroupOrderCourseId().equals(groupOrderCourseId)){
+                applyOne = orderCourseV1;
+            }
+        }
+
+        if(applyOne == null){
+            throw new RequestValidateException("unknown groupOrderCourse", "unknown groupOrderCourse");
+        }
+
+        JSONObject newTime = new JSONObject();
+        newTime.put("date", TimeUtil.dateToString(TimeUtil.dayAfter(applyOne.getDate(), 1), TimeUtil.DATE_TO_YEAR_MONTH_DAY));
+        newTime.put("start_block", applyOne.getStartBlock());
+        newTime.put("end_block", applyOne.getEndBlock());
+
+        JSONObject defaultObj = new JSONObject();
+        defaultObj.put("qingqing_group_order_course_id", OrderIdEncoder.encodeOrderId(groupOrderCourseId));
+        defaultObj.put("qingqing_teacher_id", UserIdEncoder.encodeUser(UserType.teacher, applyOne.getTeacherId()));
+        defaultObj.put("new_time_param", newTime);
+        defaultObj.put("site_type", applyOne.getSiteType() + "_ost");
+
+        model.addAttribute("interfaceId", 260L);
+        model.addAttribute("paramExampleId", 0);
+        model.addAttribute("env", env);
+        model.addAttribute("cross", 1);
+        model.addAttribute("defaultObj", defaultObj.toJSONString());
+        model.addAttribute("userId", applyOne.getTeacherId());
+        model.addAttribute("userType", "teacher");
 
         return "interface/jsonformat";
     }

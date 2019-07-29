@@ -61,6 +61,7 @@ public class OrderCourseV1{
     private Integer startBlock;
     private Integer endBlock;
     private Date date;
+    private Long assistantId;
 
     public Long getId() {
         return id;
@@ -297,5 +298,13 @@ public class OrderCourseV1{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Long getAssistantId() {
+        return assistantId;
+    }
+
+    public void setAssistantId(Long assistantId) {
+        this.assistantId = assistantId;
     }
 }

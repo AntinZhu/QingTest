@@ -71,10 +71,15 @@ public class MyErrorDecoder implements ErrorDecoder {
             }
 
             String responseValue = "";
-            if(response.body() != null && response.body().length() != null){
+            if(response.body() != null) {
                 responseValue = Util.toString(response.body().asReader());
+            }
+
+            if(!StringUtils.isEmpty(responseValue)){
+                logger.info("i am 4 debug:" + responseValue);
                 return JsonUtil.getObjectFromJson(responseValue, SimpleResponse.class);
             }else{
+                logger.info("i am 5 empty body");
                 String reason = response.status() + response.reason();
                 return new SimpleResponse(new BaseResponse(1001, reason, reason));
             }

@@ -2,6 +2,7 @@ package com.qingqing.test.controller;
 
 import com.qingqing.api.proto.v1.OrderDetail.SimpleQingqingGroupSubOrderIdRequest;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
+import com.qingqing.api.proto.v1.ValueVoucher.ListValueVoucherWithRecommendIdResponse;
 import com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.util.JsonUtil;
@@ -109,5 +110,13 @@ public class OrderController {
     @RequestMapping("class_order/add_page")
     public String addClassOrderPage(){
         return "order/add_class_order";
+    }
+
+    @RequestMapping("student/order/value_voucher_list")
+    @ProtoResponseBody
+    public ListValueVoucherWithRecommendIdResponse valueVoucherList(@RequestBody StudentSubOrderDetailRequest request){
+        return ptClient.valueVouchersList(SimpleQingqingGroupSubOrderIdRequest.newBuilder()
+                .setQingqingGroupSubOrderId(request.getQingqingOrderId())
+                .build(), request.getStudentId());
     }
 }

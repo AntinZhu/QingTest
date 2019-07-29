@@ -299,6 +299,10 @@
                                         查询结果
                                         <small>
                                             <i class="icon-double-angle-right"></i>
+                                            <label class="pull-left inline"  title="指定主库" data-rel="tooltip" >
+                                                <input id="assignMaster" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
+                                                <span class="lbl"></span>
+                                            </label>
                                             <label>
                                                 <button type="button" class="btn btn-purple btn-xs" id="refreshAll">
                                                     刷新
@@ -322,6 +326,8 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
+    var serIp = "${serIp}";
+
     jQuery(function($) {
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
@@ -360,12 +366,16 @@
         });
 
         function selectAll(){
+            var url = '/test/list_by_type_1?type=100';
+            if($("#assignMaster").val() == "1"){
+                url = '/test/list_by_type_2?type=100';
+            }
             var data = {
-                url : '/test/list_by_type?type=100',
+                url : url,
                 param : ''
             };
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI("172.22.7.82:8084"), data, handlerParamSave, false, "查询失败：");
+            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handlerParamSave, false, "查询失败：");
         }
 
         function handlerParamSave(resu){
@@ -384,7 +394,7 @@
                 param : JSON.stringify(param)
             }
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI("172.22.7.82:8084"), data, handleAddResult, false, "新增失败：");
+            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handleAddResult, false, "新增失败：");
         });
 
         function handleAddResult(resu){
@@ -403,7 +413,16 @@
                 param : JSON.stringify(param)
             }
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI("172.22.7.82:8084"), data, handleUpdateResult, false, "更新失败：");
+            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handleUpdateResult, false, "更新失败：");
+        });
+
+        $("#assignMaster").click(function(){
+            var nowValue = $(this).val();
+            if(nowValue == "1"){
+                $(this).val(0);
+            }else{
+                $(this).val(1);
+            }
         });
 
         function handleUpdateResult(resu){
@@ -422,7 +441,7 @@
                 param : JSON.stringify(param)
             }
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI("172.22.7.82:8084"), data, handleDeleteResult, false, "更新失败：");
+            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handleDeleteResult, false, "更新失败：");
         });
 
         function handleDeleteResult(resu){

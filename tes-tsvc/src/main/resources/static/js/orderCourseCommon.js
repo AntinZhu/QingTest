@@ -155,6 +155,10 @@ function applyChange(base, groupOrderCourseId, orderId){
     window.open(base +"/v1/order_course/change_apply/page?groupOrderCourseId=" + groupOrderCourseId + "&env=" + $("#env").val() + "&orderId=" + orderId);
 };
 
+function applyChange2(base, groupOrderCourseId, orderId){
+    window.open(base +"/v1/order_course/change_apply/apply_page?groupOrderCourseId=" + groupOrderCourseId + "&env=" + $("#env").val() + "&orderId=" + orderId);
+};
+
 function handlerApplyFreeze(resu, otherData){
     var orderCourseId = otherData.orderCourseId;
 

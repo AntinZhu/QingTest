@@ -606,6 +606,7 @@
             $.each(["student", "teacher", "assistant"] , function(k, v){
                 userTypeArr.push({id: v, text: v});
             });
+            var interfaceBean;
             function handlerInterface(resu){
                 var params = JSON.parse(resu.interfaceInfo.inter.paramDetail);
                 if(resu.interfaceInfo.inter.interfaceType == "PT" || resu.interfaceInfo.inter.interfaceType == "PI"){
@@ -627,6 +628,7 @@
                     });
 
                     $("#selfParamSwitch").val(${full!0});
+                    interfaceBean = resu.interfaceInfo.inter;
 
                     if(resu.interfaceInfo.inter.paramDetail != null && resu.interfaceInfo.inter.paramDetail != ""){
                         jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
@@ -754,6 +756,7 @@
                         }
                     }
                 }else{
+                    paramInfo = showParam({paramData:interfaceBean.paramDetail});
                     $(".param-ops").addClass("hide");
                 }
             });

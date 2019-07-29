@@ -84,7 +84,7 @@ public class TestController {
 
     @RequestMapping("json_format")
     public String show(@RequestParam("id") Long interfaceId,
-                       @RequestParam(value = "paramId", defaultValue = "0") Long paramId,
+                       @RequestParam(value = "paramId", defaultValue = "-1") Long paramId,
                        @RequestParam(value = "env", defaultValue = "dev") String env,
                        @RequestParam(value = "cross", defaultValue = "0") int isCross,
                        @RequestParam(value = "full", defaultValue = "0") int isFull,
@@ -143,7 +143,7 @@ public class TestController {
     @ProtoResponseBody
     public SimpleDataResponse saveParam(@RequestBody TestInterfaceParam param){
         testInterfaceParamService.save(param);
-        wxNotifyManager.markdown("有用户新增了目录", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("示例名称", param.getParamName()));
+        wxNotifyManager.markdown("有用户新增了参数示例", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("示例名称", param.getParamName()));
 
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(String.valueOf(param.getId())).build();

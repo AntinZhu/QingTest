@@ -8,12 +8,15 @@ import com.qingqing.api.proto.v1.Pay.PayCheckResponse;
 import com.qingqing.api.proto.v1.Pay.PayGeneralOrderSubmitRequest;
 import com.qingqing.api.proto.v1.Pay.PayResult;
 import com.qingqing.api.proto.v1.ProtoBufResponse;
+import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleResponse;
 import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleStringResponse;
 import com.qingqing.api.proto.v1.StudentProto.SimpleQingQingStudentIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.SimpleQingQingTeacherIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherBaseInfoForTeacherResponse;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherDetailForStudentToOrderResponse;
 import com.qingqing.api.proto.v1.UserAddress.QueryUserAddressResponse;
+import com.qingqing.api.proto.v1.ValueVoucher.ListValueVoucherWithRecommendIdResponse;
+import com.qingqing.api.proto.v1.ValueVoucher.MultiOrderUseValueVoucherRequest;
 import com.qingqing.api.proto.v1.course.OrderCourse.CancelCourseRequestV4;
 import com.qingqing.api.proto.v1.course.OrderCourse.CancelOrFreezeCourseRequestV2;
 import com.qingqing.api.proto.v1.course.OrderCourse.OrderCourseFinishRequestV3;
@@ -21,6 +24,8 @@ import com.qingqing.api.proto.v1.order.Order.AddGroupOrderRequestV2;
 import com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response;
 import com.qingqing.api.proto.v1.order.Order.JoinGroupOrderRequest;
 import com.qingqing.api.proto.v1.order.Order.StudentAddGroupOrderResponse;
+import com.qingqing.api.proto.v1.serviceslice.ServiceSliceProto.ApiCourseReportDetailForTeacherResponse;
+import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.config.feign.MyPtFeignConfiguration;
@@ -94,6 +99,20 @@ public interface PtClient {
     @ResponseBody
     String commonRequest(@PathVariable("url") String url, @RequestBody String request, @RequestHeader(name = PtRequestInterceptor.USER_ID) Long userId, @RequestHeader(PtRequestInterceptor.USER_TYPE)UserType userType);
 
+    @RequestMapping(path = "/svc/api/pt/v2/order_course_report/teacher/detail", method = RequestMethod.POST)
+    @ProtoResponseBody
+    ApiCourseReportDetailForTeacherResponse orderCourseReportDetail(SimpleLongRequest request, @RequestHeader(name = PtRequestInterceptor.TEACHER_ID) Long teacherId);
+
+    @RequestMapping(path = "/svc/api/pt/v1/valuevouchers/multi_order/use_value_vouchers", method = RequestMethod.POST)
+    @ProtoResponseBody
+    SimpleResponse useValueVouchers(MultiOrderUseValueVoucherRequest request,
+                                    @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
+
+
+    @RequestMapping(path = "/svc/api/pt/v4/valuevouchers/list_for_order", method = RequestMethod.POST)
+    @ProtoResponseBody
+    ListValueVoucherWithRecommendIdResponse valueVouchersList(SimpleQingqingGroupSubOrderIdRequest request,
+                                                              @RequestHeader(name = PtRequestInterceptor.STUDENT_ID) Long studentId);
 }
 
 

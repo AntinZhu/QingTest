@@ -800,3 +800,30 @@ function changeDefaultValue(key, clazz){
     $(newKeyLabel).text(defaultName);
     $(newKeyLabel).prev("input").val(defaultValue);;
 }
+
+function fillDefaultValueWithDefault(paramObj, defaultObj){
+    if(paramObj == null || defaultObj == null){
+        return;
+    }
+
+    for(var paramIdx in paramObj){
+        var param = paramObj[paramIdx];
+        if(param instanceof Array){
+            fillDefaultValueWithDefault(param, defaultObj[0]);
+            return;
+        }
+
+        for(var propName in defaultObj){
+            if(param.key == propName){
+                if(param.defaultValue == null){
+                    fillDefaultValueWithDefault(param.detail, defaultObj[propName]);
+                }else{
+                    param.defaultValue.name = defaultObj[propName];
+                    param.defaultValue.value = defaultObj[propName];
+                }
+
+                break;
+            }
+        }
+    }
+}

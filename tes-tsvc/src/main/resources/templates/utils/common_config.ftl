@@ -319,77 +319,33 @@
 
     function init_api_teacher_time_config(configValue){
         $("#api_teacher_time_config").val(configValue);
-        var paramsTemplate = '[{"key":"teachingHours","name":"总时长","defaultValue":{"name":{teachingHoursDefaultValue},"value":{teachingHoursDefaultValue}}},{"key":"weekendTeachingHours","name":"周末时长","defaultValue":{"name":{weekendTeachingHoursDefaultValue},"value":{weekendTeachingHoursDefaultValue}}}]';
-        var params = paramsTemplate;
+        var paramsTemplate = '[{"key":"teachingHours","name":"总时长","defaultValue":{"name":0,"value":0}},{"key":"weekendTeachingHours","name":"周末时长","defaultValue":{"name":0,"value":0}}]';
 
-        var configObj = JSON.parse(configValue);
-        params = params.replace(new RegExp("{teachingHoursDefaultValue}","gm"), configObj.teachingHours);
-        params = params.replace(new RegExp("{weekendTeachingHoursDefaultValue}","gm"), configObj.weekendTeachingHours);
-
-        return showParam({paramData:params, htmlDiv:"api_teacher_time_config_div", "valueChangedNotifyId":"api_teacher_time_config_notify", "isEditStatus":false});
+        return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:"api_teacher_time_config_div", "valueChangedNotifyId":"api_teacher_time_config_notify", "isEditStatus":false});
     }
 
     function init_installment_pay_config_v2(configValue){
         $("#installment_pay_config_v2").val(configValue);
 
-        var paramsTemplate = '[{"key":"configMap", "name":"分期配置", "detail":[{"key":"9", "name":"招行分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{9_open_defaultValue},"value":{9_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{9_limit_defaultValue_name},"value":{9_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{9_max_defaultValue_name},"value":{9_max_defaultValue}}}]} ,{"key":"10", "name":"花呗分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{10_open_defaultValue},"value":{10_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{10_limit_defaultValue_name},"value":{10_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{10_max_defaultValue_name},"value":{10_max_defaultValue}}}]} ,{"key":"11", "name":"京东支付", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{11_open_defaultValue},"value":{11_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{11_limit_defaultValue_name},"value":{11_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{11_max_defaultValue_name},"value":{11_max_defaultValue}}}]} ,{"key":"12", "name":"百度支付", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":{12_open_defaultValue},"value":{12_open_defaultValue}}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{12_limit_defaultValue_name},"value":{12_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{12_max_defaultValue_name},"value":{12_max_defaultValue}}}]} ,{"key":"16", "name":"爱海米分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":"是","value":true}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":{16_limit_defaultValue_name},"value":{16_limit_defaultValue}}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":{16_max_defaultValue_name},"value":{16_max_defaultValue}}}]}]}]';
+        var paramsTemplate = '[{"key":"configMap", "name":"分期配置", "detail":[{"key":"9", "name":"招行分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":false,"value":false}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":0,"value":0}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":"无限制","value":null}}]} ,{"key":"10", "name":"花呗分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":false,"value":false}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":0,"value":0}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":"无限制","value":null}}]} ,{"key":"11", "name":"京东支付", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":false,"value":false}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":0,"value":0}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":"无限制","value":null}}]} ,{"key":"12", "name":"百度支付", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":false,"value":false}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":0,"value":0}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":"无限制","value":null}}]} ,{"key":"16", "name":"爱海米分期", "detail":[{"key":"open", "name":"是否开启", "class":"switch_editable","defaultValue":{"name":false,"value":false}},{"key":"limitAmount", "name":"最低金额","defaultValue":{"name":0,"value":0}},{"key":"maxAmount", "name":"最大金额","defaultValue":{"name":"无限制","value":null}}]}]}]';
 
-        var params = paramsTemplate;
-        var configObj = JSON.parse(configValue);
-        var keys = ["9","10","11","12","16"];
-        for(var keyIdx in keys){
-            var key = keys[keyIdx];
-            var value = configObj.configMap == null? null : configObj.configMap[key];
-            if(value == null){
-                params = params.replace(new RegExp("{" + key + "_open_defaultValue}","gm"), "false");
-                params = params.replace(new RegExp("{" + key + "_limit_defaultValue_name}","gm"), "0.0");
-                params = params.replace(new RegExp("{" + key + "_limit_defaultValue}","gm"), "0.0");
-                params = params.replace(new RegExp("{" + key + "_max_defaultValue_name}","gm"), '"无限制"');
-                params = params.replace(new RegExp("{" + key + "_max_defaultValue}","gm"), "null");
-            }else{
-                params = params.replace(new RegExp("{" + key + "_open_defaultValue}","gm"), value.open);
-                params = params.replace(new RegExp("{" + key + "_limit_defaultValue_name}","gm"), (value.limitAmount == null? 0.0:value.limitAmount));
-                params = params.replace(new RegExp("{" + key + "_limit_defaultValue}","gm"), (value.limitAmount == null? 0.0:value.limitAmount));
-                params = params.replace(new RegExp("{" + key + "_max_defaultValue_name}","gm"), ((value.maxAmount == null || "null" == value.maxAmount)? '"无限制"':value.maxAmount));
-                params = params.replace(new RegExp("{" + key + "_max_defaultValue}","gm"), ((value.maxAmount == null || "null" == value.maxAmount)? "null":value.maxAmount));
-            }
-        }
-
-        return showParam({paramData:params, htmlDiv:"installment_pay_config_v2_div", "valueChangedNotifyId":"installment_pay_config_v2_notify", "isEditStatus":false});
+        return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:"installment_pay_config_v2_div", "valueChangedNotifyId":"installment_pay_config_v2_notify", "isEditStatus":false});
     }
 
     function init_api_moon_arrange_course_config(configValue){
         $("#api_moon_arrange_course_config").val(configValue);
-        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":{open_defaultValue},"value":{open_defaultValue}}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":{start_defaultValue},"value":{start_defaultValue}}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":{end_defaultValue},"value":{end_defaultValue}}},{"key":"deductionConfig","name":"扣费配置","detail":[{"key":"deductionIsOpen","name":"是否扣费", "class": "switch_editable","defaultValue":{"name":{deduct_open_defaultValue},"value":{deduct_open_defaultValue}}},{"key":"deductionDay","name":"几号扣费","defaultValue":{"name":{deduction_defaultValue},"value":{deduction_defaultValue}}},{"key":"endGenerateDay","name":"几号停止生成","defaultValue":{"name":{stop_defaultValue},"value":{stop_defaultValue}}},{"key":"deduction","name":"扣费比例配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":{more_half_defaultValue},"value":{more_half_defaultValue}}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":{less_half_defaultValue},"value":{less_half_defaultValue}}},{"key":"none","name":"未做任务","defaultValue":{"name":{none_defaultValue},"value":{none_defaultValue}}}]}]}]';
-        var params = paramsTemplate;
+        var paramsTemplate = '[{"key":"isOpen","name":"是否生成任务", "class": "switch_editable","defaultValue":{"name":false,"value":false}},{"key":"startUpdateDay","name":"几号开始","defaultValue":{"name":0,"value":0}},{"key":"endUpdateDay","name":"几号结束","defaultValue":{"name":0,"value":0}},{"key":"deductionConfig","name":"扣费配置","detail":[{"key":"deductionIsOpen","name":"是否扣费", "class": "switch_editable","defaultValue":{"name":0,"value":0}},{"key":"deductionDay","name":"几号扣费","defaultValue":{"name":0,"value":0}},{"key":"endGenerateDay","name":"几号停止生成","defaultValue":{"name":0,"value":0}},{"key":"deduction","name":"扣费比例配置","detail":[{"key":"moreHalf","name":"一半以上","defaultValue":{"name":0,"value":0}},{"key":"lessHalf","name":"一半以下","defaultValue":{"name":0,"value":0}},{"key":"none","name":"未做任务","defaultValue":{"name":0,"value":0}}]}]}]';
 
+        return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:"api_moon_arrange_course_config_div", "valueChangedNotifyId":"api_moon_arrange_course_config_notify", "isEditStatus":false});
+    }
+
+    function fillTemplate(paramsTemplate, configValue){
+        var params = JSON.parse(paramsTemplate);
         var configObj = JSON.parse(configValue);
-        params = params.replace(new RegExp("{open_defaultValue}","gm"), (configObj.isOpen == null? false:configObj.isOpen));
-        params = params.replace(new RegExp("{start_defaultValue}","gm"), (configObj.startUpdateDay == null? 0:configObj.startUpdateDay));
-        params = params.replace(new RegExp("{end_defaultValue}","gm"), (configObj.endUpdateDay == null? 0:configObj.endUpdateDay));
-        if(configObj.deductionConfig != null){
-            params = params.replace(new RegExp("{deduction_defaultValue}","gm"), (configObj.deductionConfig.deductionDay == null? 0:configObj.deductionConfig.deductionDay));
-            params = params.replace(new RegExp("{deduct_open_defaultValue}","gm"), (configObj.deductionConfig.deductionIsOpen == null? false:configObj.deductionConfig.deductionIsOpen));
-            params = params.replace(new RegExp("{stop_defaultValue}","gm"), (configObj.deductionConfig.endGenerateDay == null? 0:configObj.deductionConfig.endGenerateDay));
-            if(configObj.deductionConfig.deduction != null){
-                params = params.replace(new RegExp("{more_half_defaultValue}","gm"), (configObj.deductionConfig.deduction.moreHalf == null? 0:configObj.deductionConfig.deduction.moreHalf));
-                params = params.replace(new RegExp("{less_half_defaultValue}","gm"), (configObj.deductionConfig.deduction.lessHalf == null? 0:configObj.deductionConfig.deduction.lessHalf));
-                params = params.replace(new RegExp("{none_defaultValue}","gm"), (configObj.deductionConfig.deduction.none == null? 0:configObj.deductionConfig.deduction.none));
-            }else{
-                params = params.replace(new RegExp("{more_half_defaultValue}","gm"), 0);
-                params = params.replace(new RegExp("{less_half_defaultValue}","gm"), 0);
-                params = params.replace(new RegExp("{none_defaultValue}","gm"), 0);
-            }
-        }else{
-            params = params.replace(new RegExp("{deduction_defaultValue}","gm"), 0);
-            params = params.replace(new RegExp("{deduct_open_defaultValue}","gm"), false);
-            params = params.replace(new RegExp("{stop_defaultValue}","gm"), 0);
-            params = params.replace(new RegExp("{more_half_defaultValue}","gm"), 0);
-            params = params.replace(new RegExp("{less_half_defaultValue}","gm"), 0);
-            params = params.replace(new RegExp("{none_defaultValue}","gm"), 0);
-        }
 
-        return showParam({paramData:params, htmlDiv:"api_moon_arrange_course_config_div", "valueChangedNotifyId":"api_moon_arrange_course_config_notify", "isEditStatus":false});
+        fillDefaultValueWithDefault(params, configObj);
+
+        return JSON.stringify(params);
     }
 
     //输入框的值改变时触发

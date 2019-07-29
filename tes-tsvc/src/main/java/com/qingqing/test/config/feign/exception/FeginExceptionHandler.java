@@ -48,8 +48,10 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             FeignException fex = (FeignException)ex;
             switch (fex.status()){
                 case 422:
+                    logger.info("i am 1");
                     SimpleResponse result = JsonUtil.getObjectFromJson(fex.getMessage().substring(fex.getMessage().indexOf("content:\n") + 8), SimpleResponse.class);
                     baseResponse = new BaseResponse(result.getResponse().getError_code(), result.getResponse().getError_message(), result.getResponse().getHint_message());
+                    logger.info("i am 1, result:" + JsonUtil.format(baseResponse));
                     break;
                 case 401:
                    baseResponse = new BaseResponse(401, "", "token session校验不通过");
@@ -68,6 +70,7 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
         if(baseResponse != null){
             Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);
             if(pf != null){
+                logger.info("i am 2, return proto:" + JsonUtil.format(baseResponse));
                 builder.setField(pf, ProtoRespGenerator.generateResponse(baseResponse.getError_code(), baseResponse.getError_message(), baseResponse.getHint_message()));
                 return builder;
             }if(obj != null){
@@ -82,6 +85,7 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             }
         }
 
+        logger.info("i am 3, goto super");
         return super.errorResponse(ex, request, response);
     }
 }

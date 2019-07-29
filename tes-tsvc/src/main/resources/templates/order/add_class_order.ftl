@@ -342,6 +342,32 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right"></label>
+                                                            <div class="col-xs-12 col-sm-8">
+                                                                <div class="col-xs-4 label label-lg label-light arrowed-in arrowed-right qing_input_tip center" style="color: #333;text-align: left;">
+                                                                    此功能由<b class="red">朱贺</b>友情赞助
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right">选择优惠券</label>
+                                                            <div class="col-xs-12 col-sm-8">
+                                                                <select class="width-80 chosen-select tag-input-style" id="vouListSelect" data-placeholder="选择优惠券" multiple="multiple">
+                                                                </select>
+                                                                <span class="input-group-btn">
+																		<button type="button"
+                                                                                class="btn btn-purple btn-xs"
+                                                                                id="useValueBtn">
+																			使用优惠券
+																			<i class="icon-search icon-on-right bigger-110"></i>
+																		</button>
+																	</span>
+                                                            </div>
+                                                        </div>
 
                                                         <hr />
                                                         <div class="form-group">
@@ -461,7 +487,7 @@
                                                                             <th>价格(含税)</th>
                                                                             <th>价格(不含税)</th>
                                                                             <th class="hidden-480">状态</th>
-                                                                            <th>上课 | 三方赔付 | 删课 | 结课 | </th>
+                                                                            <th>上课 | 三方赔付 | 删课 | 结课 | 调课申请 | 调课 </th>
                                                                         </tr>
                                                                         </thead>
 
@@ -532,6 +558,16 @@
                                     <button class="btn btn-xs btn-warning finish-class">
                                         <input type="hidden" value="{orderCourseId}" />
                                         <i class="icon-flag bigger-120"></i>
+                                    </button>
+
+                                    <button class="btn btn-xs btn-warning change_apply-class">
+                                        <input type="hidden" value="{groupOrderCourseId}" />
+                                        <i class=" icon-fighter-jet bigger-120"></i>
+                                    </button>
+
+                                    <button class="btn btn-xs btn-warning change-class">
+                                        <input type="hidden" value="{groupOrderCourseId}" />
+                                        <i class="icon-fire bigger-120"></i>
                                     </button>
                                 </div>
                             </td>
@@ -634,6 +670,18 @@
     $(document).on("click", ".apply-cancel", function(){
         var orderCourseId = $(this).find("input").val();
         deleteClassOrderCourse("${base}", orderCourseId, 200);
+    });
+
+    $(document).on("click", ".change-class", function(){
+        var groupOrderCourseId = $(this).find("input").val();
+        var orderId = $("#orderId").text();
+        applyChange("${base}", groupOrderCourseId, orderId);
+    });
+
+    $(document).on("click", ".change_apply-class", function(){
+        var groupOrderCourseId = $(this).find("input").val();
+        var orderId = $("#orderId").text();
+        applyChange2("${base}", groupOrderCourseId, orderId);
     });
 
     function handlerCommonOrderOps(resu){
@@ -818,6 +866,7 @@
         $("#classOrderId").text(resu.classOrderId);
 
         prePay(true);
+        updateValueVouchers();
         updatePayWayList();
         return true;
     }
@@ -1189,7 +1238,76 @@
         });
 
         $("#startCourseTime").val(startDate.format("yyyy-MM-dd"));
-    })
+    });
+
+    $(document).on("click", "#useValueBtn", function(){
+        var selectList = $("#vouListSelect").val();
+        if (selectList === undefined || selectList.length == 0) {
+            return;
+        }
+
+        var request={};
+
+        var common_order = {};
+        common_order["order_type"] = 10;
+        common_order["qingqing_common_order_id"] = $("#qingqingOrderId").text();
+
+        var order_voucher_items = {};
+        order_voucher_items["common_order"] = common_order;
+        order_voucher_items["value_voucher_instance_ids"] = selectList.map(Number);
+
+        request["order_voucher_items"]=[order_voucher_items];
+        var data = {
+            url: "svc/api/pt/v1/valuevouchers/multi_order/use_value_vouchers.json",
+            param: JSON.stringify(request),
+            userId: $("#studentId").val(),
+            userType: "student"
+        };
+
+        commonAjaxRequest("${base}/v1/common/pt.json", data, useValue, false, "用券失败：", $("#env").val(), null, $("#guid").val());
+    });
+
+    function useValue(r) {
+        prePay(true);
+    }
+
+    function updateValueVouchers() {
+        var data={
+            qingqingOrderId: $("#qingqingOrderId").text(),
+            studentId:$("#studentId").val()
+        }
+        commonAjaxRequest("${base}/v1/order/student/order/value_voucher_list.json", data, handleValueVouchers, true, "获取优惠券出错:", $("#env").val(), null, $("#guid").val());
+    }
+
+    function handleValueVouchers(r) {
+        var options = new Array();
+        var index = 0;
+
+        if (r.total_reduce_amount > 0) {
+            if (r.value_vouchers != null) {
+
+                for (var v in   r.value_vouchers) {
+                    var item = r.value_vouchers[v];
+                    var option = new Object();
+                    option.key = item.value_voucher_instance_id;
+                    option.value = item.name+"（"+item.reward_amount+"）元";
+                    option.title="过期时间："+formatTime(item.expire_time,'Y/M/D h:m:s');
+                    options[index] = option;
+                    index++;
+                }
+
+                updateMutiOptions("vouListSelect", options, r.recommend_value_vouchers);
+            }
+        }
+
+        if(options.length<=0){
+            var option = new Object();
+            option.key = "-1";
+            option.value = "无可用优惠券";
+            options[0] = option;
+            updateOptions("vouListSelect", options, -1);
+        }
+    }
 </script>
         </body>
 </html>
