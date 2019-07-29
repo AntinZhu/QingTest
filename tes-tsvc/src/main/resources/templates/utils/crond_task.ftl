@@ -97,7 +97,15 @@
     });
 
     function refreshPage(){
-        commonAjaxRequest("${base}/v1/utils/cron_task/all.json", null, handlerInterface, true, "获取信息失败:");
+        var request = {
+            url : "${base}/v1/utils/cron_task/all.json",
+            data : null,
+            handlerFunc : handlerInterface,
+            isASync : true,
+            failTitle :"获取信息失败:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerInterface(resu){
@@ -145,7 +153,17 @@
             env :env
         }
 
-        commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerCorndSucc, true, "定时任务执行:", env, targetData, guid);
+        var request = {
+            url : "${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+            data : data,
+            handlerFunc : handlerCorndSucc,
+            isASync : true,
+            failTitle :"定时任务执行:",
+            guid : guid,
+            env : env
+        };
+
+        commonAjaxRequest(request);
 
         var logTargetUrl = logUrl.replace("{env}", targetData.env);
         logTargetUrl = logTargetUrl.replace("{guid}", targetData.guid);

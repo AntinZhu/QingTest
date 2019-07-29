@@ -87,7 +87,16 @@
         var data = {
             data : dataValue
         };
-        commonAjaxRequest("${base}/v1/utils/order/decode.json", data, handlerOrderDecode, true, "解密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/order/decode.json",
+            data : data,
+            handlerFunc : handlerOrderDecode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerOrderDecode(resu){
@@ -98,7 +107,16 @@
         var data = {
             data : dataValue
         };
-        commonAjaxRequest("${base}/v1/utils/order/encode.json", data, handlerOrderEncode, true, "加密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/order/encode.json",
+            data : data,
+            handlerFunc : handlerOrderEncode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerOrderEncode(resu){

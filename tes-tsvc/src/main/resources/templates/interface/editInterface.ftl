@@ -400,7 +400,15 @@
                     data : className
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/request/convert.json", data, handlerConvert, true, "解析出错:");
+                var request = {
+                    url : "${base}/v1/test/interface/request/convert.json",
+                    data : data,
+                    handlerFunc : handlerConvert,
+                    isASync : true,
+                    failTitle :"解析出错:"
+                };
+
+                commonAjaxRequest(request);
             });
 
             function handlerConvert(resu){
@@ -555,7 +563,15 @@
                     parentCatelogId : parentCatelogId
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/save.json", data, handlerSave, true, "解析出错:");
+                var request = {
+                    url : "${base}/v1/test/interface/save.json",
+                    data : data,
+                    handlerFunc : handlerSave,
+                    isASync : true,
+                    failTitle :"保存出错:"
+                };
+
+                commonAjaxRequest(request);
             });
 
             function handlerSave(resu){

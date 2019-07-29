@@ -231,7 +231,18 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, emptyFunction, false, "支付服务-交易补偿通知:", $("#env").val(), null, $("#guid").val());
+                var request = {
+                    url : "${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+                    data : data,
+                    handlerFunc : emptyFunction,
+                    isASync : false,
+                    failTitle :"支付服务-交易补偿通知:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             }
 
 
@@ -248,7 +259,19 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                return commonAjaxRequest("${base}/v1/pay/pre_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val(), null, $("#guid").val());
+
+                var request = {
+                    url : "${base}/v1/pay/pre_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+                    data : data,
+                    handlerFunc : handlerPrePay,
+                    isASync : isAsync,
+                    failTitle :"获取订单前置接口失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                return commonAjaxRequest(request);
             }
 
             function getParam(name){
@@ -360,14 +383,19 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/pay/pay_infos_2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val(), null, $("#guid").val());
 
-//                for(var idx in multiOrderIds){
-//                    var multiSubOrder = multiOrderIds[idx];
-//                    var requestData = {
-//                        order
-//                    }
-//                }
+              var request = {
+                    url : "${base}/v1/pay/pay_infos_2.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+                    data : data,
+                    handlerFunc : handlerPayWayList,
+                    isASync : true,
+                    failTitle :"获取第三方支付路径出错:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             }
 
             var syncPayWayList;
@@ -454,8 +482,18 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                result = commonAjaxRequest("${base}/v1/pay/ack_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerPay, false, "新增支付路径失败:", $("#env").val(), null, $("#guid").val());
-                return result;
+                var request = {
+                    url : "${base}/v1/pay/ack_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+                    data : data,
+                    handlerFunc : handlerPay,
+                    isASync : false,
+                    failTitle :"新增支付路径失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                return commonAjaxRequest(request);
             }
 
             function getStageInfo(payType){
@@ -517,7 +555,18 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/pay/check_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerCheckPay, false, "查询支付状态失败:", $("#env").val(), null, $("#guid").val());
+                var request = {
+                    url : "${base}/v1/pay/check_pay_v2.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+                    data : data,
+                    handlerFunc : handlerCheckPay,
+                    isASync : true,
+                    failTitle :"查询支付状态失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             }
 
             function handlerCheckPay(data){
@@ -567,7 +616,18 @@
 
                 var isLocalDebug = $("#isLocalDebug").val();
                 var localPort = $("#localDebugPort").val();
-                commonAjaxRequest("${base}/v1/pay/mock_third_pay.json?is_local=" + isLocalDebug + "&local_port=" + localPort, data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:", $("#env").val(), null, $("#guid").val());
+                var request = {
+                    url : "${base}/v1/pay/mock_third_pay.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+                    data : data,
+                    handlerFunc : handlerMockThirdNotify,
+                    isASync : true,
+                    failTitle :"模拟第三方支付成功通知失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
 
 
                 if(syncPayWayList == null){
@@ -591,7 +651,18 @@
                 var data = {
                     data : 1
                 };
-                commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
+                var request = {
+                    url : "${base}/v1/test/interface.json",
+                    data : data,
+                    handlerFunc : handlerInterface,
+                    isASync : true,
+                    failTitle :"获取接口信息失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             }
 
             $(".env").click(function(){
@@ -789,7 +860,18 @@
                             fullParam : fullParam
                         };
 
-                        commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");
+                        var request = {
+                            url : "${base}/v1/test/interface/param/save.json",
+                            data : data,
+                            handlerFunc : handlerParamSave,
+                            isASync : true,
+                            failTitle :"参数样例保存出错:",
+                            env : $("#env").val(),
+                            otherData : null,
+                            guid : $("#guid").val()
+                        };
+
+                        commonAjaxRequest(request);
                     }
                 });
             });
@@ -811,7 +893,18 @@
                     data : new Number(paramId)
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
+                var request = {
+                    url : "${base}/v1/test/interface/param/delete.json",
+                    data : data,
+                    handlerFunc : refreshPage,
+                    isASync : true,
+                    failTitle :"参数删除出错:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             });
 
             $("#param_default").click(function(){
@@ -821,7 +914,18 @@
                     data : new Number(paramId)
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
+                var request = {
+                    url : "${base}/v1/test/interface/param/default/set.json",
+                    data : data,
+                    handlerFunc : notOps,
+                    isASync : true,
+                    failTitle :"参数设置默认出错:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             });
 
             jQuery(function($) {

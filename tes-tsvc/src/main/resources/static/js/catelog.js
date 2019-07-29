@@ -4,7 +4,18 @@ function showParentCatelog(catelogUrl, cateDivId, selectValueId, defaultSelectId
         selectValueId :selectValueId,
         defaultSelectId : defaultSelectId
     };
-    commonAjaxRequest(catelogUrl, null, handleCateLogParam, false, "获取分类信息失败:", "", othData);
+
+    var request = {
+        url : catelogUrl,
+        data : null,
+        handlerFunc : handleCateLogParam,
+        isASync : false,
+        failTitle :"获取分类信息失败:",
+        env : null,
+        otherData : othData
+    };
+
+    commonAjaxRequest(request);
 }
 
 function handleCateLogParam(resu, othData){

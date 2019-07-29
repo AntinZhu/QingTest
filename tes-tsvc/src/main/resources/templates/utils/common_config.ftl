@@ -400,7 +400,17 @@
             userType : 'student'
         }
 
-        commonAjaxRequest("${base}/v1/common/pi.json", data, emptyM, true, "设置通用配置失败:", $("#env").val(), null, "test-api-config");
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : emptyM,
+            isASync : true,
+            failTitle :"设置通用配置失败:",
+            guid : "test-api-config",
+            env : $("#env").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function emptyM(){
@@ -447,7 +457,17 @@
             userType : 'student'
         }
 
-        commonAjaxRequest("${base}/v1/common/pi.json", data, initResult, true, "获取通用配置信息:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : initResult,
+            isASync : true,
+            failTitle :"获取通用配置信息:",
+            guid : "test-api-config",
+            env : $("#env").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function initResult(resu){
@@ -521,7 +541,15 @@
                     }
                 };
 
-                commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "反馈出错:");
+                var request = {
+                    url : "${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)),
+                    data : null,
+                    handlerFunc : handlerParamSave,
+                    isASync : true,
+                    failTitle :"反馈出错："
+                };
+
+                commonAjaxRequest(request);
             }
         });
     }

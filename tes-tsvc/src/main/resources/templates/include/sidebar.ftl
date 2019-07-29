@@ -91,7 +91,15 @@
         });
 
         function refreshCatelog(){
-            commonAjaxRequest("${base}/v1/test/catelog.json", null, handlerCatelog, false, "获取分类信息失败:");
+            var request = {
+                url : "${base}/v1/test/catelog.json",
+                data : null,
+                handlerFunc : handlerCatelog,
+                isASync : false,
+                failTitle :"获取分类信息失败:"
+            };
+
+            commonAjaxRequest(request);
         }
 
         function handlerCatelog(resu){
@@ -127,7 +135,15 @@
                         }
                     };
 
-                    commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "IP上传出错:");
+                    var request = {
+                        url : "${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)),
+                        data : null,
+                        handlerFunc : handlerParamSave,
+                        isASync : true,
+                        failTitle :"IP上传出错:"
+                    };
+
+                    commonAjaxRequest(request);
                 }
             });
         }
@@ -141,7 +157,15 @@
         }
 
         $("#qing_report").click(function(){
-            commonAjaxRequest("${base}/v1/report/daily.json?", null, emp, true, "报告出错:");
+            var request = {
+                url : "${base}/v1/report/daily.json?",
+                data : null,
+                handlerFunc : emp,
+                isASync : true,
+                failTitle :"报告出错:"
+            };
+
+            commonAjaxRequest(request);
         });
 
         function emp(){

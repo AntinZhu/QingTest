@@ -93,7 +93,15 @@
         $('[data-rel=tooltip]').tooltip();
 
         $("#searchBtn").click(function(){
-            commonAjaxRequest("${base}/v1/utils/phoneNumber/sync", null, handleSearch, false, "刷新性能测试环境用户数据:");
+            var request = {
+                url : "${base}/v1/utils/phoneNumber/sync",
+                data : null,
+                handlerFunc : handleSearch,
+                isASync : true,
+                failTitle :"刷新性能测试环境用户数据:"
+            };
+
+            commonAjaxRequest(request);
         });
     });
 

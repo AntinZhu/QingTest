@@ -87,7 +87,17 @@ while(   nOffset   !=   -1   )
 return   bstr   +   strUtf8; 
 }
 
-function commonAjaxRequest(url, data, handlerFunc, isASync, failTitle, env, otherData, guid, headers){
+function commonAjaxRequest(request){
+    var url = request.url;
+    var data = request.data;
+    var handlerFunc = request.handlerFunc;
+    var isASync = request.isASync;
+    var failTitle = request.failTitle;
+    var env = request.env;
+    var otherData = request.otherData;
+    var guid = request.guid;
+    var headers = request.headers;
+
     var result = true;
     if(env == null){
         env = "";

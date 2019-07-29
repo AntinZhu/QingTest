@@ -388,7 +388,15 @@
                     }
                 };
 
-                commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "反馈出错:");
+                var request = {
+                    url : "${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)),
+                    data : null,
+                    handlerFunc : handlerParamSave,
+                    isASync : true,
+                    failTitle :"反馈出错:"
+                };
+
+                commonAjaxRequest(request);
             }
         });
     }
@@ -422,7 +430,17 @@
                 data:teacherId
             };
 
-            commonAjaxRequest("${base}/v1/teacher/tag/list.json", data, init, true, "查询失败", $("#env").val(), null, "test-api-tag");
+            var request = {
+                url : "${base}/v1/teacher/tag/list.json",
+                data : data,
+                handlerFunc : init,
+                isASync : true,
+                failTitle :"查询失败:",
+                env : $("#env").val(),
+                guid : "test-api-tag"
+            };
+
+            commonAjaxRequest(request);
         }
 
         function reset(){
@@ -523,7 +541,17 @@
                 tagValue : tagValue + ""
             }
 
-            commonAjaxRequest("${base}/v1/teacher/tag/set.json", data, emptyM, true, "设置失败", $("#env").val(), null, "test-api-tag");
+            var request = {
+                url : "${base}/v1/teacher/tag/set.json",
+                data : data,
+                handlerFunc : emptyM,
+                isASync : true,
+                failTitle :"设置失败:",
+                env : $("#env").val(),
+                guid : "test-api-tag"
+            };
+
+            commonAjaxRequest(request);
         }
 
        function emptyM(){

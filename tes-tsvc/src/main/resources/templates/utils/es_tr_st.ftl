@@ -307,7 +307,15 @@
                     }
                 };
 
-                commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "反馈出错:");
+                var request = {
+                    url : "${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)),
+                    data : null,
+                    handlerFunc : handlerParamSave,
+                    isASync : true,
+                    failTitle :"反馈出错:"
+                };
+
+                commonAjaxRequest(request);
             }
         });
     }
@@ -411,7 +419,16 @@
                 queryString :queryString,
                 indexName : indexName
             }
-            commonAjaxRequest("${base}/v1/utils/es/query", data, handleFunction, false, "查询接口信息出错:", $("#env").val());
+            var request = {
+                url : "${base}/v1/utils/es/query",
+                data : data,
+                handlerFunc : handleFunction,
+                isASync : false,
+                failTitle :"查询接口信息出错:",
+                env :$("#env").val()
+            };
+
+            commonAjaxRequest(request);
         }
 
         var indexInfo;
@@ -513,7 +530,15 @@
                 indexName : indexName,
             }
 
-            commonAjaxRequest("${base}/v1/utils/es/delete", data, clearData, false, "删除索引数据错误:");
+            var request = {
+                url : "${base}/v1/utils/es/delete",
+                data : data,
+                handlerFunc : clearData,
+                isASync : false,
+                failTitle :"删除索引数据错误:"
+            };
+
+            commonAjaxRequest(request);
         }
 
         function getUniqueValue(indexInfoBean){
@@ -535,7 +560,15 @@
                 data : data
             }
 
-            commonAjaxRequest("${base}/v1/utils/es/update", data, handleUpdate, false, "更新索引数据错误:");
+            var request = {
+                url : "${base}/v1/utils/es/update",
+                data : data,
+                handlerFunc : handleUpdate,
+                isASync : false,
+                failTitle :"更新索引数据错误:"
+            };
+
+            commonAjaxRequest(request);
         }
 
         function clearData(){

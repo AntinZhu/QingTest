@@ -122,7 +122,15 @@
                 }
             };
 
-            commonAjaxRequest("${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)), null, handlerParamSave, true, "IP上传出错:");
+            var request = {
+                url : "${base}/v1/common/wx_notify.json?content=" + encodeURI(JSON.stringify(content)),
+                data : null,
+                handlerFunc : handlerParamSave,
+                isASync : true,
+                failTitle :"IP上传出错:"
+            };
+
+            commonAjaxRequest(request);
         });
 
         function handlerParamSave(){

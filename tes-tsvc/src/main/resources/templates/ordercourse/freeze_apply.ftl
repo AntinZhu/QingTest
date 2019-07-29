@@ -306,7 +306,18 @@
                     is_deduct_reduce : ($("#isPayVoucherPrice").val() == 1)
                 }
 
-                commonAjaxRequest("${base}/v1/order_course/freeze_apply/mock.json", data, handlerMockResult, true, "赔付前置失败:", $("#env").val(), null, $("#guid").val());
+                var request = {
+                    url : "${base}/v1/order_course/freeze_apply/mock.json",
+                    data : data,
+                    handlerFunc : handlerMockResult,
+                    isASync : true,
+                    failTitle :"赔付前置失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             }
 
             function handlerMockResult(resu){
@@ -331,7 +342,18 @@
                 }
 
                 jsonShow(data, "json-request");
-                commonAjaxRequest("${base}/v1/order_course/freeze_apply/process.json", data, handlerProcessResult, true, "赔付失败:", $("#env").val(), null, $("#guid").val());
+                var request = {
+                    url : "${base}/v1/order_course/freeze_apply/process.json",
+                    data : data,
+                    handlerFunc : handlerProcessResult,
+                    isASync : true,
+                    failTitle :"赔付失败:",
+                    env : $("#env").val(),
+                    otherData : null,
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             });
 
             function handlerProcessResult(resu){
@@ -368,7 +390,18 @@
                     $(".env.btn-primary").removeClass("btn-primary");
                     $(".env[value='" + env + "']").addClass("btn-primary");
 
-                    commonAjaxRequest("${base}/v1/order_course/freeze_apply/query_by_order_course_id.json", data, handlerInterface, true, "获取接口信息失败:", $("#env").val(), null, $("#guid").val());
+                    var request = {
+                        url : "${base}/v1/order_course/freeze_apply/query_by_order_course_id.json",
+                        data : data,
+                        handlerFunc : handlerInterface,
+                        isASync : true,
+                        failTitle :"获取接口信息失败:",
+                        env : $("#env").val(),
+                        otherData : null,
+                        guid : $("#guid").val()
+                    };
+
+                    commonAjaxRequest(request);
                 });
 
                 function handlerInterface(resu){

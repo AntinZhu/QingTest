@@ -392,7 +392,16 @@
         var data = {
             data : dataValue
         };
-        return commonAjaxRequest("${base}/v1/utils/order/decode.json", data, handlerOrderDecode, false, "解密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/order/decode.json",
+            data : data,
+            handlerFunc : handlerOrderDecode,
+            isASync : false,
+            failTitle :"解密结果:"
+        };
+
+        return commonAjaxRequest(request);
     }
 
     function handlerOrderDecode(resu){
@@ -403,7 +412,16 @@
         var data = {
             data : dataValue
         };
-        return commonAjaxRequest("${base}/v1/utils/order/encode.json", data, handlerOrderEncode, false, "加密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/order/encode.json",
+            data : data,
+            handlerFunc : handlerOrderEncode,
+            isASync : false,
+            failTitle :"解密结果:"
+        };
+
+        return commonAjaxRequest(request);
     }
 
     $("#ace-settings-btn").click(function () {
@@ -526,7 +544,17 @@
             user_id : new Number(dataValue),
             user_type : $("#user_type_phone_conv").val()
         };
-        commonAjaxRequest("${base}/v1/utils/user_phone/convert.json", data, handlerUserPhoneConvert, true, "解密结果:", $("#user_type_phone_env_conv").val());
+
+        var request = {
+            url : "${base}/v1/utils/user_phone/convert.json",
+            data : data,
+            handlerFunc : handlerUserPhoneConvert,
+            isASync : true,
+            failTitle :"解密结果:",
+            env : $("#user_type_phone_env_conv").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerUserPhoneConvert(resu){
@@ -547,7 +575,17 @@
             userType : $("#user_type_phone_conv").val(),
             data : dataValue
         };
-        commonAjaxRequest("${base}/v1/utils/phone_user/convert.json", data, handlerPhoneUserConvert, true, "解密结果:", $("#user_type_phone_env_conv").val());
+
+        var request = {
+            url : "${base}/v1/utils/phone_user/convert.json",
+            data : data,
+            handlerFunc : handlerPhoneUserConvert,
+            isASync : false,
+            failTitle :"解密结果:",
+            env : $("#user_type_phone_env_conv").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerPhoneUserConvert(resu){
@@ -600,7 +638,16 @@
             data : dataValue
         };
 
-        commonAjaxRequest("${base}/v1/utils/user/decode.json", data, handlerDecodeUserCov, true, "解密结果:", $("#user_env_conv").val());
+        var request = {
+            url : "${base}/v1/utils/user/decode.json",
+            data : data,
+            handlerFunc : handlerDecodeUserCov,
+            isASync : true,
+            failTitle :"解密结果:",
+            env : $("#user_env_conv").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function encodeUserCov(dataValue){
@@ -614,7 +661,17 @@
             user_id : new Number(userId),
             user_type : userType
         };
-        return commonAjaxRequest("${base}/v1/utils/user/encode.json", data, handlerEncodeUserCov, false, "解密结果:", $("#user_env_conv").val());
+
+        var request = {
+            url : "${base}/v1/utils/user/encode.json",
+            data : data,
+            handlerFunc : handlerOrderEncode,
+            isASync : false,
+            failTitle :"加密结果:",
+            env : $("#user_env_conv").val()
+        };
+
+        return commonAjaxRequest(request);
     }
 
     function handlerDecodeUserCov(resu){
@@ -682,7 +739,16 @@
         var data = {
             data : qingqingPhoneNumber
         };
-        commonAjaxRequest("${base}/v1/utils/phone/decode.json", data, handlerPhoneDecode, true, "解密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/phone/decode.json",
+            data : data,
+            handlerFunc : handlerPhoneDecode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerPhoneDecode(resu){
@@ -693,7 +759,16 @@
         var data = {
             data : phoneNumber
         };
-        commonAjaxRequest("${base}/v1/utils/phone/encode.json", data, handlerPhoneEncode, true, "解密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/phone/encode.json",
+            data : data,
+            handlerFunc : handlerPhoneEncode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerPhoneEncode(resu){
@@ -727,7 +802,16 @@
         var data = {
             data : simpleClassName
         };
-        commonAjaxRequest("${base}/v1/utils/get_full_name.json", data, handlerFullClassName, true, "查询结果:");
+
+        var request = {
+            url : "${base}/v1/utils/get_full_name.json",
+            data : data,
+            handlerFunc : handlerFullClassName,
+            isASync : true,
+            failTitle :"查询结果:"
+        };
+
+        commonAjaxRequest(request);
     });
 
     function handlerFullClassName(resp){
@@ -757,14 +841,32 @@
         var data = {
             data : reportId
         };
-        commonAjaxRequest("${base}/v1/utils/report/teacher/encode.json", data, handleTeacherReportEncode, true, "加密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/report/teacher/encode.json",
+            data : data,
+            handlerFunc : handleTeacherReportEncode,
+            isASync : true,
+            failTitle :"加密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function decodeTeacherReportId(shareCode) {
         var data = {
             data : shareCode
         };
-        commonAjaxRequest("${base}/v1/utils/report/teacher/decode.json", data, handleTeacherReportDecode, true, "解密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/report/teacher/decode.json",
+            data : data,
+            handlerFunc : handleTeacherReportDecode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handleTeacherReportEncode(r){
@@ -791,14 +893,32 @@
         var data = {
             data: [reportId,studentId]
         };
-        commonAjaxRequest("${base}/v1/utils/report/student/encode.json", data, handleStudentReportEncode, true, "加密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/report/student/encode.json",
+            data : data,
+            handlerFunc : handleStudentReportEncode,
+            isASync : true,
+            failTitle :"加密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function decodeStudentReportId(shareCode) {
         var data = {
             data : shareCode
         };
-        commonAjaxRequest("${base}/v1/utils/report/student/decode.json", data, handleStudentReportDecode, true, "解密结果:");
+
+        var request = {
+            url : "${base}/v1/utils/report/student/decode.json",
+            data : data,
+            handlerFunc : handleStudentReportDecode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handleStudentReportEncode(r){

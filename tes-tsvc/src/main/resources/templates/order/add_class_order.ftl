@@ -644,7 +644,18 @@
             studentId: studentId
         };
 
-        result = commonAjaxRequest("${base}/v1/order/add_class_order.json", data, handlerAddOrder, false, "生成订单失败:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/order/add_class_order.json",
+            data : data,
+            handlerFunc : handlerAddOrder,
+            isASync : false,
+            failTitle :"生成订单失败：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        result = commonAjaxRequest(request);
 
         return result;
     }
@@ -738,8 +749,18 @@
             sourceChannel : $("#sourceChannel").val()
         };
 
-        result = commonAjaxRequest("${base}/v1/pay/ack_pay.json", data, handlerPay, false, "新增支付路径失败:", $("#env").val(), null, $("#guid").val());
-        return result;
+        var request = {
+            url : "${base}/v1/pay/ack_pay.json",
+            data : data,
+            handlerFunc : handlerPay,
+            isASync : false,
+            failTitle :"新增支付路径失败：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        return commonAjaxRequest(request);
     }
 
     function checkPay(){
@@ -751,7 +772,18 @@
             payType : $("#payType").val()
         };
 
-        commonAjaxRequest("${base}/v1/pay/check_pay.json", data, handlerCheckPay, false, "查询支付状态失败:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/pay/check_pay.json",
+            data : data,
+            handlerFunc : handlerCheckPay,
+            isASync : false,
+            failTitle :"查询支付状态失败：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handlerCheckPay(data){
@@ -794,7 +826,18 @@
             qingqingOrderId : $("#qingqingOrderId").text()
         };
 
-        commonAjaxRequest("${base}/v1/pay/pay_infos.json", data, handlerPayWayList, true, "获取第三方支付路径出错:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/pay/pay_infos.json",
+            data : data,
+            handlerFunc : handlerPayWayList,
+            isASync : true,
+            failTitle :"获取第三方支付路径出错：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     var syncPayWayList;
@@ -808,7 +851,17 @@
                 data : qinqqingTradeNo
             };
 
-            commonAjaxRequest("${base}/v1/pay/mock_third_pay.json", data, handlerMockThirdNotify, true, "模拟第三方支付成功通知失败:", $("#env").val(), null, $("#guid").val());
+            var request = {
+                url : "${base}/v1/pay/mock_third_pay.json",
+                data : data,
+                handlerFunc : handlerMockThirdNotify,
+                isASync : true,
+                failTitle :"模拟第三方支付成功通知失败:",
+                env : $("#env").val(),
+                guid : $("#guid").val()
+            };
+
+            commonAjaxRequest(request);
 
 
             if(syncPayWayList == null){
@@ -834,7 +887,18 @@
             coursePriceType : orderTypeValue
         };
 
-        return commonAjaxRequest("${base}/v1/pay/pre_pay.json", data, handlerPrePay, isAsync, "获取订单前置接口失败:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/pay/pre_pay.json",
+            data : data,
+            handlerFunc : handlerPrePay,
+            isASync : isAsync,
+            failTitle :"获取订单前置接口失败：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        return commonAjaxRequest(request);
     }
 
     var installmentConfigs;
@@ -937,7 +1001,18 @@
             data : new Number(teacherId)
         };
 
-        commonAjaxRequest("${base}/v1/order/detail_for_class_order.json", data, handlerTeacherInfo, true, "获取老师信息for订单异常:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/order/detail_for_class_order.json",
+            data : data,
+            handlerFunc : handlerTeacherInfo,
+            isASync : true,
+            failTitle :"获取老师信息for订单异常：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     $('#gradeId').change(function(){
@@ -1011,7 +1086,18 @@
             param : "{grade_ids:[" + gradeId + "], course_id:" + courseId + "}"
         }
 
-        commonAjaxRequest("${base}/v1/common/pb.json", data, handlerTextCategory, true, "获取教材信息失败:", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/common/pb.json",
+            data : data,
+            handlerFunc : handlerTextCategory,
+            isASync : true,
+            failTitle :"获取教材信息失败：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+    };
+
+        return commonAjaxRequest(request);
     }
 
     function handlerTextCategory(resu){
@@ -1087,7 +1173,18 @@
                         studentId : $("#studentId").val(),
                         createAssistantId : 200
                     }
-                    result = commonAjaxRequest("${base}/v1/order/class_order/made_up.json", data, notOps, false, "成团失败:", $("#env").val(), null, $("#guid").val());
+
+                    var request = {
+                        url : "${base}/v1/order/class_order/made_up.json",
+                        data : data,
+                        handlerFunc : notOps,
+                        isASync : false,
+                        failTitle :"成团失败:",
+                        env : $("#env").val(),
+                        guid : $("#guid").val()
+                    };
+
+                    result = commonAjaxRequest(request);
                 }
 
                 var qingqingOrderId = $("#qingqingOrderId").text();
@@ -1264,7 +1361,17 @@
             userType: "student"
         };
 
-        commonAjaxRequest("${base}/v1/common/pt.json", data, useValue, false, "用券失败：", $("#env").val(), null, $("#guid").val());
+        var request = {
+            url : "${base}/v1/common/pt.json",
+            data : data,
+            handlerFunc : useValue,
+            isASync : false,
+            failTitle :"用券失败：",
+            env : $("#env").val(),
+            guid : $("#guid").val()
+        };
+
+        commonAjaxRequest(request);
     });
 
     function useValue(r) {
@@ -1276,7 +1383,19 @@
             qingqingOrderId: $("#qingqingOrderId").text(),
             studentId:$("#studentId").val()
         }
-        commonAjaxRequest("${base}/v1/order/student/order/value_voucher_list.json", data, handleValueVouchers, true, "获取优惠券出错:", $("#env").val(), null, $("#guid").val());
+
+        var request = {
+            url : "${base}/v1/order/student/order/value_voucher_list.json",
+            data : data,
+            handlerFunc : handleValueVouchers,
+            isASync : true,
+            failTitle :"获取优惠券出错：",
+            env : $("#env").val(),
+            otherData : null,
+            guid : $("#guid").val()
+        };
+
+        commonAjaxRequest(request);
     }
 
     function handleValueVouchers(r) {

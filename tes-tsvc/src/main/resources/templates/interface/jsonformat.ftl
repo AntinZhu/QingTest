@@ -252,7 +252,15 @@
                 var data = {
                     data : ${interfaceId}
                 };
-                commonAjaxRequest("${base}/v1/test/interface.json", data, handlerInterface, true, "获取接口信息失败:");
+                var request = {
+                    url : "${base}/v1/test/interface.json",
+                    data : data,
+                    handlerFunc : handlerInterface,
+                    isASync : true,
+                    failTitle :"获取接口信息失败:"
+                };
+
+                commonAjaxRequest(request);
             }
 
             var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()&h={server}";
@@ -474,7 +482,18 @@
                     requestUserType : $("#requestUserType").val(),
                     param : JSON.stringify(param)
                 };
-                commonAjaxRequest("${base}/v1/test/interface/invoke.json", data, handlerInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+
+                var request = {
+                    url : "${base}/v1/test/interface/invoke.json",
+                    data : data,
+                    handlerFunc : handlerInvokeResult,
+                    isASync : true,
+                    failTitle :"接口调用异常:",
+                    env :$("#env").val(),
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
             }
 
             function invokeLocal(param){
@@ -488,7 +507,18 @@
                         param : param
                     };
 
-                    commonAjaxRequest("${base}/v1/test/user/token.json", user, handlerFilterFillInvoke, true, "接口调用异常：:", $("#env").val(), othData, $("#guid").val());
+                    var request = {
+                        url : "${base}/v1/test/user/token.json",
+                        data : user,
+                        handlerFunc : handlerFilterFillInvoke,
+                        isASync : true,
+                        failTitle :"接口调用异常:",
+                        env :$("#env").val(),
+                        guid : $("#guid").val(),
+                        otherData : othData
+                    };
+
+                    commonAjaxRequest(request);
                 }else{
                     handlerLocalInvoke(param, null);
                 }
@@ -521,9 +551,30 @@
                         requestType : interfaceBean.requestType
                     };
 
-                    commonAjaxRequest("http://127.0.0.1:8009/app/cross", data, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val());
+                    var request = {
+                        url : "http://127.0.0.1:8009/app/cross",
+                        data : data,
+                        handlerFunc : handlerLocalInvokeResult,
+                        isASync : true,
+                        failTitle :"接口调用异常:",
+                        env :$("#env").val(),
+                        guid : $("#guid").val()
+                    };
+
+                    commonAjaxRequest(request);
                 }else{
-                    commonAjaxRequest("http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl, param, handlerLocalInvokeResult, true, "接口调用异常：:", $("#env").val(), null, $("#guid").val(), headers);
+                    var request = {
+                        url : "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl,
+                        data : param,
+                        handlerFunc : handlerLocalInvokeResult,
+                        isASync : true,
+                        failTitle :"接口调用异常:",
+                        env :$("#env").val(),
+                        guid : $("#guid").val(),
+                        headers :headers
+                    };
+
+                    commonAjaxRequest(request);
                 }
             }
 
@@ -589,7 +640,15 @@
                     data : new Number(paramId)
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/param/default/set.json", data, notOps, true, "参数设置默认出错:");
+                var request = {
+                    url : "${base}/v1/test/interface/param/default/set.json",
+                    data : data,
+                    handlerFunc : notOps,
+                    isASync : true,
+                    failTitle :"参数设置默认出错:"
+                };
+
+                commonAjaxRequest(request);
             });
 
             $("#param_del").click(function(){
@@ -599,7 +658,15 @@
                     data : new Number(paramId)
                 };
 
-                commonAjaxRequest("${base}/v1/test/interface/param/delete.json", data,  refreshPage, true, "参数删除出错:");
+                var request = {
+                    url : "${base}/v1/test/interface/param/delete.json",
+                    data : data,
+                    handlerFunc : refreshPage,
+                    isASync : true,
+                    failTitle :"参数删除出错:"
+                };
+
+                commonAjaxRequest(request);
             });
 
             $("#resetBtn").click(function() {
@@ -630,7 +697,15 @@
                             fullParam : fullParam
                         };
 
-                        commonAjaxRequest("${base}/v1/test/interface/param/save.json", data, handlerParamSave, true, "参数样例保存出错:");
+                        var request = {
+                            url : "${base}/v1/test/interface/param/save.json",
+                            data : data,
+                            handlerFunc : handlerParamSave,
+                            isASync : true,
+                            failTitle :"参数样例保存出错:"
+                        };
+
+                        commonAjaxRequest(request);
                     }
                 });
             });

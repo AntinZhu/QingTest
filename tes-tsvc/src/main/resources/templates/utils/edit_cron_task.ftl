@@ -165,7 +165,15 @@
             $("#resetBtn").click(function () {
                 var id = new Number($("#id").val())
 
-                commonAjaxRequest("${base}/v1/utils/cron_task/del.json?id=" + id, null, handlerDel, true, "删除失败:");
+                var request = {
+                    url : "${base}/v1/utils/cron_task/del.json?id=" + id,
+                    data : null,
+                    handlerFunc : handlerDel,
+                    isASync : true,
+                    failTitle :"删除失败:"
+                };
+
+                commonAjaxRequest(request);
             });
 
             function handlerDel() {
@@ -204,7 +212,15 @@
                     url : url
                 };
 
-                commonAjaxRequest("${base}/v1/utils/cron_task/add.json", data, handlerSave, true, "保存失败:");
+                var request = {
+                    url : "${base}/v1/utils/cron_task/add.json",
+                    data : data,
+                    handlerFunc : handlerSave,
+                    isASync : true,
+                    failTitle :"保存失败:"
+                };
+
+                commonAjaxRequest(request);
             });
 
             function handlerSave(resu){

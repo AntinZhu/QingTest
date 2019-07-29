@@ -8,9 +8,18 @@ function orderCourseList(base, qingqingOrderId, coursePriceType){
         coursePriceType : coursePriceType
     };
 
-    result = commonAjaxRequest(base + "/v1/order_course/order_course_list.json", data, handlerSubOrderDetail, false, "", $("#env").val(), otherData, $("#guid").val());
+    var request = {
+        url : base + "/v1/order_course/order_course_list.json",
+        data : data,
+        handlerFunc : handlerSubOrderDetail,
+        isASync : false,
+        failTitle :"获取课程信息失败：",
+        env : $("#env").val(),
+        otherData : otherData,
+        guid : $("#guid").val()
+    };
 
-    return result;
+    return commonAjaxRequest(request);
 }
 
 function handlerSubOrderDetail(resu, otherData){
@@ -85,7 +94,18 @@ function startClass(base, groupOrderCourseId, teacherId){
         userType : 'teacher'
     }
 
-    commonAjaxRequest(base +"/v1/common/pi.json", data, handlerCommonOrderOps, false, "点击上课失败：", $("#env").val(), null, $("#guid").val());
+    var request = {
+        url : base + "/v1/common/pi.json",
+        data : data,
+        handlerFunc : handlerCommonOrderOps,
+        isASync : false,
+        failTitle :"点击上课失败：",
+        env : $("#env").val(),
+        otherData : null,
+        guid : $("#guid").val()
+    };
+
+    commonAjaxRequest(request);
 };
 
 function finishClass(base, orderCourseId, studentId){
@@ -97,7 +117,18 @@ function finishClass(base, orderCourseId, studentId){
         userType : "student"
     };
 
-    commonAjaxRequest(base + "/v1/common/pt.json", data, handlerCommonOrderOps, false, "结课失败：", $("#env").val(), null, $("#guid").val());
+    var request = {
+        url : base + "/v1/common/pt.json",
+        data : data,
+        handlerFunc : handlerCommonOrderOps,
+        isASync : false,
+        failTitle :"结课失败：",
+        env : $("#env").val(),
+        otherData : null,
+        guid : $("#guid").val()
+    };
+
+    commonAjaxRequest(request);
 };
 
 function applyFreeze(base, orderCourseId, studentId){
@@ -114,7 +145,18 @@ function applyFreeze(base, orderCourseId, studentId){
         base :base
     };
 
-    commonAjaxRequest(base + "/v1/common/pt.json", data, handlerApplyFreeze, false, "申请三方赔付失败：", $("#env").val(), otherData, $("#guid").val());
+    var request = {
+        url : base + "/v1/common/pt.json",
+        data : data,
+        handlerFunc : handlerApplyFreeze,
+        isASync : false,
+        failTitle :"申请三方赔付失败：",
+        env : $("#env").val(),
+        otherData : otherData,
+        guid : $("#guid").val()
+    };
+
+    commonAjaxRequest(request);
 };
 
 function handlerApplyFreeze(resu, otherData){
@@ -136,7 +178,18 @@ function applyCancelOrderCourse(base, groupOrderCourseId, assistantId){
         base :base
     };
 
-    commonAjaxRequest(base + "/v1/common/pi.json", data, handlerApplyCancel, false, "申请删课失败:", $("#env").val(), otherData, $("#guid").val());
+    var request = {
+        url : base + "/v1/common/pi.json",
+        data : data,
+        handlerFunc : handlerApplyCancel,
+        isASync : false,
+        failTitle :"申请删课失败:",
+        env : $("#env").val(),
+        otherData : otherData,
+        guid : $("#guid").val()
+    };
+
+    commonAjaxRequest(request);
 };
 
 function handlerApplyCancel(resu, otherData) {
@@ -177,5 +230,16 @@ function deleteClassOrderCourse(base, orderCourseId, assistantId){
         base :base
     };
 
-    commonAjaxRequest(base + "/v1/common/pi.json", data, handlerApplyCancel, false, "申请删课失败:", $("#env").val(), otherData, $("#guid").val());
+    var request = {
+        url : base + "/v1/common/pi.json",
+        data : data,
+        handlerFunc : handlerApplyCancel,
+        isASync : false,
+        failTitle :"申请删课失败：",
+        env : $("#env").val(),
+        otherData : otherData,
+        guid : $("#guid").val()
+    };
+
+    commonAjaxRequest(request);
 }

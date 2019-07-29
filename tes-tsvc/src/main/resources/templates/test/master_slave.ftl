@@ -375,7 +375,15 @@
                 param : ''
             };
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handlerParamSave, false, "查询失败：");
+            var request = {
+                url : "${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"),
+                data : data,
+                handlerFunc : handlerParamSave,
+                isASync : false,
+                failTitle :"查询失败："
+            };
+
+            commonAjaxRequest(request);
         }
 
         function handlerParamSave(resu){
@@ -394,7 +402,15 @@
                 param : JSON.stringify(param)
             }
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handleAddResult, false, "新增失败：");
+            var request = {
+                url : "${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"),
+                data : data,
+                handlerFunc : handleAddResult,
+                isASync : false,
+                failTitle :"新增失败:"
+            };
+
+            commonAjaxRequest(request);
         });
 
         function handleAddResult(resu){
@@ -413,7 +429,15 @@
                 param : JSON.stringify(param)
             }
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handleUpdateResult, false, "更新失败：");
+            var request = {
+                url : "${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"),
+                data : data,
+                handlerFunc : handleUpdateResult,
+                isASync : false,
+                failTitle :"更新失败："
+            };
+
+            commonAjaxRequest(request);
         });
 
         $("#assignMaster").click(function(){
@@ -441,7 +465,15 @@
                 param : JSON.stringify(param)
             }
 
-            commonAjaxRequest("${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"), data, handleDeleteResult, false, "更新失败：");
+            var request = {
+                url : "${base}/v1/common/pi.json?host=" + encodeURI(serIp + ":8084"),
+                data : data,
+                handlerFunc : handleDeleteResult,
+                isASync : false,
+                failTitle :"更新失败："
+            };
+
+            commonAjaxRequest(request);
         });
 
         function handleDeleteResult(resu){

@@ -278,7 +278,16 @@
                     refValue : refValue
                 };
 
-                commonAjaxRequest("${base}/v1/test/catelog/save.json", data, handlerSave, true, "保存失败:");
+                var request = {
+                    url : "${base}/v1/test/catelog/save.json",
+                    data : data,
+                    handlerFunc : handlerSave,
+                    isASync : true,
+                    failTitle :"保存失败:"
+                };
+
+                commonAjaxRequest(request);
+
             });
 
             $(".qing_cate_ref_type").click(function(){
