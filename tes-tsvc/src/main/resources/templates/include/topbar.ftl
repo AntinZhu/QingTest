@@ -303,6 +303,10 @@
             return;
         }
 
+        sendQingMsg(msg);
+    });
+
+    function sendQingMsg(msg){
         var assignIp = "";
         var splits = msg.split("#");
         if(splits.length > 1 && isValidIP(splits[0])){
@@ -312,15 +316,15 @@
 
         var userName = $("#qing_ip").text();
         var userIp = $("#qing_user_ip").val();
-        var msg = {
+        var fullMsg = {
             userIp: userIp,
             userName : userName,
             msg : msg,
             assignIp : assignIp
         }
 
-        websocket.send(JSON.stringify(msg));
-    });
+        websocket.send(JSON.stringify(fullMsg));
+    }
 
     function isValidIP(ip) {
         var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
@@ -353,6 +357,14 @@
                     if(msg.userIp != userIp && (msg.assignIp == "" ||  msg.assignIp == userIp)){
                         if(msg.msg == "{up_ip}"){
                             upIp();
+                        }else if(msg.msg == "{deploy}"){
+                            var calc=new ActiveXObject("WScript.shell");
+                            calc.run("F:/work/Github/auto_deploy.bat");
+                            sendQingMsg("服务即将重启");
+                        }else if(msg.msg == "{full_deploy}"){
+                            var calc=new ActiveXObject("WScript.shell");
+                            calc.run("F:/work/Github/full_auto_deploy.bat");
+                            sendQingMsg("服务即将重启");
                         }else{
                             $.gritter.add({
                                 title: '新消息',

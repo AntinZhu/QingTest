@@ -1,11 +1,18 @@
 package com.qingqing.test.manager;
 
 import com.qingqing.test.domain.config.TestProtoClassName;
+import com.qingqing.test.service.common.CommonService;
 import com.qingqing.test.service.config.TestProtoClassNameService;
+import com.qingqing.test.util.QingFileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,11 +23,19 @@ import java.util.Map;
  */
 @Component
 public class TestProtoClassNameManager implements ISyncable{
+    private static final Logger logger = LoggerFactory.getLogger(TestProtoClassNameManager.class);
 
     @Autowired
     private TestProtoClassNameService testProtoClassNameService;
+    @Autowired
+    private TestConfigManager testConfigManager;
+    @Autowired
+    private CommonService commonService;
 
     private Map<String, List<String>> simpleFullMap;
+
+    @Value("${protobuf.init.filepath:null}")
+    public String protoInitFile;
 
     @PostConstruct
     public void sync(){
@@ -38,6 +53,27 @@ public class TestProtoClassNameManager implements ISyncable{
         }
 
         simpleFullMap = tmpConfigMap;
+
+        if(protoInitFile != null && "true".equals(testConfigManager.getConfigValue("proto.auto.replace", "false"))){
+            InputStream in = null;
+            try{
+                in = TestProtoClassNameManager.class.getResourceAsStream(protoInitFile);
+                List<String> encodeList = QingFileUtils.readLines(in);
+                for (String sql : encodeList) {
+                    commonService.insert(sql);
+                }
+            }catch(Exception e){
+                logger.error("init proto name fail", e);
+            }finally {
+                if(in != null){
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        // ignore
+                    }
+                }
+            }
+        }
     }
 
     @Override
