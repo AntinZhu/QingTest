@@ -37,18 +37,18 @@ public class QingApiLabUtils {
     private static final String USER_CONVERT_URL = "https://lab.changingedu.com/apilab/page/convert/user";
     private static final String PHONE_DECODE_URL = "https://lab.changingedu.com/apilab/page/convert/aliPay";
 
-    public static void main(String[] args) throws Exception {
-        String mode = args[0];
-        switch (mode){
-            case "phone":
-                String inputFile = args[1];
-                String session = args[2];
-                decodePhoneFile(inputFile, session);
-                break;
-            default:
-                System.err.println("unknown mode for value:" + mode);
-        }
-    }
+//    public static void main(String[] args) throws Exception {
+//        String mode = args[0];
+//        switch (mode){
+//            case "phone":
+//                String inputFile = args[1];
+//                String session = args[2];
+//                decodePhoneFile(inputFile, session);
+//                break;
+//            default:
+//                System.err.println("unknown mode for value:" + mode);
+//        }
+//    }
 
     private static final void decodePhoneFile(String filePath, String session) throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -179,5 +179,12 @@ public class QingApiLabUtils {
         }
 
         return null;
+    }
+
+    public static void main(String[] args) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36");
+
+        System.out.println(doJsonPost("https://zhujianxinghahaha:115dbe9b426bc0a539b148d13c3f14dd66@jenkins.changingedu.com/job/api-protobuf/build", "", headers));
     }
 }

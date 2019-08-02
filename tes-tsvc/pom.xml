@@ -178,7 +178,7 @@
         <dependency>
             <groupId>com.qingqing.search</groupId>
             <artifactId>search-client</artifactId>
-            <version>1.1.5-SNAPSHOT-tst</version>
+            <version>1.1.5-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-log4j12</artifactId>
