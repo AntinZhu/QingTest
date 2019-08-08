@@ -73,12 +73,23 @@
                             </div>
                         </div>
 
-                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
-                            <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
-                            <div class="ro" id="json-interface-detail" style="padding:0px 25px;white-space: pre-line;">
-                                <span data-type="object"><i style="cursor:pointer;" class="fa icon-minus" onclick="hide(this)"></i>{<br><br>}</span></div>
+                        <div class="hr hr-dotted"></div>
+
+                        <#include "/include/paramDetail.ftl" />
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData">格式化查看：</label>
+
+                            <div class="col-sm-9">
+                                <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
+                                    <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
+                                    <div class="ro" id="json-interface-detail" style="padding:0px 25px;white-space: pre-line;">
+                                        <span data-type="object"><i style="cursor:pointer;" class="fa icon-minus" onclick="hide(this)"></i>{<br><br>}</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
                 </div>
 
@@ -86,6 +97,18 @@
     </div>
 
 <script type="text/javascript">
+    var paramInfo;
+    $(document).on("change", "#paramJsonTemplate",function(e){
+        setTimeout(refreshResult, 500);
+    });
+
+    function refreshResult(){
+        var param = generateEditParam("#paramListDiv input", paramInfo);
+        $("#paramJsonTemplate").text(param);
+
+        jsonShow(param, "json-interface-detail");
+    }
+
     $("#paramTemplateConvertBtn").click(function(){
         var jsonObjValue = $("#paramJsonObj").val();
         if(jsonObjValue == ""){
@@ -94,7 +117,7 @@
                     text : "请输入Json串",
                     class_name : 'gritter-error gritter-center'
                 });
-                return;
+            return;
         }
 
         jsonShow(jsonObjValue, "json-interface-detail");
@@ -114,6 +137,8 @@
         var result = JSON.stringify(generateTemplate(jsonObj));
         jsonShow(result, "json-interface-detail");
         $("#paramJsonTemplate").text(result);
+
+        paramInfo = showParam({paramData:result, isEditStatus:true,valueChangedNotifyId:"paramJsonTemplate"});
     });
 </script>
 </body>

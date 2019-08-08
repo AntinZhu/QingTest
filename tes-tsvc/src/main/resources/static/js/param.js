@@ -244,10 +244,10 @@ var input_editable_value = "<div class='profile-info-value' alt='{alt}'>{editabl
 var editable_table_html = "<div class='profile-info-value' alt='{alt}'>{editable}" + del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{br}{paramList}</div></div></div>";
 var first_editable_table_html =  del_btn_html + "<div style='margin-right: 13px;'><div class='profile-user-info profile-user-info-striped' id = '{id}'>{paramList}</div></div>";
 var sub_editable_html = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input trig='{notifyId}' key='{key}' class='qing_editable' type='hidden' id='{key}--name' isMulti='{isMulti}' alt='{alt}' value='{name}'/>{name} </div>{paramList}</div>";
-var switch_editable_html = "<div class='profile-info-value' alt='{alt}' style='height: 34px;'><label class='pull-left inline' title='' data-rel='tooltip' data-original-title='{name}'><input  key='{key}' type='checkbox' name='{key}' alt='{alt}' trig='{notifyId}' value='{defaultValue}' class='ace ace-switch ace-switch-5 {class}'><span class='lbl'></span></label></div>";
+var switch_editable_html = "<div class='profile-info-value' alt='{alt}' style='height: 34px;'><label class='pull-left inline' title='' data-rel='tooltip' clazz='switch_editable' data-original-title='{name}'><input  key='{key}' type='checkbox' clazz='switch_editable' name='{key}' alt='{alt}' trig='{notifyId}' value='{defaultValue}' class='ace ace-switch ace-switch-5 {class}'><span class='lbl'></span></label></div>";
 
 var number_type_html = "<span class='col-xs-9 pull-right qing_param_edit_1 hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span><span href='#' key='{key}' clazz='datetime_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期+时间毫秒值</span></span></span><!-- /span -->";
-number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span></span></span><!-- /span -->";
+number_type_html = "<span class='col-xs-9 pull-right qing_param_edit hide'><span class='pull-right inline'><span href='#' key='{key}' trig='{notifyId}' clazz='input_editable' class='label label-large label-primary arrowed-in arrowed-right qing_value_type'>数值</span> <span href='#' key='{key}' trig='{notifyId}' clazz='date_editable' class='label label-large arrowed-in arrowed-right qing_value_type'>日期毫秒值</span></span></span><!-- /span -->";
 
 var input_editable_html_edit = "<div class='profile-info-row' alt='{alt}'><div class='profile-info-name'> <input trig='{notifyId}' key='{key}' class='qing_editable' isMulti='{isMulti}' type='hidden' id='{key}--name' alt='{alt}' value='{name}'/><span class='editable input_editable input_label'>{name}</span> </div>{value}</div>";
 var input_editable_value_edit = "<div class='profile-info-value' alt='{alt}'>" + del_btn_html + "<input trig='{notifyId}' key='{key}' type='hidden' name='{key}' alt='{alt}' value='{defaultValue}'/><span class='editable input_label {key}_label {class}' style='word-break: break-all;'alt='{alt}'>{defaultName}</span>{valueType}</div>";
@@ -664,6 +664,9 @@ function formatEditParamObject(propName, paramName, value, allObject, paramInfo)
     }
 
     var defaultName = $("." + paramName + "_label[alt='" + value.alt + "']").text();
+    if(obj.class == "switch_editable"){
+        defaultName = value.value;
+    }
     if(isArray){
         var defaultObj = new Object();
         defaultObj.name = defaultName;
@@ -742,7 +745,7 @@ $(document).on("click", ".qing_value_type", function(){
     $("input[name='" + key + "']").attr("clazz", clazz);
 
     changeDefaultValue(key, clazz);
-    notifyParamChanged($(this).prev("input").attr("trig"));
+    notifyParamChanged($(this).attr("trig"));
 });
 
 $(document).on("click", ".switch_editable", function(){
@@ -913,6 +916,9 @@ function generateTemplate(jsonObj){
                     item.detail = generateTemplate(propValue);
                 }else{
                     item.defaultValue = {name : propValue,value:propValue};
+                    if(Object.prototype.toString.call(propValue) == "[object Boolean]"){
+                        item.class = "switch_editable";
+                    }
                 }
             }
             itemArr[itemIndex++] = item;

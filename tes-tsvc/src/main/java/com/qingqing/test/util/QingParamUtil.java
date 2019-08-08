@@ -36,7 +36,6 @@ public class QingParamUtil {
 
         genProtoClassName("F:\\work\\student_pool_svc\\protobean\\src\\main\\resources\\proto-sub", "D:\\sql\\full-proto.sql");
     }
-
     private static void genProtoClassName(String dirPath, String outputFileName) throws IOException {
         List<QingProtoFile> qingProtoFiles = parseProtoDir(new File(dirPath));
 
@@ -260,9 +259,9 @@ public class QingParamUtil {
 
     private static String toBooleanProperties(String properties, boolean isArray){
         if(isArray){
-            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":[{\"name\":\"否\",\"value\":\"false\"}], \"selectable\":[{\"name\":\"否\",\"value\":\"false\"},{\"name\":\"是\",\"value\":\"true\"}]}]", properties, properties, properties);
+            return  String.format("[{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":[{\"name\":\"否\",\"value\":\"false\"}], \"class\":\"switch_editable\"}]", properties, properties, properties);
         }else{
-            return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":{\"name\":\"否\",\"value\":\"false\"}, \"selectable\":[{\"name\":\"否\",\"value\":\"false\"},{\"name\":\"是\",\"value\":\"true\"}]}", properties, properties, properties);
+            return  String.format("{\"key\":\"%s\",\"name\":\"%s\",\"defaultValue\":{\"name\":\"否\",\"value\":\"false\"}, \"class\":\"switch_editable\"}", properties, properties, properties);
         }
     }
 
