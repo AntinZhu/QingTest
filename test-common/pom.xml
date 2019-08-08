@@ -16,13 +16,13 @@
         <repository>
             <name>qingqing</name>
             <id>qingqing</id>
-            <url>http://nexus/content/repositories/qingqing/</url>
+            <url>http://nexus.changingedu.com/content/repositories/qingqing/</url>
         </repository>
 
         <snapshotRepository>
             <name>qingqing-snapshot</name>
             <id>qingqing-snapshot</id>
-            <url>http://nexus/content/repositories/qingqing-snapshot/</url>
+            <url>http://nexus.changingedu.com/content/repositories/qingqing-snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
 

@@ -2,6 +2,8 @@ package com.qingqing.test.bean.base;
 
 public class SimpleResponse {
 
+    public static final SimpleResponse SUCC = new SimpleResponse(BaseResponse.SUCC_RESP);
+
     private BaseResponse response;
 
     public SimpleResponse(){}

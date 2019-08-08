@@ -48,6 +48,38 @@
                             <div class="hr hr-dotted"></div>
                             <div class="hr hr-dotted"></div>
                             <div class="col-xs-12 col-sm-6 qing_resize">
+                                <div class="form-group">
+                                    <label style="text-align: right;" class="control-label col-xs-12 col-sm-3 no-padding-right" for="teacherIdIpt">ConfigKey:</label>
+
+                                    <div class="col-xs-12 col-sm-9">
+                                        <div class="clearfix">
+                                            <select class="width-100 chosen-select form-control" id="configKeyChoose">
+                                                <option value="0">没得选</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData">ConfigValue：</label>
+
+                                    <div class="col-sm-9">
+                                        <textarea id="configValueParam" style="height: 250px" class="autosize-transition form-control"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData"></label>
+
+                                    <div class="col-sm-9">
+                                        <button class="btn btn-info" type="button" id="searchBtn">
+                                            <i class="icon-ok bigger-110"></i>
+                                            更新
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12">
                                 <!-- 开关类 -->
                                 <div class="col-xs-12 col-sm-12 widget-container-span qing_config_switch qing_common_config hide">
                                 <#if configKey == "qing_config_switch">
@@ -182,7 +214,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- 老师授课时间设置 -->
+
+                                        <!-- 老师授课时间设置 -->
                                 <div class="col-xs-6 col-sm-6 widget-container-span qing_common_config api_teacher_time_config hide">
                                 <#if configKey == "api_teacher_time_config">
                                     <div class="widget-box">
@@ -249,6 +282,106 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- 调课约束设置 -->
+                                <div class="col-xs-6 col-sm-12 widget-container-span qing_common_config change_course_constraint_config hide">
+                                <#if configKey == "change_course_constraint_config">
+                                    <div class="widget-box">
+                                <#else >
+                                    <div class="widget-box collapsed">
+                                </#if>
+                                        <div class="widget-header header-color-pink">
+                                            <h5 class="smaller">调课约束设置(change_course_constraint_config)</h5>
+
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "change_course_constraint_config">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input type="hidden" id="change_course_constraint_config" />
+                                                <input type="hidden" id="change_course_constraint_config_notify" />
+                                                <div id="change_course_constraint_config_div">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    <!-- 首课沟通设置 -->
+                                    <div class="col-xs-6 col-sm-12 widget-container-span qing_common_config service_standard_config_v2 hide">
+                                    <#if configKey == "service_standard_config_v2">
+                                    <div class="widget-box">
+                                    <#else >
+                                    <div class="widget-box collapsed">
+                                    </#if>
+                                        <div class="widget-header header-color-pink">
+                                            <h5 class="smaller">首课沟通配置(service_standard_config_v2)</h5>
+
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "service_standard_config_v2">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input type="hidden" id="service_standard_config_v2" />
+                                                <input type="hidden" id="service_standard_config_v2_notify" />
+                                                <div id="service_standard_config_v2_div">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    <!-- 人脸认证设置 -->
+                                    <div class="col-xs-6 col-sm-6 widget-container-span qing_common_config api_detect_auth_config hide">
+                                    <#if configKey == "api_detect_auth_config">
+                                    <div class="widget-box">
+                                    <#else >
+                                    <div class="widget-box collapsed">
+                                    </#if>
+                                        <div class="widget-header header-color-pink">
+                                            <h5 class="smaller">人脸认证(api_detect_auth_config)</h5>
+
+                                            <div class="widget-toolbar no-border">
+                                                <a href="#" data-action="collapse">
+                                                <#if configKey == "api_detect_auth_config">
+                                                    <i class="icon-chevron-up"></i>
+                                                <#else >
+                                                    <i class="icon-chevron-down"></i>
+                                                </#if>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main padding-6">
+                                                <input type="hidden" id="api_detect_auth_config" />
+                                                <input type="hidden" id="api_detect_auth_config_notify" />
+                                                <div id="api_detect_auth_config_div">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
                         </div><!-- /.row -->
                     </div><!-- /.page-header -->
@@ -272,9 +405,14 @@
     var api_teacher_time_config_param_info;
     var installment_pay_config_v2_paramInfo;
     var api_moon_arrange_course_config_param_info;
+    var change_course_constraint_config_param_info;
+    var service_standard_config_v2_param_info;
+    var api_detect_auth_config_param_info;
+
     var resizeChanged = false;
 
     function initDefault(){
+        var allConfig;
         var fullSwitchTrs = "";
         // 初始化默认属性
         var defaultIdx = 0;
@@ -299,6 +437,10 @@
         api_teacher_time_config_param_info = init_api_teacher_time_config('{"teachingHours":6, "weekendTeachingHours":2}');
         installment_pay_config_v2_paramInfo = init_installment_pay_config_v2("{}");
         api_moon_arrange_course_config_param_info = init_api_moon_arrange_course_config('{"isOpen":false,"startUpdateDay":3,"endUpdateDay":25,"expriedDay":20,"deduction":{"moreHalf":3.0,"lessHalf":5.0,"none":8.0}}');
+        change_course_constraint_config_param_info = init_change_course_constraint_config('{"teacherChangeCourseConstraintConfig":{"freeChangeCourseNumPerMonth":1,"duringFineRate":10,"outsideFineRate":20,"compensateRate":80},"studentChangeCourseConstraintConfig":{"freeChangeCourseNumPerMonth":1,"duringFineRate":10,"outsideFineRate":20,"compensateRate":80},"cities":[1,2,3]}');
+
+        service_standard_config_v2_param_info = init_service_standard_config_v2("{}");
+        api_detect_auth_config_param_info = init_api_detect_auth_config("{}");
 
         <#if configKey != "">
             $(".qing_common_config.${configKey}").removeClass("hide");
@@ -339,6 +481,28 @@
         return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:"api_moon_arrange_course_config_div", "valueChangedNotifyId":"api_moon_arrange_course_config_notify", "isEditStatus":false});
     }
 
+    function init_change_course_constraint_config(configValue){
+        $("#change_course_constraint_config").val(configValue);
+        var paramsTemplate = '[{"key":"teacherChangeCourseConstraintConfig","name":"老师端","detail":[{"key":"freeChangeCourseNumPerMonth","name":"freeChangeCourseNumPerMonth","defaultValue":{"name":1,"value":1}},{"key":"duringFineRate","name":"duringFineRate","defaultValue":{"name":10,"value":10}},{"key":"outsideFineRate","name":"outsideFineRate","defaultValue":{"name":20,"value":20}},{"key":"compensateRate","name":"compensateRate","defaultValue":{"name":80,"value":80}}]},{"key":"studentChangeCourseConstraintConfig","name":"学生端","detail":[{"key":"freeChangeCourseNumPerMonth","name":"freeChangeCourseNumPerMonth","defaultValue":{"name":1,"value":1}},{"key":"duringFineRate","name":"duringFineRate","defaultValue":{"name":10,"value":10}},{"key":"outsideFineRate","name":"outsideFineRate","defaultValue":{"name":20,"value":20}},{"key":"compensateRate","name":"compensateRate","defaultValue":{"name":80,"value":80}}]},[{"key":"cities","name":"支持城市", "defaultValue":[{"name":1,"value":1}]}]]';
+
+        return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:"change_course_constraint_config_div", "valueChangedNotifyId":"change_course_constraint_config_notify", "isEditStatus":false});
+    }
+
+    function init_service_standard_config_v2(configValue){
+        $("#service_standard_config_v2").val(configValue);
+        var paramsTemplate = '[{"key":"enable","name":"enable", "class": "switch_editable","defaultValue":{"name":false,"value":false}},{"key":"deductAmount","name":"deductAmount","defaultValue":{"name":2,"value":2}},{"key":"startCourseTimeInterval","name":"startCourseTimeInterval","defaultValue":{"name":6,"value":6}},{"key":"liveClassPassingThreshold","name":"liveClassPassingThreshold","defaultValue":{"name":6,"value":6}},{"key":"live1v1PassingThreshold","name":"live1v1PassingThreshold","defaultValue":{"name":6,"value":6}},{"key":"offline1v1PassingThreshold","name":"offline1v1PassingThreshold","defaultValue":{"name":7,"value":7}},{"key":"offlineGroupPassingThreshold","name":"offlineGroupPassingThreshold","defaultValue":{"name":7,"value":7}},{"key":"validDays","name":"validDays","defaultValue":{"name":7,"value":7}},{"key":"firstCourseCommunication","name":"firstCourseCommunication","detail":[{"key":"enable","name":"enable", "class": "switch_editable","defaultValue":{"name":true,"value":true}},{"key":"deductAmount","name":"deductAmount","defaultValue":{"name":4,"value":4}}]},{"key":"firstCourseTraining","name":"firstCourseTraining","detail":[{"key":"enable","name":"enable", "class": "switch_editable","defaultValue":{"name":true,"value":true}},{"key":"deductAmount","name":"deductAmount","defaultValue":{"name":2,"value":2}},{"key":"createInterval","name":"createInterval","defaultValue":{"name":30,"value":30}}]},{"key":"firstCourseRecordOnlineLesson","name":"firstCourseRecordOnlineLesson","detail":[{"key":"enable","name":"enable", "class": "switch_editable","defaultValue":{"name":true,"value":true}}]},{"key":"firstCourseCommunicationV2","name":"firstCourseCommunicationV2","detail":[{"key":"enable", "class": "switch_editable","name":"enable","defaultValue":{"name":false,"value":false}},{"key":"deductAmount","name":"deductAmount","defaultValue":{"name":7,"value":7}},[{"key":"openCities","name":"openCities","defaultValue":[{"name":151,"value":151}]}]]}]';
+        return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:"service_standard_config_v2_div", "valueChangedNotifyId":"service_standard_config_v2_notify", "isEditStatus":false});
+    }
+
+    function init_api_detect_auth_config(configValue){
+        var key = "api_detect_auth_config";
+        $("#" + key).val(configValue);
+        var paramsTemplate = '[{"key":"isOpen", "class": "switch_editable","name":"开关","defaultValue":{"name":true,"value":true}},{"key":"maxDetectAuthNum","name":"次数上限","defaultValue":{"name":10,"value":10}}]';
+
+        return showParam({paramData:fillTemplate(paramsTemplate, configValue), htmlDiv:key + "_div", "valueChangedNotifyId":key + "_notify", "isEditStatus":false});
+    }
+
+
     function fillTemplate(paramsTemplate, configValue){
         var params = JSON.parse(paramsTemplate);
         var configObj = JSON.parse(configValue);
@@ -376,6 +540,26 @@
         setConfig("api_moon_arrange_course_config", JSON.stringify(result));
     });
 
+    //输入框的值改变时触发
+    $(document).on("change", "#change_course_constraint_config_notify",function(e){
+        var result = generateJsonParam("#change_course_constraint_config_div input", change_course_constraint_config_param_info);
+
+        setConfig("change_course_constraint_config", JSON.stringify(result));
+    });
+
+    //输入框的值改变时触发
+    $(document).on("change", "#service_standard_config_v2_notify",function(e){
+        var result = generateJsonParam("#service_standard_config_v2_div input", service_standard_config_v2_param_info);
+
+        setConfig("service_standard_config_v2", JSON.stringify(result));
+    });
+
+    //输入框的值改变时触发
+    $(document).on("change", "#api_detect_auth_config_notify",function(e){
+        var result = generateJsonParam("#api_detect_auth_config_div input", api_detect_auth_config_param_info);
+
+        setConfig("api_detect_auth_config", JSON.stringify(result));
+    });
 
     window.onresize = function(){
         resizeChanged = qingResize(resizeChanged);
@@ -403,7 +587,7 @@
         var request = {
             url : "${base}/v1/common/pi.json",
             data : data,
-            handlerFunc : emptyM,
+            handlerFunc : initConfig,
             isASync : true,
             failTitle :"设置通用配置失败:",
             guid : "test-api-config",
@@ -414,7 +598,6 @@
     }
 
     function emptyM(){
-
     }
 
     function init_api_selective_order_promise_amount_config(configValue){
@@ -471,8 +654,13 @@
     }
 
     function initResult(resu){
+        allConfig = resu.resultList;
+
+        var selectConfigList = [];
+        selectConfigList[0] = {key:"",value:"先不选"};
         for( var idx in resu.resultList){
             var config = resu.resultList[idx];
+            selectConfigList[idx + 1] = {key:config.key, value:config.key};
 
             var eleInput = $("input[id='" + config.key + "']");
             if(eleInput.length == 0){
@@ -500,7 +688,20 @@
             if("api_moon_arrange_course_config" == config.key){
                 api_moon_arrange_course_config_param_info = init_api_moon_arrange_course_config(config.value);
             }
+            if("change_course_constraint_config" == config.key) {
+                change_course_constraint_config_param_info = init_change_course_constraint_config(config.value);
+            }
+            if("service_standard_config_v2" == config.key) {
+                service_standard_config_v2_param_info = init_service_standard_config_v2(config.value);
+            }
+            if("api_detect_auth_config" == config.key) {
+                api_detect_auth_config_param_info = init_api_detect_auth_config(config.value);
+            }
+
+            $(".qing_param_edit").removeClass("hide");
         }
+
+        updateOptions("configKeyChoose", selectConfigList, "");
     }
 
     $(document).on("click", ".qing_config_switch", function(){
@@ -510,9 +711,6 @@
         $(inputEle).val(newValue);
 
         setConfig($(inputEle).attr("id"), newValue);
-    });
-
-    $('#teacher_max_teachable_student_count').change(function(){
     });
 
     $(".env").click(function(){
@@ -561,6 +759,38 @@
             class_name : 'gritter-info gritter-center'
         });
     }
+
+    $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
+    $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
+
+    $("#configKeyChoose").change(function(){
+        var value = $(this).val();
+        if(value == ""){
+            $("#configValueParam").val("");
+        }else{
+            var idx = 0;
+            var len = allConfig.length;
+            while(idx < len){
+                var config = allConfig[idx];
+                if(config.key == value){
+                    $("#configValueParam").val(config.value);
+                    break;
+                }
+                idx++;
+            }
+        }
+    });
+
+    $("#searchBtn").click(function(){
+        var configKey = $("#configKeyChoose").val();
+        if(value == ""){
+            return;
+        }
+
+        var configValue = $("#configValueParam").val();
+
+        setConfig(configKey, configValue);
+    });
 
     jQuery(function($) {
         $(".chosen-select").chosen();

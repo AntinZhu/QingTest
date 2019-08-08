@@ -21,4 +21,9 @@ public class TestUserIpServiceImpl implements TestUserIpService {
     public List<TestUserIp> selectAll() {
         return mapper.selectAll();
     }
+
+    @Override
+    public boolean updateUserHeadImage(String userIp, String headImage) {
+        return mapper.updateHeadImage(userIp, headImage) > 0;
+    }
 }

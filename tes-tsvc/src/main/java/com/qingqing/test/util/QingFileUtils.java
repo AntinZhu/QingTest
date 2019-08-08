@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,6 +36,18 @@ public class QingFileUtils {
         }
 
         return resultList;
+    }
+
+    public static final byte[] readBytes(InputStream in) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        byte[] tmp = new byte[1024];
+        int readLen = -1;
+        while((readLen = in.read(tmp)) != -1){
+            output.write(tmp, 0, readLen);
+        }
+
+        return output.toByteArray();
     }
 
     public static final List<String> readLines(String fileName) throws IOException {

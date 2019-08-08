@@ -347,30 +347,10 @@
 
             function fillDefaultValue(paramArr){
                 var defaultObj = new Object(${defaultObj});
-                for(var paramIdx in paramArr){
-                    var param = paramArr[paramIdx];
-                    if(param instanceof Array){
-                        param = param[0];
-                    }
-                    // alert(JSON.stringify(param));
-                    for(var propName in defaultObj){
-                        if(param.key == propName){
-                            if(param.defaultValue == null){
-                                fillDefaultValueWithDefault(param.detail, defaultObj[propName]);
-                            }else{
-                                param.defaultValue.name = defaultObj[propName];
-                                param.defaultValue.value = defaultObj[propName];
-                            }
-
-                            break;
-                        }
-                    }
-                }
+               fillDefaultValueWithDefault(paramArr, defaultObj);
 
                 return JSON.stringify(paramArr);
             }
-
-
 
             function initParamChoose(paramChooses, paramExampleId){
                 if(paramChooses.length == 0){

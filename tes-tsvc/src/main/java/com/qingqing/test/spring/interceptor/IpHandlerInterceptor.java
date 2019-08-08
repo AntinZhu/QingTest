@@ -27,6 +27,7 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
         if(modelAndView != null){
             modelAndView.addObject("qing_user_name", userIpManager.getUserNameByIp(requestIp));
             modelAndView.addObject("qing_user_ip", requestIp);
+            modelAndView.addObject("qing_user", userIpManager.getUserInfo(requestIp));
         }
     }
 }

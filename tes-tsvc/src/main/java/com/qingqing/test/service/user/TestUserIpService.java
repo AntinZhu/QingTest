@@ -10,4 +10,6 @@ import java.util.List;
 public interface TestUserIpService {
 
     List<TestUserIp> selectAll();
+
+    boolean updateUserHeadImage(String userIp, String headImage);
 }

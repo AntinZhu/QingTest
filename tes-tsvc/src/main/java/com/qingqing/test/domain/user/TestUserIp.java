@@ -12,6 +12,7 @@ public class TestUserIp {
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
+    private String headImage;
 
     public Long getId() {
         return id;
@@ -59,5 +60,13 @@ public class TestUserIp {
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public String getHeadImage() {
+        return headImage;
+    }
+
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
     }
 }

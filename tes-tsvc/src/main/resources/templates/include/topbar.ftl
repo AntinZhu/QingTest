@@ -226,7 +226,12 @@
 
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo" src="${base}/static/assets/avatars/user.jpg" alt="Jason's Photo" />
+                        <#if (qing_user!'') != '' && ((qing_user.headImage)!'')??>
+                            <img class="nav-user-photo" src="${qing_user.headImage}" alt="Jason's Photo" />
+                        <#else >
+                            <img class="nav-user-photo" src="${base}/static/assets/avatars/user.jpg" alt="Jason's Photo" />
+                        </#if>
+
                         <span class="user-info">
 									<small>Welcome,</small>
                                     <div id="qing_ip">${qing_user_name!'俺'}</div>

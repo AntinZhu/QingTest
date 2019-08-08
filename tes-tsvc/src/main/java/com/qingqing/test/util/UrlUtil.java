@@ -110,7 +110,7 @@ public class UrlUtil {
         FaceidClient client = new FaceidClient(cred, "ap-shanghai", clientProfile);
 
         BankCardVerificationRequest request = new BankCardVerificationRequest();
-        request.setName("何其䶮;");
+        request.setName("何其䶮");
         request.setBankCard("6225880158839831");
         request.setIdCard("360681199202144250");
 

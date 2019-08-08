@@ -20,6 +20,8 @@ function cloneInput(){
     $(nowParent).parent().append(inputClone);
 
     editableInit();
+
+    notifyParamChanged($(this).parent().parent().parent().children("input").attr("trig"));
 }
 
 function replaceLast(alt, lastNum){
@@ -41,12 +43,13 @@ function removeInput(){
     var valueParent = $(this).parent().parent();
     var valueParentParent = valueParent.parent();
 
+    var valueChangeTrig = $(valueParent).children("input").attr("trig");
     valueParent.remove();
     if(valueParentParent.children("div.profile-info-name").length > 0 && valueParentParent.children("div.profile-info-value").length == 0){
         valueParentParent.remove();
     }
 
-    // notifyParamChanged();
+    notifyParamChanged(valueChangeTrig);
 }
 
 function initHtml_ret(parentKey, params, valueChangedNotifyId){
@@ -809,8 +812,32 @@ function fillDefaultValueWithDefault(paramObj, defaultObj){
     for(var paramIdx in paramObj){
         var param = paramObj[paramIdx];
         if(param instanceof Array){
-            fillDefaultValueWithDefault(param, defaultObj[0]);
-            return;
+            if(param[0].defaultValue && param[0].defaultValue instanceof Array){
+                var defaultValueArr = defaultObj[param[0].key];
+                if(defaultValueArr == null){
+                    return paramObj;
+                }
+                param[0].defaultValue = [];
+                var defaultValueArrIdx = 0;
+                while(defaultValueArrIdx < defaultValueArr.length){
+                    param[0].defaultValue[defaultValueArrIdx] = {name:defaultValueArr[defaultValueArrIdx],value:defaultValueArr[defaultValueArrIdx]};
+                    defaultValueArrIdx++;
+                }
+            }else{
+                var detailResultArr = [];
+                var detailDefaults = defaultObj[param[0].key];
+                if(detailDefaults == null){
+                    return paramObj;
+                }
+                var detailDefaultIdx = 0;
+                while(detailDefaultIdx < detailDefaults.length){
+                    detailResultArr[detailDefaultIdx] = fillDefaultValueWithDefault(param[0].detail[0], detailDefaults[detailDefaultIdx]);
+                    detailDefaultIdx++;
+                }
+                param[0].detail = detailResultArr;
+            }
+
+            return paramObj;
         }
 
         for(var propName in defaultObj){
@@ -818,12 +845,79 @@ function fillDefaultValueWithDefault(paramObj, defaultObj){
                 if(param.defaultValue == null){
                     fillDefaultValueWithDefault(param.detail, defaultObj[propName]);
                 }else{
-                    param.defaultValue.name = defaultObj[propName];
-                    param.defaultValue.value = defaultObj[propName];
+                    if(param.defaultValue instanceof Array){
+                        var defaultValueArr = defaultObj[propName];
+                        var valueArrIdx = 0;
+                        param.defaultValue = [];
+                        while(valueArrIdx < defaultValueArr.length){
+                            param.defaultValue[defaultValue] = {name:defaultValueArr[valueArrIdx],value:defaultValueArr[valueArrIdx]};
+                            valueArrIdx++;
+                        }
+                    }else{
+                        param.defaultValue.name = defaultObj[propName];
+                        param.defaultValue.value = defaultObj[propName];
+                    }
                 }
 
                 break;
             }
         }
     }
+
+    return paramObj;
+}
+
+function generateTemplate(jsonObj){
+    var itemArr = [];
+    var itemIndex = 0;
+    if(jsonObj instanceof Array){
+        var arrItem = [];
+        var arrIdx = 0;
+        var arrLength = jsonObj.length;
+        while(arrIdx < arrLength){
+            arrItem[arrIdx] = generateTemplate(jsonObj[arrIdx]);
+            arrIdx++;
+        }
+        itemArr[itemIndex++] = arrItem;
+    }else{
+        for(var propName in jsonObj){
+            var item;
+            var propValue = jsonObj[propName];
+            if(propValue instanceof Array){
+                var arrItem = {key: propName, name:propName};
+
+                var valueIsObj = Object.prototype.toString.call(propValue[0]) == "[object Object]";
+                var arrItemDetail = [];
+                var arrIdx = 0;
+                var arrLength = propValue.length;
+                while(arrIdx < arrLength){
+                    if(valueIsObj){
+                        arrItemDetail[arrIdx] = generateTemplate(propValue[arrIdx]);
+                    }else{
+                        arrItemDetail[arrIdx] = {name : propValue[arrIdx],value:propValue[arrIdx]};
+                    }
+                    arrIdx++;
+                }
+
+                if(valueIsObj){
+                    arrItem.detail = arrItemDetail;
+                }else{
+                    arrItem.defaultValue = arrItemDetail;
+                }
+
+                item = [];
+                item[0] = arrItem;
+            }else{
+                item = {key: propName, name:propName};
+                if(Object.prototype.toString.call(propValue) == "[object Object]"){
+                    item.detail = generateTemplate(propValue);
+                }else{
+                    item.defaultValue = {name : propValue,value:propValue};
+                }
+            }
+            itemArr[itemIndex++] = item;
+        }
+    }
+
+    return itemArr;
 }

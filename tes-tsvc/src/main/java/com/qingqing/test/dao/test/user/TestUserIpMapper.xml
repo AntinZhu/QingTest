@@ -8,10 +8,11 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="head_image" property="headImage" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, user_name, user_ip, is_deleted, create_time, last_update_time
+    id, user_name, user_ip, is_deleted, create_time, last_update_time, head_image
   </sql>
 
   <select id="selectAll" resultMap="BaseResultMap">
@@ -19,5 +20,11 @@
     from t_user_ip
     where is_deleted = FALSE
   </select>
+
+  <update id="updateHeadImage">
+    update t_user_ip
+    set head_image = #{headImage, jdbcType=VARCHAR}
+    where user_ip = #{userIp,jdbcType=VARCHAR}
+  </update>
 
 </mapper>

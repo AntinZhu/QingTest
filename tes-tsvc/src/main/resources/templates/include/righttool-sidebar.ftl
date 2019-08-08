@@ -252,6 +252,27 @@
                 </div>
             </div>
 
+            <div class="group qing_catelog_hide">
+                <h3 class="accordion-header">头像上传</h3>
+
+                <div>
+                    <form id="qing_head_file_form" method="post" enctype="multipart/form-data" target="_blank" action="${base}/v1/user/up/head_image">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="file" name = "file" id="qing_head_file" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button type="button" class="btn btn-grey btn-sm" id="qing_head_file_btn">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="group">
                 <h3 class="accordion-header">类全名查找</h3>
 
@@ -475,8 +496,25 @@
         //
     });
 
+    $('#qing_head_file').ace_file_input({
+        no_file:'No File ...',
+        btn_choose:'Choose',
+        btn_change:'Change',
+        droppable:false,
+        onchange:null,
+        thumbnail:false, //| true | large
+        whitelist:'png|jpg|jpeg'
+        //blacklist:'exe|php'
+        //onchange:''
+        //
+    });
+
     $("#qing_sql_file_btn").click(function(){
         $("#qing_sql_file_form").submit();
+    });
+
+    $("#qing_head_file_btn").click(function(){
+        $("#qing_head_file_form").submit();
     });
 
     //jquery accordion

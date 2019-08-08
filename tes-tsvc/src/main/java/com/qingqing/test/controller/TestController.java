@@ -286,4 +286,8 @@ public class TestController {
         return "test/grid";
     }
 
+    @RequestMapping("param/template")
+    public String paramTemplate(){
+        return "utils/param_template";
+    }
 }
