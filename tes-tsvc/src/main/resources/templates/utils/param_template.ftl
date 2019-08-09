@@ -44,7 +44,7 @@
                         </h1>
                     </div><!-- /.page-header -->
 
-                    <div class="row col-xs-12" id="taskList">
+                    <div class="row col-xs-12">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData">Json串：</label>
 

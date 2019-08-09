@@ -587,7 +587,7 @@
         var request = {
             url : "${base}/v1/common/pi.json",
             data : data,
-            handlerFunc : initConfig,
+            handlerFunc : emptyM,
             isASync : true,
             failTitle :"设置通用配置失败:",
             guid : "test-api-config",
@@ -598,6 +598,7 @@
     }
 
     function emptyM(){
+
     }
 
     function init_api_selective_order_promise_amount_config(configValue){
@@ -713,6 +714,9 @@
         setConfig($(inputEle).attr("id"), newValue);
     });
 
+    $('#teacher_max_teachable_student_count').change(function(){
+    });
+
     $(".env").click(function(){
         $(".env.btn-primary").removeClass("btn-primary");
         $(this).addClass("btn-primary");
@@ -783,12 +787,11 @@
 
     $("#searchBtn").click(function(){
         var configKey = $("#configKeyChoose").val();
-        if(value == ""){
+        if(configKey == ""){
             return;
         }
 
         var configValue = $("#configValueParam").val();
-
         setConfig(configKey, configValue);
     });
 

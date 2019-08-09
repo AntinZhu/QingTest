@@ -853,11 +853,13 @@ function fillDefaultValueWithDefault(paramObj, defaultObj){
                         var valueArrIdx = 0;
                         param.defaultValue = [];
                         while(valueArrIdx < defaultValueArr.length){
-                            param.defaultValue[defaultValue] = {name:defaultValueArr[valueArrIdx],value:defaultValueArr[valueArrIdx]};
+                            var defaultValue = defaultValueArr[valueArrIdx];
+                            param.defaultValue[valueArrIdx] = {name:formatDefaultName(defaultValue, param.class),value:defaultValue};
                             valueArrIdx++;
                         }
                     }else{
-                        param.defaultValue.name = defaultObj[propName];
+                        var defaultValue = defaultObj[propName];
+                        param.defaultValue.name = formatDefaultName(defaultValue, param.class);
                         param.defaultValue.value = defaultObj[propName];
                     }
                 }
@@ -868,6 +870,14 @@ function fillDefaultValueWithDefault(paramObj, defaultObj){
     }
 
     return paramObj;
+}
+
+function formatDefaultName(defaultValue, clazz){
+    if(clazz == "date_editable"){
+        return formatDate_yyyyMMDD(defaultValue);
+    }
+
+    return defaultValue;
 }
 
 function generateTemplate(jsonObj){

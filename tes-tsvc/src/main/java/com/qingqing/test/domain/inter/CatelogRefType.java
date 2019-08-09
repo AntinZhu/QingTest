@@ -11,6 +11,7 @@ public enum CatelogRefType implements HasDefaultInterface<CatelogRefType>{
     url(1), // 地址
     inter(2), // 接口
     cate(3), // 目录
+    config(4), // 配置
     ;
 
     private Integer value;

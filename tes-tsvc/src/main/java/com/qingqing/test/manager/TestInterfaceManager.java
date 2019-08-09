@@ -99,7 +99,7 @@ public class TestInterfaceManager {
         return testInterface.getId();
     }
 
-    private TestInterfaceCatelog saveCatelog(Long parentCatelogId, CatelogRefType refType, String refId, String catelogName, String clazz){
+    public TestInterfaceCatelog saveCatelog(Long parentCatelogId, CatelogRefType refType, String refId, String catelogName, String clazz){
         TestInterfaceCatelog catelog = new TestInterfaceCatelog();
 
         String catelogIndex;
@@ -163,7 +163,7 @@ public class TestInterfaceManager {
         return resultBean;
     }
 
-    private List<TestInterfaceCatelog> getCatelogLinkList(TestInterfaceCatelog catelog){
+    public List<TestInterfaceCatelog> getCatelogLinkList(TestInterfaceCatelog catelog){
         List<TestInterfaceCatelog> allCatelogs = testInterfaceCatelogService.selectAll();
         Map<Long, TestInterfaceCatelog> idMapping = CollectionsUtil.mapComposerId(allCatelogs, TestInterfaceCatelog.ID_COMPOSER);
 

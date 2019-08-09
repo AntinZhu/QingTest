@@ -132,6 +132,9 @@ function catelogItem(catelog, baseUrl){
         case "inter":
             linkUrl =  baseUrl + "/v1/test/json_format?cross=1&id=" + catelog.catelog.refValue;
             break;
+        case "config":
+            linkUrl =  baseUrl + "/v1/config/common/invoke_page?id=" + catelog.catelog.refValue;
+            break;
         default:
             linkUrl = "#";
     }

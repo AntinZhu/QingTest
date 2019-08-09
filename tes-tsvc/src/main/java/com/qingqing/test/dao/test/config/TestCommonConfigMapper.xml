@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qingqing.test.dao.test.config.TestCommonConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.qingqing.test.domain.config.TestCommonConfig" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="config_key" property="configKey" jdbcType="VARCHAR" />
+    <result column="config_name" property="configName" jdbcType="VARCHAR" />
+    <result column="param_template" property="paramTemplate" jdbcType="VARCHAR" />
+    <result column="default_value" property="defaultValue" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, config_key, config_name, param_template, default_value, is_deleted, create_time, last_update_time
+  </sql>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="Base_Column_List" />
+    from t_common_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByConfigKey" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_common_config
+    where config_key = #{configKey,jdbcType=VARCHAR} and is_deleted = 0 order by id desc limit 1
+  </select>
+
+  <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" keyProperty="id" useGeneratedKeys="true">
+    insert into t_common_config (config_key, config_name, param_template, default_value, is_deleted, create_time)
+    values (#{configKey,jdbcType=VARCHAR}, #{configName,jdbcType=VARCHAR}, #{paramTemplate,jdbcType=VARCHAR}, #{defaultValue, jdbcType=VARCHAR},
+    #{isDeleted,jdbcType=TINYINT}, now())
+  </insert>
+
+  <update id="update" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" >
+      update t_common_config
+      set config_key = #{configKey,jdbcType=VARCHAR}, config_name = #{configName,jdbcType=VARCHAR}, param_template = #{paramTemplate, jdbcType=VARCHAR}, default_value = #{defaultValue,jdbcType=VARCHAR}
+      where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteById">
+    update t_common_config
+    set is_deleted = TRUE
+    where id = #{id, jdbcType=BIGINT}
+  </update>
+</mapper>
