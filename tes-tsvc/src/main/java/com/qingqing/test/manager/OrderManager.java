@@ -37,6 +37,7 @@ import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.exception.SimpleErrorCode;
+import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
@@ -62,6 +63,7 @@ import com.qingqing.test.bean.pay.request.PrePayRequestBeanV2;
 import com.qingqing.test.client.ApiPiClient;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.client.PtClient;
+import com.qingqing.test.controller.converter.BaseConverter;
 import com.qingqing.test.controller.converter.OrderConverter;
 import com.qingqing.test.controller.converter.PayConverter;
 import com.qingqing.test.domain.order.OrderCourseV1;
@@ -544,13 +546,23 @@ public class OrderManager {
         }
     }
 
-    public void madeUpClassOrder(Long groupOrderId, Long studentId, Long createAssistantId){
+    public void madeUpClassOrder(Long groupOrderId, Long studentId, Long createAssistantId, List<Long> otherStudentIds){
         // 1018:满员 1020：状态异常 1025:停止生源供给 1019:已参团
         int tryTimes = 50;
         JoinClassOrderRequest.Builder request = JoinClassOrderRequest.newBuilder()
                 .setQingqingGroupOrderId(OrderIdEncoder.encodeOrderId(groupOrderId));
+
+        int otherIdx = 0;
+        boolean isAssignOthers = !CollectionsUtil.isNullOrEmpty(otherStudentIds);
         while(tryTimes > 0){
-            studentId++;
+            logger.info("tryTimes:" + tryTimes);
+            if(isAssignOthers && otherIdx < otherStudentIds.size()){
+                studentId = otherStudentIds.get(otherIdx);
+                otherIdx++;
+            }else{
+                studentId++;
+            }
+
             if(!studentService.isUserExist(studentId)){
                 continue;
             }
@@ -583,11 +595,11 @@ public class OrderManager {
                     isMadeUp = true;
                     break;
                 default:
-                    logger.error("unknown error when join class, resp:" + JsonUtil.format(response.getResponse()));
+                    logger.error("unknown error when join class, resp:" + JsonUtil.format(BaseConverter.convertBaseResponse(response.getResponse())));
                     break;
             }
 
-            if(isMadeUp){
+            if(isMadeUp && (!isAssignOthers || (isAssignOthers && otherIdx>= otherStudentIds.size()))){
                 break;
             }
         }

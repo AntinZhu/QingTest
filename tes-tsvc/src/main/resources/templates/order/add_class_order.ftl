@@ -24,7 +24,7 @@
         }
     </style>
 </head>
-<body>start
+<body>
 <#include "/include/topbar.ftl" />
 <div class="main-container" id="main-container">
     <script type="text/javascript">
@@ -246,6 +246,13 @@
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="classHour">课时:</label>
                                                                 <div class="col-xs-12 col-sm-3">
                                                                     <input type="number" name="classHour" id="classHour" value="20" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="otherStudentIds">其他参团人员:</label>
+                                                                <div class="col-xs-12 col-sm-3">
+                                                                    <input type="text" name="otherStudentIds" id="otherStudentIds" />
                                                                 </div>
                                                             </div>
 
@@ -1168,10 +1175,22 @@
                 }
 
                 if(orderTypeValue > 1){ // 朋友团
+                    var otherStudentIdValue = $("#otherStudentIds").val();
+                    var otherStudentIds = [];
+                    if(otherStudentIdValue != ""){
+                        var otherStudentIdValues = otherStudentIdValue.split(",");
+                        var idx = 0;
+                        var len = otherStudentIdValues.length;
+                        while (idx < len){
+                            otherStudentIds[idx] = new Number(otherStudentIdValues[idx]);
+                            idx++;
+                        }
+                    }
                     var data = {
                         groupOrderId : new Number($("#groupOrderId").text()),
                         studentId : $("#studentId").val(),
-                        createAssistantId : 200
+                        createAssistantId : 200,
+                        otherStudentIds : otherStudentIds
                     }
 
                     var request = {

@@ -102,7 +102,7 @@ public class OrderController {
     @ProtoResponseBody
     public SimpleResponse madeUpClassOrder(@RequestBody MadeUpClassOrderRequest request){
         logger.info("param:" + JsonUtil.format(request));
-        orderManager.madeUpClassOrder(request.getGroupOrderId(), request.getStudentId(), request.getCreateAssistantId());
+        orderManager.madeUpClassOrder(request.getGroupOrderId(), request.getStudentId(), request.getCreateAssistantId(), request.getOtherStudentIds());
 
         return ProtoRespGenerator.SIMPLE_SUCC_RESP;
     }

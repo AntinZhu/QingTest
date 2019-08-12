@@ -11,6 +11,10 @@ import java.util.Map;
 public class BaseConverter {
 
     public static BaseResponse convertBaseResponse(ProtoBufResponse.BaseResponse response){
+        if(response == null){
+            return null;
+        }
+
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setError_code(response.getErrorCode());
         baseResponse.setError_message(response.getErrorMessage());

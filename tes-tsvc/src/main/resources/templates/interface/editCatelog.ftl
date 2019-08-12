@@ -232,7 +232,7 @@
                     </main>
                 </div>
             </div>
-        <#include "/include/rightu-util.ftl" />
+        <#include "/include/righttool-sidebar.ftl" />
         </div>
 
         <script type="text/javascript">
