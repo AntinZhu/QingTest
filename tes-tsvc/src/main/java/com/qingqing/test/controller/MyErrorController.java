@@ -1,5 +1,6 @@
 package com.qingqing.test.controller;
 
+import com.qingqing.test.spring.interceptor.IpHandlerInterceptor;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,12 @@ public class MyErrorController implements ErrorController {
     public String error(){
         return "/common/404";
     }
+
+    @RequestMapping(IpHandlerInterceptor.PAGE)
+    public String logout(){
+        return "/common/logout";
+    }
+
     @Override
     public String getErrorPath() {
         return ERROR_PATH;

@@ -87,43 +87,36 @@ public class QingFileUtils {
 
     public static void main(String[] args) throws IOException {
         List<QingCSVBean> inDBLines = QingFileUtils.readLines("D:\\sql\\in_db.csv", new QingCSVBeanConverter(","));
-        List<QingCSVBean> patchLines = QingFileUtils.readLines("D:\\sql\\分隔测试.txt", new QingCSVBeanConverter("\t"));
+//        List<QingCSVBean> patchLines = QingFileUtils.readLines("D:\\sql\\分隔测试.txt", new QingCSVBeanConverter("\t"));
 
         Map<String, QingCSVBean> inDbMap = CollectionsUtil.mapComposerId(inDBLines, new QingCSVBeanComposer(1));
-        Map<String, QingCSVBean> patchMap = CollectionsUtil.mapComposerId(patchLines, new QingCSVBeanComposer(1));
+//        Map<String, QingCSVBean> patchMap = CollectionsUtil.mapComposerId(patchLines, new QingCSVBeanComposer(1));
 
-        String template = "{db_1},{db_2},{db_3},{db_4},{db_5},{pt_2},{pt_3}";
-        String template1 = "update t_teacher_student_supply set stop_student_reason='{pt_2}',stop_student_proposer_user_id={pt_3},stop_student_proposer_type={pt_3_s} where teacher_id = {db_1} and is_stop_student_supply = 1;";
-        String template2 = "update t_teacher_student_supply set soft_stop_student_reason='{pt_2}',soft_stop_student_proposer_user_id={pt_3},soft_stop_student_proposer_type={pt_3_s} where teacher_id = {db_1} and stop_provide_student = 1;";
-        String template3 = "update t_teacher_student_supply set stop_student_reason='{pt_2}',stop_student_proposer_user_id={pt_3},stop_student_proposer_type={pt_3_s},soft_stop_student_reason='{pt_2}',soft_stop_student_proposer_user_id={pt_3},soft_stop_student_proposer_type={pt_3_s} where teacher_id = {db_1} and (stop_provide_student = 1 or is_stop_student_supply = 1);";
+        String logTemplate1= "({db_1},1,1,null,null,1,ifnull({db_5}, 5),ifnull({db_4}, 1),now(),now(),'{db_3}',ifnull({db_4}, 1),ifnull({db_5}, 5)),";
+        String logTemplate2= "({db_1},2,1,null,null,0,ifnull({db_9}, 5),ifnull({db_8}, 1),now(),now(),'{db_7}',ifnull({db_8}, 1),ifnull({db_9}, 5)),";
         for (Entry<String, QingCSVBean> stringQingCSVBeanEntry : inDbMap.entrySet()) {
-            String key = stringQingCSVBeanEntry.getKey();
             QingCSVBean inDB = stringQingCSVBeanEntry.getValue();
 
-            QingCSVBean patch = patchMap.get(key);
             String finalValue;
             String db2Value = QingCSVBean.getValueNotNull(inDB, 2);
-            String db4Value = QingCSVBean.getValueNotNull(inDB, 4);
-            String pt3Value = QingCSVBean.getValueNotNull(patch, 3);
-            if("1".equals(db2Value) && "1".equals(db4Value)){
-                finalValue = template3;
-            }else if("1".equals(db2Value)){
-                finalValue = template1;
-            }else if("1".equals(db4Value)) {
-                finalValue = template2;
-            }else{
-                continue;
+            String db6Value = QingCSVBean.getValueNotNull(inDB, 6);
+            if("1".equals(db2Value)){
+                finalValue = logTemplate1;
+                for (int i = 1; i < 11; i++){
+                    finalValue = finalValue.replaceAll("\\{db_" + i + "\\}", QingCSVBean.getValueNotNull(inDB, i));
+                }
+                System.out.println(finalValue);
             }
-            for (int i = 1; i < 11; i++){
-                finalValue = finalValue.replaceAll("\\{db_" + i + "\\}", QingCSVBean.getValueNotNull(inDB, i));
-                finalValue = finalValue.replaceAll("\\{pt_" + i + "\\}", QingCSVBean.getValueNotNull(patch, i));
+
+            if("1".equals(db6Value)) {
+                finalValue = logTemplate2;
+                for (int i = 1; i < 11; i++){
+                    finalValue = finalValue.replaceAll("\\{db_" + i + "\\}", QingCSVBean.getValueNotNull(inDB, i));
+                }
+                System.out.println(finalValue);
             }
-            if("null".equals(pt3Value)){
-                finalValue = finalValue.replaceAll("\\{pt_3_s\\}", "null");
-            }else{
-                finalValue = finalValue.replaceAll("\\{pt_3_s\\}", "2");
-            }
-            System.out.println(finalValue);
+
+
         }
     }
 

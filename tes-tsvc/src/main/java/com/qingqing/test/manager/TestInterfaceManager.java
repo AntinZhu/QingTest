@@ -5,6 +5,7 @@ import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
+import com.qingqing.test.aspect.externalsystem.QingExternalSystemFusing;
 import com.qingqing.test.aspect.masterslave.QingReadSlaveDataSource;
 import com.qingqing.test.bean.inter.CatelogBean;
 import com.qingqing.test.bean.inter.SaveCatelogBean;
@@ -233,6 +234,7 @@ public class TestInterfaceManager {
         return subList;
     }
 
+    @QingExternalSystemFusing
     public String invoke(InterfaceInvokeRequest requestBean){
         Long interfaceId = requestBean.getInterfaceId();
         TestInterface testInterface = testInterfaceService.findById(interfaceId);

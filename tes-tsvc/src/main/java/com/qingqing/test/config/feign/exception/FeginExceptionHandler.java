@@ -39,10 +39,6 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             pf = builder.getDescriptorForType().findFieldByName(PROTO_RESP_FIELD);
         }
 
-        if(ex instanceof ErrorCodeException){
-            logger.warn("errorCode Exception : " + JsonUtil.format(((ErrorCodeException)ex).getErrorCodeInterface()));
-        }
-
         BaseResponse baseResponse = null;
         if(ex instanceof FeignException){
             FeignException fex = (FeignException)ex;
@@ -69,12 +65,7 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
 
         if(baseResponse != null){
             Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);
-            if(pf != null){
-                logger.info("i am 2, return proto:" + JsonUtil.format(baseResponse));
-                builder.setField(pf, ProtoRespGenerator.generateResponse(baseResponse.getError_code(), baseResponse.getError_message(), baseResponse.getHint_message()));
-                return builder;
-            }if(obj != null){
-                logger.info("return Class:" + ((Class<?>)obj).getName());
+            if(obj != null){
                 InterfaceBaseResponse interfaceBaseResponse = new InterfaceBaseResponse();
                 interfaceBaseResponse.setResponse(baseResponse);
                 if(String.class.equals(obj)){
@@ -82,6 +73,11 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
                 }else {
                     return interfaceBaseResponse;
                 }
+            }
+
+            if(pf != null){
+                builder.setField(pf, ProtoRespGenerator.generateResponse(baseResponse.getError_code(), baseResponse.getError_message(), baseResponse.getHint_message()));
+                return builder;
             }
         }
 

@@ -3,6 +3,7 @@ package com.qingqing.test.config;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.qingqing.common.web.manager.HttpClientManagerV2;
+import com.qingqing.test.aspect.externalsystem.QingExternalSystemFusingAspect;
 import com.qingqing.test.aspect.qingswitch.aspect.AnnotationSwitchAspect;
 import com.qingqing.test.aspect.qingswitch.determiner.ISwitchKeyDeterminer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +66,10 @@ public class OtherConfiguration {
     @Bean
     public AnnotationSwitchAspect switchBean(@Autowired(required = false) List<ISwitchKeyDeterminer> switchKeyDeterminerList){
         return new AnnotationSwitchAspect(switchKeyDeterminerList);
+    }
+
+    @Bean
+    public QingExternalSystemFusingAspect externalSystemFusingAspect(){
+        return new QingExternalSystemFusingAspect();
     }
 }

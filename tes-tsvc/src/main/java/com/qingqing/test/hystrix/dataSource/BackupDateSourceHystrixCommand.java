@@ -1,4 +1,4 @@
-package com.qingqing.test.hystrix;
+package com.qingqing.test.hystrix.dataSource;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;

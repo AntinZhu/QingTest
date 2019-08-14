@@ -1,7 +1,7 @@
 package com.qingqing.test.config;
 
 import com.qingqing.common.exception.QingQingRuntimeException;
-import com.qingqing.test.hystrix.SwitchableDateSource;
+import com.qingqing.test.hystrix.dataSource.SwitchableDateSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;

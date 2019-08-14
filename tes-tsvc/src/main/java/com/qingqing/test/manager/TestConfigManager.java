@@ -1,5 +1,6 @@
 package com.qingqing.test.manager;
 
+import com.qingqing.common.onoff.ISwitchDeterminer;
 import com.qingqing.test.domain.config.TestConfig;
 import com.qingqing.test.service.config.TestConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.Map;
  * Created by zhujianxing on 2019/3/5.
  */
 @Component
-public class TestConfigManager {
+public class TestConfigManager implements ISwitchDeterminer {
 
     @Autowired
     private TestConfigService testConfigService;
@@ -35,5 +36,20 @@ public class TestConfigManager {
 
     public String getConfigValue(String configKey, String defaultValue){
         return configMap.get(configKey);
+    }
+
+    @Override
+    public boolean isOn(String s) {
+        return isOn(s, false);
+    }
+
+    @Override
+    public boolean isOn(String s, boolean defaultValue) {
+        String configValue = configMap.get(s);
+        if(configValue != null){
+           return "true".equals(configValue);
+        }
+
+        return defaultValue;
     }
 }

@@ -1,4 +1,4 @@
-package com.qingqing.test.hystrix;
+package com.qingqing.test.hystrix.dataSource;
 
 import com.qingqing.common.exception.QingQingRuntimeException;
 import org.springframework.beans.BeansException;
