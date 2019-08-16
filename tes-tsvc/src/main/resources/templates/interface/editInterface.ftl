@@ -375,7 +375,7 @@
                 $(".qing_interfaceType[value=" + interfaceType + "]").addClass("btn-primary");
                 $("#interfaceType").val(interfaceType);
 
-                var requestUserType = "${interfaceBean.inter.requestUserType}";
+                var requestUserType = "${interfaceBean.inter.requestUserType!'student'}";
                 $(".qing_requestUserType.btn-primary").removeClass("btn-primary");
                 $(".qing_requestUserType[value=" + requestUserType + "]").addClass("btn-primary");
                 $("#requestUserType").val(requestUserType);

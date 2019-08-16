@@ -226,7 +226,7 @@
 
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <#if (qing_user!'') != '' && ((qing_user.headImage)!'')??>
+                        <#if (qing_user!'') != '' && ((qing_user.headImage)!'') != ''>
                             <img class="nav-user-photo" src="${qing_user.headImage}" alt="Jason's Photo" />
                         <#else >
                             <img class="nav-user-photo" src="${base}/static/assets/avatars/user.jpg" alt="Jason's Photo" />
