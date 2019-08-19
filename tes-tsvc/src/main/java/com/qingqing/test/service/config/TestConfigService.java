@@ -9,4 +9,8 @@ import java.util.List;
  */
 public interface TestConfigService {
     List<TestConfig> selectAll();
+
+    void add(TestConfig config);
+
+    void deletedByConfigKey(String configKey);
 }

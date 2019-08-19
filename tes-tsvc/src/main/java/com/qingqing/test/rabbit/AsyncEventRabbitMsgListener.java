@@ -1,12 +1,12 @@
 package com.qingqing.test.rabbit;
 
-import com.google.common.collect.Sets;
 import com.qingqing.common.async.rabbit.AsyncEventNotifyRabbitMsgEntity;
-import com.qingqing.common.domain.AsyncEventType;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.test.bean.common.Env;
+import com.qingqing.test.bean.config.ITestConfigNotify;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
+import com.qingqing.test.manager.TestConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -16,19 +16,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by zhujianxing on 2019/7/24.
  */
 @Component
-public class AsyncEventRabbitMsgListener implements MessageListener {
+public class AsyncEventRabbitMsgListener implements MessageListener, ITestConfigNotify {
     private static final Logger logger = LoggerFactory.getLogger(AsyncEventRabbitMsgListener.class);
-
-    private static Set<AsyncEventType> IGNORE_SET = Sets.newHashSet(AsyncEventType.student_homework_status_change_notify_for_ts);
+    private static final String CONFIG_KEY = "async_event_auto_ignore_list";
 
     @Autowired
     private PiClient piClient;
+    @Autowired
+    private TestConfigManager testConfigManager;
+    private static Set<Integer> IGNORE_SET;
 
     public void onMessage(Message message) {
         MessageProperties messageProperties = message.getMessageProperties();
@@ -45,8 +48,8 @@ public class AsyncEventRabbitMsgListener implements MessageListener {
             Integer eventType = entity.getBody().getEvent_type();
 
             EnvHandlerInteceptor.setEnv(Env.pfm);
-            AsyncEventType asyncEventType = AsyncEventType.valueOf(eventType);
-            if(asyncEventType.getSaveInDB() && IGNORE_SET.contains(asyncEventType)){
+
+            if(IGNORE_SET.contains(eventType)){
                 piClient.commonRequest("/svc/api/pi/v2/event/clear.json", String.format("{event_id:%d,event_type:%d}", eventId, eventType));
             }
         } catch (UnsupportedEncodingException var6) {
@@ -57,11 +60,18 @@ public class AsyncEventRabbitMsgListener implements MessageListener {
 
     }
 
-    public static void addIgnore(AsyncEventType asyncEventType){
+    public void addIgnore(int asyncEventType){
         IGNORE_SET.add(asyncEventType);
+        testConfigManager.addConfig(CONFIG_KEY, JsonUtil.format(IGNORE_SET));
     }
 
-    public static void removeIgnore(AsyncEventType asyncEventType){
+    public void removeIgnore(int asyncEventType){
         IGNORE_SET.remove(asyncEventType);
+        testConfigManager.addConfig(CONFIG_KEY, JsonUtil.format(IGNORE_SET));
+    }
+
+    @Override
+    public void notifyChange() {
+        IGNORE_SET = new HashSet<>(JsonUtil.parserJsonList(testConfigManager.getConfigValue(CONFIG_KEY, "[147]"), Integer.class));
     }
 }

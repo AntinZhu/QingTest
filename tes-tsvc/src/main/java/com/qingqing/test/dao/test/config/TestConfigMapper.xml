@@ -19,4 +19,17 @@
     from t_config
     where is_deleted = FALSE
   </select>
+
+  <insert id="add" parameterType="com.qingqing.test.domain.config.TestConfig" useGeneratedKeys="true" keyProperty="id">
+    insert into t_config(config_key, config_value, is_deleted, create_time) value(
+    #{configKey,jdbcType=VARCHAR} , #{configValue,jdbcType=VARCHAR} , 0, now()
+    )
+  </insert>
+
+  <update id="deletedByConfigKey" >
+    update t_config
+    set is_deleted = TRUE
+    where config_key = #{configKey, jdbcType=VARCHAR}
+  </update>
+
 </mapper>

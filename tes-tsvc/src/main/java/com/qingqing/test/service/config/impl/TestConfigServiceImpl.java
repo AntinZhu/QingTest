@@ -21,4 +21,14 @@ public class TestConfigServiceImpl implements TestConfigService {
     public List<TestConfig> selectAll() {
         return mapper.selectAll();
     }
+
+    @Override
+    public void add(TestConfig config) {
+        mapper.add(config);
+    }
+
+    @Override
+    public void deletedByConfigKey(String configKey) {
+        mapper.deletedByConfigKey(configKey);
+    }
 }

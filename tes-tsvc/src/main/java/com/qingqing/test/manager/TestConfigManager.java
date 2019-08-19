@@ -1,12 +1,17 @@
 package com.qingqing.test.manager;
 
 import com.qingqing.common.onoff.ISwitchDeterminer;
+import com.qingqing.test.bean.config.ITestConfigNotify;
+import com.qingqing.test.config.TestSourceDataConfig;
 import com.qingqing.test.domain.config.TestConfig;
 import com.qingqing.test.service.config.TestConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -24,7 +29,8 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
 
     @Autowired
     private TestConfigService testConfigService;
-
+    @Autowired
+    private List<ITestConfigNotify> testConfigNotifies;
     private Map<String, String> configMap;
 
     @PostConstruct
@@ -37,6 +43,13 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
         }
 
         configMap = tmpConfigMap;
+        for(ITestConfigNotify testConfigNotify : testConfigNotifies){
+            try{
+                testConfigNotify.notifyChange();
+            }catch (Exception e){
+                logger.error("test config notify fail", e);
+            }
+        }
     }
 
     @Override
@@ -45,7 +58,12 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
     }
 
     public String getConfigValue(String configKey, String defaultValue){
-        return configMap.get(configKey);
+        String configValue =  configMap.get(configKey);
+        if(configValue == null){
+            return defaultValue;
+        }
+
+        return configValue;
     }
 
     @Override
@@ -62,5 +80,23 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
         }
 
         return defaultValue;
+    }
+
+    @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
+    public void addConfig(String configKey, String configValue){
+        testConfigService.deletedByConfigKey(configKey);
+
+        TestConfig testConfig = new TestConfig();
+        testConfig.setConfigKey(configKey);
+        testConfig.setConfigValue(configValue);
+        testConfig.setDeleted(Boolean.FALSE);
+        testConfigService.add(testConfig);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                sync();
+            }
+        });
     }
 }

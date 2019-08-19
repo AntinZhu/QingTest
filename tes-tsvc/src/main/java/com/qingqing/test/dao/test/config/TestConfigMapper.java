@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface TestConfigMapper {
     List<TestConfig> selectAll();
+
+    void add(TestConfig config);
+
+    void deletedByConfigKey(String configKey);
 }

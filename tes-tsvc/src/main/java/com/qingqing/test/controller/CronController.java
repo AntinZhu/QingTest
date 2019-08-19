@@ -1,6 +1,5 @@
 package com.qingqing.test.controller;
 
-import com.qingqing.common.domain.AsyncEventType;
 import com.qingqing.test.bean.schedule.QingScheduleCheck;
 import com.qingqing.test.bean.schedule.QingScheduleCheckable;
 import com.qingqing.test.manager.CommonSyncManager;
@@ -25,6 +24,8 @@ public class CronController implements QingScheduleCheckable {
     private CommonSyncManager commonSyncManager;
     @Autowired
     private QingScheduleCheckManager qingScheduleCheckManager;
+    @Autowired
+    private AsyncEventRabbitMsgListener asyncEventRabbitMsgListener;
 
     @RequestMapping("sync")
     @ResponseBody
@@ -38,7 +39,7 @@ public class CronController implements QingScheduleCheckable {
     @RequestMapping("event/ignore")
     @ResponseBody
     public ResponseEntity<String> ignoreEvent(@RequestParam("eventType") int eventType){
-        AsyncEventRabbitMsgListener.addIgnore(AsyncEventType.valueOf(eventType));
+        asyncEventRabbitMsgListener.addIgnore(eventType);
 
         return ResponseEntity.ok("ok");
     }
@@ -46,7 +47,7 @@ public class CronController implements QingScheduleCheckable {
     @RequestMapping("event/resume")
     @ResponseBody
     public ResponseEntity<String> resumeEvent(@RequestParam("eventType") int eventType){
-        AsyncEventRabbitMsgListener.removeIgnore(AsyncEventType.valueOf(eventType));
+        asyncEventRabbitMsgListener.removeIgnore(eventType);
 
         return ResponseEntity.ok("ok");
     }
