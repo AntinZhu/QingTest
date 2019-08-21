@@ -1,5 +1,6 @@
 package com.qingqing.test.spring.interceptor;
 
+import com.google.common.collect.Sets;
 import com.qingqing.common.onoff.ISwitchDeterminer;
 import com.qingqing.common.web.util.RequestExtract;
 import com.qingqing.test.domain.user.TestUserIp;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Created by zhujianxing on 2019/7/8.
@@ -20,6 +22,12 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(IpHandlerInterceptor.class);
     public static final String PAGE = "/logout";
+    public static final Set<String> IGNORE_SET = Sets.newHashSet(
+            PAGE,
+            "/v1/utils/ip/up",
+            "/v1/common/wx_notify",
+            "/v1/common/wx_notify.json"
+    );
 
     @Autowired
     private UserIpManager userIpManager;
@@ -33,7 +41,7 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
         }
 
         String requestIp = RequestExtract.getServerIpByRequest((HttpServletRequest)request);
-        if(!request.getRequestURI().equals(request.getContextPath() + PAGE)){
+        if(!isIgnore(request.getRequestURI(), request.getContextPath())){
             TestUserIp userIp = userIpManager.getUserInfo(requestIp);
             if(userIp == null){
                 response.sendRedirect(request.getContextPath() + PAGE);
@@ -41,6 +49,16 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
+    }
+
+    private boolean isIgnore(String requestUrl, String contentPath){
+        for (String ignoreUrl : IGNORE_SET) {
+            if(requestUrl.equals(contentPath + ignoreUrl)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

@@ -325,12 +325,12 @@
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                     var paramDetail = fillDefaultValue(JSON.parse(resu.interfaceInfo.inter.paramDetail));
                     paramInfo = showParam({paramData:paramDetail});
+                }
 
-                    paramExamples = resu.interfaceInfo.paramList;
-                    initParamChoose(paramExamples, ${paramExampleId});
-                    if(${paramExampleId} == 0){
-                        fillFullParam();
-                    }
+                paramExamples = resu.interfaceInfo.paramList;
+                initParamChoose(paramExamples, ${paramExampleId});
+                if(${paramExampleId} == 0){
+                    fillFullParam();
                 }
 
                 var env = '${env!"dev"}';
@@ -383,9 +383,11 @@
                 }
                 updateOptions("paramChoose", options, paramExampleId);
                 if(paramEx != null){
-                    paramInfo = showParam({paramData:paramEx.paramDetail});
                     $("#requestUserId").val(paramEx.requestUserId);
                     $("#requestUserIdDiv").text(paramEx.requestUserId);
+                    if(paramEx.paramDetail != "[]"){
+                        paramInfo = showParam({paramData:paramEx.paramDetail});
+                    }
                 }
 
                 $("#paramChooseDiv").removeClass("hide");
@@ -593,7 +595,11 @@
                     for(idx in paramExamples){
                         var paramEx = paramExamples[idx];
                         if(paramEx.id == id){
-                            paramInfo = showParam({paramData:paramEx.paramDetail});
+                            if(paramEx.paramDetail != "[]"){
+                                paramInfo = showParam({paramData:paramEx.paramDetail});
+                            }else{
+                                $("#paramDiv").addClass("hide");
+                            }
                             $("#requestUserId").val(paramEx.requestUserId);
                             $("#requestUserIdDiv").text(paramEx.requestUserId);
 
@@ -608,7 +614,11 @@
                         }
                     }
                 }else{
-                    paramInfo = showParam({paramData:interfaceBean.paramDetail});
+                    if(interfaceBean.paramDetail){
+                        paramInfo = showParam({paramData:interfaceBean.paramDetail});
+                    }else{
+                        $("#paramDiv").addClass("hide");
+                    }
                     $(".param-ops").addClass("hide");
                 }
             });

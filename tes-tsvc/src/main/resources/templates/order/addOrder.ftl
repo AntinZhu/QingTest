@@ -506,7 +506,12 @@
                                                                             </th>
                                                                             <th>价格(含税)</th>
                                                                             <th>价格(不含税)</th>
-                                                                            <th class="hidden-480">状态</th>
+                                                                            <th class="hidden-480">
+                                                                                状态
+                                                                                <a href="#" class="btn btn-app btn-success btn-xs" id="orderCourseStatusRefresh">
+                                                                                    <i class="icon-refresh bigger-230"></i>
+                                                                                </a>
+                                                                            </th>
                                                                             <th>上课 | 三方赔付 | 删课 | 结课 | 调课申请 | 调课 </th>
                                                                         </tr>
                                                                         </thead>
@@ -1615,6 +1620,11 @@
 
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
+
+        $("#orderCourseStatusRefresh").click(function(){
+            var qingqingOrderId = $("#qingqingOrderId").text();
+            orderCourseList("${base}", qingqingOrderId, $("#coursePriceType").val());
+        });
 
         $(".select2").css('width','200px').select2({allowClear:true})
                 .on('change', function(){

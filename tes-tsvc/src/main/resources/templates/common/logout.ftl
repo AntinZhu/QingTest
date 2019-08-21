@@ -61,5 +61,9 @@
         <#include "/include/righttool-sidebar.ftl" />
         </div>
 </body>
-</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        upIp();
+    });
+</script>
 </html>

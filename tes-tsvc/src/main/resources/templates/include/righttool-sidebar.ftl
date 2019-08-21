@@ -703,7 +703,7 @@
         var request = {
             url : "${base}/v1/utils/user/encode.json",
             data : data,
-            handlerFunc : handlerOrderEncode,
+            handlerFunc : handlerEncodeUserCov,
             isASync : false,
             failTitle :"加密结果:",
             env : $("#user_env_conv").val()
