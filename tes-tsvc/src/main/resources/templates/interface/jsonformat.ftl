@@ -327,6 +327,11 @@
                     paramInfo = showParam({paramData:paramDetail});
                 }
 
+                if("${userType!''}" != ""){
+                    $("#requestUserTypeDiv").text("${userType}");
+                    $("#requestUserType").val("${userType}");
+                }
+
                 paramExamples = resu.interfaceInfo.paramList;
                 initParamChoose(paramExamples, ${paramExampleId});
                 if(${paramExampleId} == 0){

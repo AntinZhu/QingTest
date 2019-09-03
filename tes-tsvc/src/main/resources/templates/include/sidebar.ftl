@@ -17,12 +17,12 @@
                 <i class="icon-group"></i>
             </button>
 
-            <button class="btn btn-danger">
+            <button class="btn btn-danger" id="qing_config_refresh">
                 <i class="icon-cogs"></i>
             </button>
         </div>
 
-        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <div class="sidebar-shortcuts-mini" >
             <span class="btn btn-success"></span>
 
             <span class="btn btn-info"></span>
@@ -170,5 +170,17 @@
 
         function emp(){
         }
+
+        $("#qing_config_refresh").click(function(){
+            var request = {
+                url : "${base}/cron/v1/sync?type=all",
+                data : null,
+                handlerFunc : emp,
+                isASync : true,
+                failTitle :"刷新失败:"
+            };
+
+            commonAjaxRequest(request);
+        });
     </script>
 </div>

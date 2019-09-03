@@ -86,7 +86,7 @@ public class TestController {
     public String show(@RequestParam("id") Long interfaceId,
                        @RequestParam(value = "paramId", defaultValue = "-1") Long paramId,
                        @RequestParam(value = "env", defaultValue = "dev") String env,
-                       @RequestParam(value = "cross", defaultValue = "0") int isCross,
+                       @RequestParam(value = "cross", defaultValue = "1") int isCross,
                        @RequestParam(value = "full", defaultValue = "0") int isFull,
                        @RequestParam(value = "inv", defaultValue = "0") int inv,
                        @RequestParam(value = "def", defaultValue = "{}") String defaultObj,

@@ -471,6 +471,11 @@
 
                 var modifyStr = $("#form-field-tags").val();
                 var modifyArr = modifyStr.split(",");
+                var myIdx = 0;
+                while(myIdx < modifyArr.length){
+                    modifyArr[myIdx] = modifyArr[myIdx].trim();
+                    myIdx++;
+                }
 
                 if(modifyArr.length == 1 && modifyArr[0] == ""){
                     $("#paramDiv").addClass("hide");

@@ -1,14 +1,7 @@
 package com.qingqing.test.util;
 
 import com.qingqing.common.exception.QingQingRuntimeException;
-import com.qingqing.common.util.JsonUtil;
 import com.qingqing.test.bean.test.BankValidateResult;
-import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.common.profile.ClientProfile;
-import com.tencentcloudapi.common.profile.HttpProfile;
-import com.tencentcloudapi.faceid.v20180301.FaceidClient;
-import com.tencentcloudapi.faceid.v20180301.models.BankCardVerificationRequest;
 import com.tencentcloudapi.faceid.v20180301.models.BankCardVerificationResponse;
 
 import java.io.UnsupportedEncodingException;
@@ -89,6 +82,7 @@ public class UrlUtil {
     }
 
     public static void main(String[] args) {
+        System.out.println(String.format("sub navigation not found, cityId:%s, courseId:%s", 1, 2));
 //        String requestUrl = "a/b/n_q/";
 //        int lastSplitIdx = requestUrl.lastIndexOf("/");
 //        if(lastSplitIdx > -1 && lastSplitIdx < requestUrl.length() - 1){
@@ -96,34 +90,34 @@ public class UrlUtil {
 //        }else{
 //            System.out.println(requestUrl);
 //        }
-        BankValidateResult result;
+//        BankValidateResult result;
+////
+////        // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey
+//        Credential cred = new Credential("AKIDTGbawzHe5lANZJn5La6a3Q1W9cLKo35Y", "EhpYfYwDkQ4tdDq5kzNdGTZ9PHYayvOd");
 //
-//        // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey
-        Credential cred = new Credential("AKIDTGbawzHe5lANZJn5La6a3Q1W9cLKo35Y", "EhpYfYwDkQ4tdDq5kzNdGTZ9PHYayvOd");
-
-        HttpProfile httpProfile = new HttpProfile();
-        httpProfile.setEndpoint("faceid.tencentcloudapi.com");
-
-        ClientProfile clientProfile = new ClientProfile();
-        clientProfile.setHttpProfile(httpProfile);
+//        HttpProfile httpProfile = new HttpProfile();
+//        httpProfile.setEndpoint("faceid.tencentcloudapi.com");
 //
-        FaceidClient client = new FaceidClient(cred, "ap-shanghai", clientProfile);
-
-        BankCardVerificationRequest request = new BankCardVerificationRequest();
-        request.setName("何其䶮");
-        request.setBankCard("6225880158839831");
-        request.setIdCard("360681199202144250");
-
-        BankCardVerificationResponse response = null;
-        try {
-            response = client.BankCardVerification(request);
-            result = toBankValidateResult(response);
-        } catch (TencentCloudSDKException e) {
-            result = new BankValidateResult(false, false, "验证失败 当前系统无法验证，请稍后再试", false);
-        }finally {
-        }
-
-        System.out.println(JsonUtil.format(result));
+//        ClientProfile clientProfile = new ClientProfile();
+//        clientProfile.setHttpProfile(httpProfile);
+////
+//        FaceidClient client = new FaceidClient(cred, "ap-shanghai", clientProfile);
+//
+//        BankCardVerificationRequest request = new BankCardVerificationRequest();
+//        request.setName("何其䶮");
+//        request.setBankCard("6225880158839831");
+//        request.setIdCard("360681199202144250");
+//
+//        BankCardVerificationResponse response = null;
+//        try {
+//            response = client.BankCardVerification(request);
+//            result = toBankValidateResult(response);
+//        } catch (TencentCloudSDKException e) {
+//            result = new BankValidateResult(false, false, "验证失败 当前系统无法验证，请稍后再试", false);
+//        }finally {
+//        }
+//
+//        System.out.println(JsonUtil.format(result));
 
 //        String s= "{\"Result\": \"-3\",\"description\": \"?????\",\"requestId\": \"c6daaf7f-dbdc-4a9d-a20b-9a14ffdd8328\"}";
 //        System.out.println(JsonUtil.format(JSON.parseObject(s, BankCardVerificationResponse.class)));

@@ -1,5 +1,7 @@
 package com.qingqing.test.manager;
 
+import com.qingqing.test.aspect.delayinit.IQingInitDelayable;
+import com.qingqing.test.aspect.delayinit.QingInitCheck;
 import com.qingqing.test.domain.config.TestProtoClassName;
 import com.qingqing.test.service.common.CommonService;
 import com.qingqing.test.service.config.TestProtoClassNameService;
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import java.util.Map;
  * Created by zhujianxing on 2019/3/5.
  */
 @Component
-public class TestProtoClassNameManager implements ISyncable{
+public class TestProtoClassNameManager implements ISyncable, IQingInitDelayable {
     private static final Logger logger = LoggerFactory.getLogger(TestProtoClassNameManager.class);
 
     @Autowired
@@ -37,7 +38,7 @@ public class TestProtoClassNameManager implements ISyncable{
     @Value("${protobuf.init.filepath:null}")
     public String protoInitFile;
 
-    @PostConstruct
+//    @PostConstruct
     public void sync(){
         List<TestProtoClassName> testConfigList = testProtoClassNameService.selectAll();
 
@@ -81,7 +82,18 @@ public class TestProtoClassNameManager implements ISyncable{
         return new SyncType[]{SyncType.all, SyncType.proto_name};
     }
 
+    @QingInitCheck
     public List<String> getFullClassName(String simpleName){
         return simpleFullMap.get(simpleName);
+    }
+
+    @Override
+    public void doInit() {
+        sync();
+    }
+
+    @Override
+    public boolean isNeedInit() {
+        return simpleFullMap == null;
     }
 }
