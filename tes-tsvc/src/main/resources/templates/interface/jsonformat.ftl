@@ -290,7 +290,8 @@
                 return url;
             }
 
-            var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
+            var gatewayUrl = "http://gateway.{env}.idc.cedu.cn";
+            var interfaceUrlPrefix;
             var paramExamples;
             var interfaceBean;
             var userTypeArr = [];
@@ -299,7 +300,7 @@
             });
             function handlerInterface(resu){
                 jsonShow(resu, "json-interface");
-                interfaceUrlPrefix += resu.interfaceInfo.inter.interfaceUrl + "?guid={guid}";
+                interfaceUrlPrefix = gatewayUrl + resu.interfaceInfo.inter.interfaceUrl + "?guid={guid}";
                 $("#interfaceId").val(resu.interfaceInfo.inter.id);
                 interfaceBean = resu.interfaceInfo.inter;
                 $("#interfaceNameDiv").text(resu.interfaceInfo.inter.interfaceName);

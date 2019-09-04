@@ -51,7 +51,9 @@ public class CommonController {
     }
 
     @RequestMapping("haha")
-    public String haha() {
+    public String haha(@RequestParam(value = "s", defaultValue = "") String search, Model model) {
+        model.addAttribute("search", search);
+
         return "utils/haha";
     }
 

@@ -45,7 +45,7 @@
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-actions">
                             <div class="input-group">
-                                <input id="qing_search" placeholder="输入你想查找的接口名称 ..." type="text" class="form-control" name="message" />
+                                <input id="qing_search" placeholder="输入你想查找的接口名称 ..." type="text" class="form-control" name="message" value="${search}" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-sm btn-info no-radius" type="button" id="interfaceSearch" />
                                 </span>
@@ -88,6 +88,24 @@
 
             $("#taskList").append(html);
         }
+
+
+    }
+
+    function search(){
+        var search = $("#qing_search").val();
+        $(".qing_task").addClass("hide");
+
+        if(search != ""){
+            for(var idx in allInterface){
+                var task = allInterface[idx];
+                var id = "task_" + task.id;
+
+                if(task.interfaceName.toLowerCase().indexOf(search) != -1 || task.interfaceUrl.toLowerCase().indexOf(search) != -1){
+                    $("#" + id).removeClass("hide");
+                }
+            }
+        }
     }
 
     jQuery(function($) {
@@ -100,21 +118,8 @@
             $("#env").val($(this).val());
         });
 
-        $("#qing_search").change(function(){
-            var search = $("#qing_search").val();
-            $(".qing_task").addClass("hide");
+        $("#qing_search").change(search);
 
-            if(search != ""){
-                for(var idx in allInterface){
-                    var task = allInterface[idx];
-                    var id = "task_" + task.id;
-
-                    if(task.interfaceName.toLowerCase().indexOf(search) != -1 || task.interfaceUrl.toLowerCase().indexOf(search) != -1){
-                        $("#" + id).removeClass("hide");
-                    }
-                }
-            }
-        });
 
     });
 </script>
