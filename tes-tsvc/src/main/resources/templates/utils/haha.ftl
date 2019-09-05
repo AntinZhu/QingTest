@@ -89,7 +89,7 @@
             $("#taskList").append(html);
         }
 
-
+        search();
     }
 
     function search(){

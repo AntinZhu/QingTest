@@ -81,8 +81,8 @@ public class UrlUtil {
         return result;
     }
 
-    public static void main(String[] args) {
-        System.out.println(String.format("sub navigation not found, cityId:%s, courseId:%s", 1, 2));
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        System.out.println(URLEncoder.encode("杨琳", "utf-8").replaceAll("\\+", "%20"));
 //        String requestUrl = "a/b/n_q/";
 //        int lastSplitIdx = requestUrl.lastIndexOf("/");
 //        if(lastSplitIdx > -1 && lastSplitIdx < requestUrl.length() - 1){
@@ -104,9 +104,9 @@ public class UrlUtil {
 //        FaceidClient client = new FaceidClient(cred, "ap-shanghai", clientProfile);
 //
 //        BankCardVerificationRequest request = new BankCardVerificationRequest();
-//        request.setName("何其䶮");
-//        request.setBankCard("6225880158839831");
-//        request.setIdCard("360681199202144250");
+//        request.setName("杨琳");
+//        request.setBankCard("6215230500614350");
+//        request.setIdCard("420683199402281267");
 //
 //        BankCardVerificationResponse response = null;
 //        try {
@@ -118,7 +118,7 @@ public class UrlUtil {
 //        }
 //
 //        System.out.println(JsonUtil.format(result));
-
+//
 //        String s= "{\"Result\": \"-3\",\"description\": \"?????\",\"requestId\": \"c6daaf7f-dbdc-4a9d-a20b-9a14ffdd8328\"}";
 //        System.out.println(JsonUtil.format(JSON.parseObject(s, BankCardVerificationResponse.class)));
     }

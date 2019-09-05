@@ -177,7 +177,9 @@
     var paramArr = [{id:1, name:'小轻评级-每日',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_rating','tr_reward_level','tr_reward_level_standardline','tr_reward_level_isprotected','tr_reward_level_protectedreason','tr_reward_level_firstorderdate','tr_reward_level_protectedenddate','tr_reward_level_rankid']},
         {id:2, name:'小轻评级-每月',indexName:'bi_teacher_index', paramNames:['teacher_id','bi_etl_date','tr_reward_level_mon_rating','tr_reward_level_mon','tr_reward_level_standardline','tr_reward_level_mon_isprotected','tr_reward_level_mon_protectedreason','tr_reward_level_mon_firstorderdate','tr_reward_level_mon_protectedenddate','tr_reward_level_mon_rankid']},
         {id:3, name:'小轻评级-每日',indexName:'bi_tr_stu_all_index', paramNames:['teacher_id','student_id','bi_etl_date','rl_t_s_valid_stu','rl_t_s_negative_appraise','rl_t_s_renew_fail']},
-        {id:4, name:'小轻评级-每月',indexName:'bi_tr_stu_all_index', paramNames:['teacher_id','student_id','bi_etl_date','rl_t_s_valid_stu_mon','rl_t_s_negative_appraise_mon','rl_t_s_renew_fail_mon']}];
+        {id:4, name:'小轻评级-每月',indexName:'bi_tr_stu_all_index', paramNames:['teacher_id','student_id','bi_etl_date','rl_t_s_valid_stu_mon','rl_t_s_negative_appraise_mon','rl_t_s_renew_fail_mon']},
+        {id:5, name:'一周魅力小结',indexName:'bi_teacher_index', paramNames:['teacher_id','tr_charm_brief_summary_week','tr_charm_brief_summary_lastweek','bi_etl_date']}
+    ];
     // indexPrefix: 索引前缀 isRelation:
     var supportIndexArr = [
         {indexPrefix:'bi_teacher_index',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
