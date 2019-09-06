@@ -132,6 +132,8 @@
 
             $("#taskList").append(html);
         }
+
+        search($("#task_search").val());
     }
 
     function cronTaskIdx(idx){
@@ -201,8 +203,6 @@
     jQuery(function($) {
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
-
-        search($("#task_search").val());
 
         $(".env").click(function(){
             $(".env.btn-primary").removeClass("btn-primary");

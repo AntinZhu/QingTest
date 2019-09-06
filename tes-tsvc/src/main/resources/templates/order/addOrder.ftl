@@ -512,7 +512,7 @@
                                                                                     <i class="icon-refresh bigger-230"></i>
                                                                                 </a>
                                                                             </th>
-                                                                            <th>上课 | 三方赔付 | 删课 | 结课 | 调课申请 | 调课 </th>
+                                                                            <th>上课 | 三方赔付 | 删课 | 调课申请 | 调课 | 结课 </th>
                                                                         </tr>
                                                                         </thead>
 
@@ -620,11 +620,6 @@
                                         <i class="icon-trash bigger-120"></i>
                                     </button>
 
-                                    <button class="btn btn-xs btn-warning finish-class">
-                                        <input type="hidden" value="{orderCourseId}" />
-                                        <i class="icon-flag bigger-120"></i>
-                                    </button>
-
                                     <button class="btn btn-xs btn-warning change_apply-class">
                                         <input type="hidden" value="{groupOrderCourseId}" />
                                         <i class=" icon-fighter-jet bigger-120"></i>
@@ -633,6 +628,11 @@
                                     <button class="btn btn-xs btn-warning change-class">
                                         <input type="hidden" value="{groupOrderCourseId}" />
                                         <i class="icon-fire bigger-120"></i>
+                                    </button>
+
+                                    <button class="btn btn-xs btn-warning finish-class">
+                                        <input type="hidden" value="{orderCourseId}" />
+                                        <i class="icon-flag bigger-120"></i>
                                     </button>
                                 </div>
                             </td>

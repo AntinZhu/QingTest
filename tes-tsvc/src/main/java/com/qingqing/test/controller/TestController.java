@@ -77,9 +77,9 @@ public class TestController {
     @RequestMapping("test")
     @ResponseBody
     public String show( Model model){
-        TestStudentIndexBean bean = biStudentEsMapper.findPoint();
-        bean.setSumGrade(biStudentEsMapper.sunGrade());
-        return JsonUtil.format(bean);
+
+
+        return "ok";
     }
 
     @RequestMapping("json_format")
