@@ -151,7 +151,7 @@
         function handlerParamSave(){
             $.gritter.add({
                 title : '提示:',
-                text : "反馈成功",
+                text : "反馈成功，请过几分钟后再试",
                 class_name : 'gritter-info gritter-center'
             });
         }

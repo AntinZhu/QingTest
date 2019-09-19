@@ -9,13 +9,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by zhujianxing on 2019/7/4.
  */
 public class PomUtils {
 
-    public static void main(String[] args) throws ParserConfigurationException, SAXException {
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         final SAXParser parser = factory.newSAXParser();
 

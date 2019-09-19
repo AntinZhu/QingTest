@@ -243,6 +243,34 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+
+                                                                                <div class="form-group qing_catelog_hide">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData">Json串：</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <textarea id="paramJsonObj" style="height: 250px" class="autosize-transition form-control"></textarea>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group qing_catelog_hide">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="aa"></label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="col-sm-offset-5">
+                                                                                            <button type="button" class="btn btn-grey btn-sm" id="paramTemplateConvertBtn">
+                                                                                                <i class="icon-refresh"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group qing_catelog_hide">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="fullData">结果：</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <textarea id="paramJsonTemplate" style="height: 250px" class="autosize-transition form-control"></textarea>
+                                                                                    </div>
+                                                                                </div>
                                                                             </form>
 
                                                                             <div class="hr hr-dotted"></div>
@@ -345,8 +373,17 @@
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
             //输入框的值改变时触发
             $(document).on("change", "#paramDetail",function(e){
-                $("#paramDetail").val(generateEditParam("#paramListDiv input", paramInfo));
+                setTimeout(refreshResult, 500);
             });
+
+            function refreshResult(){
+                var paramDetail = generateEditParam("#paramListDiv input", paramInfo);
+                $("#paramDetail").val(paramDetail);
+                $("#paramJsonTemplate").text(paramDetail);
+                $("#paramJsonTemplate").val(paramDetail);
+
+                $("#paramJsonObj").val(JSON.stringify(generateJsonParam("#paramListDiv input", paramInfo)));
+            }
 
 //            $(document).on("change", "#paramListDiv :input:not(.qing_editable)",function(e){
 //
@@ -365,6 +402,9 @@
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){
                     paramInfo = showParam({paramData:paramDetail, isEditStatus:true, valueChangedNotifyId:"paramDetail"});
+                    $("#paramJsonObj").val(JSON.stringify(generateJsonParam("#paramListDiv input", paramInfo)));
+                    $("#paramJsonTemplate").text(paramDetail);
+                    $("#paramJsonTemplate").val(paramDetail);
                 }else{
                     $("#hasParam").removeAttr("checked");
                     $("#hasParam").val(0);
@@ -416,6 +456,8 @@
                 jsonShow(resu.data, "json-interface-detail");
                 paramInfo = showParam({paramData:resu.data, isEditStatus:true,valueChangedNotifyId:"paramDetail"});
                 $("#paramDetail").val(resu.data);
+
+                refreshResult();
             }
 
             $("#resetBtn").click(function () {
@@ -532,8 +574,7 @@
 
                 var paramDetail = "";
                 if($("#hasParam").val() == 1){
-                    $("#paramDetail").val(generateEditParam("#paramListDiv input", paramInfo));
-                    paramDetail = $("#paramDetail").val();;
+                    paramDetail = $("#paramJsonTemplate").val();
                     if(paramDetail == null || paramDetail == ""){
                         $.gritter.add({
                             title : '参数错误:',
@@ -582,6 +623,38 @@
                 });
                 refreshCatelog();
             }
+
+            $("#paramTemplateConvertBtn").click(function(){
+                var jsonObjValue = $("#paramJsonObj").val();
+                if(jsonObjValue == ""){
+                    $.gritter.add({
+                        title : "参数错误",
+                        text : "请输入Json串",
+                        class_name : 'gritter-error gritter-center'
+                    });
+                    return;
+                }
+
+                jsonShow(jsonObjValue, "json-interface-detail");
+
+                var jsonObj;
+                try{
+                    jsonObj = JSON.parse(jsonObjValue);
+                }catch(e){
+                    $.gritter.add({
+                        title : "参数错误",
+                        text : "Json串格式有误",
+                        class_name : 'gritter-error gritter-center'
+                    });
+                    return;
+                }
+
+                var result = JSON.stringify(generateTemplate(jsonObj));
+                jsonShow(result, "json-interface-detail");
+                $("#paramJsonTemplate").text(result);
+
+                paramInfo = showParam({paramData:result, isEditStatus:true, valueChangedNotifyId:"paramDetail"});
+            });
 
             jQuery(function($) {
 

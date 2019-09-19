@@ -87,10 +87,10 @@ public class QingFileUtils {
 
     public static void main(String[] args) throws IOException {
         List<QingCSVBean> inDBLines = QingFileUtils.readLines("D:\\sql\\in_db.csv", new QingCSVBeanConverter(","));
-//        List<QingCSVBean> patchLines = QingFileUtils.readLines("D:\\sql\\分隔测试.txt", new QingCSVBeanConverter("\t"));
+        List<QingCSVBean> patchLines = QingFileUtils.readLines("D:\\sql\\分隔测试.txt", new QingCSVBeanConverter("\t"));
 
         Map<String, QingCSVBean> inDbMap = CollectionsUtil.mapComposerId(inDBLines, new QingCSVBeanComposer(1));
-//        Map<String, QingCSVBean> patchMap = CollectionsUtil.mapComposerId(patchLines, new QingCSVBeanComposer(1));
+        Map<String, QingCSVBean> patchMap = CollectionsUtil.mapComposerId(patchLines, new QingCSVBeanComposer(1));
 
         String logTemplate1= "({db_1},1,1,null,null,1,ifnull({db_5}, 5),ifnull({db_4}, 1),now(),now(),'{db_3}',ifnull({db_4}, 1),ifnull({db_5}, 5)),";
         String logTemplate2= "({db_1},2,1,null,null,0,ifnull({db_9}, 5),ifnull({db_8}, 1),now(),now(),'{db_7}',ifnull({db_8}, 1),ifnull({db_9}, 5)),";
@@ -115,12 +115,10 @@ public class QingFileUtils {
                 }
                 System.out.println(finalValue);
             }
-
-
         }
     }
 
-    private static void searchCommonProperties(){
+    private static void searchCommonProperties() throws IOException {
         File dir = new File("D:\\all-project");
         DirSearchUtils.checkDir(dir, new FileHandler() {
             @Override
