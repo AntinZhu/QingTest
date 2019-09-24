@@ -316,7 +316,6 @@
                         source: userTypeArr,
                         success: function(e, response, newValue) {
                             $(this).prev("input").val(newValue);
-                            alert("hehe");
                         }
                     });
                 }

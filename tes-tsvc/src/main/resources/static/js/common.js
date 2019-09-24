@@ -609,6 +609,12 @@ function formatDate_yyyyMMDD(shijianchuo){
     return y + '-' + m + "-" + d;
 }
 
+function toShijiancuo(dateDtring){
+    var time = new Date(dateDtring);
+
+    return time.getTime();
+}
+
 function notOps(resu){
 
 }

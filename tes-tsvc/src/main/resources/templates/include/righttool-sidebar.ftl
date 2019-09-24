@@ -391,6 +391,41 @@
                 </div>
             </div>
 
+            <div class="group">
+                <h3 class="accordion-header">时间转换</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">时间戳：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" class="qing_time_conv" id="qing_timestamp_input" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="qing_time_converter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">时间：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" class="qing_time_conv" id="qing_time_input" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         </div>
@@ -469,6 +504,31 @@
             }
         });
     });
+
+    $(".qing_time_conv").blur(function(){
+        if($(this).val() == ''){
+            return;
+        }
+
+        var valueKey = this.id;
+        $(".qing_time_conv").each(function(key,value){
+            if(value.id != valueKey){
+                $(value).val("");
+            }
+        });
+    });
+
+    $("#qing_time_converter").click(function(){
+        var time = $("#qing_time_input").val();
+        var timestamp = $("#qing_timestamp_input").val();
+
+        if(time != null && time != ""){
+            $("#qing_timestamp_input").val(toShijiancuo(time));
+        }else if(timestamp != null && timestamp != ""){
+            $("#qing_time_input").val(formatDate(new Number(timestamp)));
+        }
+    });
+
 
     $('#id-input-file-3').ace_file_input({
         no_file:'No File ...',
