@@ -86,7 +86,11 @@
             html = html.replace(new RegExp("{url}","gm"), "${base}/v1/test/json_format?cross=1&id=" + task.id);
             html = html.replace(new RegExp("{content}","gm"), task.interfaceUrl);
 
-            $("#taskList").append(html);
+            try{
+                $("#taskList").append(html);
+            }catch(t){
+                // ignore
+            }
         }
 
         search();

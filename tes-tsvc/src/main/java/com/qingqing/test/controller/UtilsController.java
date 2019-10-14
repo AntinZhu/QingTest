@@ -333,6 +333,8 @@ public class UtilsController {
         for (String sql : encodeList) {
             commonService.insert(sql);
         }
+
+
     }
 
     @RequestMapping("mock")

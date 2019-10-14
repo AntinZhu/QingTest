@@ -281,6 +281,18 @@
                                                         </label>
                                                     </td>
                                                 </tr>
+
+                                                <tr>
+                                                    <td class="">38</td>
+                                                    <td class="">是否是海风老师</td>
+
+                                                    <td>
+                                                        <label class="pull-left inline qing_tag_switch is_hf_teacher"  title="" data-rel="tooltip" >
+                                                            <input type="checkbox" id="is_hf_teacher" class="ace ace-switch ace-switch-5" value="0" />
+                                                            <span class="lbl"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -362,6 +374,29 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- 最大可授课学生数 -->
+                            <div class="col-xs-12 col-sm-3 widget-container-span qing_resize">
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h5 class="smaller">39-海风老师ID</h5>
+
+                                        <div class="widget-toolbar">
+													<span class="label label-success">
+														16%
+														<i class="icon-arrow-up"></i>
+													</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main padding-6">
+                                            <div class="alert alert-info center">
+                                                <input type="text" class="input-mini" id="bind_hf_teacher_id" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div><!-- /.row -->
                     </div><!-- /.page-header -->
                 </div>
@@ -413,6 +448,8 @@
         $(".chosen-select").chosen();
         $('[data-rel=tooltip]').tooltip();
         $('#teacher_max_teachable_student_count').ace_spinner({value:0,min:0,max:1000,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+        $('#bind_hf_teacher_id').ace_spinner({value:0,min:0,max:1000000000,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
 
         var paramInfo;
         $(document).ready(function(){
@@ -472,6 +509,7 @@
 
         var inInit = false;
         function init(resu){
+            clearAllData();
             inInit = true;
             for( var idx in resu.resultList){
                 var tag = resu.resultList[idx];
@@ -511,6 +549,10 @@
 
                 if("teacher_max_teachable_student_count" == tag.tagType){
                     $("#teacher_max_teachable_student_count").val(tag.tagValue);
+                }
+
+                if("bind_hf_teacher_id" == tag.tagType){
+                    $("#bind_hf_teacher_id").val(tag.tagValue);
                 }
             }
 
@@ -590,6 +632,10 @@
             setTag(getTeacherId(), "teacher_max_teachable_student_count", $(this).val());
         });
 
+        $('#bind_hf_teacher_id').change(function(){
+            setTag(getTeacherId(), "bind_hf_teacher_id", $(this).val());
+        });
+
         $(".env").click(function(){
             $(".env.btn-primary").removeClass("btn-primary");
             $(this).addClass("btn-primary");
@@ -606,6 +652,13 @@
             var param = generateJsonParam("#paramListDiv input", paramInfo);
 
             return param.teacher_id;
+        }
+
+        function clearAllData(){
+            $('#teacher_max_teachable_student_count').val(0);
+            $('#bind_hf_teacher_id').val(0);
+            $(".use_live_tool.btn-primary").removeClass("btn-primary");
+            $(".teacher_limited_site_types").removeClass("btn-primary");
         }
     });
 </script>

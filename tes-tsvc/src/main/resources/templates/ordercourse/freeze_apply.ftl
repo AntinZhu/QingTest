@@ -208,6 +208,19 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="taxAmount">是否与海风老师结算:</label>
+
+                                                                                    <div class="col-xs-12 col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <label class="pull-left inline"  title="" data-rel="tooltip" >
+                                                                                                <input id="isPayHFTeacher" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
+                                                                                                <span class="lbl"></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
                                                                                 <div class="hr hr-dotted"></div>
                                                                                 <div class="hr hr-dotted"></div>
                                                                             </form>
@@ -338,7 +351,8 @@
                     tax_amount : new Number($("#taxAmount").val()),
                     process_content : $("#remark").val(),
                     is_paid_voucher_price : ($("#isPayVoucherPrice").val() == "1"),
-                    depend_on_course_num : new Number($("#dependOnCourseNum").val())
+                    depend_on_course_num : new Number($("#dependOnCourseNum").val()),
+                    is_need_pay_for_hf_teacher : ($("#isPayHFTeacher").val() == "1")
                 }
 
                 jsonShow(data, "json-request");
@@ -371,6 +385,14 @@
             }
 
             $(document).on("change", "#isPayVoucherPrice", function(){
+                if($(this).val() == 0){
+                    $(this).val(1);
+                }else{
+                    $(this).val(0);
+                }
+            });
+
+            $(document).on("change", "#isPayHFTeacher", function(){
                 if($(this).val() == 0){
                     $(this).val(1);
                 }else{

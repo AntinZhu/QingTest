@@ -1,8 +1,6 @@
 package com.qingqing.test.util;
 
 import com.qingqing.test.util.QingParamUtil.QingProtoFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.beans.IntrospectionException;
 import java.io.BufferedReader;
@@ -21,7 +19,6 @@ import java.util.regex.Pattern;
  * Created by zhujianxing on 2019/8/1.
  */
 public class QingProtoClassNameUtil {
-    private static final Logger logger = LoggerFactory.getLogger(QingProtoClassNameUtil.class);
 
     public static void main(String[] args) throws ClassNotFoundException, IntrospectionException, IOException {
         String outFilePath = "D:\\sql\\full-proto.sql";
@@ -35,6 +32,7 @@ public class QingProtoClassNameUtil {
         List<QingProtoFile> qingProtoFiles = parseProtoDir(new File(dirPath));
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName));
+        writer.write("use qq_itest;");
         writer.write("delete from `t_proto_class_name`;");
         for (QingProtoFile qingProtoFile : qingProtoFiles) {
             String fullOuterClassName = qingProtoFile.getPackageName() + "." + qingProtoFile.getOutterClassName();
