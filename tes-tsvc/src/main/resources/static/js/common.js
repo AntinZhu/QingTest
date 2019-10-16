@@ -419,11 +419,17 @@ $('.clear').click(function(){
     };
 })(jQuery);
 
+var tradeNotifyLogUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20%22{tradeId}%22&h=svc&t=Now&i=rsyslog-app*&_g=()";
 function thirdPayWayList(payBriefList){
     var trText = "";
     for(idx in payBriefList){
         var payBrief = payBriefList[idx];
-        trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td>" + payBrief.tradeId + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td><div class=\" btn-group\"><button type=\"button\" class=\"btn btn-xs btn-success mockPayBtn\"><i class=\"icon-ok bigger-120\"></i></button></div></td></tr>";
+
+        var logUrl = tradeNotifyLogUrl;
+        logUrl = logUrl.replace("{env}", $("#env").val());
+        logUrl = logUrl.replace("{tradeId}", payBrief.tradeId);
+
+        trText = trText + "<tr><td>" + payBrief.payTypeName + "</td><td class=\"hidden-480\">" + payBrief.qingqingTradeNo + "</td><td>" + payBrief.tradeId + "</td><td class=\"hidden-480\"><span class=\"label label-sm label-warning\">" + payBrief.payStatus + "</span></td><td><div class=\" btn-group\"><button type=\"button\" class=\"btn btn-xs btn-success mockPayBtn\"><i class=\"icon-ok bigger-120\"></i></button></div></td><td><a target=\"_blank\" href='" + logUrl + "'>查看日志</a> </td></tr>";
     }
 
     return trText;

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.qingqing.test.dao.mock.MockRuleMapper" >
+<mapper namespace="com.qingqing.test.dao.test.mock.MockRuleMapper" >
   <resultMap id="BaseResultMap" type="com.qingqing.test.domain.mock.MockRule" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="interface_type" property="interfaceType" javaType="RuleInterfaceType" />
+    <result column="mock_type" property="mockType" jdbcType="VARCHAR" />
     <result column="rule_type" property="ruleType" javaType="RuleType" />
     <result column="rule_value" property="ruleValue" jdbcType="VARCHAR" />
     <result column="rule_order_num" property="ruleOrderNum" jdbcType="INTEGER" />
+    <result column="delay_ms" property="delayMs" jdbcType="INTEGER" />
     <result column="resp" property="resp" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_need_record_order" property="isNeedRecordOrder" jdbcType="BOOLEAN" />
     <result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -15,8 +17,23 @@
   </resultMap>
 
     <sql id="Base_Column_List" >
-    id, interface_type, rule_type, rule_value, rule_order_num, resp, is_need_record_order, is_deleted, create_time, last_update_time
+    id, mock_type, rule_type, rule_value, rule_order_num, resp, is_need_record_order, delay_ms, remark, is_deleted, create_time, last_update_time
   </sql>
+
+  <insert id="insert" parameterType="com.qingqing.test.domain.mock.MockRule" useGeneratedKeys="true" keyProperty="id">
+    insert into t_mock_rule(mock_type, rule_type,  rule_value, rule_order_num, resp, is_need_record_order, delay_ms, remark, is_deleted, create_time) value(
+    #{mockType, jdbcType=VARCHAR},
+    #{ruleType, javaType=RuleType},
+    #{mockValue, jdbcType=VARCHAR},
+    #{ruleOrderNum, jdbcType=INTEGER},
+    #{resp, jdbcType=VARCHAR},
+    #{isNeedRecordOrder, jdbcType=INTEGER},
+    #{delayMs, jdbcType=INTEGER},
+    #{remark, jdbcType=VARCHAR},
+    0,
+    now()
+    )
+  </insert>
   
   <select id="selectAll" resultMap="BaseResultMap">
     select 
@@ -24,5 +41,4 @@
     	from t_mock_rule
     	where is_deleted = FALSE
   </select>
-  
 </mapper>

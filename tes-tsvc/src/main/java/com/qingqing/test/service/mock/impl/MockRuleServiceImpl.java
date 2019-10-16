@@ -1,6 +1,6 @@
 package com.qingqing.test.service.mock.impl;
 
-import com.qingqing.test.dao.mock.MockRuleMapper;
+import com.qingqing.test.dao.test.mock.MockRuleMapper;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.service.mock.MockRuleService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -47,7 +47,7 @@
                                     </h1>
 
                                     <hr />
-                                    <h3 class="lighter smaller">不要再找了，这个页面已经被我删除了</h3>
+                                    <h3 class="lighter smaller">时空错乱，让你穿越至此，放下键盘和鼠标，放空自己，闻一闻这自由的味道！该下班了，少年！！！！！</h3>
 
                                     <div>
                                         <div class="space"></div>

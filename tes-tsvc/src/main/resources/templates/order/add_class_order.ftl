@@ -454,6 +454,7 @@
                                                                                 <th>TradeId</th>
                                                                                 <th class="hidden-480">Status</th>
                                                                                 <th>操作</th>
+                                                                                <th>日志</th>
                                                                             </tr>
                                                                         </thead>
 

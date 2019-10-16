@@ -27,10 +27,12 @@ import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.index.IndexQueryRequestBean;
 import com.qingqing.test.bean.index.IndexUpdateRequestBean;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
-import com.qingqing.test.dao.mock.MockRuleMapper;
+import com.qingqing.test.dao.test.mock.MockRuleMapper;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.domain.tool.TestCronTask;
 import com.qingqing.test.manager.BITeacherIndexManager;
+import com.qingqing.test.manager.CommonSyncManager;
+import com.qingqing.test.manager.ISyncable.SyncType;
 import com.qingqing.test.manager.PhoneNumberManager;
 import com.qingqing.test.manager.QingApiLabManager;
 import com.qingqing.test.manager.TestProtoClassNameManager;
@@ -92,6 +94,8 @@ public class UtilsController {
     private WxNotifyManager wxNotifyManager;
     @Autowired
     private UserIpManager userIpManager;
+    @Autowired
+    private CommonSyncManager commonSyncManager;
 
     private final static String ENCODE_KEY = "erahsQqx";
     private final static String VERSION_V1 = "v1";
@@ -334,7 +338,7 @@ public class UtilsController {
             commonService.insert(sql);
         }
 
-
+        commonSyncManager.sync(SyncType.all);
     }
 
     @RequestMapping("mock")

@@ -115,6 +115,18 @@
 
                                                 <tbody>
                                                 <tr>
+                                                    <td class="">38</td>
+                                                    <td class="">是否是海风老师</td>
+
+                                                    <td>
+                                                        <label class="pull-left inline qing_tag_switch is_hf_teacher"  title="" data-rel="tooltip" >
+                                                            <input type="checkbox" id="is_hf_teacher" class="ace ace-switch ace-switch-5" value="0" />
+                                                            <span class="lbl"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
                                                     <td class="">34</td>
                                                     <td class="">是否是严选老师</td>
 
@@ -282,17 +294,6 @@
                                                     </td>
                                                 </tr>
 
-                                                <tr>
-                                                    <td class="">38</td>
-                                                    <td class="">是否是海风老师</td>
-
-                                                    <td>
-                                                        <label class="pull-left inline qing_tag_switch is_hf_teacher"  title="" data-rel="tooltip" >
-                                                            <input type="checkbox" id="is_hf_teacher" class="ace ace-switch ace-switch-5" value="0" />
-                                                            <span class="lbl"></span>
-                                                        </label>
-                                                    </td>
-                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>

@@ -39,6 +39,10 @@ public class UserIpManager implements ISyncable{
         return userIpMapping.get(userIp);
     }
 
+    public boolean isUserIpExist(String userIp){
+        return getUserInfo(userIp) != null;
+    }
+
     @Override
     public void sync() {
         List<TestUserIp> userIpList = testUserIpService.selectAll();

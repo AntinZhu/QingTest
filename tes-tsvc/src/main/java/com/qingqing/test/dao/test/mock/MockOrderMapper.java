@@ -1,4 +1,4 @@
-package com.qingqing.test.dao.mock;
+package com.qingqing.test.dao.test.mock;
 
 import com.qingqing.test.bean.mock.MockOrder;
 

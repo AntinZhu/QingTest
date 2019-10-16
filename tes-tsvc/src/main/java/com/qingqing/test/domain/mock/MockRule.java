@@ -9,12 +9,14 @@ import java.util.Date;
 public class MockRule implements Comparable<MockRule>{
 
     private Integer id;
-    private InterfaceType interfaceType;
+    private String mockType;
     private RuleType ruleType;
     private String ruleValue;
     private Integer ruleOrderNum;
     private String resp;
     private Boolean isNeedRecordOrder;
+    private String remark;
+    private Integer delayMs; // 延迟返回的毫秒数
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
@@ -27,12 +29,12 @@ public class MockRule implements Comparable<MockRule>{
         this.id = id;
     }
 
-    public InterfaceType getInterfaceType() {
-        return interfaceType;
+    public String getMockType() {
+        return mockType;
     }
 
-    public void setInterfaceType(InterfaceType interfaceType) {
-        this.interfaceType = interfaceType;
+    public void setMockType(String mockType) {
+        this.mockType = mockType;
     }
 
     public RuleType getRuleType() {
@@ -75,6 +77,14 @@ public class MockRule implements Comparable<MockRule>{
         isNeedRecordOrder = needRecordOrder;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public Boolean getDeleted() {
         return isDeleted;
     }
@@ -97,6 +107,14 @@ public class MockRule implements Comparable<MockRule>{
 
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public Integer getDelayMs() {
+        return delayMs;
+    }
+
+    public void setDelayMs(Integer delayMs) {
+        this.delayMs = delayMs;
     }
 
     @Override

@@ -14,6 +14,8 @@ import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.KeyAndValue;
+import com.qingqing.test.bean.common.UrlAndParam;
+import com.qingqing.test.bean.common.UserWithDataBean;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.inter.CatelogBean;
@@ -34,6 +36,7 @@ import com.qingqing.test.manager.PassportManager;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.manager.UserIpManager;
 import com.qingqing.test.manager.WxNotifyManager;
+import com.qingqing.test.manager.mock.MyMockTestManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
 import com.qingqing.test.service.inter.TestInterfaceService;
@@ -73,13 +76,18 @@ public class TestController {
     private WxNotifyManager wxNotifyManager;
     @Autowired
     private UserIpManager userIpManager;
+    @Autowired
+    private MyMockTestManager myMockTestManager;
 
     @RequestMapping("test")
     @ResponseBody
     public String show( Model model){
+        UrlAndParam url = new UrlAndParam();
+        url.setUrl("abc");
+        url.setParam("param");
+        UserWithDataBean user = new UserWithDataBean();
 
-
-        return "ok";
+        return myMockTestManager.test(url, user);
     }
 
     @RequestMapping("json_format")
