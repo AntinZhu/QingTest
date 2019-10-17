@@ -191,6 +191,7 @@
         {indexPrefix:'bi_tr_stu_index_last_day',isRelation:true, userType:'',uniqueKey:'student-teacher', clazz:'relation', userName:'老师和学生'},
         {indexPrefix:'bi_teacher_index_last_day',isRelation:false, userType:'teacher',uniqueKey:'teacher', clazz:'teacher', userName:'老师'},
         {indexPrefix:'bi_crm_index_last_day',isRelation:false, userType:'customer',uniqueKey:'crm', clazz:'crm', userName:'customer'},
+        {indexPrefix:'bi_crm_upt_index',isRelation:false, userType:'customer',uniqueKey:'crm', clazz:'crm', userName:'customer'},
     ];
     var selectable = [];
     var aliasArr = ${alias};

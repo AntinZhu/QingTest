@@ -1,11 +1,10 @@
 package com.qingqing.test.manager.mock.rule;
 
 import com.qingqing.common.util.CollectionsUtil;
-import com.qingqing.test.domain.mock.IRuleData;
 import com.qingqing.test.domain.mock.InterfaceType;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.domain.mock.RuleType;
-import com.qingqing.test.manager.mock.rule.impl.AmountRuleHandler;
+import com.qingqing.test.manager.mock.rule.impl.AmountRangeRuleHandler;
 import com.qingqing.test.service.mock.MockRuleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,20 +30,21 @@ public class MockRuleManager {
     private MockRuleService mockRuleService;
 
     private static Map<RuleType, IRuleHandler> ruleHandlerMapping;
-    private Map<InterfaceType, List<MockRule>> interfaceRuleListMapping;
+    private Map<String, List<MockRule>> interfaceRuleListMapping;
 
     static{
         ruleHandlerMapping = new HashMap<>();
-        ruleHandlerMapping.put(RuleType.amount, new AmountRuleHandler());
+        ruleHandlerMapping.put(RuleType.AMOUNT_RANGE, new AmountRangeRuleHandler());
+        ruleHandlerMapping.put(RuleType.AMOUNT_RANGE, new AmountRangeRuleHandler());
     }
 
     @PostConstruct
     public void sync(){
         List<MockRule> mockRuleList = mockRuleService.selectAll();
 
-        Map<InterfaceType, List<MockRule>> tmpInterfaceRuleListMapping = new HashMap<>(mockRuleList.size());
+        Map<String, List<MockRule>> tmpInterfaceRuleListMapping = new HashMap<>(mockRuleList.size());
         for(MockRule mockRule : mockRuleList){
-            InterfaceType interfaceType = mockRule.getInterfaceType();
+            String interfaceType = mockRule.getMockType();
             if(interfaceType.equals(InterfaceType.unknown)){
                 continue;
             }
@@ -65,12 +65,12 @@ public class MockRuleManager {
         interfaceRuleListMapping = tmpInterfaceRuleListMapping;
     }
 
-    public Map<InterfaceType, List<MockRule>> getInterfaceRuleListMapping() {
+    public Map<String, List<MockRule>> getInterfaceRuleListMapping() {
         return interfaceRuleListMapping;
     }
 
-    public MockRule getMockRule(InterfaceType interfaceType, IRuleData ruleData){
-        List<MockRule> ruleList = interfaceRuleListMapping.get(interfaceType);
+    public MockRule getMockRule(String ruleType, String matchValue){
+        List<MockRule> ruleList = interfaceRuleListMapping.get(ruleType);
         if(!CollectionsUtil.isNullOrEmpty(ruleList)){
             for(MockRule  mockRule : ruleList){
                 if(mockRule.getRuleType().equals(RuleType.unknown)){
@@ -80,7 +80,7 @@ public class MockRuleManager {
 
                 IRuleHandler ruleHandler = ruleHandlerMapping.get(mockRule.getRuleType());
                 if(ruleHandler != null){
-                    if(ruleHandler.meetRule(mockRule.getRuleValue(), ruleData)){
+                    if(ruleHandler.meetRule(mockRule.getRuleValue(), matchValue)){
                         return mockRule;
                     }
                 }else{

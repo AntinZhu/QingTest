@@ -1037,7 +1037,7 @@
             guid : $("#guid").val()
         };
 
-        commonAjaxRequest(request);
+        return commonAjaxRequest(request);
     }
 
     function handlerCheckPay(data){
@@ -1054,8 +1054,11 @@
                 clearTimeout(checkPayTimer);
                 checkPayTimer = null;
             }
+
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     function handlerPay(resu){
@@ -1640,7 +1643,7 @@
                 return addOrder();
             }else if(info.step == 2){
                 var orderStatus = $("#orderStatus").text();
-                if("已支付" != orderStatus){
+                if("已支付" != orderStatus && !checkPay()){
                     $.gritter.add({
                         title : '操作提醒:',
                         text : '你需要再次页面完成支付，才能到下一步',
