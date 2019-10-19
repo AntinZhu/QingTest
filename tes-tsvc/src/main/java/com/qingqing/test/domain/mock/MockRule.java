@@ -17,6 +17,7 @@ public class MockRule implements Comparable<MockRule>{
     private Boolean isNeedRecordOrder;
     private String remark;
     private Integer delayMs; // 延迟返回的毫秒数
+    private Boolean isDefault;
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
@@ -83,6 +84,14 @@ public class MockRule implements Comparable<MockRule>{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public Boolean getDeleted() {

@@ -4,7 +4,9 @@ import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.test.domain.mock.InterfaceType;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.domain.mock.RuleType;
+import com.qingqing.test.manager.ISyncable;
 import com.qingqing.test.manager.mock.rule.impl.AmountRangeRuleHandler;
+import com.qingqing.test.manager.mock.rule.impl.ValueMatchRuleHandler;
 import com.qingqing.test.service.mock.MockRuleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,7 @@ import java.util.Map;
  * Created by zhujianxing on 2018/6/12.
  */
 @Component
-public class MockRuleManager {
+public class MockRuleManager implements ISyncable {
 
     private static final Logger logger = LoggerFactory.getLogger(MockRuleManager.class);
 
@@ -35,7 +37,7 @@ public class MockRuleManager {
     static{
         ruleHandlerMapping = new HashMap<>();
         ruleHandlerMapping.put(RuleType.AMOUNT_RANGE, new AmountRangeRuleHandler());
-        ruleHandlerMapping.put(RuleType.AMOUNT_RANGE, new AmountRangeRuleHandler());
+        ruleHandlerMapping.put(RuleType.VALUE_MATCH, new ValueMatchRuleHandler());
     }
 
     @PostConstruct
@@ -65,6 +67,11 @@ public class MockRuleManager {
         interfaceRuleListMapping = tmpInterfaceRuleListMapping;
     }
 
+    @Override
+    public SyncType[] syncTypes() {
+        return new SyncType[]{SyncType.mock_rule, SyncType.all};
+    }
+
     public Map<String, List<MockRule>> getInterfaceRuleListMapping() {
         return interfaceRuleListMapping;
     }
@@ -76,6 +83,10 @@ public class MockRuleManager {
                 if(mockRule.getRuleType().equals(RuleType.unknown)){
                     logger.error("unknown rule type, id:" + mockRule.getId());
                     continue;
+                }
+
+                if(mockRule.getDefault()){
+                    return mockRule;
                 }
 
                 IRuleHandler ruleHandler = ruleHandlerMapping.get(mockRule.getRuleType());

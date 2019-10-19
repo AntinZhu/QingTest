@@ -87,7 +87,10 @@ public class TestController {
         url.setParam("param");
         UserWithDataBean user = new UserWithDataBean();
 
-        return myMockTestManager.test(url, user);
+        String result = JsonUtil.format(myMockTestManager.c(url, user));
+
+        url.setUrl("ammm");
+        return result + JsonUtil.format(myMockTestManager.c(url, user));
     }
 
     @RequestMapping("json_format")

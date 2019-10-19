@@ -22,13 +22,18 @@
     0,
     now()
     )
+    ON DUPLICATE KEY UPDATE
+      	is_deleted = 0,
+      	create_time = now()
   </insert>
 
   <select id="selectAll" resultMap="BaseResultMap">
     select 
   	  <include refid="Base_Column_List" />
     	from t_mock_type
-    	where is_deleted = FALSE
   </select>
 
+  <update id="delete">
+    update t_mock_type set is_deleted= 1 where id = #{id, jdbcType=BIGINT}
+  </update>
 </mapper>

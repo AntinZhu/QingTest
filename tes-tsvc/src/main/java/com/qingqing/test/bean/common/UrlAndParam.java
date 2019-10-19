@@ -3,6 +3,7 @@ package com.qingqing.test.bean.common;
 /**
  * Created by zhujianxing on 2019/5/15.
  */
+// {"url":"am", "param":"456"}
 public class UrlAndParam {
     private String url;
     private String param;

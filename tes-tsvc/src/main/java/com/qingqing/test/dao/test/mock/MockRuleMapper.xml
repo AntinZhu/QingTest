@@ -11,25 +11,27 @@
     <result column="resp" property="resp" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_need_record_order" property="isNeedRecordOrder" jdbcType="BOOLEAN" />
+    <result column="is_default" property="isDefault" jdbcType="BOOLEAN" />
     <result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
     <sql id="Base_Column_List" >
-    id, mock_type, rule_type, rule_value, rule_order_num, resp, is_need_record_order, delay_ms, remark, is_deleted, create_time, last_update_time
+    id, mock_type, rule_type, rule_value, rule_order_num, resp, is_need_record_order, delay_ms, remark, is_default, is_deleted, create_time, last_update_time
   </sql>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.mock.MockRule" useGeneratedKeys="true" keyProperty="id">
-    insert into t_mock_rule(mock_type, rule_type,  rule_value, rule_order_num, resp, is_need_record_order, delay_ms, remark, is_deleted, create_time) value(
+    insert into t_mock_rule(mock_type, rule_type,  rule_value, rule_order_num, resp, is_need_record_order, delay_ms, remark, is_default, is_deleted, create_time) value(
     #{mockType, jdbcType=VARCHAR},
     #{ruleType, javaType=RuleType},
-    #{mockValue, jdbcType=VARCHAR},
+    #{ruleValue, jdbcType=VARCHAR},
     #{ruleOrderNum, jdbcType=INTEGER},
     #{resp, jdbcType=VARCHAR},
     #{isNeedRecordOrder, jdbcType=INTEGER},
     #{delayMs, jdbcType=INTEGER},
     #{remark, jdbcType=VARCHAR},
+    #{isDefault,jdbcType=BOOLEAN} ,
     0,
     now()
     )
@@ -41,4 +43,50 @@
     	from t_mock_rule
     	where is_deleted = FALSE
   </select>
+
+  <select id="findById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_mock_rule
+    where id = #{id, jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByRuleType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_mock_rule
+    where rule_type = #{ruleType, jdbcTYpe=VARCHAR}
+  </select>
+
+  <update id="markDeleted">
+    update t_mock_rule set is_deleted = #{isDeleted, jdbcType=BOOLEAN} where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <update id="updateRuleOrderNum">
+    update t_mock_rule set rule_order_num = #{ruleOrderNum, jdbcType=INTEGER} where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <update id="resetDefault">
+    update t_mock_rule set is_default = 0 where rule_type = #{ruleType, jdbcType=VARCHAR} where is_default = 1
+  </update>
+
+  <update id="updateDefault">
+    update t_mock_rule set is_default= #{isDefault, jdbcType=BOOLEAN} where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <update id="update">
+    update t_mock_rule
+    set is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+     mock_type = #{mockType, jdbcType=VARCHAR},
+     rule_type = #{ruleType, javaType=RuleType},
+     rule_value = #{ruleValue, jdbcType=VARCHAR},
+     rule_order_num = #{ruleOrderNum, jdbcType=INTEGER},
+     resp = #{resp, jdbcType=VARCHAR},
+    is_need_record_order = #{isNeedRecordOrder, jdbcType=INTEGER},
+     delay_ms = #{delayMs, jdbcType=INTEGER},
+     remark = #{remark, jdbcType=VARCHAR},
+     is_deleted = #{isDeleted,jdbcType=BOOLEAN},
+     is_default = #{isDefault,jdbcType=BOOLEAN}
+    where id = #{id, jdbcType=BIGINT}
+  </update>
 </mapper>

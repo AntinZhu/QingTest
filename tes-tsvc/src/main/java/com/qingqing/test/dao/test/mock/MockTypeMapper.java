@@ -9,4 +9,6 @@ public interface MockTypeMapper {
 	List<MockType> selectAll();
 
 	void insert(MockType mockType);
+
+	void delete(Long id);
 }
