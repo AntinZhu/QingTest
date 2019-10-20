@@ -55,7 +55,7 @@
     select
     <include refid="Base_Column_List" />
     from t_mock_rule
-    where rule_type = #{ruleType, jdbcTYpe=VARCHAR}
+    where rule_type = #{ruleType, jdbcType=VARCHAR}
   </select>
 
   <update id="markDeleted">

@@ -60,6 +60,11 @@ public class CommonMockController {
         return mockRule.getResp();
     }
 
+    @RequestMapping(value = "type")
+    public String typePage(){
+        return "mock/type_list";
+    }
+
     @RequestMapping(value = "type/list", method = RequestMethod.POST)
     @ResponseBody
     public ListResponse<MockType> getRuleTypeList(){
@@ -77,7 +82,7 @@ public class CommonMockController {
         return SimpleResponse.SUCC;
     }
 
-    @RequestMapping(value = "type/delate", method = RequestMethod.POST)
+    @RequestMapping(value = "type/delete", method = RequestMethod.POST)
     @ResponseBody
     public SimpleResponse deleteRuleType(@RequestBody SimpleLongRequest request){
         mockTypeService.delete(request.getData());
