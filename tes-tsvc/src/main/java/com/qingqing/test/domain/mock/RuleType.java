@@ -7,7 +7,7 @@ import com.qingqing.common.intf.HasDefaultInterface;
  */
 public enum RuleType implements HasDefaultInterface<RuleType> {
     unknown(-1),
-    AMOUNT_RANGE(1), // 金额范围规则
+    NUMBER_RANGE(1), // 数值范围规则
     VALUE_MATCH(2), // 值匹配规则
     ;
 

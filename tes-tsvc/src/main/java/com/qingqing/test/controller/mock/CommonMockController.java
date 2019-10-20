@@ -3,12 +3,15 @@ package com.qingqing.test.controller.mock;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.util.StringUtils;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.IdAndBoolBean;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.domain.mock.MockType;
+import com.qingqing.test.manager.CommonSyncManager;
+import com.qingqing.test.manager.ISyncable;
 import com.qingqing.test.manager.mock.rule.MockRuleManager;
 import com.qingqing.test.service.mock.MockRuleService;
 import com.qingqing.test.service.mock.MockTypeService;
@@ -16,11 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by zhujianxing on 2019/10/16.
@@ -37,6 +44,8 @@ public class CommonMockController {
     private MockRuleService mockRuleService;
     @Autowired
     private MockTypeService mockTypeService;
+    @Autowired
+    private CommonSyncManager commonSyncManage;
 
     @RequestMapping(value = "invoke", method = RequestMethod.POST)
     @ResponseBody
@@ -90,12 +99,35 @@ public class CommonMockController {
         return SimpleResponse.SUCC;
     }
 
+    @RequestMapping(value = "rule")
+    public String rulePage(Model model, @RequestParam("mockType") String ruleType){
+        model.addAttribute("mockType", ruleType);
+
+        return "mock/rule_list";
+    }
+
+    @RequestMapping(value = "rule/edit")
+    public String editRule(Model model, @RequestParam(value = "id", defaultValue = "0") Long id, @RequestParam(value = "mockType", defaultValue = "") String mockType){
+        model.addAttribute("id", id);
+        if(id > 0){
+            model.addAttribute("bean", mockRuleService.findById(id));
+        }
+        if(!StringUtils.isEmpty(mockType)){
+            model.addAttribute("mockType", mockType);
+        }
+
+        return "mock/edit_mock_rule";
+    }
+
     @RequestMapping(value = "rule/list", method = RequestMethod.POST)
     @ResponseBody
     public ListResponse<MockRule> addgetRuleList(@RequestBody SimpleStringRequest request){
+        List<MockRule> resultList = mockRuleService.selectByRuleType(request.getData());
+        Collections.sort(resultList);
+
         ListResponse<MockRule> result = new ListResponse<>();
         result.setResponse(BaseResponse.SUCC_RESP);
-        result.setResultList(mockRuleService.selectByRuleType(request.getData()));
+        result.setResultList(resultList);
         return result;
     }
 
@@ -108,6 +140,7 @@ public class CommonMockController {
             mockRuleService.insert(mockRule);
         }
 
+        commonSyncManage.sync(ISyncable.SyncType.mock_rule);
         return SimpleResponse.SUCC;
     }
 
@@ -122,8 +155,10 @@ public class CommonMockController {
     @RequestMapping(value = "rule/set_default", method = RequestMethod.POST)
     @ResponseBody
     public SimpleResponse markDefault(@RequestBody IdAndBoolBean request){
-        MockRule ruleType = mockRuleService.findById(request.getId());
-        mockRuleService.resetDefault(ruleType.getMockType());
+        if(request.getBool()){
+            MockRule ruleType = mockRuleService.findById(request.getId());
+            mockRuleService.resetDefault(ruleType.getMockType());
+        }
         mockRuleService.markDefault(request.getId(), request.getBool());
 
         return SimpleResponse.SUCC;

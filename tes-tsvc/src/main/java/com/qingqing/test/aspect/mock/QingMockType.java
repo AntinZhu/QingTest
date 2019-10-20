@@ -6,5 +6,6 @@ package com.qingqing.test.aspect.mock;
 public enum QingMockType {
     unknown,
     test,
+    abc,
     ;
 }

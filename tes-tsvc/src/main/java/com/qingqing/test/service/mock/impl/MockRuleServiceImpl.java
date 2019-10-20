@@ -49,8 +49,8 @@ public class MockRuleServiceImpl implements MockRuleService {
     }
 
     @Override
-    public void resetDefault(String ruleType) {
-        mapper.resetDefault(ruleType);
+    public void resetDefault(String mockType) {
+        mapper.resetDefault(mockType);
     }
 
     @Override

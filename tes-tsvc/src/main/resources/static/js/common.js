@@ -231,6 +231,10 @@ function deleteEmptyProperty(object){
     }
 }
 
+function isStringEmpty(object) {
+    return object == null || object == "";
+}
+
 function isEmpty(object) {
     for (var name in object) {
         return false;

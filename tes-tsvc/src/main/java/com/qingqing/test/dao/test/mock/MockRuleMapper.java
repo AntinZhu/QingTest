@@ -19,7 +19,7 @@ public interface MockRuleMapper {
 
 	void updateRuleOrderNum(@Param("id") Long id, @Param("ruleOrderNum") Integer ruleOrderNum);
 
-	void resetDefault(@Param("ruleType") String ruleType);
+	void resetDefault(@Param("mockType") String mockType);
 
 	void updateDefault(@Param("id") Long id, @Param("isDefault") boolean isDefault);
 

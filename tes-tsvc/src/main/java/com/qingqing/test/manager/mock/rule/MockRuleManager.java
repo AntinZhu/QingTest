@@ -36,7 +36,7 @@ public class MockRuleManager implements ISyncable {
 
     static{
         ruleHandlerMapping = new HashMap<>();
-        ruleHandlerMapping.put(RuleType.AMOUNT_RANGE, new AmountRangeRuleHandler());
+        ruleHandlerMapping.put(RuleType.NUMBER_RANGE, new AmountRangeRuleHandler());
         ruleHandlerMapping.put(RuleType.VALUE_MATCH, new ValueMatchRuleHandler());
     }
 
