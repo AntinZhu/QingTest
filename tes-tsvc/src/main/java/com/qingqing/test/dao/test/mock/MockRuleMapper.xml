@@ -78,7 +78,7 @@
     update t_mock_rule set not_mock= #{notMock, jdbcType=BOOLEAN} where id = #{id, jdbcType=BIGINT}
   </update>
 
-  <update id="update">
+  <update id="update" parameterType="com.qingqing.test.domain.mock.MockRule">
     update t_mock_rule
     set
      mock_type = #{mockType, jdbcType=VARCHAR},
@@ -90,7 +90,7 @@
      remark = #{remark, jdbcType=VARCHAR},
      is_deleted = #{deleted,jdbcType=BOOLEAN},
      is_default = #{default,jdbcType=BOOLEAN},
-     not_mock = #{notMock. id,jdbcType=BOOLEAN}
+     not_mock = #{notMock,jdbcType=BOOLEAN}
     where id = #{id, jdbcType=BIGINT}
   </update>
 </mapper>

@@ -457,10 +457,10 @@
                     remark : remark,
                     ruleType : $("#ruleType").val(),
                     ruleValue : JSON.stringify(ruleValue),
-                    notMock : $("#notMock").val(),
+                    notMock : $("#notMock").val() == "1",
                     resp : resp,
                     ruleOrderNum : ruleOrderNum,
-                    default: $("#isDefault").val() == 1,
+                    default: $("#isDefault").val() == "1",
                     delayMs:delayMs,
                     deleted : 0,
                     isNeedRecordOrder:false
