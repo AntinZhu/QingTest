@@ -118,8 +118,14 @@
         commonAjaxRequest(request);
     }
 
+    document.addEventListener('visibilitychange',function(){ //浏览器切换事件
+        if(document.visibilityState!='hidden') { //状态判断
+            refreshPage();
+        }
+    });
+
     var ruleListUrl = '${base}/v1/mock/rule?catelogIndex=3-8-1&mockType='
-    var template_HTML = '<tr><td><a target="_blank" href="{ruleListUrl}">{mockType}</a></td><td>{mockName}</td><td class="hidden-480">{status}</td><td><input type="hidden" id = "id" value="{id}"/> <input type="hidden" id = "mockType" value="{mockType}"/> <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="green" target="_blank" href="${base}/v1/mock/type/edit?catelogIndex=3-8-1&id={id}"><i class="icon-pencil bigger-130"></i></a></div></td></tr>';
+    var template_HTML = '<tr><td><a href="{ruleListUrl}">{mockType}</a></td><td>{mockName}</td><td class="hidden-480">{status}</td><td><input type="hidden" id = "id" value="{id}"/> <input type="hidden" id = "mockType" value="{mockType}"/> <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="green" target="_blank" href="${base}/v1/mock/type/edit?catelogIndex=3-8-1&id={id}"><i class="icon-pencil bigger-130"></i></a></div></td></tr>';
     function handlerInterface(resu) {
         var resultList = resu.resultList;
         if (resu.resultList != null && resu.resultList.length > 0) {

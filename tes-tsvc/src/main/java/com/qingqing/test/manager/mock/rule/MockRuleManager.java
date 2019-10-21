@@ -28,6 +28,8 @@ public class MockRuleManager implements ISyncable {
 
     private static final Logger logger = LoggerFactory.getLogger(MockRuleManager.class);
 
+    public static final String NOT_MOCK_RESP = "qing_not_mock";
+
     @Autowired
     private MockRuleService mockRuleService;
 

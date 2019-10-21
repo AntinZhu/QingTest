@@ -23,5 +23,7 @@ public interface MockRuleMapper {
 
 	void updateDefault(@Param("id") Long id, @Param("isDefault") boolean isDefault);
 
+	void updateNotMock(@Param("id") Long id, @Param("notMock") boolean notMock);
+
 	void update(MockRule mockRule);
 }

@@ -172,6 +172,21 @@
                                                                                 </div>
 
                                                                                 <div class="form-group">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="noMock">走原代码逻辑：</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <label>
+                                                                                                <input id="noMock" class="ace ace-switch ace-switch-6" type="checkbox" value="0" />
+                                                                                                <span class="lbl"></span>
+                                                                                            </label>
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
                                                                                     <label class="col-sm-3 control-label no-padding-right" style="text-align: right" for="resp">返回值：</label>
 
                                                                                     <div class="col-sm-9">
@@ -271,17 +286,21 @@
                 ruleTypeChange("${bean.ruleType}");
                 revertValueInput("${bean.ruleType}", '${bean.ruleValue}');
                 $("#ruleOrderNum").val(${bean.ruleOrderNum});
-                $("#resp").val("${bean.resp}");
+                $("#resp").val("${bean.resp!''}");
                 $("#remark").val("${bean.remark}");
                 $("#delayMs").val(${bean.delayMs});
                 $("#ruleOrderNum").val(${bean.ruleOrderNum});
-                var idDefault = "${bean.default?c}" == "true";
-                if(idDefault){
+                var idDefault = "${bean.default?c}" ;
+                if(idDefault == "true"){
                     $("#isDefault").attr("checked", "checked");
                     $("#isDefault").val(1);
                 }else{
                     $("#isDefault").removeAttr("checked");
                     $("#isDefault").val(0);
+                }
+                if("${bean.notMock?c}" == "true"){
+                    $("#noMock").val(1);
+                    $("#noMock").attr("checked", "checked");
                 }
             <#else>
                 refreshMockType("${mockType!''}");
@@ -352,6 +371,16 @@
                 }
             });
 
+            $("#noMock").click(function(){
+                var noMock = $("#noMock").val();
+                if(noMock == 0){
+                    $("#noMock").val(1);
+                    $("#resp").text(noMockResp);
+                }else{
+                    $("#noMock").val(0);
+                }
+            });
+
             $("#saveBtn").click(function(){
                 var remark = $("#remark").val();
                 if(isStringEmpty(remark)){
@@ -394,7 +423,7 @@
                 }
 
                 var resp = $("#resp").val();
-                if(isStringEmpty(resp)){
+                if($("#noMock").val() == "0" && isStringEmpty(resp)){
                     $.gritter.add({
                         title : '参数错误:',
                         text : "返回值不能为空",
@@ -428,6 +457,7 @@
                     remark : remark,
                     ruleType : $("#ruleType").val(),
                     ruleValue : JSON.stringify(ruleValue),
+                    notMock : $("#notMock").val(),
                     resp : resp,
                     ruleOrderNum : ruleOrderNum,
                     default: $("#isDefault").val() == 1,

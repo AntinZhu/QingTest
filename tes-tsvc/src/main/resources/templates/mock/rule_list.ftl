@@ -92,6 +92,7 @@
                                             <th>返回值</th>
                                             <th>是否是默认</th>
                                             <th>是否启用</th>
+                                            <th>走原代码逻辑</th>
                                             <th>操作</th>
                                             </tr>
                                     </thead>
@@ -141,6 +142,7 @@
             '<td>{resp}</td>' +
             '<td><label><input id="{id}" class="ace ace-switch ace-switch-6 default_rule" type="checkbox" value="{isDefault}" {default_checked} />    <span class="lbl"></span>    </label></td>' +
             '<td class="hidden-480"><label><input id="{id}" class="ace ace-switch ace-switch-6 enable_rule" type="checkbox" value="{isEnable}" {enable_checked} />    <span class="lbl"></span>    </label></td>' +
+            '<td><label><input id="{id}" class="ace ace-switch ace-switch-6 notMock_rule" type="checkbox" value="{notMock}" {notMock_checked} />    <span class="lbl"></span>    </label></td>' +
             '<td>' +
                 '<input type="hidden" id = "id" value="{id}"/> ' +
                 '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">' +
@@ -183,6 +185,14 @@
                     html = html.replace(new RegExp("{enable_checked}", "gm"),  'checked="checked"');
                     html = html.replace(new RegExp("{isEnable}", "gm"), "1");
                 }
+                var notMockChecked = "";
+                var notMock = "0";
+                if(result.notMock){
+                    notMockChecked = 'checked="checked"';
+                    notMock = "1";
+                }
+                html = html.replace(new RegExp("{notMock}", "gm"), notMock);
+                html = html.replace(new RegExp("{notMock_checked}", "gm"), notMockChecked);
 
                 $("#ruleListBody").append(html);
             }
@@ -240,6 +250,35 @@
 
         var request = {
             url : "${base}/v1/mock/rule/set_default.json",
+            data : data,
+            handlerFunc : handleDefaultResult,
+            isASync : true,
+            failTitle :"保存出错:"
+        };
+
+        commonAjaxRequest(request);
+    });
+
+    $(document).on("click", '.notMock_rule', function(){
+        var id = $(this).attr("id");
+        var defaultValue;
+
+        var isDefault = $(this).val();
+        if(isDefault == 0){
+            defaultValue = true;
+            $(this).val(1);
+        }else{
+            defaultValue = false;
+            $(this).val(0);
+        }
+
+        var data = {
+            id : id,
+            bool : defaultValue
+        };
+
+        var request = {
+            url : "${base}/v1/mock/rule/set_notMock.json",
             data : data,
             handlerFunc : handleDefaultResult,
             isASync : true,

@@ -70,7 +70,11 @@ public class CommonMockController {
             }
         }
 
-        return mockRule.getResp();
+        if(mockRule.getNotMock()){
+            return MockRuleManager.NOT_MOCK_RESP;
+        }else{
+            return mockRule.getResp();
+        }
     }
 
     @RequestMapping(value = "type")
@@ -175,6 +179,7 @@ public class CommonMockController {
     public SimpleResponse markDeleted(@RequestBody IdAndBoolBean request){
         mockRuleService.markDelete(request.getId(), request.getBool());
 
+        commonSyncManage.sync(ISyncable.SyncType.mock_rule);
         return SimpleResponse.SUCC;
     }
 
@@ -187,6 +192,16 @@ public class CommonMockController {
         }
         mockRuleService.markDefault(request.getId(), request.getBool());
 
+        commonSyncManage.sync(ISyncable.SyncType.mock_rule);
+        return SimpleResponse.SUCC;
+    }
+
+    @RequestMapping(value = "rule/set_notMock", method = RequestMethod.POST)
+    @ResponseBody
+    public SimpleResponse markNotMock(@RequestBody IdAndBoolBean request){
+        mockRuleService.markNotMock(request.getId(), request.getBool());
+
+        commonSyncManage.sync(ISyncable.SyncType.mock_rule);
         return SimpleResponse.SUCC;
     }
 }

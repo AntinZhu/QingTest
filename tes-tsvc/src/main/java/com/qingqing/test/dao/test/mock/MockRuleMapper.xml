@@ -12,16 +12,17 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_default" property="isDefault" jdbcType="BOOLEAN" />
     <result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+    <result column="not_mock" property="notMock" jdbcType="BOOLEAN" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
     <sql id="Base_Column_List" >
-    id, mock_type, rule_type, rule_value, rule_order_num, resp, delay_ms, remark, is_default, is_deleted, create_time, last_update_time
+    id, mock_type, rule_type, rule_value, rule_order_num, resp, delay_ms, remark, is_default, is_deleted, create_time, last_update_time, not_mock
   </sql>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.mock.MockRule" useGeneratedKeys="true" keyProperty="id">
-    insert into t_mock_rule(mock_type, rule_type,  rule_value, rule_order_num, resp, delay_ms, remark, is_default, is_deleted, create_time) value(
+    insert into t_mock_rule(mock_type, rule_type,  rule_value, rule_order_num, resp, delay_ms, remark, is_default, not_mock, is_deleted, create_time) value(
     #{mockType, jdbcType=VARCHAR},
     #{ruleType, javaType=RuleType},
     #{ruleValue, jdbcType=VARCHAR},
@@ -30,6 +31,7 @@
     #{delayMs, jdbcType=INTEGER},
     #{remark, jdbcType=VARCHAR},
     #{default,jdbcType=BOOLEAN} ,
+    #{notMock,jdbcType=BOOLEAN} ,
     0,
     now()
     )
@@ -72,6 +74,10 @@
     update t_mock_rule set is_default= #{isDefault, jdbcType=BOOLEAN} where id = #{id, jdbcType=BIGINT}
   </update>
 
+  <update id="updateNotMock">
+    update t_mock_rule set not_mock= #{notMock, jdbcType=BOOLEAN} where id = #{id, jdbcType=BIGINT}
+  </update>
+
   <update id="update">
     update t_mock_rule
     set
@@ -83,7 +89,8 @@
      delay_ms = #{delayMs, jdbcType=INTEGER},
      remark = #{remark, jdbcType=VARCHAR},
      is_deleted = #{deleted,jdbcType=BOOLEAN},
-     is_default = #{default,jdbcType=BOOLEAN}
+     is_default = #{default,jdbcType=BOOLEAN},
+     not_mock = #{notMock. id,jdbcType=BOOLEAN}
     where id = #{id, jdbcType=BIGINT}
   </update>
 </mapper>

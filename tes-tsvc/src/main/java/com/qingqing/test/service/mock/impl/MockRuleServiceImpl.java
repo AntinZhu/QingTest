@@ -49,6 +49,11 @@ public class MockRuleServiceImpl implements MockRuleService {
     }
 
     @Override
+    public void markNotMock(Long id, boolean notMock) {
+        mapper.updateNotMock(id, notMock);
+    }
+
+    @Override
     public void resetDefault(String mockType) {
         mapper.resetDefault(mockType);
     }

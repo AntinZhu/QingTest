@@ -23,6 +23,8 @@ public interface MockRuleService {
 
     void markDefault(Long id, boolean isDefault);
 
+    void markNotMock(Long id, boolean notMock);
+
     void resetDefault(String mockType);
 
     void updateRuleOrderNum(Long id, Integer ruleOrderNum);
