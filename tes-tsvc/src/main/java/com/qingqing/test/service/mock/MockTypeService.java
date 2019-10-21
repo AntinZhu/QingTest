@@ -11,7 +11,13 @@ public interface MockTypeService {
 
     List<MockType> selectAll();
 
+    MockType findById(Long id);
+
+    MockType findByMockType(String mockType);
+
     void insert(MockType mockType);
+
+    void update(MockType mockType);
 
     void delete(Long id);
 }

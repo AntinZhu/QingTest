@@ -24,16 +24,38 @@
     )
     ON DUPLICATE KEY UPDATE
       	is_deleted = 0,
+      	mock_name = #{mockName, jdbcType=VARCHAR},
       	create_time = now()
   </insert>
 
   <select id="selectAll" resultMap="BaseResultMap">
-    select 
+    select
   	  <include refid="Base_Column_List" />
     	from t_mock_type
   </select>
 
+  <select id="findById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_mock_type
+    where id = #{id, jdbcType=BIGINT}
+  </select>
+
+  <select id="findByMockType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_mock_type
+    where mock_type = #{mockType, jdbcType=VARCHAR}
+  </select>
+
   <update id="delete">
     update t_mock_type set is_deleted= 1 where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <update id="update" parameterType="com.qingqing.test.domain.mock.MockType">
+    update t_mock_type
+    set mock_type = #{mockType, jdbcType=VARCHAR},
+    mock_name = #{mockName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

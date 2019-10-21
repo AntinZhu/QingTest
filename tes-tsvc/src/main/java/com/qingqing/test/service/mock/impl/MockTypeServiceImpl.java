@@ -23,8 +23,23 @@ public class MockTypeServiceImpl implements MockTypeService {
     }
 
     @Override
+    public MockType findById(Long id) {
+        return mapper.findById(id);
+    }
+
+    @Override
+    public MockType findByMockType(String mockType) {
+        return mapper.findByMockType(mockType);
+    }
+
+    @Override
     public void insert(MockType mockType) {
         mapper.insert(mockType);
+    }
+
+    @Override
+    public void update(MockType mockType) {
+        mapper.update(mockType);
     }
 
     @Override

@@ -2,12 +2,15 @@ package com.qingqing.test.controller.mock;
 
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
+import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.StringUtils;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.IdAndBoolBean;
 import com.qingqing.test.bean.common.response.ListResponse;
+import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.domain.mock.MockType;
 import com.qingqing.test.manager.CommonSyncManager;
@@ -18,6 +21,7 @@ import com.qingqing.test.service.mock.MockTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,6 +78,16 @@ public class CommonMockController {
         return "mock/type_list";
     }
 
+    @RequestMapping(value = "type/edit")
+    public String typeEditPage(Model model, @RequestParam(value = "id", defaultValue = "0") Long id){
+        model.addAttribute("id", id);
+        if(id > 0){
+            model.addAttribute("bean", mockTypeService.findById(id));
+        }
+
+        return "mock/edit_type";
+    }
+
     @RequestMapping(value = "type/list", method = RequestMethod.POST)
     @ResponseBody
     public ListResponse<MockType> getRuleTypeList(){
@@ -86,7 +100,19 @@ public class CommonMockController {
     @RequestMapping(value = "type/add", method = RequestMethod.POST)
     @ResponseBody
     public SimpleResponse addRuleType(@RequestBody MockType mockType){
-        mockTypeService.insert(mockType);
+        if(mockType.getId() != null){
+            try{
+                mockTypeService.update(mockType);
+            }catch(DuplicateKeyException e){
+                throw new ErrorCodeException(new SimpleErrorCode(1001, "", "已存在该MockType，不允许修改"), "DuplicateKeyException for：" + JsonUtil.format(mockType));
+            }
+        }else{
+            MockType inDb = mockTypeService.findByMockType(mockType.getMockType());
+            if(inDb != null){
+                throw new ErrorCodeException(new SimpleErrorCode(1001, "", "已存在该MockType，无法新增"), "exist for：" + JsonUtil.format(mockType));
+            }
+            mockTypeService.insert(mockType);
+        }
 
         return SimpleResponse.SUCC;
     }

@@ -67,6 +67,18 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="table-responsive">
+                                <span class="col-sm-12" style="margin-bottom: 10px;">
+                                    <a class="btn btn-link" target="_blank" href="${base}/v1/mock/type/edit?catelogIndex=3-8-1">
+                                        <i class="icon-plus-sign bigger-220 green"></i>
+                                    </a>
+                                    <label class="pull-right inline"  title="开启时可显示未启用的规则" data-rel="tooltip" >
+                                        <small class="muted">显示未启用:</small>
+
+                                        <input id="showDeletedBtn" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span><!-- /span -->
+
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -107,7 +119,7 @@
     }
 
     var ruleListUrl = '${base}/v1/mock/rule?catelogIndex=3-8-1&mockType='
-    var template_HTML = '<tr><td><a target="_blank" href="{ruleListUrl}">{mockType}</a></td><td>{mockName}</td><td class="hidden-480">{status}</td><td><input type="hidden" id = "id" value="{id}"/> <input type="hidden" id = "mockType" value="{mockType}"/> <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="green" href="#"><i class="icon-pencil bigger-130"></i></a><a class="red" href="#"><i class="icon-trash bigger-130 _delete"></i></a></div></td></tr>';
+    var template_HTML = '<tr><td><a target="_blank" href="{ruleListUrl}">{mockType}</a></td><td>{mockName}</td><td class="hidden-480">{status}</td><td><input type="hidden" id = "id" value="{id}"/> <input type="hidden" id = "mockType" value="{mockType}"/> <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="green" target="_blank" href="${base}/v1/mock/type/edit?catelogIndex=3-8-1&id={id}"><i class="icon-pencil bigger-130"></i></a></div></td></tr>';
     function handlerInterface(resu) {
         var resultList = resu.resultList;
         if (resu.resultList != null && resu.resultList.length > 0) {

@@ -41,7 +41,7 @@
                             <i class="icon-home home-icon"></i>
                             <a href="#">系统设置</a>
                         </li>
-                        <li class="active">mock配置</li>
+                        <li class="active"><a href="${base}/v1/mock/type?catelogIndex=3-8-1">mock配置</a></li>
                         <li class="active">mock规则</li>
                     </ul><!-- .breadcrumb -->
 
@@ -70,7 +70,7 @@
                                 <input type="hidden" id="mockType" />
                                 <span class="col-sm-12" style="margin-bottom: 10px;">
                                     <a class="btn btn-link" target="_blank" href="${base}/v1/mock/rule/edit?catelogIndex=3-8-1&mockType=${mockType}">
-                                        <i class="icon-plus-sign bigger-240 green"></i>
+                                        <i class="icon-plus-sign bigger-220 green"></i>
                                     </a>
                                     <label class="pull-right inline"  title="开启时可显示未启用的规则" data-rel="tooltip" >
                                         <small class="muted">显示未启用:</small>
@@ -111,6 +111,12 @@
 <script type="text/javascript">
     $(document).ready(function(){
         refreshPage();
+    });
+
+    document.addEventListener('visibilitychange',function(){ //浏览器切换事件
+        if(document.visibilityState!='hidden') { //状态判断
+            refreshPage();
+        }
     });
 
     function refreshPage(){

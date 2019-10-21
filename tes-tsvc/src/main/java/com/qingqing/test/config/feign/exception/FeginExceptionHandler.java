@@ -63,8 +63,11 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
             baseResponse = new BaseResponse(ece.getErrorCodeInterface().getErrorCode(), ece.getErrorCodeInterface().getMsg(), ece.getErrorCodeInterface().getHintMessage());
         }
 
+//        logger.info("exception class:" + ex.getClass().getName());
         if(baseResponse != null){
+//            logger.info("baseResponse:" + JsonUtil.format(baseResponse));
             Object obj = request.getAttribute(MyResponseBuildInteceptor.BASE_RESP);
+//            logger.info("obj:" + JsonUtil.format(obj));
             if(obj != null){
                 InterfaceBaseResponse interfaceBaseResponse = new InterfaceBaseResponse();
                 interfaceBaseResponse.setResponse(baseResponse);
