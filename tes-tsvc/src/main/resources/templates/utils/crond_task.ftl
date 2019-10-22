@@ -64,8 +64,14 @@
                     </div><!-- /.page-header -->
 
                     <div class = "row" style="height: 100px">
+                        <div class="col-xs-12">
+                            <form class="form-horizontal" role="form">
+                                <#include "/include/env.ftl" />
 
-                        <#include "/include/env.ftl" />
+                                    <div class="hr hr-dotted"></div>
+                                    <div class="hr hr-dotted"></div>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="row" id="taskList">
@@ -94,6 +100,8 @@
 
     $(document).ready(function(){
         refreshPage();
+
+        $("#qing_local_switch_div").removeClass("hide");
     });
 
     function refreshPage(){
@@ -141,22 +149,30 @@
     }
 
     function cronTask(idx, url){
+        var guid = generateGuid();
+        var isLocalDebug = $("#isLocalDebug").val();
+        if(isLocalDebug == "1"){
+            invokeLocal(url, guid);
+        }else{
+            invokeServer(url, guid);
+        }
+
+        var logTargetUrl = logUrl.replace("{env}", $("#env").val());
+        logTargetUrl = logTargetUrl.replace("{guid}", guid);
+
+        var logEle = $("#link_" + idx);
+        $(logEle).removeClass("hide");
+        $(logEle).children("a:first")[0].href = logTargetUrl;
+    }
+
+    function invokeServer(url, guid){
+        var env = $("#env").val();
         var data = {
             data : url
-        }
-
-        var isLocalDebug = $("#isLocalDebug").val();
-        var localPort = $("#localDebugPort").val();
-        var env = $("#env").val();
-        var guid = generateGuid();
-        var targetData = {
-            idx: idx,
-            guid : guid,
-            env :env
-        }
+        };
 
         var request = {
-            url : "${base}/v1/common/crond_task.json?is_local=" + isLocalDebug + "&local_port=" + localPort,
+            url : "${base}/v1/common/crond_task.json",
             data : data,
             handlerFunc : handlerCorndSucc,
             isASync : true,
@@ -166,18 +182,29 @@
         };
 
         commonAjaxRequest(request);
+    }
 
-        var logTargetUrl = logUrl.replace("{env}", targetData.env);
-        logTargetUrl = logTargetUrl.replace("{guid}", targetData.guid);
+    function invokeLocal(url, guid){
+        var localPort = $("#localDebugPort").val();
+        var url = "http://127.0.0.1:" + localPort + url + "?guid=" + guid;
 
-        var idx = targetData.idx;
-        var logEle = $("#link_" + idx);
-        $(logEle).removeClass("hide");
-        $(logEle).children("a:first")[0].href = logTargetUrl;
+        var data = {
+            url : url
+        };
+
+        var request = {
+            url : "http://127.0.0.1:8009/app/cross",
+            data : data,
+            handlerFunc : handlerCorndSucc,
+            isASync : true,
+            failTitle :"接口调用异常:"
+        };
+
+        commonAjaxRequest(request);
     }
 
     var logUrl = "http://172.22.12.14:5601/app/logtrail#/?q=env_type:%20%22{env}%22%20%26%26%20guid:%20%22{guid}%22&t=Now&i=rsyslog-app*&_g=()";
-    function handlerCorndSucc(resu, data){
+    function handlerCorndSucc(resu){
         $.gritter.add({
             title : '提示:',
             text : "接口调用成功",

@@ -115,7 +115,7 @@ function commonAjaxRequest(request){
     $.ajax({
         type : "POST",
         url : url,
-        timeout : 60000,
+        timeout : 300000,
         headers: headers,
         data : JSON.stringify(data),
         dataType : 'json',

@@ -26,7 +26,9 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
             PAGE,
             "/v1/utils/ip/up",
             "/v1/common/wx_notify",
-            "/v1/common/wx_notify.json"
+            "/v1/common/wx_notify.json",
+            "/v1/mock/invoke",
+            "/v1/mock/invoke.json"
     );
 
     @Autowired
