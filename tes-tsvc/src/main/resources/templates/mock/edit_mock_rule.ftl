@@ -286,7 +286,7 @@
                 ruleTypeChange("${bean.ruleType}");
                 revertValueInput("${bean.ruleType}", '${bean.ruleValue}');
                 $("#ruleOrderNum").val(${bean.ruleOrderNum});
-                $("#resp").val("${bean.resp!''}");
+                $("#resp").val('${bean.resp}');
                 $("#remark").val("${bean.remark}");
                 $("#delayMs").val(${bean.delayMs});
                 $("#ruleOrderNum").val(${bean.ruleOrderNum});
@@ -375,7 +375,6 @@
                 var noMock = $("#noMock").val();
                 if(noMock == 0){
                     $("#noMock").val(1);
-                    $("#resp").text(noMockResp);
                 }else{
                     $("#noMock").val(0);
                 }
@@ -457,7 +456,7 @@
                     remark : remark,
                     ruleType : $("#ruleType").val(),
                     ruleValue : JSON.stringify(ruleValue),
-                    notMock : $("#notMock").val() == "1",
+                    notMock : $("#noMock").val() == "1",
                     resp : resp,
                     ruleOrderNum : ruleOrderNum,
                     default: $("#isDefault").val() == "1",

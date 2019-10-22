@@ -129,6 +129,7 @@
     function handlerInterface(resu) {
         var resultList = resu.resultList;
         if (resu.resultList != null && resu.resultList.length > 0) {
+            $("#typeListBody").html("");
             for (var resultIdx in resultList) {
                 var result = resultList[resultIdx];
 

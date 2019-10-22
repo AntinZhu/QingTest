@@ -132,6 +132,7 @@
         commonAjaxRequest(request);
     }
 
+    var cacheResult;
     var template_HTML = '<tr class="ruleLine {ruleClass}">' +
             '<td><a href="#">{mockType}</a></td>' +
             '<td>{remark}</td>' +
@@ -151,6 +152,7 @@
             '</td></tr>';
     function handlerInterface(resu) {
         var resultList = resu.resultList;
+        cacheResult = resultList;
         if (resu.resultList != null && resu.resultList.length > 0) {
             $("#ruleListBody").html("");
             var showDeleted = $("#showDeletedBtn").val() == "1";
@@ -165,7 +167,14 @@
                 html = html.replace(new RegExp("{ruleValue}", "gm"), ruleValueDesc(result.ruleType, result.ruleValue));
                 html = html.replace(new RegExp("{ruleOrderNum}", "gm"), result.ruleOrderNum);
                 html = html.replace(new RegExp("{delayMs}", "gm"), result.delayMs);
-                html = html.replace(new RegExp("{resp}", "gm"), result.resp);
+                var resp = result.resp;
+                if(resp.length < 20){
+                    html = html.replace(new RegExp("{resp}", "gm"), resp);
+                }else{
+                    var href = '<a href="#" class="respContent tooltip-info" qing_id="' + result.id + '" title="">' + resp.substring(0, 18) + '...</a>';
+                    html = html.replace(new RegExp("{resp}", "gm"), href);
+                }
+
                 html = html.replace(new RegExp("{isDefault}", "gm"), result.default ? "1" : "0");
                 var defaultChecked = "";
                 if(result.default){
@@ -332,6 +341,27 @@
             $(".rule_deleted").addClass("hide");
         }
     });
+
+    $(document).on("click", ".respContent", function(){
+        $.gritter.add({
+            title: '',
+            text: getRespById($(this).attr("qing_id")),
+            class_name: 'gritter-info gritter-center'
+        });
+
+        return false;
+    });
+
+    function getRespById(id){
+        for (var resultIdx in cacheResult) {
+            var result = cacheResult[resultIdx];
+            if(result.id == id){
+                return result.resp;
+            }
+        }
+
+        return "";
+    }
 
     jQuery(function($) {
         $(".chosen-select").chosen();
