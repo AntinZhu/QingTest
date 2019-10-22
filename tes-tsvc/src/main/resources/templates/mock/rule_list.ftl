@@ -41,7 +41,7 @@
                             <i class="icon-home home-icon"></i>
                             <a href="#">系统设置</a>
                         </li>
-                        <li class="active"><a href="${base}/v1/mock/type?catelogIndex=3-8-1">mock配置</a></li>
+                        <li class="active"><a href="${base}/v1/mock/type?catelogIndex=3-8">mock配置</a></li>
                         <li class="active">mock规则</li>
                     </ul><!-- .breadcrumb -->
 
@@ -69,7 +69,7 @@
                             <div class="table-responsive">
                                 <input type="hidden" id="mockType" />
                                 <span class="col-sm-12" style="margin-bottom: 10px;">
-                                    <a class="btn btn-link" target="_blank" href="${base}/v1/mock/rule/edit?catelogIndex=3-8-1&mockType=${mockType}">
+                                    <a class="btn btn-link" target="_blank" href="${base}/v1/mock/rule/edit?catelogIndex=3-8&mockType=${mockType}">
                                         <i class="icon-plus-sign bigger-220 green"></i>
                                     </a>
                                     <label class="pull-right inline"  title="开启时可显示未启用的规则" data-rel="tooltip" >
@@ -147,7 +147,7 @@
             '<td>' +
                 '<input type="hidden" id = "id" value="{id}"/> ' +
                 '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">' +
-                    '<a class="green" target="_blank" href="${base}/v1/mock/rule/edit?catelogIndex=3-8-1&id={id}"><i class="icon-pencil bigger-130"></i></a>' +
+                    '<a class="green" target="_blank" href="${base}/v1/mock/rule/edit?catelogIndex=3-8&id={id}"><i class="icon-pencil bigger-130"></i></a>' +
                 '</div>' +
             '</td></tr>';
     function handlerInterface(resu) {
