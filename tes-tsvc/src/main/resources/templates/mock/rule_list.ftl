@@ -68,6 +68,19 @@
                         <div class="col-xs-12">
                             <div class="table-responsive">
                                 <input type="hidden" id="mockType" />
+
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" style="text-align: right;" for="env">环境开关:</label>
+
+                                    <div class="col-xs-12 col-sm-9">
+                                        <div class="clearfix">
+                                            <button type="button" value="0" env="dev" style="border-radius: 8px" class="btn qing_mock_enable">开发环境</button>
+                                            <button type="button" value="0" env="hjl" style="border-radius: 8px" class="btn qing_mock_enable">接口测试环境</button>
+                                            <button type="button" value="0" env="tst" style="border-radius: 8px" class="btn qing_mock_enable">测试环境</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <span class="col-sm-12" style="margin-bottom: 10px;">
                                     <a class="btn btn-link" target="_blank" href="${base}/v1/mock/rule/edit?catelogIndex=3-8&mockType=${mockType}">
                                         <i class="icon-plus-sign bigger-220 green"></i>
@@ -110,8 +123,15 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
+    var allEnv = ["dev","tst","hjl"];
     $(document).ready(function(){
+        $("#mockType").val('${mockType}');
         refreshPage();
+
+        for(var envIdx in allEnv){
+            var env = allEnv[envIdx];
+            initConfig(env);
+        }
     });
 
     document.addEventListener('visibilitychange',function(){ //浏览器切换事件
@@ -361,6 +381,102 @@
         }
 
         return "";
+    }
+
+    function initConfig(env){
+        var data = {
+            url : "/svc/api/pi/v1/test/common/config/list.json",
+            param:"",
+            userId:22367,
+            userType : 'student'
+        };
+
+        var otherData = {
+            env : env
+        }
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : initResult,
+            isASync : true,
+            failTitle :"获取通用配置信息:",
+            guid : "test-api-config",
+            env : env,
+            otherData : otherData
+        };
+
+        commonAjaxRequest(request);
+    }
+
+    var dbConfigKey = "api_mock_enable_${mockType}";
+    function initResult(resu, otherData) {
+        for (var idx in resu.resultList) {
+            var config = resu.resultList[idx];
+            if(dbConfigKey == config.key){
+                if(config.value == "true" || config.value == "TRUE"){
+                    $(".qing_mock_enable[env='" + otherData.env + "']").addClass("btn-primary");
+                    $(".qing_mock_enable[env='" + otherData.env + "']").val("1");
+                }
+                break;
+            }
+        }
+    }
+
+    $(document).on("click", ".qing_mock_enable", function(){
+        var env = $(this).attr("env");
+        var value = $(this).val();
+        if(value == "0"){ // 取开启
+            setConfig(env, dbConfigKey, "true");
+        }else{
+            setConfig(env, dbConfigKey, "false");
+        }
+    });
+
+    function setConfig(env, configKey, configValue){
+        if(configKey == "" || configKey == null){
+            return;
+        }
+
+        var obj = new Object();
+        obj.configKey = configKey;
+        obj.configValue = configValue;
+        obj.configScope = "common";
+        obj.operateUserId = 1;
+        obj.operateUserType = "system";
+
+        var data = {
+            url : "/svc/api/pi/v1/test/common/config/reset.json",
+            param: JSON.stringify(obj),
+            userId:22367,
+            userType : 'student'
+        };
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : handleSetConfig,
+            isASync : true,
+            failTitle :"设置通用配置失败:",
+            guid : "test-api-config",
+            env : env,
+            otherData:{"env":env, "newValue": (configValue == "true"? "1":"0")}
+        };
+
+        commonAjaxRequest(request);
+    }
+
+    function handleSetConfig(resu, otherData){
+        if(otherData.newValue == "1"){
+            $(".qing_mock_enable[env='" + otherData.env + "']").addClass("btn-primary");
+            $(".qing_mock_enable[env='" + otherData.env + "']").val("1");
+        }else{
+            $(".qing_mock_enable[env='" + otherData.env + "']").removeClass("btn-primary");
+            $(".qing_mock_enable[env='" + otherData.env + "']").val("0");
+        }
+
+        // 刷新对应环境配置
+        piSingleRequest("${base}", otherData.env, "/svc/api/crontab/v1/sync?syncType=app_common");
     }
 
     jQuery(function($) {

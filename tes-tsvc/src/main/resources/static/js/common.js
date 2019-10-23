@@ -742,3 +742,27 @@ function formatNumber(n) {
     n = n.toString()
     return n[1] ? n : '0' + n
 }
+
+function piSingleRequest(base, env, url) {
+    var data = {
+        url : url,
+        param :"{}",
+        userId:22367,
+        userType : 'student'
+    };
+
+    var request = {
+        url : base + "/v1/common/pi.json",
+        data : data,
+        handlerFunc : handleIgnore,
+        isASync : true,
+        failTitle :"请求失败:",
+        env : env
+    };
+
+    commonAjaxRequest(request);
+}
+
+function handleIgnore(resu){
+
+}

@@ -164,7 +164,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
 
             <div class="group qing_catelog_hide">
                 <h3 class="accordion-header">线上手机号批量解密</h3>
@@ -309,7 +309,6 @@
                 </div>
             </div>
 
-
             <div class="group">
                 <h3 class="accordion-header">学生端课程报告加解密</h3>
 
@@ -427,7 +426,41 @@
                 </div>
             </div>
 
-        </div>
+            <div class="group qing_catelog_hide">
+                <h3 class="accordion-header">用户IP查询</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">用户IP：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" class="user_ip_conv" id="user_ip_conv" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="userIpConverter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">用户名：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" class="user_ip_conv" id="user_name_conv" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div><!-- /#ace-settings-container -->
@@ -1026,5 +1059,87 @@
     function handleStudentReportDecode(r) {
         $("#studentReportId_input").val(r.resultList[0]);
         $("#studentReportIdStudentId_input").val(r.resultList[1]);
+    }
+
+    $(".user_ip_conv").blur(function(){
+        if($(this).val() == ''){
+            return;
+        }
+
+        var valueKey = this.id;
+        $(".user_ip_conv").each(function(key,value){
+            if(value.id != valueKey){
+                $(value).val("");
+            }
+        });
+    });
+
+    $("#userIpConverter").click(function(){
+        var userIp = $("#user_ip_conv").val();
+        var userName = $("#user_name_conv").val();
+
+        if (!isStringEmpty(userIp)) {
+            queryUserName(userIp);
+        } else if (!isStringEmpty(userName)) {
+            queryUserIp(userName);
+        }
+    });
+
+    function queryUserName(userIp){
+        var data = {
+            data : userIp
+        };
+
+        var request = {
+            url : "${base}/v1/utils/ip/query_by_ip.json",
+            data : data,
+            handlerFunc : handleQueryUserNameResult,
+            isASync : true,
+            failTitle :"查询用户IP结果:"
+        };
+
+        commonAjaxRequest(request);
+    }
+
+    function handleQueryUserNameResult(resu){
+        if(isStringEmpty(resu.resultList)){
+            $.gritter.add({
+                title : "查询结果",
+                text : "未找到该用户信息",
+                class_name : 'gritter-error gritter-right'
+            });
+            return;
+        }
+
+        $("#user_name_conv").val(resu.resultList);
+    }
+
+    function queryUserIp(userName){
+        var data = {
+            data : userName
+        };
+
+        var request = {
+            url : "${base}/v1/utils/ip/query_by_name.json",
+            data : data,
+            handlerFunc : handleQueryUserIpResult,
+            isASync : true,
+            failTitle :"查询用户IP结果:"
+        };
+
+        commonAjaxRequest(request);
+    }
+
+    function handleQueryUserIpResult(resu){
+        if(isStringEmpty(resu.resultList)){
+            $.gritter.add({
+                title : "查询结果",
+                text : "未找到该用户信息",
+                class_name : 'gritter-error gritter-right'
+            });
+            return;
+        }
+
+        $("#user_ip_conv").val(resu.resultList);
     }
 </script>

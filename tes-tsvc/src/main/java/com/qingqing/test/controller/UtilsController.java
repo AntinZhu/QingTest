@@ -30,6 +30,7 @@ import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.dao.test.mock.MockRuleMapper;
 import com.qingqing.test.domain.mock.MockRule;
 import com.qingqing.test.domain.tool.TestCronTask;
+import com.qingqing.test.domain.user.TestUserIp;
 import com.qingqing.test.manager.BITeacherIndexManager;
 import com.qingqing.test.manager.CommonSyncManager;
 import com.qingqing.test.manager.ISyncable.SyncType;
@@ -519,6 +520,35 @@ public class UtilsController {
         } catch (RuntimeException ex) {
             throw new RequestValidateException("code parse failed. code:" + shareCode, "code error", ex);
         }
+    }
 
+    @RequestMapping("ip/query_by_name")
+    @ResponseBody
+    public SingleResponse<String> queryUserIp(@ProtoRequestBody SimpleStringRequest request){
+        TestUserIp userIpBean = userIpManager.getUserInfoByName(request.getData());
+        String userIp = "";
+        if(userIpBean != null){
+            userIp = userIpBean.getUserIp();
+        }
+
+        SingleResponse<String> result = new SingleResponse<>();
+        result.setResponse(BaseResponse.SUCC_RESP);
+        result.setResultList(userIp);
+        return result;
+    }
+
+    @RequestMapping("ip/query_by_ip")
+    @ResponseBody
+    public SingleResponse<String> queryUserName(@ProtoRequestBody SimpleStringRequest request){
+        TestUserIp userIpBean = userIpManager.getUserInfo(request.getData());
+        String userName = "";
+        if(userIpBean != null){
+            userName = userIpBean.getUserName();
+        }
+
+        SingleResponse<String> result = new SingleResponse<>();
+        result.setResponse(BaseResponse.SUCC_RESP);
+        result.setResultList(userName);
+        return result;
     }
 }

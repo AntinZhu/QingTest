@@ -34,6 +34,8 @@ import com.qingqing.test.bean.order.ServicePackageInfo;
 import com.qingqing.test.bean.order.StrengthenInfo;
 import com.qingqing.test.bean.order.StrengthenPackage;
 import com.qingqing.test.bean.order.TeacherInfoForOrderBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderConverter {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderConverter.class);
 
     public static TeacherInfoForOrderBean converterToInfoBean(Long teacherId, TeacherDetailForLiveClassOrderResponse response){
         // 获取所有支持的年级，科目，上门方式
@@ -92,6 +96,7 @@ public class OrderConverter {
     }
 
     public static TeacherInfoForOrderBean converterToInfoBean(TeacherProto.TeacherDetailForStudentToOrderResponse response){
+//        logger.info("detail_for_order:" + JsonUtil.format(JsonFormat.printToString(response)));
         TeacherInfoForOrderBean bean = new TeacherInfoForOrderBean();
         bean.setResponse(BaseConverter.convertBaseResponse(response.getResponse()));
         if(!BaseResponse.SUCC_CODE.equals(bean.getResponse().getError_code())){

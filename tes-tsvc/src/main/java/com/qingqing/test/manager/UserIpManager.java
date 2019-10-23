@@ -20,6 +20,7 @@ public class UserIpManager implements ISyncable{
     private TestUserIpService testUserIpService;
 
     private Map<String, TestUserIp> userIpMapping;
+    private Map<String, TestUserIp> userNameMapping;
 
     @PostConstruct
     public void init(){
@@ -39,6 +40,10 @@ public class UserIpManager implements ISyncable{
         return userIpMapping.get(userIp);
     }
 
+    public TestUserIp getUserInfoByName(String userName){
+        return userNameMapping.get(userName);
+    }
+
     public boolean isUserIpExist(String userIp){
         return getUserInfo(userIp) != null;
     }
@@ -47,11 +52,14 @@ public class UserIpManager implements ISyncable{
     public void sync() {
         List<TestUserIp> userIpList = testUserIpService.selectAll();
         Map<String, TestUserIp> tmpMapping = new HashMap<String, TestUserIp>();
+        Map<String, TestUserIp> tmpNameMapping = new HashMap<String, TestUserIp>();
         for (TestUserIp testUserIp : userIpList) {
             tmpMapping.put(testUserIp.getUserIp(), testUserIp);
+            tmpNameMapping.put(testUserIp.getUserName(), testUserIp);
         }
 
         userIpMapping = tmpMapping;
+        userNameMapping = tmpNameMapping;
     }
 
     @Override

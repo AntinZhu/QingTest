@@ -96,7 +96,7 @@
         {url:"/svc/api/crontab/v1/teacher_forewarning_sync", description:"预警线同步"},
         {url:"/svc/api/crontab/v1/teacher/sex_correct", description:"性别校正"},
         ];
-    var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center;word-break: break-all;"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div><div id="link_{idx}" class="hide" style="text-align: center;margin-top: 5px;margin-bottom: 5px;" ><hr style="margin-bottom: 0px;margin-top: 0px;" /><a href="" target="_blank"> 查看日志</a></div></div></div></div>';
+    var task_html = '<div class="col-xs-2 col-sm-3 qing_task" id="task_{idx}"><div class="widget-box"><div class="widget-header" style="text-align: center"><h4 class="smaller">{desc}</h4></div><div class="widget-body"><div class="widget-main" style="text-align: center;word-break: break-all;"><button class="btn btn-xs btn-danger" onclick="cronTaskIdx({idx})"><i class="icon-bolt bigger-110"></i>执行<i class="icon-arrow-right icon-on-right"></i></button></div><div class="" style="text-align: center;margin-top: 5px;margin-bottom: 5px;" ><hr style="margin-bottom: 0px;margin-top: 0px;" /><a id="link_{idx}" href="#"> 查看日志</a></div></div></div></div>';
 
     $(document).ready(function(){
         refreshPage();
@@ -136,12 +136,20 @@
             var task = cronTaskArr[taskIdx];
             var html = task_html;
             html = html.replace(new RegExp("{idx}","gm"), taskIdx);
-            html = html.replace(new RegExp("{desc}","gm"), task.description + "(" + task.id + ")");
+            html = html.replace(new RegExp("{desc}","gm"), formatDesc(task.description) + "(" + task.id + ")");
 
             $("#taskList").append(html);
         }
 
         search($("#task_search").val());
+    }
+
+    function formatDesc(desc){
+        if(desc.length < 8){
+            return desc;
+        }
+
+        return desc.substr(0, 8) + "...";
     }
 
     function cronTaskIdx(idx){
@@ -161,8 +169,8 @@
         logTargetUrl = logTargetUrl.replace("{guid}", guid);
 
         var logEle = $("#link_" + idx);
-        $(logEle).removeClass("hide");
-        $(logEle).children("a:first")[0].href = logTargetUrl;
+        $(logEle).attr("href", logTargetUrl);
+        $(logEle).attr("target", "_blank");
     }
 
     function invokeServer(url, guid){

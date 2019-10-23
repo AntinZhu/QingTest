@@ -328,9 +328,9 @@
                     paramInfo = showParam({paramData:paramDetail});
                 }
 
-                if("${userType!''}" != ""){
-                    $("#requestUserTypeDiv").text("${userType}");
-                    $("#requestUserType").val("${userType}");
+                if('${userType!""}' != ""){
+                    $("#requestUserTypeDiv").text('${userType!"ta"}');
+                    $("#requestUserType").val('${userType!"ta"}');
                 }
 
                 paramExamples = resu.interfaceInfo.paramList;
