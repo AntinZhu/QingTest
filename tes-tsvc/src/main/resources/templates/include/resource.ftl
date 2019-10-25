@@ -12,7 +12,11 @@
 <!-- page specific plugin styles -->
 <link rel="stylesheet" href="${base}/static/assets/css/select2.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/chosen.css"/>
+
 <link rel="stylesheet" href="${base}/static/assets/css/jquery-ui-1.10.3.full.min.css" />
+<link rel="stylesheet" href="${base}/static/assets/css/datepicker.css" />
+<link rel="stylesheet" href="${base}/static/assets/css/ui.jqgrid.css" />
+
 <#--<link rel="stylesheet" href="${base}/static/assets/css/jquery-ui-1.10.3.custom.min.css" />-->
 <link rel="stylesheet" href="${base}/static/assets/css/jquery.gritter.css" />
 <!-- fonts -->
@@ -22,7 +26,6 @@
 <link rel="stylesheet" href="${base}/static/assets/css/ace-rtl.min.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/ace-skins.min.css" />
 
-<link rel="stylesheet" href="${base}/static/assets/css/datepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/bootstrap-timepicker.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/bootstrap-datetimepicker.min.css" />
 <link rel="stylesheet" href="${base}/static/assets/css/daterangepicker.css" />

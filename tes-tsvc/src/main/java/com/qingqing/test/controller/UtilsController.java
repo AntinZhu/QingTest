@@ -1,5 +1,6 @@
 package com.qingqing.test.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
 import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.UserProto;
@@ -26,6 +27,7 @@ import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.index.IndexQueryRequestBean;
 import com.qingqing.test.bean.index.IndexUpdateRequestBean;
+import com.qingqing.test.client.PiClient;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.dao.test.mock.MockRuleMapper;
 import com.qingqing.test.domain.mock.MockRule;
@@ -97,6 +99,8 @@ public class UtilsController {
     private UserIpManager userIpManager;
     @Autowired
     private CommonSyncManager commonSyncManager;
+    @Autowired
+    private PiClient piClient;
 
     private final static String ENCODE_KEY = "erahsQqx";
     private final static String VERSION_V1 = "v1";
@@ -418,6 +422,29 @@ public class UtilsController {
         return "utils/common_config";
     }
 
+    @RequestMapping("common/common_config")
+    public String commonConfigPage2(@RequestParam(value = "key", defaultValue = "") String configKey, Model model){
+        model.addAttribute("configKey", configKey);
+
+        return "utils/common_config_2";
+    }
+
+    @RequestMapping("common_config/set")
+    @ResponseBody
+    public void setCommonConfig(@RequestParam(value = "configKey") String configKey, @RequestParam(value = "configValue") String configValue, Model model){
+        logger.info("configKey:" + configKey + " configValue:" + configValue);
+
+        JSONObject obj = new JSONObject();
+        obj.put("configKey", configKey);
+        obj.put("configValue", configValue);
+        obj.put("configScope", "common");
+        obj.put("operateUserId", 1);
+        obj.put("operateUserType", "system");
+        logger.info("param:" + obj.toJSONString());
+
+        piClient.commonRequest("/svc/api/pi/v1/test/common/config/reset.json?guid=api-test_reset_common_config", obj.toJSONString());
+    }
+
     @RequestMapping("report/teacher/encode")
     @ResponseBody
     public SingleResponse<String> encodeStudentReportId(@ProtoRequestBody SimpleStringRequest request) {
@@ -550,5 +577,10 @@ public class UtilsController {
         result.setResponse(BaseResponse.SUCC_RESP);
         result.setResultList(userName);
         return result;
+    }
+
+    @RequestMapping("/test")
+    public String test(){
+        return "utils/common_config_2";
     }
 }

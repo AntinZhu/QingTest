@@ -476,7 +476,7 @@
         }
 
         // 刷新对应环境配置
-        piSingleRequest("${base}", otherData.env, "/svc/api/crontab/v1/sync?syncType=app_common");
+        // piSingleRequest("${base}", otherData.env, "/svc/api/crontab/v1/sync?syncType=app_common");
     }
 
     jQuery(function($) {
