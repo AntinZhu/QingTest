@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>新增Mock类型</title>
+    <title>新增或编辑用户</title>
     <#include "/include/resource_uncompressed.ftl" />
 
     <style>
@@ -89,18 +89,18 @@
                                                         <div id="faq-0-1">
                                                             <div id="accordion" class="accordion-style2">
                                                                 <div class="group">
-                                                                    <h3 class="accordion-header">MockType参数填写</h3>
+                                                                    <h3 class="accordion-header">用户参数填写</h3>
 
                                                                     <div>
                                                                         <div class="col-xs-12">
                                                                             <form class="form-horizontal">
                                                                                 <input type="hidden" id = "id" />
                                                                                 <div class="form-group">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="mockType">MockType:</label>
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="userName">用户名:</label>
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" id="mockType" placeholder="mockType..." />
+                                                                                            <input class="col-xs-3" type="text" id="userName" placeholder="用户名..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -108,11 +108,11 @@
                                                                                 </div>
 
                                                                                 <div class="form-group">
-                                                                                    <label class="col-sm-3 control-label no-padding-right" for="mockName">名称描述:</label>
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="userIp">用户IP:</label>
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" id="mockName" placeholder="mockName..." />
+                                                                                            <input class="col-xs-3" type="text" id="userIp" placeholder="用户IP..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -162,27 +162,27 @@
             $(document).ready(function(){
             <#if ((id)!0) gt 0>
                 $("#id").val(${bean.id});
-                $("#mockType").val("${bean.mockType}");
-                $("#mockName").val("${bean.mockName}");
+                $("#userName").val("${bean.userName}");
+                $("#userIp").val("${bean.userIp}");
             <#else>
             </#if>
             });
 
             $("#saveBtn").click(function () {
-                var mockType = $("#mockType").val();
-                if(isStringEmpty(mockType)){
+                var userName = $("#userName").val();
+                if(isStringEmpty(userName)){
                     $.gritter.add({
                         title : '参数错误:',
-                        text : "MockType不能为空",
+                        text : "用户名不能为空",
                         class_name : 'gritter-error gritter-center'
                     });
                     return;
                 }
-                var mockName = $("#mockName").val();
-                if(isStringEmpty(mockName)){
+                var userIp = $("#userIp").val();
+                if(isStringEmpty(userIp)){
                     $.gritter.add({
                         title : '参数错误:',
-                        text : "名称描述不能为空",
+                        text : "用户IP不能为空",
                         class_name : 'gritter-error gritter-center'
                     });
                     return;
@@ -190,13 +190,13 @@
 
                 var data = {
                     id : $("#id").val(),
-                    mockType : mockType,
-                    mockName : mockName,
+                    userName : userName,
+                    userIp : userIp,
                     deleted : false
                 };
 
                 var request = {
-                    url : "${base}/v1/mock/type/add.json",
+                    url : "${base}/v1/user/add.json",
                     data : data,
                     handlerFunc : handlerSave,
                     isASync : true,

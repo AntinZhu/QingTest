@@ -8,5 +8,11 @@ import java.util.List;
 public interface TestUserIpMapper {
     List<TestUserIp> selectAll();
 
+    void insert(TestUserIp userIp);
+
+    void updateDeleted(@Param("id") Long id, @Param("isDeleted") boolean isDeleted);
+
     int updateHeadImage(@Param("userIp") String userIp, @Param("headImage") String headImage);
+
+    TestUserIp findById(@Param("id") Long id);
 }

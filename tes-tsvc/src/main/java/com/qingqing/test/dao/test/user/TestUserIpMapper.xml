@@ -18,13 +18,32 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" />
     from t_user_ip
-    where is_deleted = FALSE
   </select>
+
+  <insert id="insert" parameterType="com.qingqing.test.domain.user.TestUserIp">
+    insert into t_user_ip(user_name, user_ip, is_deleted, head_image, create_time)
+    value(#{userName,jdbcType=VARCHAR} , #{userIp,jdbcType=VARCHAR} , 0, #{headImage,jdbcType=VARCHAR} , now())
+    ON DUPLICATE KEY UPDATE
+      	is_deleted = 0,
+      	user_name = #{userName, jdbcType=VARCHAR}
+  </insert>
 
   <update id="updateHeadImage">
     update t_user_ip
     set head_image = #{headImage, jdbcType=VARCHAR}
     where user_ip = #{userIp,jdbcType=VARCHAR}
   </update>
+
+  <update id="updateDeleted">
+    update t_user_ip
+    set is_deleted = #{isDeleted,jdbcType=BOOLEAN}
+    where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <select id="findById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_user_ip
+    where id  = #{id,jdbcType=BIGINT}
+  </select>
 
 </mapper>

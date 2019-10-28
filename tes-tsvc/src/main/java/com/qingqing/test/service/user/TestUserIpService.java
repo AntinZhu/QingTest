@@ -11,5 +11,11 @@ public interface TestUserIpService {
 
     List<TestUserIp> selectAll();
 
+    void insert(TestUserIp userIp);
+
+    TestUserIp findById(Long id);
+
+    void updateDeleted(Long id, boolean isDeleted);
+
     boolean updateUserHeadImage(String userIp, String headImage);
 }

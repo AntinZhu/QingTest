@@ -54,6 +54,10 @@ public class UserIpManager implements ISyncable{
         Map<String, TestUserIp> tmpMapping = new HashMap<String, TestUserIp>();
         Map<String, TestUserIp> tmpNameMapping = new HashMap<String, TestUserIp>();
         for (TestUserIp testUserIp : userIpList) {
+            if(testUserIp.getDeleted()){
+                continue;
+            }
+
             tmpMapping.put(testUserIp.getUserIp(), testUserIp);
             tmpNameMapping.put(testUserIp.getUserName(), testUserIp);
         }

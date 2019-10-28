@@ -243,7 +243,7 @@
 
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li>
-                            <a href="#">
+                            <a href="${base}/v1/user/list_page?catelogIndex=3-8">
                                 <i class="icon-cog"></i>
                                 Settings
                             </a>

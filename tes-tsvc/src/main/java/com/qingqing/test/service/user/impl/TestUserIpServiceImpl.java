@@ -23,6 +23,21 @@ public class TestUserIpServiceImpl implements TestUserIpService {
     }
 
     @Override
+    public void insert(TestUserIp userIp) {
+        mapper.insert(userIp);
+    }
+
+    @Override
+    public TestUserIp findById(Long id) {
+        return mapper.findById(id);
+    }
+
+    @Override
+    public void updateDeleted(Long id, boolean isDeleted) {
+        mapper.updateDeleted(id, isDeleted);
+    }
+
+    @Override
     public boolean updateUserHeadImage(String userIp, String headImage) {
         return mapper.updateHeadImage(userIp, headImage) > 0;
     }
