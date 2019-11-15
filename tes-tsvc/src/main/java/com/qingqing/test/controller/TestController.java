@@ -8,14 +8,14 @@ import com.qingqing.api.proto.v1.util.Common.SimpleStringRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
+import com.qingqing.test.aspect.validate.IpLoginValid;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.KeyAndValue;
-import com.qingqing.test.bean.common.UrlAndParam;
-import com.qingqing.test.bean.common.UserWithDataBean;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
 import com.qingqing.test.bean.inter.CatelogBean;
@@ -28,10 +28,11 @@ import com.qingqing.test.bean.inter.response.TestInterfaceResponse;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.controller.errorcode.TestInterfaceErrorCode;
 import com.qingqing.test.dao.es.BiStudentEsMapper;
+import com.qingqing.test.domain.inter.CatelogRefType;
 import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
+import com.qingqing.test.domain.inter.TestInterfaceCatelog.CatelogRef;
 import com.qingqing.test.domain.inter.TestInterfaceParam;
-import com.qingqing.test.domain.test.TestStudentIndexBean;
 import com.qingqing.test.manager.PassportManager;
 import com.qingqing.test.manager.TestInterfaceManager;
 import com.qingqing.test.manager.UserIpManager;
@@ -52,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -81,16 +83,16 @@ public class TestController {
 
     @RequestMapping("test")
     @ResponseBody
-    public String show( Model model){
-        UrlAndParam url = new UrlAndParam();
-        url.setUrl("abc");
-        url.setParam("param");
-        UserWithDataBean user = new UserWithDataBean();
-
-        String result = JsonUtil.format(myMockTestManager.c(url, user));
-
-        url.setUrl("ammm");
-        return result + JsonUtil.format(myMockTestManager.c(url, user));
+    public String show( Model model, @RequestParam(value = "aa", required = false) List<Long> teacherIds){
+//        UrlAndParam url = new UrlAndParam();
+//        url.setUrl("abc");
+//        url.setParam("param");
+//        UserWithDataBean user = new UserWithDataBean();
+//
+//        String result = JsonUtil.format(myMockTestManager.c(url, user));
+//
+//        url.setUrl("ammm");
+        return JsonUtil.format(teacherIds);
     }
 
     @RequestMapping("json_format")
@@ -126,6 +128,7 @@ public class TestController {
     }
 
     @RequestMapping("/interface/edit")
+    @IpLoginValid
     public String edit(@RequestParam(value="id", defaultValue = "0") Long interfaceId, Model model){
         if(interfaceId > 0){
             TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
@@ -136,6 +139,7 @@ public class TestController {
 
     @RequestMapping("/interface/save")
     @ProtoResponseBody
+    @IpLoginValid
     public SimpleDataResponse save(@RequestBody SaveInterfaceBean saveBean){
         Long parentCatelogId = saveBean.getParentCatelogId();
         TestInterfaceCatelog testInterfaceCatelog = catelogService.findById(parentCatelogId);
@@ -152,6 +156,7 @@ public class TestController {
 
     @RequestMapping("/interface/param/save")
     @ProtoResponseBody
+    @IpLoginValid
     public SimpleDataResponse saveParam(@RequestBody TestInterfaceParam param){
         testInterfaceParamService.save(param);
         wxNotifyManager.markdown("有用户新增了参数示例", new KeyAndValue("用户", userIpManager.getUserNameByIp(IpFilter.getRequestUserIp())), new KeyAndValue("示例名称", param.getParamName()));
@@ -162,6 +167,7 @@ public class TestController {
 
     @RequestMapping("/interface/param/delete")
     @ProtoResponseBody
+    @IpLoginValid
     public SimpleResponse deleteParam(@RequestBody SimpleLongRequest request){
         testInterfaceParamService.deleteById(request.getData());
 
@@ -170,6 +176,7 @@ public class TestController {
 
     @RequestMapping("/interface/param/default/set")
     @ProtoResponseBody
+    @IpLoginValid
     public SimpleResponse setParamDefault(@RequestBody SimpleLongRequest request){
         TestInterfaceParam param = testInterfaceParamService.findById(request.getData());
         if(param != null){
@@ -191,6 +198,7 @@ public class TestController {
 
     @RequestMapping("/catelog/save")
     @ResponseBody
+    @IpLoginValid
     public SingleResponse saveCatelog(@RequestBody SaveCatelogBean saveBean){
         Long parentCatelogId = saveBean.getParentCatelogId();
 
@@ -277,9 +285,19 @@ public class TestController {
     @RequestMapping("/interface/all")
     @ResponseBody
     public ListResponse<TestInterface> allTestInterface(){
+        List<TestInterface> allInterfaceList = testInterfaceService.findAll();
+        List<TestInterfaceCatelog> allCatelogList = catelogService.selectAll();
+        Map<CatelogRef, TestInterfaceCatelog> refMap = CollectionsUtil.mapComposerId(allCatelogList, TestInterfaceCatelog.REF_COMPOSER);
+        for (TestInterface testInterface : allInterfaceList) {
+            TestInterfaceCatelog catelog = refMap.get(new CatelogRef(CatelogRefType.inter, String.valueOf(testInterface.getId())));
+            if(catelog != null){
+                testInterface.setCatelogIndex(catelog.getCacheCatelogIndex());
+            }
+        }
+
         ListResponse<TestInterface> interfaceResponse = new ListResponse<>();
         interfaceResponse.setResponse(BaseResponse.SUCC_RESP);
-        interfaceResponse.setResultList(testInterfaceService.findAll());
+        interfaceResponse.setResultList(allInterfaceList);
         return interfaceResponse;
     }
 

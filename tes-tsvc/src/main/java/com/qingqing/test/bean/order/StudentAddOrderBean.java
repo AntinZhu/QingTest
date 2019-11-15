@@ -28,6 +28,7 @@ public class StudentAddOrderBean {
     private Integer strengthenTimes;
 
     private Long servicePackageId;
+    private Integer startBlock;
 
     public Long getStudentId() {
         return studentId;
@@ -155,5 +156,13 @@ public class StudentAddOrderBean {
 
     public void setServicePackageId(Long servicePackageId) {
         this.servicePackageId = servicePackageId;
+    }
+
+    public Integer getStartBlock() {
+        return startBlock;
+    }
+
+    public void setStartBlock(Integer startBlock) {
+        this.startBlock = startBlock;
     }
 }

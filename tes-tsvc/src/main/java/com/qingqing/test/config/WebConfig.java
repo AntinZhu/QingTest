@@ -79,7 +79,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         factory.setMaxRequestSize("50MB");
 
         return factory.createMultipartConfig();
-
-
     }
+
+//    @Bean
+//    public ObjectMapper objectMapper() {
+//        return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+//    }
 }

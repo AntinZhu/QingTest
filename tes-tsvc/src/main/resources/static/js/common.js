@@ -766,3 +766,7 @@ function piSingleRequest(base, env, url) {
 function handleIgnore(resu){
 
 }
+
+function reloadPage(){
+    location.reload();
+}

@@ -140,7 +140,8 @@
                         data : null,
                         handlerFunc : handlerParamSave,
                         isASync : true,
-                        failTitle :"IP上传出错:"
+                        failTitle :"IP上传出错:",
+                        otherData : {"userName":result, "userIp":userIp}
                     };
 
                     commonAjaxRequest(request);
@@ -148,12 +149,26 @@
             });
         }
 
-        function handlerParamSave(){
+        function handlerParamSave(resu, otherData){
+            var request = {
+                url : "${base}/v1/user/tmp/login.json?userName=" + otherData.userName + "&userIp=" + otherData.userIp,
+                data : null,
+                handlerFunc : handleTmpLogin,
+                isASync : true,
+                failTitle :"申请临时登陆出错:"
+            };
+
+            commonAjaxRequest(request);
+        }
+
+        function handleTmpLogin(){
             $.gritter.add({
                 title : '提示:',
-                text : "反馈成功，请过几分钟后再试",
+                text : "提交成功，您将获得5分钟的临时登陆状态。待用户名审核通过后，将可一直使用。3秒后将跳转到目标页面...",
                 class_name : 'gritter-info gritter-center'
             });
+
+            setTimeout(reloadPage, 3000);
         }
 
         $("#qing_report").click(function(){

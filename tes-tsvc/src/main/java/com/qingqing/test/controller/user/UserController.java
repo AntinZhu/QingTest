@@ -2,6 +2,8 @@ package com.qingqing.test.controller.user;
 
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.SimpleErrorCode;
+import com.qingqing.test.aspect.validate.IpLoginValid;
+import com.qingqing.test.aspect.validate.IpLoginValidType;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.IdAndBoolBean;
@@ -45,6 +47,7 @@ public class UserController {
 
     @RequestMapping("up/head_image")
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse upHeadImage(@RequestParam("file") MultipartFile file){
         String requestUserId = IpFilter.getRequestUserIp();
         String userName = userIpManager.getUserNameByIp(requestUserId);
@@ -70,11 +73,13 @@ public class UserController {
     }
 
     @RequestMapping("/list_page")
+    @IpLoginValid
     public String userIpPage(){
         return "user/user_ip_list";
     }
 
     @RequestMapping("/edit")
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.82")
     public String editUserPage(@RequestParam(value = "id", defaultValue = "0") Long userId, Model model){
         model.addAttribute("id", userId);
         if(userId > 0){
@@ -97,6 +102,7 @@ public class UserController {
 
     @RequestMapping("/add")
     @ResponseBody
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.82")
     public SimpleResponse addUser(@RequestBody  TestUserIp userIp){
         testUserIpService.insert(userIp);
 
@@ -106,10 +112,19 @@ public class UserController {
 
     @RequestMapping("/isDeleted/set")
     @ResponseBody
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.82")
     public SimpleResponse updateDeleted(@RequestBody IdAndBoolBean request){
         testUserIpService.updateDeleted(request.getId(), request.getBool());
 
         commonSyncManager.sync(SyncType.user_ip);
+        return SimpleResponse.SUCC;
+    }
+
+    @RequestMapping("/tmp/login")
+    @ResponseBody
+    public SimpleResponse tmpLogin(@RequestParam("userIp") String userIp, @RequestParam("userName") String userName){
+        userIpManager.addTmpUser(userName, userIp);
+
         return SimpleResponse.SUCC;
     }
 }

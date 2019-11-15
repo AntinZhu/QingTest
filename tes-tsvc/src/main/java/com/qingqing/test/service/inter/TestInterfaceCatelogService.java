@@ -23,4 +23,6 @@ public interface TestInterfaceCatelogService {
     void deletedById(Long id);
 
     TestInterfaceCatelog selectByRefTypeAndRefValue(CatelogRefType refType, String refValue);
+
+    void updateCatelogIndex(Long id, String catelogIndex);
 }

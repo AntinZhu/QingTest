@@ -136,6 +136,7 @@
     function handlerInterface(resu) {
         var resultList = resu.resultList;
         cacheResult = resultList;
+        cacheResult.reverse();
         showItems(cacheResult);
     };
 

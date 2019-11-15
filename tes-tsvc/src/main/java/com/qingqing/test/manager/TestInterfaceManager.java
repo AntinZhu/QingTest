@@ -26,6 +26,7 @@ import com.qingqing.test.service.inter.TestInterfaceService;
 import com.qingqing.test.service.inter.impl.TestInterfaceCatelogReadOnlyServiceImpl;
 import com.qingqing.test.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +41,7 @@ import java.util.Map;
  * Created by zhujianxing on 2018/8/30.
  */
 @Component
-public class TestInterfaceManager {
+public class TestInterfaceManager implements ISyncable{
 
     @Autowired
     private TestInterfaceService testInterfaceService;
@@ -107,23 +108,23 @@ public class TestInterfaceManager {
         if(parentCatelogId != null){
             TestInterfaceCatelog parentCatelog = catelogService.selectForUpdate(parentCatelogId);
             sortNum = parentCatelog.getSubItemCnt() + 1;
-//            catelogIndex = parentCatelog.getCatelogIndex() + "-" + sortNum;
+            catelogIndex = parentCatelog.getCacheCatelogIndex() + "-" + sortNum;
 
             catelogService.incSubItemCnt(parentCatelog.getId());
         }else{
             sortNum = getNextRootCateogIndex();
-//            catelogIndex = String.valueOf(sortNum);
+            catelogIndex = String.valueOf(sortNum);
         }
 
         catelog.setCatelogName(catelogName);
         catelog.setRefType(refType);
         catelog.setRefValue(refId);
         catelog.setDeleted(Boolean.FALSE);
-//        catelog.setCatelogIndex(catelogIndex);
         catelog.setParentCatelogId(parentCatelogId == null? 0L : parentCatelogId);
         catelog.setSortNum(sortNum);
         catelog.setSubItemCnt(0);
         catelog.setClazz(clazz);
+        catelog.setCacheCatelogIndex(catelogIndex);
 
         catelogService.save(catelog);
 
@@ -180,6 +181,23 @@ public class TestInterfaceManager {
         }
 
         return resultList;
+    }
+
+    private String generateCatelogIndex(Map<Long, TestInterfaceCatelog> idMapping, TestInterfaceCatelog catelog){
+        String catelogIndex = String.valueOf(catelog.getSortNum());
+
+        Long parentCatelogId = catelog.getParentCatelogId();
+        while (parentCatelogId != null && parentCatelogId != 0L){
+            TestInterfaceCatelog parentCatelog = idMapping.get(parentCatelogId);
+            if(parentCatelog == null){
+                break;
+            }
+
+            catelogIndex = parentCatelog.getSortNum() + "-" + catelogIndex;
+            parentCatelogId = parentCatelog.getParentCatelogId();
+        }
+
+        return catelogIndex;
     }
 
     @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
@@ -272,5 +290,24 @@ public class TestInterfaceManager {
         }
 
         return paramValue;
+    }
+
+    @Override
+    @Scheduled(cron = "0 30 * * * *")
+    public void sync() {
+        List<TestInterfaceCatelog> allCatelogs = testInterfaceCatelogService.selectAll();
+        Map<Long, TestInterfaceCatelog> idMapping = CollectionsUtil.mapComposerId(allCatelogs, TestInterfaceCatelog.ID_COMPOSER);
+
+        for (TestInterfaceCatelog catelog : allCatelogs) {
+            String newCatelogIndex = generateCatelogIndex(idMapping, catelog);
+            if(!newCatelogIndex.equals(catelog.getCacheCatelogIndex())){
+                catelogService.updateCatelogIndex(catelog.getId(), newCatelogIndex);
+            }
+        }
+    }
+
+    @Override
+    public SyncType[] syncTypes() {
+        return new SyncType[]{SyncType.all, SyncType.catelog_index};
     }
 }

@@ -1,6 +1,7 @@
 package com.qingqing.test.controller.config;
 
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
+import com.qingqing.test.aspect.validate.IpLoginValid;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.response.SingleResponse;
@@ -32,6 +33,7 @@ public class CommonConfigController {
     private TestCommonConfigManager testCommonConfigManager;
 
     @RequestMapping("add_page")
+    @IpLoginValid
     public String add(@RequestParam(value = "id", defaultValue = "0") Long id, Model model){
         if(id > 0){
             model.addAttribute("configBean", testCommonConfigManager.getBeanById(id));
@@ -55,6 +57,7 @@ public class CommonConfigController {
 
     @RequestMapping("add")
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse add(@RequestBody SaveCommonConfigBean bean){
         testCommonConfigManager.saveCommonConfig(bean);
 
@@ -63,6 +66,7 @@ public class CommonConfigController {
 
     @RequestMapping("update")
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse update(@RequestBody TestCommonConfig testCommonConfig){
         testCommonConfigService.update(testCommonConfig);
 
@@ -82,6 +86,7 @@ public class CommonConfigController {
 
     @RequestMapping("delete")
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse delete(@RequestBody SimpleLongRequest request){
         testCommonConfigService.deleteById(request.getData());
 

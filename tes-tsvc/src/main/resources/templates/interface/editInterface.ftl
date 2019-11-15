@@ -398,7 +398,10 @@
                 $("#interfaceName").val("${interfaceBean.inter.interfaceName}");
                 $("#interfaceUrl").val("${interfaceBean.inter.interfaceUrl}");
                 $("#nextPageUrl").val('${interfaceBean.inter.nextPageUrl!""}');
-                var paramDetail ='${interfaceBean.inter.paramDetail!""}';
+                var paramDetail = '${interfaceBean.inter.paramDetail!"{}"}';
+                if(paramDetail.indexOf("\") == -1){
+                    paramDetail = paramDetail.replace(new RegExp("\","gm"), "\\");
+                }
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){
                     paramInfo = showParam({paramData:paramDetail, isEditStatus:true, valueChangedNotifyId:"paramDetail"});

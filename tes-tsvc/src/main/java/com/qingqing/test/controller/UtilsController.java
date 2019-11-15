@@ -19,6 +19,7 @@ import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.encode.TripleDESUtil;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
+import com.qingqing.test.aspect.validate.IpLoginValid;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.KeyAndValue;
 import com.qingqing.test.bean.base.SimpleResponse;
@@ -366,6 +367,7 @@ public class UtilsController {
     }
 
     @RequestMapping("cron_task/add")
+    @IpLoginValid
     public @ResponseBody
     ProtoBufResponse.SimpleResponse addCronTask(@RequestBody TestCronTask cronTask) {
         if(cronTask.getId() == null || cronTask.getId() == 0){
@@ -380,6 +382,7 @@ public class UtilsController {
     }
 
     @RequestMapping("cron_task/edit")
+    @IpLoginValid
     public String editCronTask(@RequestParam(value="id", defaultValue = "0") Long id, Model model){
         if(id > 0){
             TestCronTask task = testCronTaskService.findById(id);
@@ -389,6 +392,7 @@ public class UtilsController {
     }
 
     @RequestMapping("cron_task/del")
+    @IpLoginValid
     public @ResponseBody
     ProtoBufResponse.SimpleResponse delCronTask(@RequestParam("id") Long id) {
         testCronTaskService.deleted(id);
@@ -567,7 +571,7 @@ public class UtilsController {
     @RequestMapping("ip/query_by_ip")
     @ResponseBody
     public SingleResponse<String> queryUserName(@ProtoRequestBody SimpleStringRequest request){
-        TestUserIp userIpBean = userIpManager.getUserInfo(request.getData());
+        TestUserIp userIpBean = userIpManager.getUserInfoIncTmp(request.getData());
         String userName = "";
         if(userIpBean != null){
             userName = userIpBean.getUserName();

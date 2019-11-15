@@ -296,7 +296,7 @@ public class OrderManager {
             TimeParam.Builder timeBuilder = TimeParam.newBuilder();
             Date courseDate = addOrderBean.getStartCourseTime();
             Integer halfHourLength = classHour / 5;
-            Integer start = 0;
+            Integer start = addOrderBean.getStartBlock();
             for(int i = 0; i < courseTimes; i++){
                 timeBuilder.setDate(TimeUtil.dateToString(courseDate, TimeUtil.DATE_TO_YEAR_MONTH_DAY));
                 timeBuilder.setStartBlock(start);

@@ -2,16 +2,20 @@ package com.qingqing.test.manager;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Sets;
 import com.qingqing.common.web.manager.HttpClientManagerV2;
+import com.qingqing.test.util.QingFileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -78,7 +82,7 @@ public class QingApiLabManager {
         return "null";
     }
 
-    private final String phoneToUserId(String userType, String phoneNumber, String session){
+    public final String phoneToUserId(String userType, String phoneNumber, String session){
 //        String requestData = "{\"lan_ip\":\"172.22.7.82\",\"userType\":\"%s\",\"userId\":\"\",\"qingqingUserId\":\"\",\"phoneNumber\":\"%s\"}";
         JSONObject requestData = new JSONObject();
         requestData.put("lan_ip", "172.22.7.82");
@@ -113,5 +117,25 @@ public class QingApiLabManager {
                 "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36");
 
         return  headers;
+    }
+
+    public void setHttpClientManagerV2(HttpClientManagerV2 httpClientManagerV2) {
+        this.httpClientManagerV2 = httpClientManagerV2;
+    }
+
+    public static void main(String[] args) throws IOException {
+        HttpClientManagerV2 httpClientManagerV2 = new HttpClientManagerV2(3000, 30000,
+                Sets.<String>newHashSet(), null, null);
+        httpClientManagerV2.setMaxTotal(1023);
+        httpClientManagerV2.setIsUseV1(false);
+
+        QingApiLabManager labManager = new QingApiLabManager();
+        labManager.setHttpClientManagerV2(httpClientManagerV2);
+
+        List<String> phones = QingFileUtils.readLines("D://sql//pn.txt");
+        for (String phone : phones) {
+            String teacherId = labManager.phoneToUserId("teacher", phone, "b6c8ee5d-29e5-4a00-be29-735d3c7d26dc");
+            System.out.println(phone + "," + teacherId);
+        }
     }
 }

@@ -141,7 +141,7 @@ public class EnvClient implements Client {
     }
 
     private String formatUrl(String url) throws UnsupportedEncodingException {
-        String host = getHost();
+        String host = getHost(url);
         url = URLDecoder.decode(url, "utf-8");
 
         String finalUrl = url.replace("{host}", host);
@@ -156,6 +156,9 @@ public class EnvClient implements Client {
         }
 
         String env = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV);
+        if("hjl".equals(env) && url.contains("passportsvc")){
+            env = "fws";
+        }
         finalUrl = finalUrl.replace("{env}", env == null? "":env);
 
         finalUrl = finalUrl.replace("cn//", "cn/");
@@ -163,15 +166,15 @@ public class EnvClient implements Client {
         return finalUrl;
     }
 
-    protected String getHost(){
+    protected String getHost(String url){
 //        if(EnvHandlerInteceptor.isLocalDebug()){
 //            return EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.IP) + ":" + EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.LOCAL_PORT);
 //        }else{
-            return getEnvHost();
+            return getEnvHost(url);
 //        }
     }
 
-    private String getEnvHost(){
+    private String getEnvHost(String url){
         String host = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.HOST);
         if(host != null){
             return host;
@@ -184,9 +187,12 @@ public class EnvClient implements Client {
 
         Env env = Env.valueOf(envValue);
         switch (env){
+            case hjl:
+                if(url.contains("passportsvc")){
+                    return "gateway.fws.idc.cedu.cn";
+                }
             case dev:
             case tst:
-            case hjl:
             case pfm:
                 return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
             case on_line:

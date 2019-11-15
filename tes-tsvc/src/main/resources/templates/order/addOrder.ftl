@@ -246,12 +246,53 @@
 
                                                         <!-- 老师的相关信息 -->
                                                         <div class="form-group">
-                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startCourseTime">首次上课时间:</label>
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startCourseTime">首次上课日期:</label>
                                                             <div class="input-group col-xs-12 col-sm-6">
                                                                 <input class="form-control date-picker" id="startCourseTime" type="text" />
                                                                 <span class="input-group-addon">
                                                                             <i class="icon-calendar bigger-110"></i>
                                                                         </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 老师的相关信息 -->
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startBlock">开始上课时间:</label>
+                                                            <div class="input-group col-xs-12 col-sm-6">
+                                                                <select class="width-80 chosen-select" id="startBlock" data-placeholder="开始上课时间...">
+                                                                    <option value="-4">06:00</option>
+                                                                    <option value="-3">06:30</option>
+                                                                    <option value="-2">07:00</option>
+                                                                    <option value="-1">07:30</option>
+                                                                    <option value="0" selected="selected">08:00</option>
+                                                                    <option value="1">08:30</option>
+                                                                    <option value="2">09:00</option>
+                                                                    <option value="3">09:30</option>
+                                                                    <option value="4">10:00</option>
+                                                                    <option value="5">10:30</option>
+                                                                    <option value="6">11:00</option>
+                                                                    <option value="7">11:30</option>
+                                                                    <option value="8">12:00</option>
+                                                                    <option value="9">12:30</option>
+                                                                    <option value="10">13:00</option>
+                                                                    <option value="11">13:30</option>
+                                                                    <option value="12">14:00</option>
+                                                                    <option value="13">14:30</option>
+                                                                    <option value="14">15:00</option>
+                                                                    <option value="15">15:30</option>
+                                                                    <option value="16">16:00</option>
+                                                                    <option value="17">16:30</option>
+                                                                    <option value="18">17:00</option>
+                                                                    <option value="19">17:30</option>
+                                                                    <option value="20">18:00</option>
+                                                                    <option value="21">18:30</option>
+                                                                    <option value="22">19:00</option>
+                                                                    <option value="23">19:30</option>
+                                                                    <option value="24">20:00</option>
+                                                                    <option value="25">20:30</option>
+                                                                    <option value="26">21:00</option>
+                                                                    <option value="27">21:30</option>
+                                                                </select>
                                                             </div>
                                                         </div>
 
@@ -803,7 +844,8 @@
             strengthenType :strengthenType,
             normalTimes :normalTimes,
             strengthenTimes :strengthenTimes,
-            servicePackageId : servicePackageId
+            servicePackageId : servicePackageId,
+            startBlock : $("#startBlock").val()
         };
 
         var request = {
@@ -1020,10 +1062,8 @@
     function checkPay(){
         var data = {
             qingqingOrderId : $("#qingqingOrderId").text(),
-            orderAmount : $("#orderAmountTxt").text(),
             studentId : $("#studentId").val(),
             coursePriceType : $("#coursePriceType").val(),
-            payType : $("#payType").val()
         };
 
         var request = {
@@ -1791,7 +1831,8 @@
         $('#modal-wizard .wizard-actions .btn[data-dismiss=modal]').removeAttr('disabled');
 
         $("th,td").addClass("center");
-        $("#payType_chosen").css("width", "331px;");
+        $("#payType_chosen").css("width", "331px");
+        $("#startBlock_chosen").css("width", "160px");
         var startDate = new Date();
         startDate.setDate(startDate.getDate() + 1);
         $(".date-picker").datepicker({format : 'yyyy-mm-dd', startDate: formatDate(startDate.getTime()),autoclose:true}).next().on(ace.click_event, function(){

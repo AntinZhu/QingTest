@@ -6,6 +6,7 @@ import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.StringUtils;
+import com.qingqing.test.aspect.validate.IpLoginValid;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.IdAndBoolBean;
@@ -103,6 +104,7 @@ public class CommonMockController {
 
     @RequestMapping(value = "type/add", method = RequestMethod.POST)
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse addRuleType(@RequestBody MockType mockType){
         if(mockType.getId() != null){
             try{
@@ -123,6 +125,7 @@ public class CommonMockController {
 
     @RequestMapping(value = "type/delete", method = RequestMethod.POST)
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse deleteRuleType(@RequestBody SimpleLongRequest request){
         mockTypeService.delete(request.getData());
 
@@ -163,6 +166,7 @@ public class CommonMockController {
 
     @RequestMapping(value = "rule/add", method = RequestMethod.POST)
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse addRule(@RequestBody MockRule mockRule){
         if(mockRule.getId() != null){
             mockRuleService.update(mockRule);
@@ -176,6 +180,7 @@ public class CommonMockController {
 
     @RequestMapping(value = "rule/set_deleted", method = RequestMethod.POST)
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse markDeleted(@RequestBody IdAndBoolBean request){
         mockRuleService.markDelete(request.getId(), request.getBool());
 
@@ -185,6 +190,7 @@ public class CommonMockController {
 
     @RequestMapping(value = "rule/set_default", method = RequestMethod.POST)
     @ResponseBody
+    @IpLoginValid
     public SimpleResponse markDefault(@RequestBody IdAndBoolBean request){
         if(request.getBool()){
             MockRule ruleType = mockRuleService.findById(request.getId());

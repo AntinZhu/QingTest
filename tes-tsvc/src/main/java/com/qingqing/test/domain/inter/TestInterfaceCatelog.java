@@ -13,6 +13,41 @@ public class TestInterfaceCatelog {
         }
     };
 
+    public static Composer<CatelogRef, TestInterfaceCatelog> REF_COMPOSER = new Composer<CatelogRef, TestInterfaceCatelog>() {
+        @Override
+        public CatelogRef getComposerId(TestInterfaceCatelog testInterfaceCatelog) {
+            return new CatelogRef(testInterfaceCatelog.getRefType(), testInterfaceCatelog.getRefValue());
+        }
+    };
+
+    public static class CatelogRef{
+        private CatelogRefType refType;
+        private String refValue;
+
+        public CatelogRef(CatelogRefType refType, String refValue) {
+            this.refType = refType;
+            this.refValue = refValue;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof CatelogRef)) return false;
+
+            CatelogRef that = (CatelogRef) o;
+
+            if (refType != that.refType) return false;
+            return refValue != null ? refValue.equals(that.refValue) : that.refValue == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = refType.hashCode();
+            result = 31 * result + (refValue != null ? refValue.hashCode() : 0);
+            return result;
+        }
+    }
+
     private Long id;
     private String catelogName;
     private Integer sortNum;
@@ -24,6 +59,7 @@ public class TestInterfaceCatelog {
     private Date createTime;
     private String clazz;
     private Date lastUpdateTime;
+    private String cacheCatelogIndex;
 
     public Long getId() {
         return id;
@@ -111,5 +147,13 @@ public class TestInterfaceCatelog {
 
     public void setClazz(String clazz) {
         this.clazz = clazz;
+    }
+
+    public String getCacheCatelogIndex() {
+        return cacheCatelogIndex;
+    }
+
+    public void setCacheCatelogIndex(String cacheCatelogIndex) {
+        this.cacheCatelogIndex = cacheCatelogIndex;
     }
 }

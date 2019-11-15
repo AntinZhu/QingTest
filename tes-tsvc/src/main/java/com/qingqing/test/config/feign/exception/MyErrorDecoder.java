@@ -44,6 +44,7 @@ public class MyErrorDecoder implements ErrorDecoder {
                     if(StringUtils.isEmpty(hintMsg)){
                         hintMsg = errorMsg;
                     }
+                    logger.info("errorMsg:{} hintMsg:{}", errorMsg, hintMsg);
                     return new RequestValidateException(errorMsg, hintMsg);
                 }
                 return new RequestValidateException("", "服务器返回：" + response.status());

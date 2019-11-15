@@ -314,7 +314,7 @@
                         type: 'select2',
                         value : resu.interfaceInfo.inter.requestUserType,
                         source: userTypeArr,
-                        success: function(e, response, newValue) {
+                        success: function(response, newValue) {
                             $(this).prev("input").val(newValue);
                         }
                     });

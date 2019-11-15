@@ -53,6 +53,13 @@
                         </div>
                     </div>
 
+                    <div class="col-xs-3 col-sm-3">
+                    </div>
+
+                    <div class="col-xs-3 col-sm-3">
+                        <a href="${base}/v1/download/cross">下载本地调试辅助工具</a>
+                    </div>
+
                     <div class="row col-xs-12" id="taskList">
                     </div>
                 </div>
@@ -83,7 +90,7 @@
             var html = task_html;
             html = html.replace(new RegExp("{idx}","gm"), task.id);
             html = html.replace(new RegExp("{desc}","gm"), task.interfaceName);
-            html = html.replace(new RegExp("{url}","gm"), "${base}/v1/test/json_format?cross=1&id=" + task.id);
+            html = html.replace(new RegExp("{url}","gm"), "${base}/v1/test/json_format?cross=1&id=" + task.id + "&catelogIndex=" + task.catelogIndex);
             html = html.replace(new RegExp("{content}","gm"), task.interfaceUrl);
 
             try{

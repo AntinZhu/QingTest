@@ -20,4 +20,6 @@ public interface TestInterfaceCatelogMapper {
     void deleteById(Long id);
 
     TestInterfaceCatelog selectByRefTypeAndRefValue(@Param("refType") CatelogRefType refType, @Param("refValue") String refValue);
+
+    void updateCatelogIndex(@Param("id") Long id, @Param("catelogIndex") String catelogIndex);
 }

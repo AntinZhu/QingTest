@@ -49,7 +49,7 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
 
         String requestIp = RequestExtract.getServerIpByRequest((HttpServletRequest)request);
         if(!isIgnore(request.getRequestURI(), request.getContextPath())){
-            TestUserIp userIp = userIpManager.getUserInfo(requestIp);
+            TestUserIp userIp = userIpManager.getUserInfoIncTmp(requestIp);
             if(userIp == null){
                 response.sendRedirect(request.getContextPath() + PAGE + "?requestUrl=" + URLEncoder.encode(request.getRequestURI().replace(request.getContextPath(), "")  + "?" + request.getQueryString(), "utf-8"));
                 wxNotifyManager.selfNotify(buildNewIpFilterContent(requestIp));
@@ -87,7 +87,7 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
         if(modelAndView != null){
             modelAndView.addObject("qing_user_name", userIpManager.getUserNameByIp(requestIp));
             modelAndView.addObject("qing_user_ip", requestIp);
-            modelAndView.addObject("qing_user", userIpManager.getUserInfo(requestIp));
+            modelAndView.addObject("qing_user", userIpManager.getUserInfoIncTmp(requestIp));
         }
     }
 }

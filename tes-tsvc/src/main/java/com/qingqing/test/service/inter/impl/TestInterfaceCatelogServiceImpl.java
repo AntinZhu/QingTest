@@ -65,4 +65,9 @@ public class TestInterfaceCatelogServiceImpl implements TestInterfaceCatelogServ
     public TestInterfaceCatelog selectByRefTypeAndRefValue(CatelogRefType refType, String refValue) {
         return testInterfaceCatelogMapper.selectByRefTypeAndRefValue(refType, refValue);
     }
+
+    @Override
+    public void updateCatelogIndex(Long id, String catelogIndex) {
+        testInterfaceCatelogMapper.updateCatelogIndex(id, catelogIndex);
+    }
 }
