@@ -85,7 +85,7 @@
                                             <th>用户IP</th>
                                             <th>状态</th>
                                             <th>操作</th>
-                                            </tr>
+                                        </tr>
                                     </thead>
 
                                     <tbody  id= "ruleListBody">

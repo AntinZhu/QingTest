@@ -1,4 +1,5 @@
 <div class="navbar navbar-default" id="navbar">
+    <input type="hidden" id="qing-base" value="${base}" />
     <script type="text/javascript">
         try{ace.settings.check('navbar' , 'fixed')}catch(e){}
     </script>

@@ -3,6 +3,21 @@ $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-b
 $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>'+
 '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
 
+function replaceLast(alt, lastNum){
+    var newAlt = "";
+
+    var splitArr = alt.split("-");
+    for(var idx in splitArr){
+        var altItem = splitArr[idx];
+        if(idx == splitArr.length - 1){
+            altItem = lastNum;
+        }
+        newAlt += newAlt ==""? altItem : "-" + altItem;
+    }
+
+    return newAlt;
+}
+
 function cloneInput(){
     var inputClone = $(this).parent().parent().parent().clone();
     inputClone.children("div .addInputDiv").remove();
@@ -22,21 +37,6 @@ function cloneInput(){
     editableInit();
 
     notifyParamChanged($(this).parent().parent().parent().children("input").attr("trig"));
-}
-
-function replaceLast(alt, lastNum){
-    var newAlt = "";
-
-    var splitArr = alt.split("-");
-    for(var idx in splitArr){
-        var altItem = splitArr[idx];
-        if(idx == splitArr.length - 1){
-            altItem = lastNum;
-        }
-        newAlt += newAlt ==""? altItem : "-" + altItem;
-    }
-
-    return newAlt;
 }
 
 function removeInput(){

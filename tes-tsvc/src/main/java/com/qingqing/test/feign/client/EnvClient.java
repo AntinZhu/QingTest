@@ -162,6 +162,9 @@ public class EnvClient implements Client {
         finalUrl = finalUrl.replace("{env}", env == null? "":env);
 
         finalUrl = finalUrl.replace("cn//", "cn/");
+        finalUrl = finalUrl.replace("{empty}", "");
+        finalUrl = finalUrl.replace("http:///", "");
+
 //        logger.info("finalUrl:" + finalUrl);
         return finalUrl;
     }

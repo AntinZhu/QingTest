@@ -391,17 +391,32 @@
 //            });
 
             $(document).ready(function(){
-            <#if ((interfaceBean.inter.id)!0) gt 0>
-                $("#interfaceId").val(${interfaceBean.inter.id});
-                $("#catelogName").val("${interfaceBean.catelog.catelogName}");
-                $("#parentCatelogId").val("${interfaceBean.catelog.id}");
-                $("#interfaceName").val("${interfaceBean.inter.interfaceName}");
-                $("#interfaceUrl").val("${interfaceBean.inter.interfaceUrl}");
-                $("#nextPageUrl").val('${interfaceBean.inter.nextPageUrl!""}');
-                var paramDetail = '${interfaceBean.inter.paramDetail!"{}"}';
-                if(paramDetail.indexOf("\") == -1){
-                    paramDetail = paramDetail.replace(new RegExp("\","gm"), "\\");
-                }
+            <#if ((id)!0) gt 0>
+                var request = {
+                    url : "${base}/v1/test/interface/${id}.json",
+                    data : null,
+                    handlerFunc : editEdit,
+                    isASync : true,
+                    failTitle :"查询接口信息出错:"
+                };
+
+                commonAjaxRequest(request);
+
+                $(".qing_input_tip").addClass("hide");
+            <#else>
+                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
+            </#if>
+            });
+
+            function editEdit(resp) {
+                var interfaceBean = resp.interfaceInfo;
+                $("#interfaceId").val(interfaceBean.inter.id);
+                $("#catelogName").val(interfaceBean.catelog.catelogName);
+                $("#parentCatelogId").val(interfaceBean.catelog.id);
+                $("#interfaceName").val(interfaceBean.inter.interfaceName);
+                $("#interfaceUrl").val(interfaceBean.inter.interfaceUrl);
+                $("#nextPageUrl").val(interfaceBean.inter.nextPageUrl);
+                var paramDetail = interfaceBean.inter.paramDetail;
                 $("#paramDetail").val(paramDetail);
                 if(paramDetail != ""){
                     paramInfo = showParam({paramData:paramDetail, isEditStatus:true, valueChangedNotifyId:"paramDetail"});
@@ -413,24 +428,26 @@
                     $("#hasParam").val(0);
                 }
 
-                var interfaceType = "${interfaceBean.inter.interfaceType}";
+                var interfaceType = interfaceBean.inter.interfaceType;
+                if(interfaceType == null){
+                    interfaceType = "PT";
+                }
                 $(".qing_interfaceType.btn-primary").removeClass("btn-primary");
                 $(".qing_interfaceType[value=" + interfaceType + "]").addClass("btn-primary");
                 $("#interfaceType").val(interfaceType);
 
-                var requestUserType = "${interfaceBean.inter.requestUserType!'student'}";
+                var requestUserType = interfaceBean.inter.requestUserType;
+                if(requestUserType == null){
+                    requestUserType = "student";
+                }
                 $(".qing_requestUserType.btn-primary").removeClass("btn-primary");
                 $(".qing_requestUserType[value=" + requestUserType + "]").addClass("btn-primary");
                 $("#requestUserType").val(requestUserType);
-                $("#className").val("${(interfaceBean.inter.paramClassName)!''}");
+                $("#className").val(interfaceBean.inter.paramClassName);
 
                 // TODO 父的cateId
-                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId", ${interfaceBean.catelog.id});
-                $(".qing_input_tip").addClass("hide");
-            <#else>
-                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
-            </#if>
-            });
+                showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId", interfaceBean.catelog.id);
+            }
 
             $("#generateParam").click(function () {
                 var className = $('#className').val().trim();

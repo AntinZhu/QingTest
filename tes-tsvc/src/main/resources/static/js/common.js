@@ -743,7 +743,7 @@ function formatNumber(n) {
     return n[1] ? n : '0' + n
 }
 
-function piSingleRequest(base, env, url) {
+function piSingleRequest(base, env, url, callback) {
     var data = {
         url : url,
         param :"{}",
@@ -754,7 +754,27 @@ function piSingleRequest(base, env, url) {
     var request = {
         url : base + "/v1/common/pi.json",
         data : data,
-        handlerFunc : handleIgnore,
+        handlerFunc : callback == null? handleIgnore:callback,
+        isASync : true,
+        failTitle :"请求失败:",
+        env : env
+    };
+
+    commonAjaxRequest(request);
+}
+
+function piSingleRequestV2(base, env, url, callback) {
+    var data = {
+        url : url,
+        param :"{}",
+        userId:22367,
+        userType : 'student'
+    };
+
+    var request = {
+        url : base + "/v1/common/pi_v2.json",
+        data : data,
+        handlerFunc : callback == null? handleIgnore:callback,
         isASync : true,
         failTitle :"请求失败:",
         env : env

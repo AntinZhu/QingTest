@@ -46,6 +46,7 @@
     <script src="${base}/static/js/json/jsonlint.js"></script>
     <script src="${base}/static/js/json/jquery.numberedtextarea.js"></script>
     <script src="${base}/static/js/param.js"></script>
+    <script src="${base}/static/js/paramResult.js"></script>
 
 </head>
 <body>
@@ -146,7 +147,7 @@
                                                                 <h3  id="param-step-2" class="accordion-header">请求参数</h3>
                                                                 <div>
                                                                     <div class="col-md-12" style="padding:0;position:relative;height:100%;">
-                                                                        <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
+                                                                        <div style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
                                                                             <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
                                                                             <div class="ro" id="json-request" style="padding:0px 25px;white-space: pre-line;">
                                                                                 <span data-type="object"><i style="cursor:pointer;" class="fa icon-minus" onclick="hide(this)"></i>{<br><br>}</span></div>
@@ -160,10 +161,13 @@
 
                                                                     <div>
                                                                         <div class="col-md-12" style="padding:0;position:relative;height:100%;">
-                                                                            <div id="right-box" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
+                                                                            <div id="json-response-div" style="width:100%;height: 87vh;min-height:520px;border:solid 1px #f6f6f6;border-radius:0;resize: none;overflow-y:scroll; outline:none;position:relative;font-size:12px;padding-top:40px;">
                                                                                 <div id="line-num" style="background-color:#fafafa;padding:0px 8px;float:left;border-right:dashed 1px #E5EBEE;display:none;z-index:-1;color:#999;position:absolute;text-align:center;over-flow:hidden;"><div>1<div></div></div></div>
                                                                                 <div class="ro" id="json-response" style="padding:0px 25px;white-space: pre-line;">
                                                                                     <span data-type="object"><i style="cursor:pointer;" class="fa icon-minus" onclick="hide(this)"></i>{<br><br>}</span></div>
+                                                                            </div>
+
+                                                                            <div id="dataResultDiv" class="hide">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -352,7 +356,7 @@
             }
 
             function fillDefaultValue(paramArr){
-                var defaultObj = new Object(${defaultObj});
+                var defaultObj = new Object(${defaultObj!"{}"});
                fillDefaultValueWithDefault(paramArr, defaultObj);
 
                 return JSON.stringify(paramArr);
@@ -567,8 +571,15 @@
             }
 
             function handlerInvokeResult(resu){
+            <#if ((dataResultFunction)!'') == ''>
                 jsonShow(resu.data, "json-response");
                 afterInv(resu.data);
+            <#else>
+                jsonShow(resu.data, "json-response");
+                $("#json-response-div").addClass("hide");
+                $("#dataResultDiv").removeClass("hide");
+                ${dataResultFunction}(resu)
+            </#if>
             };
 
             function handlerLocalInvokeResult(resu){

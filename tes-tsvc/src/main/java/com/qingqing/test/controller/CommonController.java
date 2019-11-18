@@ -10,6 +10,7 @@ import com.qingqing.test.bean.common.UserCommonRequest;
 import com.qingqing.test.client.CommonPbClient;
 import com.qingqing.test.client.PbClient;
 import com.qingqing.test.client.PiClient;
+import com.qingqing.test.client.PiClientV2;
 import com.qingqing.test.client.PtClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,8 @@ public class CommonController {
     private PtClient ptClient;
     @Autowired
     private CommonPbClient commonPbClient;
+    @Autowired
+    private PiClientV2 piClientV2;
 
     @RequestMapping("crond_task")
     @ResponseBody
@@ -70,6 +73,16 @@ public class CommonController {
             return  piClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
         }else{
             return piClient.commonRequest(request.getUrl(), request.getParam());
+        }
+    }
+
+    @RequestMapping("pi_v2")
+    @ResponseBody
+    public String piRequestV2(@RequestBody UserCommonRequest request){
+        if(request.getUserId() != null){
+            return  piClientV2.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+        }else{
+            return piClientV2.commonRequest(request.getUrl(), request.getParam());
         }
     }
 

@@ -10,6 +10,7 @@ import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.RequestValidateException;
 import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.JsonUtil;
+import com.qingqing.common.util.StringUtils;
 import com.qingqing.common.web.protobuf.ProtoRequestBody;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
@@ -133,9 +134,10 @@ public class TestController {
         if(interfaceId > 0){
             TestInterfaceBean interfaceBean = testInterfaceManager.getInterfaceBean(interfaceId);
             model.addAttribute("interfaceBean", interfaceBean);
+            model.addAttribute("id", interfaceId);
         }
         return "interface/editInterface";
-    }
+     }
 
     @RequestMapping("/interface/save")
     @ProtoResponseBody
