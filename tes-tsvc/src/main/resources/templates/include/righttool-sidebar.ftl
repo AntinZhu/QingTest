@@ -461,6 +461,68 @@
                     </div>
                 </div>
             </div>
+
+            <div class="group">
+                <h3 class="accordion-header">在线旁听2.0分享码</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">分享码：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" id="course_list_v2_code_input" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="course_listen_v2_converter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label no-padding-right" style="text-align: right">groupOrderCourseId</label>
+
+                            <div class="col-sm-7">
+                                 <span class="input-icon">
+                                     <input type="text" id="course_listen_v2_group_order_course_id"/>
+                                 </span>
+                            </div>
+
+                            <label class="col-sm-4 control-label no-padding-right" style="text-align: right">有效期：</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input class="form-control date-picker" id="course_listen_v2_timepicker_date" type="text" />
+                                    <span class="input-group-addon">
+                                        <i class="icon-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+
+                                <div class="input-group bootstrap-timepicker">
+                                    <input id="course_listen_v2_timepicker" type="text" class="form-control"/>
+                                    <span class="input-group-addon">
+																<i class="icon-time bigger-110"></i>
+															</span>
+                                </div>
+                            </div>
+
+                            <label class="col-sm-4 control-label no-padding-right" style="text-align: right">（直播/回放）：</label>
+                            <div class="col-sm-8">
+                            <span class="input-icon">
+                                            <select class="form-control" id="course_listen_v2_code_type">
+                                                <option value="1">直播</option>
+                                                <option value="2">回放</option>
+                                            </select>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div><!-- /#ace-settings-container -->
@@ -1141,5 +1203,102 @@
         }
 
         $("#user_ip_conv").val(resu.resultList);
+    }
+
+    $("#course_listen_v2_converter").click(function(){
+        var code = $("#course_list_v2_code_input").val();
+        var groupOrderCourse = $("#course_listen_v2_group_order_course_id").val();
+        var date = $("#course_listen_v2_timepicker_date").val();
+        var time = $("#course_listen_v2_timepicker").val();
+        var type = $("#course_listen_v2_code_type").val();
+
+        if (code != null && code != "") {
+            decodeCourseListenV2(code);
+        } else if (groupOrderCourse != null && groupOrderCourse != "" && date != null && date != "" && time != null && time != "" && type != null && type != "") {
+            courseListenV2Encode(groupOrderCourse,date,time,type);
+        }
+    });
+
+    function decodeCourseListenV2(code){
+        var obj = new Object();
+
+        var data = {
+            url : "/svc/api/pi/v1/course_listen_v2_test/decode?code="+code,
+            param: JSON.stringify(obj),
+            userId:1,
+            userType : 'admin'
+        }
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : handleCourseListenV2Decode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonRestAjaxRequest(request);
+    }
+
+    $('#course_listen_v2_timepicker').timepicker({
+        minuteStep: 1,
+        showSeconds: true,
+        showMeridian: false
+    }).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+
+
+    function handleCourseListenV2Decode(r) {
+        if(r==null || r==""){
+            $.gritter.add({
+                title : '错误',
+                text : '解码失败',
+                class_name : 'gritter-info gritter-center'
+            });
+        }
+        console.log(r);
+
+        var date = formatDate_yyyyMMDD(new Number(r.endEffectiveTime));
+        var time = formatDate_hhmmss(new Number(r.endEffectiveTime));
+        $("#course_listen_v2_group_order_course_id").val(r.groupOrderCourseId);
+        $("#course_listen_v2_timepicker_date").val(date);
+
+        var type = 1
+        if (r.shareCodeType == 'playback') {
+            type = 2;
+        } else {
+            type = 1;
+        }
+        $("#course_listen_v2_timepicker").val(time)
+        $("#course_listen_v2_code_type").val(type);
+    }
+
+    function courseListenV2Encode(groupOrderCourse,date,time,type) {
+        var t=date+" "+time;
+        var timep =toShijiancuo(t);
+
+        var obj = new Object();
+
+        var data = {
+            url: "/svc/api/pi/v1/course_listen_v2_test/encode?groupOrderCourseId=" + groupOrderCourse + "&endEffectiveTime=" + timep + "&shareCodeTypeValue=" + type + "&isAdmin=false",
+            param: JSON.stringify(obj),
+            userId:1,
+            userType : 'admin'
+        }
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : handleCourseListenV2Encode,
+            isASync : true,
+            failTitle :"加密结果:"
+        };
+
+        commonAjaxRequest(request);
+    }
+
+    function handleCourseListenV2Encode(r) {
+        $("#course_list_v2_code_input").val(r.data);
     }
 </script>

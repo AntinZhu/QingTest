@@ -157,6 +157,64 @@ function commonAjaxRequest(request){
     return result;
 }
 
+function commonRestAjaxRequest(request){
+    var url = request.url;
+    var data = request.data;
+    var handlerFunc = request.handlerFunc;
+    var isASync = request.isASync;
+    var failTitle = request.failTitle;
+    var env = request.env;
+    var otherData = request.otherData;
+    var guid = request.guid;
+    var headers = request.headers;
+
+    var result = true;
+    if(env == null){
+        env = "";
+    }
+    if(guid == null){
+        guid = "";
+    }
+
+    if(url.indexOf("?") == -1){
+        url += "?env=" + env + "&guid=" + guid
+    }else{
+        url += "&env=" + env + "&guid=" + guid
+    }
+
+    $.ajax({
+        type : "POST",
+        url : url,
+        timeout : 300000,
+        headers: headers,
+        data : JSON.stringify(data),
+        dataType : 'json',
+        crossDomain: headers != null,
+        async :isASync,
+        contentType: 'application/json',
+        success : function(resu) {
+            result = handlerFunc(resu, otherData);
+        },
+        error :function (jqXHR, textStatus, errorThrown) {
+            switch (jqXHR.status){
+                case 422:
+                    handlerErrorStatusCode(422, jqXHR.responseText);
+                    break;
+            }
+        },
+        statusCode: {
+            404: function() {
+                handlerErrorStatusCode(404);
+            },
+            500: function() {
+                handlerErrorStatusCode(500);
+            }
+        }
+    });
+    return result;
+}
+
+
 function handlerErrorStatusCode(errorStatus, resu){
     switch (errorStatus){
         case 500:
@@ -617,6 +675,14 @@ function formatDate_yyyyMMDD(shijianchuo){
     var mm = time.getMinutes();
     var s = time.getSeconds();
     return y + '-' + m + "-" + d;
+}
+
+function formatDate_hhmmss(shijianchuo){
+    var time = new Date(shijianchuo);
+    var h = time.getHours();
+    var mm = time.getMinutes();
+    var s = time.getSeconds();
+    return h + ':' + mm + ":" + s;
 }
 
 function toShijiancuo(dateDtring){
