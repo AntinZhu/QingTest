@@ -495,7 +495,7 @@
                             <label class="col-sm-4 control-label no-padding-right" style="text-align: right">有效期：</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <input class="form-control date-picker" id="course_listen_v2_timepicker_date" type="text" />
+                                    <input class="form-control date-picker" id="course_listen_v2_timepicker_date" type="text" data-date-format="yyyy-mm-dd"/>
                                     <span class="input-group-addon">
                                         <i class="icon-calendar bigger-110"></i>
                                     </span>
@@ -1315,4 +1315,8 @@
     function handleCourseListenV2Encode(r) {
         $("#course_list_v2_code_input").val(r.data);
     }
+
+    $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
 </script>
