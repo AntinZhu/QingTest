@@ -517,8 +517,19 @@
                                                 <option value="2">回放</option>
                                             </select>
                                         </span>
+
                             </div>
-                        </div>
+
+                            <label class="col-sm-4 control-label no-padding-right"
+                                   style="text-align: right">admin权限：</label>
+                            <div class="col-sm-8">
+                            <span class="input-icon">
+                                            <select class="form-control" id="course_listen_v2_admin_type">
+                                                <option value="true">是</option>
+                                                <option value="false">否</option>
+                                            </select>
+                                        </span>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -1211,11 +1222,13 @@
         var date = $("#course_listen_v2_timepicker_date").val();
         var time = $("#course_listen_v2_timepicker").val();
         var type = $("#course_listen_v2_code_type").val();
+        var admin= $("#course_listen_v2_admin_type").val();
+
 
         if (code != null && code != "") {
             decodeCourseListenV2(code);
         } else if (groupOrderCourse != null && groupOrderCourse != "" && date != null && date != "" && time != null && time != "" && type != null && type != "") {
-            courseListenV2Encode(groupOrderCourse,date,time,type);
+            courseListenV2Encode(groupOrderCourse,date,time,type,admin);
         }
     });
 
@@ -1227,7 +1240,7 @@
             param: JSON.stringify(obj),
             userId:1,
             userType : 'admin'
-        }
+        };
 
         var request = {
             url : "${base}/v1/common/pi.json",
@@ -1263,6 +1276,7 @@
         var time = formatDate_hhmmss(new Number(r.endEffectiveTime));
         $("#course_listen_v2_group_order_course_id").val(r.groupOrderCourseId);
         $("#course_listen_v2_timepicker_date").val(date);
+        $("#course_listen_v2_admin_type").val(String(r.admin));
 
         var type = 1
         if (r.shareCodeType == 'playback') {
@@ -1274,18 +1288,18 @@
         $("#course_listen_v2_code_type").val(type);
     }
 
-    function courseListenV2Encode(groupOrderCourse,date,time,type) {
+    function courseListenV2Encode(groupOrderCourse,date,time,type,admin) {
         var t=date+" "+time;
         var timep =toShijiancuo(t);
 
         var obj = new Object();
 
         var data = {
-            url: "/svc/api/pi/v1/course_listen_v2_test/encode?groupOrderCourseId=" + groupOrderCourse + "&endEffectiveTime=" + timep + "&shareCodeTypeValue=" + type + "&isAdmin=false",
+            url: "/svc/api/pi/v1/course_listen_v2_test/encode?groupOrderCourseId=" + groupOrderCourse + "&endEffectiveTime=" + timep + "&shareCodeTypeValue=" + type + "&isAdmin="+admin,
             param: JSON.stringify(obj),
             userId:1,
             userType : 'admin'
-        }
+        };
 
         var request = {
             url : "${base}/v1/common/pi.json",
