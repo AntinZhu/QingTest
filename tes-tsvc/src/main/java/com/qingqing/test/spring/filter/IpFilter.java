@@ -81,7 +81,8 @@ public class IpFilter implements Filter, QingScheduleable {
     }
 
     public void wxNotify(String newIp){
-        wxNotifyManager.selfNotify(buildNewIpNotifyContent(newIp));
+        return;
+//        wxNotifyManager.selfNotify(buildNewIpNotifyContent(newIp));
     }
 
     private String buildNewIpNotifyContent(String newIp){
