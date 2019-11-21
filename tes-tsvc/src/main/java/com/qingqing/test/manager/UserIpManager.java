@@ -49,7 +49,7 @@ public class UserIpManager implements ISyncable{
         if(user == null){
             user = tmpUserMapping.get(userIp);
             if(user != null){
-                Date tenMinsAgo = TimeUtil.minutesAfterNow(-5);
+                Date tenMinsAgo = TimeUtil.minutesAfterNow(-1);
 //                logger.info("tmp user:createTime:{} validate time:{}", TimeUtil.dateToString(user.getCreateTime()), TimeUtil.dateToString(tenMinsAgo));
                 if(user.getCreateTime().before(tenMinsAgo)){
                     user = null;

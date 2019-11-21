@@ -4,19 +4,6 @@
 <head>
     <title>刷性能测试环境数据</title>
     <#include "/include/resource.ftl" />
-    <link href="${base}/static/css/json/base.css" rel="stylesheet">
-    <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
-
-    <script src="${base}/static/js/json/hm.js"></script>
-    <script src="${base}/static/js/json/jquery.message.js"></script>
-    <script src="${base}/static/js/json/jquery.json.js"></script>
-    <script src="${base}/static/js/json/json2.js"></script>
-    <script src="${base}/static/js/json/jsonlint.js"></script>
-    <script src="${base}/static/js/json/jquery.numberedtextarea.js"></script>
-    <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
-    <script src="${base}/static/assets/js/bootstrap-tag.min.js"></script>
-    <script src="${base}/static/js/param.js"></script>
-
 </head>
 <body>
     <#include "/include/topbar.ftl" />

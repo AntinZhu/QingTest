@@ -164,7 +164,7 @@
         function handleTmpLogin(){
             $.gritter.add({
                 title : '提示:',
-                text : "提交成功，您将获得5分钟的临时登陆状态。待用户名审核通过后，将可一直使用。3秒后将跳转到目标页面...",
+                text : "提交成功，您将获得1分钟的临时登陆状态。待用户名审核通过后，将可一直使用。3秒后将跳转到目标页面...",
                 class_name : 'gritter-info gritter-center'
             });
 

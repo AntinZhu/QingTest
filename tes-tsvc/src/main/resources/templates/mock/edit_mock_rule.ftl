@@ -43,7 +43,6 @@
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
 
-    <script src="${base}/static/js/json/hm.js"></script>
     <script src="${base}/static/js/json/jquery.message.js"></script>
     <script src="${base}/static/js/json/jquery.json.js"></script>
     <script src="${base}/static/js/json/json2.js"></script>

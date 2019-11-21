@@ -7,7 +7,6 @@
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
 
-    <script src="${base}/static/js/json/hm.js"></script>
     <script src="${base}/static/js/json/jquery.message.js"></script>
     <script src="${base}/static/js/json/jquery.json.js"></script>
     <script src="${base}/static/js/json/json2.js"></script>
@@ -366,7 +365,7 @@
         $.gritter.add({
             title: '',
             text: getRespById($(this).attr("qing_id")),
-            class_name: 'gritter-info gritter-center'
+            class_name: 'gritter-warning gritter-center'
         });
 
         return false;
@@ -377,6 +376,12 @@
             var result = cacheResult[resultIdx];
             if(result.id == id){
                 return result.resp;
+//                try{
+//                    JSON.parse(result.resp);
+//                    return toFormatJson(result.resp);
+//                }catch(e){
+//                    return result.resp;
+//                }
             }
         }
 

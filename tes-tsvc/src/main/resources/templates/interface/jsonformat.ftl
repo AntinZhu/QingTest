@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title id = "qing_title">Hello World!</title>
-    <#include "/include/resource_uncompressed.ftl" />
+    <#include "/include/resource.ftl" />
 
     <style>
         .spinner-preview {
@@ -39,7 +39,7 @@
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
 
-    <script src="${base}/static/js/json/hm.js"></script>
+    <script src="${base}/static/js/json/clipboard.min.js"></script>
     <script src="${base}/static/js/json/jquery.message.js"></script>
     <script src="${base}/static/js/json/jquery.json.js"></script>
     <script src="${base}/static/js/json/json2.js"></script>
@@ -91,6 +91,26 @@
                                                             <a target="_blank" title="点击链接可查看调用日志" data-rel="tooltip" id = "logUrl" href="">
                                                                 <div class="widget-main" id="interfaceUrl"> Took the final exam. Phew! </div>
                                                             </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 请求的接口地址 -->
+                                                <div class="timeline-item clearfix hide" id="shareUrlDiv">
+                                                    <div class="timeline-info">
+                                                        <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
+                                                    </div>
+
+                                                    <div class="widget-box transparent">
+                                                        <div class="widget-header hidden"></div>
+
+                                                        <div class="widget-body">
+                                                            <div class="widget-main">
+                                                                <div id="shareUrl" style="float: left">Took the final exam. Phew!</div>
+                                                                <button class="btn btn-link btn-sm copy" data-clipboard-target="#shareUrl">
+                                                                    <i class="icon-share-alt biggr-100"></i>
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -246,6 +266,7 @@
 
             var paramInfo;
             var isCross = ${cross!1};
+            var catelogIdx;
             $(document).ready(function(){
                 refreshPage();
             });
@@ -330,6 +351,10 @@
                     jsonShow(resu.interfaceInfo.inter.paramDetail, "json-interface-detail");
                     var paramDetail = fillDefaultValue(JSON.parse(resu.interfaceInfo.inter.paramDetail));
                     paramInfo = showParam({paramData:paramDetail});
+                }
+
+                if(resu.interfaceInfo.catelog){
+                    catelogIdx = resu.interfaceInfo.catelog.cacheCatelogIndex;
                 }
 
                 if('${userType!""}' != ""){
@@ -588,6 +613,11 @@
                 afterInv(resu);
             };
 
+            $("#qing_param_copy").click(function(){
+                // 复制到粘贴板
+                copyToClipboard(location.href);
+            });
+
             function afterInv(responseData){
                 var goToNextPage = ${goToNextPage!0};
                 responseData = JSON.parse(responseData)
@@ -638,6 +668,8 @@
                     }
                     $(".param-ops").addClass("hide");
                 }
+
+                refreshShareUrl();
             });
 
             $("#param_default").click(function(){
@@ -675,6 +707,15 @@
 
                 commonAjaxRequest(request);
             });
+
+            function refreshShareUrl(){
+                if($("#paramChoose").val() > 0){
+                    $("#shareUrl").text("http://" + location.host + location.pathname + "?inv=1&id=${interfaceId}&paramId=" + id + "&catelogIndex=" + catelogIdx + "&env=" + $("#env").val());
+                    $("#shareUrlDiv").removeClass("hide");
+                }else{
+                    $("#shareUrlDiv").addClass("hide");
+                }
+            }
 
             $("#resetBtn").click(function() {
                 bootbox.prompt("取个名字", function(result) {
@@ -733,9 +774,19 @@
                 $("#env").val($(this).val());
 
                 refreshInterfaceUrl();
+                refreshShareUrl();
             });
 
             $('#teacherIdBtn').click(invoke);
+
+            $('.copy').click(function(){
+                //$.msg("成功复制到粘贴板","color:#00D69C;");
+                // $(this).tooltip('toggle')
+                //       .attr('data-original-title', "复制成功！")
+                //       .tooltip('fixTitle')
+                //       .tooltip('toggle');
+            });
+            var clipboard = new Clipboard('.copy');
 
             jQuery(function($) {
                 setInterval(refreshTime, 1000);

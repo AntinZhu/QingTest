@@ -34,6 +34,9 @@
 <link rel="stylesheet" href="${base}/static/css/common.css" />
 <!-- ace styles -->
 
+<link href="${base}/static/css/json/base.css" rel="stylesheet">
+<link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
+
 <!--[if lte IE 8]>
 <link rel="stylesheet" href="${base}/static/assets/css/ace-ie.min.css" />
 <![endif]-->
@@ -99,7 +102,6 @@
 <script src="${base}/static/assets/js/jquery.hotkeys.min.js"></script>
 
 <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
-<script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
 <script src="${base}/static/assets/js/uncompressed/date-time/bootstrap-datepicker.js"></script>

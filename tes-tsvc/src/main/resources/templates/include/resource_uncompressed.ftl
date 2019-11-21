@@ -99,6 +99,8 @@
 <script src="${base}/static/assets/js/uncompressed/x-editable/bootstrap-editable.js"></script>
 <script src="${base}/static/assets/js/date-time/bootstrap-datetimepicker.js"></script>
 <script src="${base}/static/assets/js/uncompressed/fuelux/fuelux.spinner.js"></script>
+<script src="${base}/static/assets/js/uncompressed/date-time/bootstrap-datepicker.js"></script>
+<script src="${base}/static/assets/js/uncompressed/date-time/bootstrap-timepicker.js"></script>
 <script src="${base}/static/js/common.js"></script>
 <script src="${base}/static/js/catelog.js"></script>
 

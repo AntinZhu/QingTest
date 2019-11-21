@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>新增或编辑用户</title>
-    <#include "/include/resource_uncompressed.ftl" />
+    <#include "/include/resource.ftl" />
 
     <style>
         .spinner-preview {
@@ -39,7 +39,6 @@
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
 
-    <script src="${base}/static/js/json/hm.js"></script>
     <script src="${base}/static/js/json/jquery.message.js"></script>
     <script src="${base}/static/js/json/jquery.json.js"></script>
     <script src="${base}/static/js/json/json2.js"></script>
