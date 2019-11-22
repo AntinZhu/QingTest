@@ -710,7 +710,7 @@
 
             function refreshShareUrl(){
                 if($("#paramChoose").val() > 0){
-                    $("#shareUrl").text("http://" + location.host + location.pathname + "?inv=1&id=${interfaceId}&paramId=" + id + "&catelogIndex=" + catelogIdx + "&env=" + $("#env").val());
+                    $("#shareUrl").text("http://" + location.host + location.pathname + "?inv=1&id=${interfaceId}&paramId=" + $("#paramChoose").val() + "&catelogIndex=" + catelogIdx + "&env=" + $("#env").val());
                     $("#shareUrlDiv").removeClass("hide");
                 }else{
                     $("#shareUrlDiv").addClass("hide");
