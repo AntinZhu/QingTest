@@ -535,6 +535,85 @@
             </div>
 
         </div>
+        <div class="group">
+                <h3 class="accordion-header">在线课分享码</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">分享码：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" id="live_lesson_code_input" />
+                                </span>
+                            </div>
+
+                            <label class="col-sm-5 control-label no-padding-right"
+                                   style="text-align: right">是否校验有效期：</label>
+                            <div class="col-sm-7">
+                                <span class="input-icon">
+                                    <select class="form-control" id="live_lesson_is_need_expire">
+                                        <option value="false">否</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="live_lesson_converter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" style="text-align: right">OrderCourseId:</label>
+                            <div class="col-sm-8">
+                                 <span class="input-icon">
+                                     <input type="text" id="live_lesson_order_course_id"/>
+                                 </span>
+                            </div>
+
+                            <label class="col-sm-4 control-label no-padding-right" style="text-align: right">UserId</label>
+                            <div class="col-sm-8">
+                                 <span class="input-icon">
+                                     <input type="text" id="live_lesson_user_id"/>
+                                 </span>
+                            </div>
+
+                            <label class="col-sm-4 control-label no-padding-right" style="text-align: right">UserType</label>
+                            <div class="col-sm-8">
+                                <span class="input-icon">
+                                            <select class="form-control" id="live_lesson_user_type">
+                                                <option value="1">teacher</option>
+                                                <option value="0">student</option>
+                                            </select>
+                                        </span>
+                            </div>
+
+                            <label class="col-sm-4 control-label no-padding-right" style="text-align: right">有效期：</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input class="form-control date-picker" id="live_lesson_timepicker_date" type="text" data-date-format="yyyy-mm-dd"/>
+                                    <span class="input-group-addon">
+                                        <i class="icon-calendar bigger-110"></i>
+                                    </span>
+                                </div>
+
+                                <div class="input-group bootstrap-timepicker">
+                                    <input id="live_lesson_timepicker" type="text" class="form-control"/>
+                                    <span class="input-group-addon">
+																<i class="icon-time bigger-110"></i>
+															</span>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+
+        </div>
+            
     </div>
 </div><!-- /#ace-settings-container -->
 
@@ -1232,6 +1311,25 @@
         }
     });
 
+    $("#live_lesson_converter").click(function(){
+        var code = $("#live_lesson_code_input").val();
+        var isNeedExpire= $("#live_lesson_is_need_expire").val();
+
+        var orderCOurseId = $("#live_lesson_order_course_id").val();
+        var userId = $("#live_lesson_user_id").val();
+        var userType = $("#live_lesson_user_type").val();
+        var date = $("#live_lesson_timepicker_date").val();
+        var time = $("#live_lesson_timepicker").val();
+
+
+
+        if (code != null && code != "") {
+            decodeLiveLesson(code, isNeedExpire);
+        } else if (orderCOurseId != null && orderCOurseId != "" && date != null && date != "" && time != null && time != "" && userType != null && userType != "" && userId != null && userId != "") {
+            liveLessonEncode(orderCOurseId,date,time,userType,userId);
+        }
+    });
+
     function decodeCourseListenV2(code){
         var obj = new Object();
 
@@ -1253,7 +1351,38 @@
         commonRestAjaxRequest(request);
     }
 
+    function decodeLiveLesson(shareCode, isNeedExpire){
+        var obj = new Object();
+
+        var data = {
+            url : "/svc/api/pi/v1/live_lesson_test/decode?shareCode="+shareCode + "&isNeedCheckExpire=" + isNeedExpire + "&guid=shanyao_test_live_lesson_decode",
+            param: JSON.stringify(obj),
+            userId:1,
+            userType : 'admin'
+        };
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : handleLiveLessonDecode,
+            isASync : true,
+            failTitle :"解密结果:"
+        };
+
+        commonRestAjaxRequest(request);
+    }
+
+
     $('#course_listen_v2_timepicker').timepicker({
+        minuteStep: 1,
+        showSeconds: true,
+        showMeridian: false
+    }).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+
+
+    $('#live_lesson_timepicker').timepicker({
         minuteStep: 1,
         showSeconds: true,
         showMeridian: false
@@ -1287,6 +1416,34 @@
         $("#course_listen_v2_timepicker").val(time)
         $("#course_listen_v2_code_type").val(type);
     }
+   function handleLiveLessonDecode(r) {
+        if(r==null || r==""){
+            $.gritter.add({
+                title : '错误',
+                text : '解码失败',
+                class_name : 'gritter-info gritter-center'
+            });
+        }
+        console.log("result:"+r);
+
+        var date = formatDate_yyyyMMDD(new Number(r.expireTime));
+        var time = formatDate_hhmmss(new Number(r.expireTime));
+        $("#live_lesson_order_course_id").val(r.orderCourseId);
+        $("#live_lesson_timepicker_date").val(date);
+        $("#live_lesson_user_id").val(r.userId);
+
+        var userType = "0";
+        if ("student" == r.userType) {
+            userType = "0";
+        }
+
+        if ("teacher" == r.userType) {
+            userType = "1";
+        }
+
+       $("#live_lesson_user_type").val(userType);
+        $("#live_lesson_timepicker").val(time);
+    }
 
     function courseListenV2Encode(groupOrderCourse,date,time,type,admin) {
         var t=date+" "+time;
@@ -1312,8 +1469,36 @@
         commonAjaxRequest(request);
     }
 
+    function liveLessonEncode(orderCOurseId,date,time,userType,userId) {
+        var t=date+" "+time;
+        var timep =toShijiancuo(t);
+
+        var obj = new Object();
+
+        var data = {
+            url: "/svc/api/pi/v1/live_lesson_test/encode?orderCourseId=" + orderCOurseId + "&expireTime=" + timep + "&userType=" + userType + "&userId=" + userId + "&guid=shanyao_test_live_lesson_encode",
+            param: JSON.stringify(obj),
+            userId:1,
+            userType : 'admin'
+        };
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : handleLiveLessonEncode,
+            isASync : true,
+            failTitle :"加密结果:"
+        };
+
+        commonAjaxRequest(request);
+    }
+
     function handleCourseListenV2Encode(r) {
         $("#course_list_v2_code_input").val(r.data);
+    }
+
+    function handleLiveLessonEncode(r) {
+        $("#live_lesson_code_input").val(r.data);
     }
 
     $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
