@@ -102,8 +102,8 @@
 <script src="${base}/static/assets/js/jquery.hotkeys.min.js"></script>
 
 <script src="${base}/static/assets/js/jquery.maskedinput.min.js"></script>
-<script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
 <script src="${base}/static/assets/js/x-editable/bootstrap-editable.min.js"></script>
+<script src="${base}/static/assets/js/x-editable/ace-editable.min.js"></script>
 <script src="${base}/static/assets/js/uncompressed/date-time/bootstrap-datepicker.js"></script>
 <script src="${base}/static/assets/js/uncompressed/date-time/bootstrap-timepicker.js"></script>
 <script src="${base}/static/assets/js/bootstrap-tag.min.js"></script>

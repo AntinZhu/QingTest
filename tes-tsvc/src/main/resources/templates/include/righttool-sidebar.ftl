@@ -535,6 +535,42 @@
             </div>
 
         </div>
+
+            <div class="group">
+                <h3 class="accordion-header">PI-接口校验所需参数</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">时间戳：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" class="qing_pi_conv" id="qing_pi_output_timestamp" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">AuthKey：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text" class="qing_pi_conv" id="qing_pi_output_auth_key" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="qing_pi_converter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
 </div><!-- /#ace-settings-container -->
 
@@ -1319,4 +1355,26 @@
     $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
         $(this).prev().focus();
     });
+
+    $("#qing_pi_converter").click(function(){
+        var user = {
+            user_id :  3856,
+            user_type  : 'teacher'
+        };
+
+        var request = {
+            url : "${base}/v1/test/user/token.json",
+            data : user,
+            handlerFunc : handlerPiToolFilterFillInvoke,
+            isASync : true,
+            failTitle :"接口调用异常:"
+        };
+
+        commonAjaxRequest(request);
+    });
+
+    function handlerPiToolFilterFillInvoke(resu){
+        $("#qing_pi_output_timestamp").val(resu.resultList.timestamp);
+        $("#qing_pi_output_auth_key").val(resu.resultList.authkey);
+    }
 </script>
