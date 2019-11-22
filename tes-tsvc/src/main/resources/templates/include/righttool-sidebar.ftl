@@ -571,21 +571,21 @@
                             <label class="col-sm-4 control-label no-padding-right" style="text-align: right">OrderCourseId:</label>
                             <div class="col-sm-8">
                                  <span class="input-icon">
-                                     <input type="text" id="live_lesson_order_course_id"/>
+                                     <input type="text" id="live_lesson_order_course_id" class="live_lesson_input_data"/>
                                  </span>
                             </div>
 
                             <label class="col-sm-4 control-label no-padding-right" style="text-align: right">UserId</label>
                             <div class="col-sm-8">
                                  <span class="input-icon">
-                                     <input type="text" id="live_lesson_user_id"/>
+                                     <input type="text" id="live_lesson_user_id" class="live_lesson_input_data"/>
                                  </span>
                             </div>
 
                             <label class="col-sm-4 control-label no-padding-right" style="text-align: right">UserType</label>
                             <div class="col-sm-8">
                                 <span class="input-icon">
-                                            <select class="form-control" id="live_lesson_user_type">
+                                            <select class="form-control live_lesson_input_data" id="live_lesson_user_type" >
                                                 <option value="1">teacher</option>
                                                 <option value="0">student</option>
                                             </select>
@@ -595,14 +595,14 @@
                             <label class="col-sm-4 control-label no-padding-right" style="text-align: right">有效期：</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <input class="form-control date-picker" id="live_lesson_timepicker_date" type="text" data-date-format="yyyy-mm-dd"/>
+                                    <input class="form-control date-picker live_lesson_input_data" id="live_lesson_timepicker_date" type="text" data-date-format="yyyy-mm-dd" />
                                     <span class="input-group-addon">
                                         <i class="icon-calendar bigger-110"></i>
                                     </span>
                                 </div>
 
                                 <div class="input-group bootstrap-timepicker">
-                                    <input id="live_lesson_timepicker" type="text" class="form-control lesson_timepicker"/>
+                                    <input id="live_lesson_timepicker" type="text" class="form-control lesson_timepicker live_lesson_input_data"/>
                                     <span class="input-group-addon">
 																<i class="icon-time bigger-110"></i>
 															</span>
@@ -1553,5 +1553,12 @@
         function handleLiveLessonEncode(r) {
             $("#live_lesson_code_input").val(r.data);
         }
+
+        $('.live_lesson_input_data').click(function(){
+            console.log("click")
+            $("#live_lesson_code_input").val('');
+        })
+
+
 
     </script>
