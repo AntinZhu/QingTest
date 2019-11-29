@@ -230,7 +230,7 @@
                                                             <div class="form-group">
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="startCourseTime">首次上课时间:</label>
                                                                 <div class="input-group col-xs-12 col-sm-6">
-                                                                    <input class="form-control date-picker" id="startCourseTime" type="text" data-date-format="yyyy-mm-dd" />
+                                                                    <input class="form-control" id="startCourseTime" type="text" data-date-format="yyyy-mm-dd" />
                                                                     <span class="input-group-addon">
                                                                                 <i class="icon-calendar bigger-110"></i>
                                                                             </span>
@@ -1360,7 +1360,7 @@
         $("#payType_chosen").css("width", "331px;");
         var startDate = new Date();
         startDate.setDate(startDate.getDate() + 1);
-        $(".date-picker").datepicker({format : 'yyyy-mm-dd', startDate: formatDate(startDate.getTime()),autoclose:true}).next().on(ace.click_event, function(){
+        $("#startCourseTime").datepicker({format : 'yyyy-mm-dd', startDate: formatDate(startDate.getTime()),autoclose:true}).next().on(ace.click_event, function(){
             $(this).prev().focus();
         });
 

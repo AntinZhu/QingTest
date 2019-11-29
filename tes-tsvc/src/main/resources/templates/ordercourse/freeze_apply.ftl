@@ -220,6 +220,19 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="thirdPartyApprovalResult">审批结果类型:</label>
+
+                                                                                    <div class="col-xs-12 col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <select class="width-80 chosen-select" id="thirdPartyApprovalResult" data-placeholder="选择审批结果类型...">
+                                                                                                <option value="refund_result">退款</option>
+                                                                                                <option value="course_remedy_result">补课</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
                                                                                 <div class="hr hr-dotted"></div>
                                                                                 <div class="hr hr-dotted"></div>
                                                                             </form>
@@ -294,7 +307,7 @@
                 var guid = generateGuid();
 
                 var interfaceUrlPrefix = "http://gateway.{env}.idc.cedu.cn";
-                var interfaceUrl = "/svc/pi/v4/order_course/action/process_freeze.json"
+                var interfaceUrl = "/svc/pi/v5/order_course/action/process_freeze.json"
                 interfaceUrlPrefix += interfaceUrl + "?guid={guid}";
                 var url = interfaceUrlPrefix.replace("{env}", env);
                 url = url.replace("{guid}", guid);
@@ -342,8 +355,8 @@
 
             $("#submitBtn").click(function(){
                 var groupApplyId = $("#groupApplyId").val();
-                var data = {
-                    group_apply_id : new Number(groupApplyId),
+                var requestData = {
+                    qingqing_group_apply_id : "" + encode(groupApplyId),
                     student_amount : new Number($("#studentAmount").val()),
                     teacher_amount : new Number($("#teacherAmount").val()),
                     assistant_amount : new Number($("#assistantAmount").val()),
@@ -351,12 +364,20 @@
                     process_content : $("#remark").val(),
                     is_paid_voucher_price : ($("#isPayVoucherPrice").val() == "1"),
                     depend_on_course_num : new Number($("#dependOnCourseNum").val()),
-                    is_need_pay_for_hf_teacher : ($("#isPayHFTeacher").val() == "1")
-                }
+                    is_need_pay_for_hf_teacher : ($("#isPayHFTeacher").val() == "1"),
+                    third_party_approval_result : $("#thirdPartyApprovalResult").val()
+                };
+
+                var data = {
+                    url: "/svc/api/pi/v5/order_course/action/process_freeze.json",
+                    param: JSON.stringify(requestData),
+                    userType:"ta",
+                    userId: 120
+                };
 
                 jsonShow(data, "json-request");
                 var request = {
-                    url : "${base}/v1/order_course/freeze_apply/process.json",
+                    url : "${base}/v1/common/pi.json",
                     data : data,
                     handlerFunc : handlerProcessResult,
                     isASync : true,
@@ -452,6 +473,9 @@
 
                         refreshInterfaceUrl();
                     });
+
+                    $(".select2").css('width','100px');
+                    $("#thirdPartyApprovalResult_chosen").css("width", "100px");
 
                     $('#username').editable({
                         type: 'text',

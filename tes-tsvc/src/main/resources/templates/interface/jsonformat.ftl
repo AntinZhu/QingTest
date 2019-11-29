@@ -96,7 +96,7 @@
                                                 </div>
 
                                                 <!-- 请求的接口地址 -->
-                                                <div class="timeline-item clearfix hide" id="shareUrlDiv">
+                                                <div class="timeline-item clearfix qing_catelog_hide" id="shareUrlDiv">
                                                     <div class="timeline-info">
                                                         <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
                                                     </div>
@@ -711,9 +711,6 @@
             function refreshShareUrl(){
                 if($("#paramChoose").val() > 0){
                     $("#shareUrl").text("http://" + location.host + location.pathname + "?inv=1&id=${interfaceId}&paramId=" + $("#paramChoose").val() + "&catelogIndex=" + catelogIdx + "&env=" + $("#env").val());
-                    $("#shareUrlDiv").removeClass("hide");
-                }else{
-                    $("#shareUrlDiv").addClass("hide");
                 }
             }
 
