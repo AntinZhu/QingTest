@@ -435,18 +435,28 @@ public class UtilsController {
 
     @RequestMapping("common_config/set")
     @ResponseBody
-    public void setCommonConfig(@RequestParam(value = "configKey") String configKey, @RequestParam(value = "configValue") String configValue, Model model){
-        logger.info("configKey:" + configKey + " configValue:" + configValue);
+    public void setCommonConfig(
+            @RequestParam(value = "oper") String oper,
+            @RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "configKey", required = false) String configKey,
+            @RequestParam(value = "configValue", required = false) String configValue,
+            Model model){
+        if(oper == "edit"){
+            logger.info("configKey:" + configKey + " configValue:" + configValue);
 
-        JSONObject obj = new JSONObject();
-        obj.put("configKey", configKey);
-        obj.put("configValue", configValue);
-        obj.put("configScope", "common");
-        obj.put("operateUserId", 1);
-        obj.put("operateUserType", "system");
-        logger.info("param:" + obj.toJSONString());
+            JSONObject obj = new JSONObject();
+            obj.put("configKey", configKey);
+            obj.put("configValue", configValue);
+            obj.put("configScope", "common");
+            obj.put("operateUserId", 1);
+            obj.put("operateUserType", "system");
+            logger.info("param:" + obj.toJSONString());
 
-        piClient.commonRequest("/svc/api/pi/v1/test/common/config/reset.json?guid=api-test_reset_common_config", obj.toJSONString());
+            piClient.commonRequest("/svc/api/pi/v1/test/common/config/reset.json?guid=api-test_reset_common_config", obj.toJSONString());
+        }else if(oper == "del"){
+            piClient.commonRequest("/svc/api/pi/v1/test/common/config/del.json?guid=api-test_reset_common_config&id=" + id, "");
+        }
+
     }
 
     @RequestMapping("report/teacher/encode")
@@ -586,5 +596,36 @@ public class UtilsController {
     @RequestMapping("/test")
     public String test(){
         return "utils/common_config_2";
+    }
+
+    @RequestMapping("common/city_config")
+    public String cityConfigManager(@RequestParam(value = "key", defaultValue = "") String configKey, Model model){
+        model.addAttribute("configKey", configKey);
+
+        return "utils/city_rule_config";
+    }
+
+    @RequestMapping("city_config/set")
+    @ResponseBody
+    public void setCityConfig(
+            @RequestParam(value = "oper") String oper,
+            @RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "cityId", required = false) Integer cityId,
+            @RequestParam(value = "ruleType", required = false) String ruleType,
+            @RequestParam(value = "configValue", required = false) String configValue,
+            Model model){
+        if(oper == "edit"){
+            logger.info("city cityId:" + cityId + " ruleType:" + ruleType + " configValue:" + configValue);
+
+            JSONObject obj = new JSONObject();
+            obj.put("cityId", cityId);
+            obj.put("ruleType", ruleType);
+            obj.put("configValue", configValue);
+            obj.put("isDeleted", false);
+
+            piClient.commonRequest("/svc/api/pi/v1/test/city_config/reset.json?guid=api-test_reset_city_config", obj.toJSONString());
+        }else if(oper == "del"){
+            piClient.commonRequest("/svc/api/pi/v1/test/city_config/del.json?guid=api-test_reset_city_config&id=" + id, "");
+        }
     }
 }

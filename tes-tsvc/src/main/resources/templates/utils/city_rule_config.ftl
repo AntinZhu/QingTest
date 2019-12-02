@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>通用配置修改</title>
+    <title>城市配置修改</title>
     <#include "/include/resource.ftl" />
     <link href="${base}/static/css/json/base.css" rel="stylesheet">
     <link href="${base}/static/css/json/jquery.numberedtextarea.css" rel="stylesheet">
@@ -99,7 +99,7 @@
 
     function initConfig(){
         var data = {
-            url : "/svc/api/pi/v1/test/common/config/list.json",
+            url : "/svc/api/pi/v1/test/city_config/list.json",
             param:"",
             userId:22367,
             userType : 'student'
@@ -130,11 +130,11 @@
         var assignConfigKey = $("#qing_config_search").val();
         for(var idx in resu.resultList){
             var result = resu.resultList[idx];
-            if(assignConfigKey != "" && result.key.indexOf(assignConfigKey) == -1){
+            if(assignConfigKey != "" && result.ruleType.indexOf(assignConfigKey) == -1){
                 continue;
             }
 
-            var item = {id:idx, configKey:result.key,configValue:result.value};
+            var item = {id:idx, cityId:result.cityId, "ruleType": result.ruleType,configValue:result.configValue};
 
             items.push(item);
         }
@@ -146,7 +146,7 @@
             data: items,
             datatype: "local",
             height: 600,
-            colNames:[' ', 'ConfigKey','ConfigValue'],
+            colNames:[' ', '城市ID','配置类型','配置值'],
             colModel:[
                 {name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
                     formatter:'actions',
@@ -157,8 +157,9 @@
                         //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
                     }
                 },
-                {name:'configKey',index:'configKey', width:100,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
-                {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}},
+                {name:'cityId',index:'cityId', width:100,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
+                {name:'ruleType',index:'ruleType', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}},
+                {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
             ],
 
             viewrecords : true,
@@ -183,8 +184,8 @@
                 }, 0);
             },
 
-            editurl: "${base}/v1/utils/common_config/set.json?env=" + env,//nothing is saved
-            caption: "通用配置查询和设置",
+            editurl: "${base}/v1/utils/city_config/set.json?env=" + env,//nothing is saved
+            caption: "城市配置查询和设置",
 
 
             autowidth: true
@@ -198,7 +199,7 @@
                     editicon : 'icon-pencil blue',
                     add: true,
                     addicon : 'icon-plus-sign purple',
-                    del: true,
+                    del: false,
                     delicon : 'icon-trash red',
                     search: false,
                     searchicon : 'icon-search orange',
@@ -224,34 +225,7 @@
                         return true;
                     }
                 },
-                { //DELETE
-                    closeOnEscape: true,
-                    closeAfterDelete :true,
-                    reloadAfterSubmit : true,
-                    drag:true,
-                    afterSubmit:function (response, postdata) {
-                        if (response.responseText == "")
-                        {
-                            $("#list4").trigger("reloadGrid", [{current: true}]) ;
-                            return [false, response.responseText];
-                        }
-                        else
-                        {
-                            $(this).jqGrid('setGridParam', {
-                                datatype: 'json'
-                            }).trigger('reloadGrid');
-                            return [true, response.responseText];
-                        }
-                    } ,
-                    delData: {
-                        EmpId: function () {
-                            var sel_id = $('#list4').jqGrid('getGridParam', 'selrow');
-                            var value = $('#list4').jqGrid('getCell',sel_id, 'id');
-                            alert(value);
-                            return value;
-                        }
-                    }
-                },
+                null,
                 null,
                 null
         );
