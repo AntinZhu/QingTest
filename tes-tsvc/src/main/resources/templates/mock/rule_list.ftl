@@ -74,7 +74,7 @@
                                     <div class="col-xs-12 col-sm-9">
                                         <div class="clearfix">
                                             <button type="button" value="0" env="dev" style="border-radius: 8px" class="btn qing_mock_enable">开发环境</button>
-                                            <button type="button" value="0" env="hjl" style="border-radius: 8px" class="btn qing_mock_enable">接口测试环境</button>
+                                            <button type="button" value="0" env="fws" style="border-radius: 8px" class="btn qing_mock_enable">接口测试环境</button>
                                             <button type="button" value="0" env="tst" style="border-radius: 8px" class="btn qing_mock_enable">测试环境</button>
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@
             <#include "/include/righttool-sidebar.ftl" />
 
 <script type="text/javascript">
-    var allEnv = ["dev","tst","hjl"];
+    var allEnv = ["dev","tst","fws"];
     $(document).ready(function(){
         $("#mockType").val('${mockType}');
         refreshPage();

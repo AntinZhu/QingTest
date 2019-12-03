@@ -71,7 +71,7 @@
                             <input type="hidden" id="user_env_conv" value="dev" />
                             <button type="button" value="dev" style="border-radius: 8px" class="btn btn-xs user_env_conv btn-primary">dev</button>
                             <button type="button" value="tst" style="border-radius: 8px" class="btn btn-xs user_env_conv">tst</button>
-                            <button type="button" value="hjl" style="border-radius: 8px" class="btn btn-xs user_env_conv">hjl</button>
+                            <button type="button" value="fws" style="border-radius: 8px" class="btn btn-xs user_env_conv">fws</button>
                         </div>
                     </div>
 
@@ -127,7 +127,7 @@
                             <input type="hidden" id="user_type_phone_env_conv" value="dev" />
                             <button type="button" value="dev" style="border-radius: 8px" class="btn btn-xs user_type_phone_env_conv btn-primary">dev</button>
                             <button type="button" value="tst" style="border-radius: 8px" class="btn btn-xs user_type_phone_env_conv">tst</button>
-                            <button type="button" value="hjl" style="border-radius: 8px" class="btn btn-xs user_type_phone_env_conv">hjl</button>
+                            <button type="button" value="fws" style="border-radius: 8px" class="btn btn-xs user_type_phone_env_conv">fws</button>
                         </div>
                     </div>
 

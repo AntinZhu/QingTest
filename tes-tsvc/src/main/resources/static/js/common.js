@@ -97,6 +97,10 @@ function commonAjaxRequest(request){
     var otherData = request.otherData;
     var guid = request.guid;
     var headers = request.headers;
+    var ignoreFail = false;
+    if(request.ignoreFail){
+        ignoreFail = request.ignoreFail;
+    }
 
     var result = true;
     if(env == null){
@@ -124,13 +128,15 @@ function commonAjaxRequest(request){
         contentType: 'application/json',
         success : function(resu) {
             if(resu.response.error_code != 0){
-                switch (resu.response.error_code){
-                    case 422:
-                        handlerErrorStatusCode(resu.response.error_code, resu);
-                        break;
-                    default :
-                        gritterError(failTitle, resu.response);
-                        break;
+                if(!ignoreFail){
+                    switch (resu.response.error_code){
+                        case 422:
+                            handlerErrorStatusCode(resu.response.error_code, resu);
+                            break;
+                        default :
+                            gritterError(failTitle, resu.response);
+                            break;
+                    }
                 }
                 result = false;
             }else{
@@ -138,6 +144,10 @@ function commonAjaxRequest(request){
             }
         },
         error :function (jqXHR, textStatus, errorThrown) {
+            if(ignoreFail){
+                return;
+            }
+
             switch (jqXHR.status){
                 case 422:
                     handlerErrorStatusCode(422, jqXHR.responseText);
@@ -146,9 +156,17 @@ function commonAjaxRequest(request){
         },
         statusCode: {
             404: function() {
+                if(ignoreFail){
+                    return;
+                }
+
                 handlerErrorStatusCode(404);
             },
             500: function() {
+                if(ignoreFail){
+                    return;
+                }
+
                 handlerErrorStatusCode(500);
             }
         }
@@ -891,4 +909,8 @@ function copyToClipboard(txt) {
         clip.setData(trans, null, clipid.kGlobalClipboard);
         alert("复制成功！");
     }
+}
+
+function returnResult(resp){
+    return resp;
 }

@@ -437,11 +437,11 @@ public class UtilsController {
     @ResponseBody
     public void setCommonConfig(
             @RequestParam(value = "oper") String oper,
-            @RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "id", required = false) String id,
             @RequestParam(value = "configKey", required = false) String configKey,
             @RequestParam(value = "configValue", required = false) String configValue,
             Model model){
-        if(oper == "edit"){
+        if("edit".equals(oper) || "add".equals(oper) ){
             logger.info("configKey:" + configKey + " configValue:" + configValue);
 
             JSONObject obj = new JSONObject();
@@ -453,7 +453,7 @@ public class UtilsController {
             logger.info("param:" + obj.toJSONString());
 
             piClient.commonRequest("/svc/api/pi/v1/test/common/config/reset.json?guid=api-test_reset_common_config", obj.toJSONString());
-        }else if(oper == "del"){
+        }else if("del".equals(oper)){
             piClient.commonRequest("/svc/api/pi/v1/test/common/config/del.json?guid=api-test_reset_common_config&id=" + id, "");
         }
 
@@ -609,12 +609,12 @@ public class UtilsController {
     @ResponseBody
     public void setCityConfig(
             @RequestParam(value = "oper") String oper,
-            @RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "id", required = false) String id,
             @RequestParam(value = "cityId", required = false) Integer cityId,
             @RequestParam(value = "ruleType", required = false) String ruleType,
             @RequestParam(value = "configValue", required = false) String configValue,
             Model model){
-        if(oper == "edit"){
+        if("edit".equals(oper) || "add".equals(oper) ){
             logger.info("city cityId:" + cityId + " ruleType:" + ruleType + " configValue:" + configValue);
 
             JSONObject obj = new JSONObject();
@@ -624,7 +624,7 @@ public class UtilsController {
             obj.put("isDeleted", false);
 
             piClient.commonRequest("/svc/api/pi/v1/test/city_config/reset.json?guid=api-test_reset_city_config", obj.toJSONString());
-        }else if(oper == "del"){
+        }else if("del".equals(oper) ){
             piClient.commonRequest("/svc/api/pi/v1/test/city_config/del.json?guid=api-test_reset_city_config&id=" + id, "");
         }
     }

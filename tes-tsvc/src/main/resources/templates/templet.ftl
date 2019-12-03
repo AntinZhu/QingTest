@@ -50,7 +50,7 @@
                                             <div class="clearfix">
                                                 <input type="hidden" name="env" id="env" value="dev" class="col-xs-12 col-sm-3" />
                                                 <button type="button" value="dev" class="btn env btn-primary">开发环境</button>
-                                                <button type="button" value="hjl" class="btn env">接口测试环境</button>
+                                                <button type="button" value="fws" class="btn env">接口测试环境</button>
                                                 <button type="button" value="tst" class="btn env">测试环境</button>
                                             </div>
                                         </div>

@@ -149,10 +149,12 @@ public class EnvClient implements Client {
         if(guid == null){
             guid = "test-api-" + System.currentTimeMillis();
         }
-        if(finalUrl.indexOf("?") == -1){
-            finalUrl = finalUrl + "?guid=" + guid;
-        }else{
-            finalUrl = finalUrl + "&guid=" + guid;
+        if(finalUrl.indexOf("guid=") == -1){
+            if(finalUrl.indexOf("?") == -1){
+                finalUrl = finalUrl + "?guid=" + guid;
+            }else{
+                finalUrl = finalUrl + "&guid=" + guid;
+            }
         }
 
         String env = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.ENV);
@@ -190,10 +192,7 @@ public class EnvClient implements Client {
 
         Env env = Env.valueOf(envValue);
         switch (env){
-            case hjl:
-                if(url.contains("passportsvc")){
-                    return "gateway.fws.idc.cedu.cn";
-                }
+            case fws:
             case dev:
             case tst:
             case pfm:

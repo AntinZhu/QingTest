@@ -5,7 +5,7 @@
         <div class="clearfix">
             <input type="hidden" name="env" id="env" value="dev" class="col-xs-12 col-sm-3" />
             <button type="button" value="dev" style="border-radius: 8px" class="btn env btn-primary">开发环境</button>
-            <button type="button" value="hjl" style="border-radius: 8px" class="btn env">接口测试环境</button>
+            <button type="button" value="fws" style="border-radius: 8px" class="btn env">接口测试环境</button>
             <button type="button" value="tst" style="border-radius: 8px" class="btn env">测试环境</button>
             <button type="button" value="pfm" style="border-radius: 8px;display: none" class="btn env qing_catelog_hide">性能测试环境</button>
             <button type="button" value="on_line" style="border-radius: 8px;" class="btn env hide">线上环境</button>

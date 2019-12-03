@@ -127,69 +127,147 @@
 
         var items = [];
 
+
+        var types = null;
+        var typeObj = {};
+        try{
+            var resultList = getCityRuleTypes().resultList;
+            for(var idx in resultList){
+                var type = resultList[idx];
+                types = types + type.key + ":" + type.value;
+                if(idx != resultList.length - 1){
+                    types = types + ";"
+                }
+                typeObj[type.key] = type.value;
+            }
+        }catch(e){
+            types = null;
+        }
+
+
         var assignConfigKey = $("#qing_config_search").val();
         for(var idx in resu.resultList){
             var result = resu.resultList[idx];
+            var item;
+            var ruleType;
+            if(types){
+                ruleType = typeObj[result.ruleType];
+            }else{
+                ruleType = result.ruleType;
+            }
+
             if(assignConfigKey != "" && result.ruleType.indexOf(assignConfigKey) == -1){
                 continue;
             }
 
-            var item = {id:idx, cityId:result.cityId, "ruleType": result.ruleType,configValue:result.configValue};
-
+            item = {id:idx, cityId:result.cityId, "ruleType": ruleType,configValue:result.configValue};
             items.push(item);
         }
 
         items.reverse();
 
         $("#qingDataContent").html('<table id="grid-table"></table><div id="grid-pager"></div>');
-        var jqParam = {
-            data: items,
-            datatype: "local",
-            height: 600,
-            colNames:[' ', '城市ID','配置类型','配置值'],
-            colModel:[
-                {name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
-                    formatter:'actions',
-                    formatoptions:{
-                        keys:true,
+        var jqParam;
+        if(types){
+            jqParam = {
+                data: items,
+                datatype: "local",
+                height: 600,
+                colNames:[' ', '城市ID','配置名称','配置值'],
+                colModel:[
+                    {name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
+                        formatter:'actions',
+                        formatoptions:{
+                            keys:true,
 
-                        delOptions:{recreateForm: true, beforeShowForm:beforeDeleteCallback},
-                        //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
-                    }
+                            delOptions:{recreateForm: true, beforeShowForm:beforeDeleteCallback},
+                            //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
+                        }
+                    },
+                    {name:'cityId',index:'cityId', width:50,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
+                    {name:'ruleType',index:'ruleType', width:200, editable: true,edittype:"select",editoptions:{value:types}},
+                    {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
+                ],
+
+                viewrecords : true,
+                rowNum:50,
+                rowList:[50,100,200],
+                pager : pager_selector,
+                altRows: true,
+                //toppager: true,
+
+                multiselect: true,
+                //multikey: "ctrlKey",
+                multiboxonly: true,
+
+                loadComplete : function() {
+                    var table = this;
+                    setTimeout(function(){
+                        styleCheckbox(table);
+
+                        updateActionIcons(table);
+                        updatePagerIcons(table);
+                        enableTooltips(table);
+                    }, 0);
                 },
-                {name:'cityId',index:'cityId', width:100,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
-                {name:'ruleType',index:'ruleType', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}},
-                {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
-            ],
 
-            viewrecords : true,
-            rowNum:50,
-            rowList:[50,100,200],
-            pager : pager_selector,
-            altRows: true,
-            //toppager: true,
-
-            multiselect: true,
-            //multikey: "ctrlKey",
-            multiboxonly: true,
-
-            loadComplete : function() {
-                var table = this;
-                setTimeout(function(){
-                    styleCheckbox(table);
-
-                    updateActionIcons(table);
-                    updatePagerIcons(table);
-                    enableTooltips(table);
-                }, 0);
-            },
-
-            editurl: "${base}/v1/utils/city_config/set.json?env=" + env,//nothing is saved
-            caption: "城市配置查询和设置",
+                editurl: "${base}/v1/utils/city_config/set.json?env=" + env,//nothing is saved
+                caption: "城市配置查询和设置",
 
 
-            autowidth: true
-        };
+                autowidth: true
+            };
+        }else{
+            jqParam = {
+                data: items,
+                datatype: "local",
+                height: 600,
+                colNames:[' ', '城市ID','配置类型','配置值'],
+                colModel:[
+                    {name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
+                        formatter:'actions',
+                        formatoptions:{
+                            keys:true,
+
+                            delOptions:{recreateForm: true, beforeShowForm:beforeDeleteCallback},
+                            //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
+                        }
+                    },
+                    {name:'cityId',index:'cityId', width:50,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
+                    {name:'ruleType',index:'ruleType', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}},
+                    {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
+                ],
+
+                viewrecords : true,
+                rowNum:50,
+                rowList:[50,100,200],
+                pager : pager_selector,
+                altRows: true,
+                //toppager: true,
+
+                multiselect: true,
+                //multikey: "ctrlKey",
+                multiboxonly: true,
+
+                loadComplete : function() {
+                    var table = this;
+                    setTimeout(function(){
+                        styleCheckbox(table);
+
+                        updateActionIcons(table);
+                        updatePagerIcons(table);
+                        enableTooltips(table);
+                    }, 0);
+                },
+
+                editurl: "${base}/v1/utils/city_config/set.json?env=" + env,//nothing is saved
+                caption: "城市配置查询和设置",
+
+
+                autowidth: true
+            };
+        }
+
 
         jQuery(grid_selector).jqGrid(jqParam);
         //navButtons
@@ -231,6 +309,28 @@
         );
 
         $(document).off("click", '#refresh_grid-table').on('click', '#refresh_grid-table',initConfig);
+    }
+
+    function getCityRuleTypes(){
+        var data = {
+            url : "/svc/api/pi/v1/test/city_config/type.json",
+            param:"",
+            userId:22367,
+            userType : 'student'
+        }
+
+        var request = {
+            url : "${base}/v1/common/pi.json",
+            data : data,
+            handlerFunc : returnResult,
+            isASync : false,
+            failTitle :"获取城市配置信息:",
+            guid : "test-api-city_type_config",
+            env : $("#env").val(),
+            ignoreFail :true
+        };
+
+        return commonAjaxRequest(request);
     }
 
     $(".env").click(function(){
