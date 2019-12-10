@@ -650,6 +650,42 @@
                     </div>
                 </div>
             </div>
+
+            <div class="group">
+                <h3 class="accordion-header">海风登录短信验证码</h3>
+
+                <div>
+                    <div id="home3" class="tab-pane in active">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">手机号：</label>
+
+                            <div class="col-sm-9">
+                                        <span class="input-icon">
+                                            <input type="text"  id="hf_phoneNumber" />
+                                            <i class="icon-unlock blue"></i>
+                                        </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 center" style="margin-bottom: 7px;margin-top: 7px;">
+                                <button class="btn btn-grey btn-sm" id="hf_captcha_converter">
+                                    <i class="icon-refresh"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" style="text-align: right">验证码：</label>
+
+                            <div class="col-sm-9">
+                                <span class="input-icon">
+                                    <input type="text" id="hf_captcha" />
+                                    <i class="icon-lock blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div><!-- /#ace-settings-container -->
 
@@ -1559,6 +1595,30 @@
             $("#live_lesson_code_input").val('');
         })
 
+        $("#hf_captcha_converter").click(function(){
+            var phoneNumber = $("#hf_phoneNumber").val();
 
+            var request = {
+                url : "${base}/v1/redis/get.json",
+                data : {"data":phoneNumber},
+                handlerFunc : hfCaptcha,
+                isASync : true,
+                failTitle :"获取验证码结果:"
+            };
 
+            commonAjaxRequest(request);
+        });
+
+        function hfCaptcha(resu){
+           if(isStringEmpty(resu.resultList)){
+               $.gritter.add({
+                   title : '失败',
+                   text : '没有找到验证码',
+                   class_name : 'gritter-info gritter-center'
+               });
+               return;
+           }
+
+           $("#hf_captcha").val(JSON.parse(resu.resultList).number);
+        }
     </script>

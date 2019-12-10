@@ -270,6 +270,11 @@
             <!-- go to https://search.maven.org/search?q=tencentcloud-sdk-java and get the latest version. -->
             <version>3.0.79</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

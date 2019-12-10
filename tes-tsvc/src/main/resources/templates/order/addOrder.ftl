@@ -406,15 +406,6 @@
                                                         <hr />
 
                                                         <div class="form-group">
-                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right"></label>
-                                                            <div class="col-xs-12 col-sm-8">
-                                                                <div class="col-xs-4 label label-lg label-light arrowed-in arrowed-right qing_input_tip center" style="color: #333;text-align: left;">
-                                                                    此功能由<b class="red">朱贺</b>友情赞助
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
                                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right">选择优惠券</label>
                                                             <div class="col-xs-12 col-sm-8">
                                                                 <select class="width-80 chosen-select tag-input-style" id="vouListSelect" data-placeholder="选择优惠券" multiple="multiple">

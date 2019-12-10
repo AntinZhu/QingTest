@@ -156,7 +156,7 @@
                 ruleType = result.ruleType;
             }
 
-            if(assignConfigKey != "" && result.ruleType.indexOf(assignConfigKey) == -1){
+            if(assignConfigKey != "" && ruleType.indexOf(assignConfigKey) == -1){
                 continue;
             }
 
@@ -184,9 +184,9 @@
                             //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
                         }
                     },
-                    {name:'cityId',index:'cityId', width:50,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
-                    {name:'ruleType',index:'ruleType', width:200, editable: true,edittype:"select",editoptions:{value:types}},
-                    {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
+                    {name:'cityId',index:'cityId', width:20,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
+                    {name:'ruleType',index:'ruleType', width:50, editable: true,edittype:"select",editoptions:{value:types}},
+                    {name:'configValue',index:'configValue', sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
                 ],
 
                 viewrecords : true,
@@ -233,9 +233,9 @@
                             //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
                         }
                     },
-                    {name:'cityId',index:'cityId', width:50,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
-                    {name:'ruleType',index:'ruleType', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}},
-                    {name:'configValue',index:'configValue', width:200, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
+                    {name:'cityId',index:'cityId', width:20,editable: true,editoptions:{size:"60",maxlength:"100"},search:true},
+                    {name:'ruleType',index:'ruleType', width:50, sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}},
+                    {name:'configValue',index:'configValue', sortable:false,editable: true,edittype:"textarea", editoptions:{rows:"2",cols:"60"}}
                 ],
 
                 viewrecords : true,
