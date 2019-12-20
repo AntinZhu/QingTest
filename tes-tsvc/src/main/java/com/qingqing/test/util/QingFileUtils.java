@@ -1,7 +1,9 @@
 package com.qingqing.test.util;
 
+import com.csvreader.CsvReader;
 import com.qingqing.common.intf.Composer;
 import com.qingqing.common.util.CollectionsUtil;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.StringUtils;
 import com.qingqing.test.util.DirSearchUtils.FileHandler;
 import org.slf4j.Logger;
@@ -86,6 +88,14 @@ public class QingFileUtils {
     }
 
     public static void main(String[] args) throws IOException {
+        List<QingCSVBean> inDBLines = readLines("D:\\分成有问题的数据.csv", new QingCSVBeanConverter("\t"));
+        CsvReader reader = new CsvReader("D:\\分成有问题的数据.csv", '\t');
+        while(reader.readRecord()){
+            System.out.println(reader.getRawRecord());
+        }
+    }
+
+    public static void main1(String[] args) throws IOException {
         List<QingCSVBean> inDBLines = QingFileUtils.readLines("D:\\sql\\in_db.csv", new QingCSVBeanConverter(","));
         List<QingCSVBean> patchLines = QingFileUtils.readLines("D:\\sql\\分隔测试.txt", new QingCSVBeanConverter("\t"));
 

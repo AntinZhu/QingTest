@@ -34,10 +34,7 @@ import com.qingqing.test.domain.inter.TestInterface;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog;
 import com.qingqing.test.domain.inter.TestInterfaceCatelog.CatelogRef;
 import com.qingqing.test.domain.inter.TestInterfaceParam;
-import com.qingqing.test.manager.PassportManager;
-import com.qingqing.test.manager.TestInterfaceManager;
-import com.qingqing.test.manager.UserIpManager;
-import com.qingqing.test.manager.WxNotifyManager;
+import com.qingqing.test.manager.*;
 import com.qingqing.test.manager.mock.MyMockTestManager;
 import com.qingqing.test.service.inter.TestInterfaceCatelogService;
 import com.qingqing.test.service.inter.TestInterfaceParamService;
@@ -74,13 +71,11 @@ public class TestController {
     @Autowired
     private PassportManager passportManager;
     @Autowired
-    private BiStudentEsMapper biStudentEsMapper;
-    @Autowired
     private WxNotifyManager wxNotifyManager;
     @Autowired
     private UserIpManager userIpManager;
     @Autowired
-    private MyMockTestManager myMockTestManager;
+    private TestProtoClassNameManager testProtoClassNameManager;
 
     @RequestMapping("test")
     @ResponseBody
@@ -279,7 +274,13 @@ public class TestController {
             throw new RequestValidateException("need param className", "need param className");
         }
 
-        String data = QingParamUtil.generateParamJson(request.getData());
+        String fullClassName = request.getData();
+        List<String> fullClassInDB = testProtoClassNameManager.getFullClassName(fullClassName);
+        if(!CollectionsUtil.isNullOrEmpty(fullClassInDB)){
+            fullClassName = fullClassInDB.get(0);
+        }
+
+        String data = QingParamUtil.generateParamJson(fullClassName);
         return SimpleDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP)
                 .setData(data).build();
     }

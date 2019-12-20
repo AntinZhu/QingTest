@@ -132,9 +132,9 @@ public class QingApiLabManager {
         QingApiLabManager labManager = new QingApiLabManager();
         labManager.setHttpClientManagerV2(httpClientManagerV2);
 
-        List<String> phones = QingFileUtils.readLines("D://sql//pn.txt");
+        List<String> phones = QingFileUtils.readLines("D://sql//en_pn.txt");
         for (String phone : phones) {
-            String teacherId = labManager.phoneToUserId("teacher", phone, "b6c8ee5d-29e5-4a00-be29-735d3c7d26dc");
+            String teacherId = labManager.decodePhoneNumber(phone, "05817145-39b3-482e-9b4f-6b4324f1f5a4");
             System.out.println(phone + "," + teacherId);
         }
     }

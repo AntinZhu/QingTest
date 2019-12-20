@@ -1,8 +1,5 @@
 package com.qingqing.test.util;
 
-import com.qingqing.test.util.QingParamUtil.QingProtoFile;
-
-import java.beans.IntrospectionException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,12 +17,12 @@ import java.util.regex.Pattern;
  */
 public class QingProtoClassNameUtil {
 
-    public static void main(String[] args) throws ClassNotFoundException, IntrospectionException, IOException {
+    public static void main(String[] args) throws ClassNotFoundException,IOException {
         String outFilePath = "D:\\sql\\full-proto.sql";
         if(args.length > 0){
             outFilePath = args[0];
         }
-        genProtoClassName("F:\\work\\student_pool_svc\\protobean\\src\\main\\resources\\proto-sub", outFilePath);
+        genProtoClassName(args[1], outFilePath);
     }
 
     private static void genProtoClassName(String dirPath, String outputFileName) throws IOException {
@@ -106,5 +103,39 @@ public class QingProtoClassNameUtil {
         }
 
         return result;
+    }
+
+    static class QingProtoFile{
+        private String packageName;
+        private String outterClassName;
+        private List<String> innerClassNames;
+
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public void setPackageName(String packageName) {
+            this.packageName = packageName;
+        }
+
+        public String getOutterClassName() {
+            return outterClassName;
+        }
+
+        public void setOutterClassName(String outterClassName) {
+            this.outterClassName = outterClassName;
+        }
+
+        public List<String> getInnerClassNames() {
+            return innerClassNames;
+        }
+
+        public void setInnerClassNames(List<String> innerClassNames) {
+            this.innerClassNames = innerClassNames;
+        }
+    }
+
+    private static boolean isSimpleType(Class<?> enumClazz){
+        return String.class.equals(enumClazz) || enumClazz.isPrimitive() || Number.class.isAssignableFrom(enumClazz);
     }
 }

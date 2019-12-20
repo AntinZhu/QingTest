@@ -645,6 +645,8 @@
 
             $(document).ready(function(){
                 refreshPage();
+
+                $("#qing_local_switch_div").removeClass("hide");
             });
 
             function refreshPage(){

@@ -16,11 +16,23 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, IntrospectionException {
-//        String className = "com.qingqing.test.bean.ordercourse.request.StartClassRequest";
-//        Class<?> clazz = com.qingqing.api.proto.v1.order.Order.GroupSubOrderInfoDetailV2Response.class;
-//        System.out.println(printField(Class.forName(TeachingTimeAndClassTimeRequest.class.getName()), ""));
-        Double paidAmount = 6D;
-        System.out.println(String.valueOf(paidAmount));
+        String str = "";
+    }
+
+    private static String getMostChar(String str){
+        if(str == null || str == ""){
+            return "";
+        }
+
+        int totalLen = str.length();
+        if(totalLen == 1){
+            return str;
+        }
+
+        int i = 0;
+        int j = 1;
+
+        return "";
     }
 
     private static String printField(Class<?> clazz, String prefix) throws ClassNotFoundException, IntrospectionException {
