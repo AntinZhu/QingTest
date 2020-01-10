@@ -20,7 +20,7 @@ public class EsConfig {
     @Bean
     public RestClient getClient(@Value("${a}") String value) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         // 如果有多个从节点可以持续在内部new多个HttpHost，参数1是ip,参数2是HTTP端口，参数3是通信协议
-        RestClientBuilder clientBuilder = RestClient.builder(new HttpHost("172.20.13.216", 9200, "http"));
+        RestClientBuilder clientBuilder = RestClient.builder(new HttpHost("backend.es.idc.cedu.cn", 9201, "http"));
 
         // 添加其他配置，返回来的还是RestClientBuilder对象，这些配置都是可选的
         // clientBuilder.setXX()...

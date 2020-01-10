@@ -34,7 +34,7 @@ public class WebMvcConfig {
     public final static String MEDIA_TYPES_XML  = "application/xml";
 
     public final static Properties mediaTypes = new Properties();
-    public final static MediaType DEFAULT_MEDIA_TYPE = MediaType.valueOf(MEDIA_TYPES_PROTOBUF);
+    public final static MediaType DEFAULT_MEDIA_TYPE = MediaType.valueOf(MEDIA_TYPES_JSON);
     static {
         mediaTypes.put("proto", MEDIA_TYPES_PROTOBUF);
         mediaTypes.put("json", MEDIA_TYPES_JSON);
@@ -60,7 +60,6 @@ public class WebMvcConfig {
     public CatelogHandlerInteceptor catelogHandlerInteceptor(){
         return new CatelogHandlerInteceptor();
     }
-
 
     @Bean
     public ProtobufHttpMessageConverter protobufHttpMessageConverter(){

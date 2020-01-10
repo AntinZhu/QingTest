@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created by yangzirong on 8/15/2017.
  */
-@Configuration
+//@Configuration
 public class ApiMqConfig {
 
     private final static String CONNECTION_FACTORY = "apiConnectionFactory";

@@ -198,8 +198,7 @@ public class EnvClient implements Client {
             case pfm:
                 return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
             case on_line:
-                String serValue = EnvHandlerInteceptor.getParam(EnvHandlerInteceptor.SER);
-                String onLineHost = serValue + ".prd.svc.idc.cedu.cn:8080";
+                String onLineHost = "apigw.changingedu.com";
                 logger.info("on_line host:" + onLineHost);
                 return onLineHost;
             default:

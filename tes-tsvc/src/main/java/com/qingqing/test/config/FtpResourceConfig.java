@@ -11,6 +11,7 @@ import com.qingqing.common.util.UserIdShuffler;
 import com.qingqing.common.util.encode.RSADecrypterCore;
 import com.qingqing.common.util.encode.RSAEncrypterCore;
 import com.qingqing.common.util.encode.TripleDESUtil;
+import com.qingqing.test.client.ApiPiClient;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

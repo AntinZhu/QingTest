@@ -80,7 +80,9 @@
                                                 <!-- 请求的接口地址 -->
                                                 <div class="timeline-item clearfix">
                                                     <div class="timeline-info">
-                                                        <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
+                                                        <a id="editInterface" href="#" target="_blank">
+                                                            <i class="timeline-indicator icon-beaker btn btn-default no-hover"></i>
+                                                        </a>
                                                     </div>
 
                                                     <div class="widget-box transparent">
@@ -269,6 +271,8 @@
             var catelogIdx;
             $(document).ready(function(){
                 refreshPage();
+
+                $("#editInterface").attr("href", "http://" + location.host + "${base}/v1/test/interface/edit?catelogIndex=3-1&id=${interfaceId}");
             });
 
             function refreshPage(){
