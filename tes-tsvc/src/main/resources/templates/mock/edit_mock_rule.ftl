@@ -285,7 +285,7 @@
                 ruleTypeChange("${bean.ruleType}");
                 revertValueInput("${bean.ruleType}", '${bean.ruleValue}');
                 $("#ruleOrderNum").val(${bean.ruleOrderNum});
-                $("#resp").val('${bean.resp}');
+                $("#resp").val('${bean.resp?replace("\n","\\\n")}');
                 $("#remark").val("${bean.remark}");
                 $("#delayMs").val(${bean.delayMs});
                 $("#ruleOrderNum").val(${bean.ruleOrderNum});
