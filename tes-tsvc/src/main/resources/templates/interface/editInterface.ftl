@@ -219,7 +219,7 @@
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
                                                                                             <label>
-                                                                                                <input id="hasHeader" class="ace ace-switch ace-switch-6" type="checkbox" value="0"/>
+                                                                                                <input id="hasHeader" class="ace ace-switch ace-switch-6" type="checkbox" value="0" checked="checked"/>
                                                                                                 <span class="lbl"></span>
                                                                                             </label>
                                                                                         </div>
@@ -244,6 +244,7 @@
                                                                                                     <a class="blue addHeaderBtn" href="###"><i class="icon-plus bigger-130"></i></a>
                                                                                                 </span>
                                                                                             </label>
+                                                                                            <br />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -402,19 +403,18 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
-            var headerHtml = '<label>\
-                    <input name="form-field-checkbox" id="header_enable_{idx}" value="1" class="ace ace-checkbox-2 qing_header_enable" type="checkbox" checked="checked">\
+            var headerHtmlTemplate = '<label>\
+                    <input name="form-field-checkbox" id="header_enable_{idx}" value="1" class="ace ace-checkbox-2 qing_header_enable" type="checkbox" {header_checked}>\
                     <span class="lbl">\
-                    <input type="text" id="header_key_{idx}">\
+                    <input type="text" id="header_key_{idx}" value="{header_key_value}" >\
                     =\
-                    <input type="text" id="header_value_{idx}">\
+                    <input type="text" id="header_value_{idx}" value="{header_value_value}" >\
                     <a class="red delHeaderBtn" href="###"><i class="icon-trash bigger-130"></i></a>\
                     <a class="blue addHeaderBtn" href="###"><i class="icon-plus bigger-130"></i></a>\
                     </span>\
-                    </label>';
+                    </label><br />';
 
             var paramInfo;
-            var headerInfo;
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
             //输入框的值改变时触发
@@ -441,11 +441,14 @@
             });
 
             $(document).off("click", '.addHeaderBtn').on('click', '.addHeaderBtn',function () {
-                var newHeaderHtml = headerHtml;
+                var newHeaderHtml = headerHtmlTemplate;
                 var idx = 1 + new Number($("#requestHeaders").attr("_idx"));
                 $("#requestHeaders").attr("_idx", idx);
 
                 newHeaderHtml = newHeaderHtml.replace(new RegExp("{idx}","gm"), idx);
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_checked}","gm"), 'checked="checked"');
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_key_value}","gm"), "");
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_value_value}","gm"), "");
 
                 $("#requestHeaders").append(newHeaderHtml);
             });
@@ -479,6 +482,7 @@
                 $(".qing_input_tip").addClass("hide");
             <#else>
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId");
+                $("#hasHeader").removeAttr("checked");
             </#if>
             });
 
@@ -500,6 +504,30 @@
                 }else{
                     $("#hasParam").removeAttr("checked");
                     $("#hasParam").val(0);
+                }
+
+                var headerStr = interfaceBean.inter.requestHeaders;
+                if(!isStringEmpty(headerStr)){
+                    var headers = JSON.parse(headerStr);
+                    var headerIdx = 0;
+                    var headerLength = headers.length;
+                    var allHeaderHtml = "";
+                    while(headerIdx < headerLength){
+                        var header = headers[headerIdx];
+
+                        var headerHtml = headerHtmlTemplate.replace(new RegExp("{idx}","gm"), headerIdx);
+                        headerHtml = headerHtml.replace(new RegExp("{header_checked}","gm"), header.enable? 'checked="checked"':'');
+                        headerHtml = headerHtml.replace(new RegExp("{header_key_value}","gm"), header.key);
+                        headerHtml = headerHtml.replace(new RegExp("{header_value_value}","gm"), header.value);
+
+                        headerIdx++;
+                        allHeaderHtml += headerHtml;
+                    }
+                    $("#requestHeaders").attr("_idx", headerLength);
+                    $("#requestHeaders").html(allHeaderHtml);
+                    $("#requestHeadersDiv").removeClass("hide");
+                }else{
+                    $("#hasHeader").removeAttr("checked");
                 }
 
                 var interfaceType = interfaceBean.inter.interfaceType;
