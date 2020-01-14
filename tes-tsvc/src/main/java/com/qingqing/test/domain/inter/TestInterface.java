@@ -19,6 +19,7 @@ public class TestInterface {
     private Date createTime;
     private Date lastUpdateTime;
     private String paramClassName;
+    private String requestHeaders;
 
     public Long getId() {
         return id;
@@ -130,5 +131,13 @@ public class TestInterface {
 
     public void setNextPageUrl(String nextPageUrl) {
         this.nextPageUrl = nextPageUrl;
+    }
+
+    public String getRequestHeaders() {
+        return requestHeaders;
+    }
+
+    public void setRequestHeaders(String requestHeaders) {
+        this.requestHeaders = requestHeaders;
     }
 }

@@ -214,6 +214,41 @@
                                                                                 </div>
 
                                                                                 <div class="form-group">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="hasHeader">是否需要Header：</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <label>
+                                                                                                <input id="hasHeader" class="ace ace-switch ace-switch-6" type="checkbox" value="0"/>
+                                                                                                <span class="lbl"></span>
+                                                                                            </label>
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group hide" id="requestHeadersDiv">
+                                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求Headers:</label>
+
+                                                                                    <div class="col-xs-12 col-sm-9">
+                                                                                        <div id="requestHeaders" _idx="1">
+                                                                                            <label>
+                                                                                                <input name="form-field-checkbox" id="header_enable_1" class="ace ace-checkbox-2" type="checkbox" checked="checked">
+                                                                                                <span class="lbl">
+                                                                                                    <input type="text" id="header_key_1">
+                                                                                                    =
+                                                                                                    <input type="text" id="header_value_1">
+
+                                                                                                    <a class='red delHeaderBtn' href='###'><i class='icon-trash bigger-130'></i></a>
+                                                                                                    <a class="blue addHeaderBtn" href="###"><i class="icon-plus bigger-130"></i></a>
+                                                                                                </span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
                                                                                     <label class="col-sm-3 control-label no-padding-right" for="className">是否需要参数：</label>
 
                                                                                     <div class="col-sm-9">
@@ -367,12 +402,52 @@
         <script type="text/javascript">
             $('textarea').numberedtextarea();
 
+            var headerHtml = '<label>\
+                    <input name="form-field-checkbox" id="header_enable_{idx}" value="1" class="ace ace-checkbox-2 qing_header_enable" type="checkbox" checked="checked">\
+                    <span class="lbl">\
+                    <input type="text" id="header_key_{idx}">\
+                    =\
+                    <input type="text" id="header_value_{idx}">\
+                    <a class="red delHeaderBtn" href="###"><i class="icon-trash bigger-130"></i></a>\
+                    <a class="blue addHeaderBtn" href="###"><i class="icon-plus bigger-130"></i></a>\
+                    </span>\
+                    </label>';
+
             var paramInfo;
+            var headerInfo;
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
             //输入框的值改变时触发
             $(document).on("change", "#paramDetail",function(e){
                 setTimeout(refreshResult, 500);
+            });
+
+            //输入框的值改变时触发
+            $(document).on("change", "#headerDetail",function(e){
+                setTimeout(refreshResult, 500);
+            });
+
+            $(document).off("click", '.qing_header_enable').on('click', '.qing_header_enable',function () {
+                var nowValue = $(this).val();
+                if(nowValue == 1){
+                    $(this).val(0);
+                }else{
+                    $(this).val(1);
+                }
+            });
+
+            $(document).off("click", '.delHeaderBtn').on('click', '.delHeaderBtn',function () {
+                $(this).parent().parent().remove();
+            });
+
+            $(document).off("click", '.addHeaderBtn').on('click', '.addHeaderBtn',function () {
+                var newHeaderHtml = headerHtml;
+                var idx = 1 + new Number($("#requestHeaders").attr("_idx"));
+                $("#requestHeaders").attr("_idx", idx);
+
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{idx}","gm"), idx);
+
+                $("#requestHeaders").append(newHeaderHtml);
             });
 
             function refreshResult(){
@@ -526,6 +601,17 @@
                 }
             });
 
+            $("#hasHeader").change(function () {
+                var value = $(this).val();
+                if(value == 1){
+                    $(this).val(0);
+                    $("#requestHeadersDiv").addClass("hide");
+                }else{
+                    $("#requestHeadersDiv").removeClass("hide");
+                    $(this).val(1);
+                }
+            });
+
             $("#saveBtn").click(function () {
                 var catelogName = $("#catelogName").val();
                 if(catelogName == null || catelogName == ""){
@@ -604,6 +690,37 @@
                     }
                 }
 
+                var headerJson = null;
+                if($("#hasHeader").val() == 1){
+                    var headerLen = new Number($("#requestHeaders").attr("_idx"));
+                    var headerIdx = 1;
+                    while(headerIdx <= headerLen){
+                        var enable = $("#header_enable_" + headerIdx);
+                        if($(enable).val()){
+                            if(headerJson == null){
+                                headerJson = [];
+                            }
+
+                            var header = {};
+                            header.enable = $(enable).val();
+                            header.key =  $("#header_key_" + headerIdx).val();
+                            header.value =  $("#header_value_" + headerIdx).val();
+
+                            if(isStringEmpty(header.key)){
+                                $.gritter.add({
+                                    title : '参数错误:',
+                                    text : "Header参数名不能为空",
+                                    class_name : 'gritter-error gritter-center'
+                                });
+                                return;
+                            }
+
+                            headerJson.push(header);
+                        }
+                        headerIdx++;
+                    }
+                }
+
                 var data = {
                     inter:{
                         id : $("#interfaceId").val(),
@@ -617,7 +734,8 @@
                         catelogIndex:'0',
                         paramDetail : paramDetail,
                         deleted : 0,
-                        paramClassName : $("#className").val()
+                        paramClassName : $("#className").val(),
+                        requestHeaders: JSON.stringify(headerJson)
                     },
                     catelogName : catelogName,
                     parentCatelogId : parentCatelogId
