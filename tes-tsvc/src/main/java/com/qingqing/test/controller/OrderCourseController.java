@@ -153,7 +153,7 @@ public class OrderCourseController {
     @RequestMapping("student/apply_cancel")
     @ProtoResponseBody
     public String applyCancel(@RequestBody UserCommonRequest userCommonRequest) {
-        return  piClient.commonRequest(userCommonRequest.getUrl(), userCommonRequest.getParam(), userCommonRequest.getUserId(), userCommonRequest.getUserType());
+        return  piClient.commonRequest(userCommonRequest.getUrl(), userCommonRequest.getParam(), userCommonRequest.getUserId(), userCommonRequest.getUserType(), "");
     }
 
 

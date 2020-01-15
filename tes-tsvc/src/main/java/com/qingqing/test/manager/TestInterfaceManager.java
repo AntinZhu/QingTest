@@ -3,6 +3,7 @@ package com.qingqing.test.manager;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.util.CollectionsUtil;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.OrderIdEncoder;
 import com.qingqing.common.util.StringUtils;
 import com.qingqing.test.aspect.masterslave.QingReadSlaveDataSource;
@@ -258,20 +259,42 @@ public class TestInterfaceManager implements ISyncable{
             throw new ErrorCodeException(TestInterfaceErrorCode.unknown_test_interface, "unknown interface for id:" + interfaceId);
         }
 
+        String headers = CollectionsUtil.isNullOrEmpty(requestBean.getHeaders())? "": JsonUtil.format(requestBean.getHeaders());
         switch (testInterface.getInterfaceType()){
             case PT:
                 switch (requestBean.getRequestUserType()){
                     case student:
                     case teacher:
                     case ta:
-                        return ptClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId(), requestBean.getRequestUserType());
+                        switch (testInterface.getRequestType()){
+                            case POST:
+                                return ptClient.commonRequest(requestBean.getRequestUrl(), requestBean.getParam(), requestBean.getRequestUserId(), requestBean.getRequestUserType(), headers);
+                            case GET:
+                                return ptClient.commonGetRequest(requestBean.getRequestUrl(), requestBean.getParam(), requestBean.getRequestUserId(), requestBean.getRequestUserType(), headers);
+                            default:
+                                throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_type, "unsupport request type for value:" + testInterface.getRequestType());
+                        }
                     default:
                         throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_user_type, "unsupport request user type for value:" + testInterface.getRequestUserType());
                 }
             case PI:
-                return piClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam(), requestBean.getRequestUserId(), testInterface.getRequestUserType());
+                switch (testInterface.getRequestType()){
+                    case POST:
+                        return piClient.commonRequest(requestBean.getRequestUrl(), requestBean.getParam(), requestBean.getRequestUserId(), requestBean.getRequestUserType(), headers);
+                    case GET:
+                        return piClient.commonGetRequest(requestBean.getRequestUrl(), requestBean.getParam(), requestBean.getRequestUserId(), requestBean.getRequestUserType(), headers);
+                    default:
+                        throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_type, "unsupport request type for value:" + testInterface.getRequestType());
+                }
             case PB:
-                return pbClient.commonRequest(testInterface.getInterfaceUrl(), requestBean.getParam());
+                switch (testInterface.getRequestType()){
+                    case POST:
+                        return pbClient.commonRequest(requestBean.getRequestUrl(), requestBean.getParam(), headers);
+                    case GET:
+                        return pbClient.commonGetRequest(requestBean.getRequestUrl(), requestBean.getParam(), headers);
+                    default:
+                        throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_request_type, "unsupport request type for value:" + testInterface.getRequestType());
+                }
             default:
                 throw new ErrorCodeException(TestInterfaceErrorCode.unsupport_interface_type, "unsupport interface type for value:" + testInterface.getInterfaceType());
         }

@@ -68,6 +68,32 @@
         <div class="hr hr-dotted"></div>
     </div>
 
+    <div class="hide" id="requestHeadersDiv">
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="param3">请求Headers:</label>
+
+            <div class="col-xs-12 col-sm-9">
+                <div id="requestHeaders" _idx="1">
+                    <label>
+                        <input name="form-field-checkbox" id="header_enable_1" value="0" class="ace ace-checkbox-2" type="checkbox" checked="checked">
+                        <span class="lbl">
+                            <input type="text" id="header_key_1">
+                            =
+                            <input type="text" id="header_value_1">
+
+                            <a class='red delHeaderBtn' href='###'><i class='icon-trash bigger-130'></i></a>
+                            <a class="blue addHeaderBtn" href="###"><i class="icon-plus bigger-130"></i></a>
+                        </span>
+                    </label>
+                    <br />
+                </div>
+            </div>
+        </div>
+
+        <div class="hr hr-dotted"></div>
+        <div class="hr hr-dotted"></div>
+    </div>
+
     <#include "/include/paramDetail.ftl" />
 
     <div class="hr hr-dotted"></div>

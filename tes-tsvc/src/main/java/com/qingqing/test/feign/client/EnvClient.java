@@ -80,7 +80,7 @@ public class EnvClient implements Client {
             connection.addRequestProperty("Accept", "*/*");
         }
 
-        if (request.body() != null) {
+        if (request.body() != null && request.body().length > 0) {
             if (contentLength != null) {
                 connection.setFixedLengthStreamingMode(contentLength);
             } else {

@@ -144,6 +144,17 @@
 
                                                                     <div>
                                                                         <div class="col-xs-12">
+                                                                            <div class="form-group qing_catelog_hide">
+                                                                                <label class="col-sm-3 control-label no-padding-right" for="requestUrl">地址:</label>
+
+                                                                                <div class="col-sm-9">
+                                                                                    <div class="clearfix">
+                                                                                        <input class="col-xs-10" type="text" id="requestUrl" placeholder="修改地址..." />
+                                                                                    </div>
+
+                                                                                    <div class="space-2"></div>
+                                                                                </div>
+                                                                            </div>
 
                                                                             <#include "/include/param.ftl" />
 
@@ -265,6 +276,15 @@
 
         <script type="text/javascript">
             $('textarea').numberedtextarea();
+            var headerHtmlTemplate = '<label>\
+                    <input name="form-field-checkbox" id="header_enable_{idx}" value="{header_enable_value}" class="ace ace-checkbox-2 qing_header_enable" type="checkbox" {header_checked}>\
+                    <span class="lbl">\
+                    <input type="text" id="header_key_{idx}" value="{header_key_value}" >\
+                    =\
+                    <input type="text" id="header_value_{idx}" value="{header_value_value}" >\
+                    <a class="blue addHeaderBtn" href="###"><i class="icon-plus bigger-130"></i></a>\
+                    </span>\
+                    </label><br />';
 
             var paramInfo;
             var isCross = ${cross!1};
@@ -347,6 +367,30 @@
                             $(this).prev("input").val(newValue);
                         }
                     });
+                }
+
+                $("#requestUrl").val(resu.interfaceInfo.inter.interfaceUrl);
+
+                if(!isStringEmpty(resu.interfaceInfo.inter.requestHeaders)){
+                    var headers = JSON.parse(resu.interfaceInfo.inter.requestHeaders);
+                    var headerIdx = 0;
+                    var headerLength = headers.length;
+                    var allHeaderHtml = "";
+                    while(headerIdx < headerLength){
+                        var header = headers[headerIdx];
+
+                        var headerHtml = headerHtmlTemplate.replace(new RegExp("{idx}","gm"), headerIdx + 1);
+                        headerHtml = headerHtml.replace(new RegExp("{header_checked}","gm"), header.enable? 'checked="checked"':'');
+                        headerHtml = headerHtml.replace(new RegExp("{header_enable_value}","gm"), header.enable? 1:0);
+                        headerHtml = headerHtml.replace(new RegExp("{header_key_value}","gm"), header.key);
+                        headerHtml = headerHtml.replace(new RegExp("{header_value_value}","gm"), header.value);
+
+                        headerIdx++;
+                        allHeaderHtml += headerHtml;
+                    }
+                    $("#requestHeaders").attr("_idx", headerLength);
+                    $("#requestHeaders").html(allHeaderHtml);
+                    $("#requestHeadersDiv").removeClass("hide");
                 }
 
                 $("#selfParamSwitch").val(${full!0});
@@ -452,6 +496,27 @@
 
             $(document).off("click", '.addInputBtn').on('click', '.addInputBtn',cloneInput);
             $(document).off("click", '.delInputBtn').on('click', '.delInputBtn',removeInput);
+            $(document).off("click", '.addHeaderBtn').on('click', '.addHeaderBtn',function () {
+                var newHeaderHtml = headerHtmlTemplate;
+                var idx = 1 + new Number($("#requestHeaders").attr("_idx"));
+                $("#requestHeaders").attr("_idx", idx);
+
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{idx}","gm"), idx);
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_checked}","gm"), 'checked="checked"');
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_enable_value}","gm"), 1);
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_key_value}","gm"), "");
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_value_value}","gm"), "");
+
+                $("#requestHeaders").append(newHeaderHtml);
+            });
+            $(document).off("click", '.qing_header_enable').on('click', '.qing_header_enable',function () {
+                var nowValue = $(this).val();
+                if(nowValue == 1){
+                    $(this).val(0);
+                }else{
+                    $(this).val(1);
+                }
+            });
 
             function invoke () {
                 refreshInterfaceUrl();
@@ -493,15 +558,41 @@
                     param = generateJsonParam("#paramListDiv input", paramInfo);
                 }
 
-                return param;
+                if(JSON.stringify(param) == "{}"){
+                    return null;
+                }else{
+                    return param;
+                }
+            }
+
+            function getHeaders(){
+                var headers = [];
+
+                var headerLen = new Number($("#requestHeaders").attr("_idx"));
+                var headerIdx = 1;
+                while(headerIdx <= headerLen){
+                    var enable = $("#header_enable_" + headerIdx);
+                    if($(enable).val() == 1){
+                        var header = {};
+                        header.key =  $("#header_key_" + headerIdx).val();
+                        header.value =  $("#header_value_" + headerIdx).val();
+
+                        headers.push(header);
+                    }
+                    headerIdx++;
+                }
+
+                return headers;
             }
 
             function invokeServer(param){
                 var data = {
+                    requestUrl : $("#requestUrl").val(),
                     interfaceId : $("#interfaceId").val(),
                     requestUserId : $("#requestUserId").val(),
                     requestUserType : $("#requestUserType").val(),
-                    param : JSON.stringify(param)
+                    param : param == null? "":JSON.stringify(param),
+                    headers : getHeaders()
                 };
 
                 var request = {
@@ -541,7 +632,9 @@
 
                     commonAjaxRequest(request);
                 }else{
-                    handlerLocalInvoke(param, null);
+                    var headers= {};
+                    fillHeaders(headers);
+                    handlerLocalInvoke(param, headers);
                 }
             }
 
@@ -555,20 +648,30 @@
                     Authkey : token.authkey,
                     qingqing_debug_mode : 'true',
                     QingqingUser : token.qingqingUserId
-                }
+                };
+                fillHeaders(headers);
 
                 handlerLocalInvoke(param, headers);
             }
 
+            function fillHeaders(headers){
+                var assignHeaders = getHeaders();
+                var idx = 0;
+                while(idx < assignHeaders.length){
+                    headers[assignHeaders[idx].key] = assignHeaders[idx].value;
+                    idx++;
+                }
+            }
+
             function handlerLocalInvoke(param, headers){
                 var localPort = $("#localDebugPort").val();
-                var url = "http://127.0.0.1:" + localPort + interfaceBean.interfaceUrl + "?guid=" + $("#guid").val();
+                var url = "http://127.0.0.1:" + localPort + $("#requestUrl").val() + "?guid=" + $("#guid").val();
 
                 if(isCross == 1){
                     var data = {
                         url : url,
                         headers : headers,
-                        params : JSON.stringify(param),
+                        params : param == null? "":JSON.stringify(param),
                         requestType : interfaceBean.requestType
                     };
 
