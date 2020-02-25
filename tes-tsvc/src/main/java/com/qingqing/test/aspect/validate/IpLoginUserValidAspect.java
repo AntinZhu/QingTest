@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * Created by zhujianxing on 2019/10/16.
  */
 @Aspect
-@Component
+//@Component
 public class IpLoginUserValidAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(IpLoginUserValidAspect.class);

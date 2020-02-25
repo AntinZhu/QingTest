@@ -13,6 +13,7 @@ public class TeacherInfoForOrderBean extends InterfaceBaseResponse {
     private List<CourseContentPackage> courseContentPackageList;
     private List<StrengthenPackage> strengthenPackageList;
     private ServicePackage servicePackage;
+    private List<ClassHourPackage> classHourPackageList;
 
     public String getQingqingTeacherId() {
         return qingqingTeacherId;
@@ -68,5 +69,13 @@ public class TeacherInfoForOrderBean extends InterfaceBaseResponse {
 
     public void setServicePackage(ServicePackage servicePackage) {
         this.servicePackage = servicePackage;
+    }
+
+    public List<ClassHourPackage> getClassHourPackageList() {
+        return classHourPackageList;
+    }
+
+    public void setClassHourPackageList(List<ClassHourPackage> classHourPackageList) {
+        this.classHourPackageList = classHourPackageList;
     }
 }
