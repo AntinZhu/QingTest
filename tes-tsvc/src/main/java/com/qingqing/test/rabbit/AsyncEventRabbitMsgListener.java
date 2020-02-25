@@ -50,7 +50,7 @@ public class AsyncEventRabbitMsgListener implements MessageListener, ITestConfig
             EnvHandlerInteceptor.setEnv(Env.pfm);
 
             if(IGNORE_SET.contains(eventType)){
-                piClient.commonRequest("/svc/api/pi/v2/event/clear.json", String.format("{event_id:%d,event_type:%d}", eventId, eventType));
+                piClient.commonRequest("/svc/api/pi/v2/event/clear.json", String.format("{event_id:%d,event_type:%d}", eventId, eventType), "");
             }
         } catch (UnsupportedEncodingException var6) {
             logger.error("failed to decode mq message:{}", encoding, var6);

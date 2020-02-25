@@ -63,16 +63,16 @@ public class CommonController {
     @RequestMapping("pb")
     @ResponseBody
     public String pbRequest(@RequestBody UrlAndParam request){
-        return pbClient.commonRequest(request.getUrl(), request.getParam());
+        return pbClient.commonRequest(request.getUrl(), request.getParam(), "");
     }
 
     @RequestMapping("pi")
     @ResponseBody
     public String piRequest(@RequestBody UserCommonRequest request){
         if(request.getUserId() != null){
-            return  piClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+            return  piClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType(), "");
         }else{
-            return piClient.commonRequest(request.getUrl(), request.getParam());
+            return piClient.commonRequest(request.getUrl(), request.getParam(), "");
         }
     }
 
@@ -80,16 +80,16 @@ public class CommonController {
     @ResponseBody
     public String piRequestV2(@RequestBody UserCommonRequest request){
         if(request.getUserId() != null){
-            return  piClientV2.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+            return  piClientV2.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType(), "");
         }else{
-            return piClientV2.commonRequest(request.getUrl(), request.getParam());
+            return piClientV2.commonRequest(request.getUrl(), request.getParam(), "");
         }
     }
 
     @RequestMapping("pt")
     @ResponseBody
     public String ptRequest(@RequestBody UserCommonRequest request){
-        return  ptClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType());
+        return  ptClient.commonRequest(request.getUrl(), request.getParam(), request.getUserId(), request.getUserType(), "");
     }
 
     @RequestMapping("wx_notify")

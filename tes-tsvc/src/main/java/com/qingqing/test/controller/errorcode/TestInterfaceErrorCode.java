@@ -9,6 +9,7 @@ public enum TestInterfaceErrorCode implements ErrorCodeInterface{
     unknown_test_interface(1001, "unknown test interface", "未找到对应的接口"),
     unsupport_interface_type(1002, "unsupport interface type", "当前暂不支持该接口类型"),
     unsupport_request_user_type(1003, "unsupport request user type", "当前暂不支持该请求用户类型"),
+    unsupport_request_type(1004, "unsupport request type", "当前暂不支持该请求类型"),
     ;
 
     private Integer errorCode;

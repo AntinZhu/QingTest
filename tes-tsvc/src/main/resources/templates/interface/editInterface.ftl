@@ -201,6 +201,18 @@
                                                                                 </div>
 
                                                                                 <div class="form-group">
+                                                                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="requestType">请求类型:</label>
+
+                                                                                    <div class="col-xs-12 col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <input type="hidden" name="requestType" id="requestType" value="POST" />
+                                                                                            <button type="button" value="POST" style="border-radius: 8px;" class="btn btn-sm qing_requestType btn-primary">&thinsp;&thinsp;&thinsp;&thinsp;POST&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;</button>
+                                                                                            <button type="button" value="GET" style="border-radius: 8px;" class="btn btn-sm qing_requestType">&thinsp;&thinsp;&thinsp;&thinsp;GET&thinsp;&thinsp;&thinsp;&thinsp;</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
                                                                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="env">接口请求人用户类型:</label>
 
                                                                                     <div class="col-xs-12 col-sm-9">
@@ -404,7 +416,7 @@
             $('textarea').numberedtextarea();
 
             var headerHtmlTemplate = '<label>\
-                    <input name="form-field-checkbox" id="header_enable_{idx}" value="1" class="ace ace-checkbox-2 qing_header_enable" type="checkbox" {header_checked}>\
+                    <input name="form-field-checkbox" id="header_enable_{idx}" value="{header_enable_value}" class="ace ace-checkbox-2 qing_header_enable" type="checkbox" {header_checked}>\
                     <span class="lbl">\
                     <input type="text" id="header_key_{idx}" value="{header_key_value}" >\
                     =\
@@ -447,6 +459,7 @@
 
                 newHeaderHtml = newHeaderHtml.replace(new RegExp("{idx}","gm"), idx);
                 newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_checked}","gm"), 'checked="checked"');
+                newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_enable_value}","gm"), 1);
                 newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_key_value}","gm"), "");
                 newHeaderHtml = newHeaderHtml.replace(new RegExp("{header_value_value}","gm"), "");
 
@@ -515,8 +528,9 @@
                     while(headerIdx < headerLength){
                         var header = headers[headerIdx];
 
-                        var headerHtml = headerHtmlTemplate.replace(new RegExp("{idx}","gm"), headerIdx);
+                        var headerHtml = headerHtmlTemplate.replace(new RegExp("{idx}","gm"), headerIdx + 1);
                         headerHtml = headerHtml.replace(new RegExp("{header_checked}","gm"), header.enable? 'checked="checked"':'');
+                        headerHtml = headerHtml.replace(new RegExp("{header_enable_value}","gm"), header.enable? 1:0);
                         headerHtml = headerHtml.replace(new RegExp("{header_key_value}","gm"), header.key);
                         headerHtml = headerHtml.replace(new RegExp("{header_value_value}","gm"), header.value);
 
@@ -526,6 +540,7 @@
                     $("#requestHeaders").attr("_idx", headerLength);
                     $("#requestHeaders").html(allHeaderHtml);
                     $("#requestHeadersDiv").removeClass("hide");
+                    $("#hasHeader").val(1);
                 }else{
                     $("#hasHeader").removeAttr("checked");
                 }
@@ -546,6 +561,14 @@
                 $(".qing_requestUserType[value=" + requestUserType + "]").addClass("btn-primary");
                 $("#requestUserType").val(requestUserType);
                 $("#className").val(interfaceBean.inter.paramClassName);
+
+                var requestType = interfaceBean.inter.requestType;
+                if(requestType == null){
+                    requestType = "POST";
+                }
+                $(".qing_requestType.btn-primary").removeClass("btn-primary");
+                $(".qing_requestType[value=" + requestType + "]").addClass("btn-primary");
+                $("#requestType").val(requestType);
 
                 // TODO 父的cateId
                 showParentCatelog("${base}/v1/test/catelog.json", "tree1", "parentCatelogId", interfaceBean.catelog.id);
@@ -605,6 +628,13 @@
                         $("#requestUserType").val($(requestUserTypes[0]).val());
                     }
                 }
+            });
+
+            $(".qing_requestType").click(function() {
+                $(".qing_requestType.btn-primary").removeClass("btn-primary");
+                $(this).addClass("btn-primary");
+
+                $("#requestType").val($(this).val());
             });
 
             $(".qing_requestUserType").click(function(){
@@ -718,19 +748,19 @@
                     }
                 }
 
-                var headerJson = null;
+                var headerJson = "";
                 if($("#hasHeader").val() == 1){
                     var headerLen = new Number($("#requestHeaders").attr("_idx"));
                     var headerIdx = 1;
                     while(headerIdx <= headerLen){
                         var enable = $("#header_enable_" + headerIdx);
                         if($(enable).val()){
-                            if(headerJson == null){
+                            if(headerJson == null || headerJson == ""){
                                 headerJson = [];
                             }
 
                             var header = {};
-                            header.enable = $(enable).val();
+                            header.enable = ($(enable).val() == 1);
                             header.key =  $("#header_key_" + headerIdx).val();
                             header.value =  $("#header_value_" + headerIdx).val();
 
@@ -756,14 +786,14 @@
                         interfaceUrl : interfaceUrl,
                         nextPageUrl :nextPageUrl,
                         interfaceType : interfaceType,
-                        requestType : 1,
+                        requestType : $("#requestType").val(),
                         requestUserType : requestUserType,
                         sortDescNum: 0,
                         catelogIndex:'0',
                         paramDetail : paramDetail,
                         deleted : 0,
                         paramClassName : $("#className").val(),
-                        requestHeaders: JSON.stringify(headerJson)
+                        requestHeaders: isStringEmpty(headerJson)? null : JSON.stringify(headerJson)
                     },
                     catelogName : catelogName,
                     parentCatelogId : parentCatelogId

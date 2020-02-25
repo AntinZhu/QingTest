@@ -452,9 +452,9 @@ public class UtilsController {
             obj.put("operateUserType", "system");
             logger.info("param:" + obj.toJSONString());
 
-            piClient.commonRequest("/svc/api/pi/v1/test/common/config/reset.json?guid=api-test_reset_common_config", obj.toJSONString());
+            piClient.commonRequest("/svc/api/pi/v1/test/common/config/reset.json?guid=api-test_reset_common_config", obj.toJSONString(), "");
         }else if("del".equals(oper)){
-            piClient.commonRequest("/svc/api/pi/v1/test/common/config/del.json?guid=api-test_reset_common_config&id=" + id, "");
+            piClient.commonRequest("/svc/api/pi/v1/test/common/config/del.json?guid=api-test_reset_common_config&id=" + id, "", "");
         }
 
     }
@@ -623,9 +623,9 @@ public class UtilsController {
             obj.put("configValue", configValue);
             obj.put("isDeleted", false);
 
-            piClient.commonRequest("/svc/api/pi/v1/test/city_config/reset.json?guid=api-test_reset_city_config", obj.toJSONString());
+            piClient.commonRequest("/svc/api/pi/v1/test/city_config/reset.json?guid=api-test_reset_city_config", obj.toJSONString(), "");
         }else if("del".equals(oper) ){
-            piClient.commonRequest("/svc/api/pi/v1/test/city_config/del.json?guid=api-test_reset_city_config&id=" + id, "");
+            piClient.commonRequest("/svc/api/pi/v1/test/city_config/del.json?guid=api-test_reset_city_config&id=" + id, "", "");
         }
     }
 }
