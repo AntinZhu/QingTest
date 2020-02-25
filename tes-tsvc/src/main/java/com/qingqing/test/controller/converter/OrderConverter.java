@@ -21,19 +21,8 @@ import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.util.converter.lang.DoubleCompareUtil;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.KeyAndValue;
-import com.qingqing.test.bean.order.AddOrderResultBean;
-import com.qingqing.test.bean.order.CourseContentPackage;
-import com.qingqing.test.bean.order.CourseOrderBean;
-import com.qingqing.test.bean.order.CoursePackage;
-import com.qingqing.test.bean.order.CoursePrice;
+import com.qingqing.test.bean.order.*;
 import com.qingqing.test.bean.order.CoursePrice.SiteTypeAndPrice;
-import com.qingqing.test.bean.order.CoursePriceType;
-import com.qingqing.test.bean.order.OrderSiteType;
-import com.qingqing.test.bean.order.ServicePackage;
-import com.qingqing.test.bean.order.ServicePackageInfo;
-import com.qingqing.test.bean.order.StrengthenInfo;
-import com.qingqing.test.bean.order.StrengthenPackage;
-import com.qingqing.test.bean.order.TeacherInfoForOrderBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -186,6 +175,12 @@ public class OrderConverter {
             servicePackage.setServicePackageInfoList(servicePackageInfoList);
             bean.setServicePackage(servicePackage);
         }
+
+        // 课时包
+        if(response.hasClass){
+
+        }
+        List<ClassHourPackage> classHurPackageList = new ArrayList<>();
 
         bean.setSupportCourseList(BaseConverter.convertToKeyAndValue(courseMap));
         bean.setCourseOrderList(courseOrderBeanList);
