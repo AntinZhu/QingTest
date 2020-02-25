@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class TestProtoClassNameManager implements ISyncable, IQingInitDelayable 
     @Value("${protobuf.init.filepath:null}")
     public String protoInitFile;
 
-//    @PostConstruct
+    @PostConstruct
     public void sync(){
         List<TestProtoClassName> testConfigList = testProtoClassNameService.selectAll();
 

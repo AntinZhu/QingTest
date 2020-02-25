@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 /**
  * Created by zhujianxing on 2018/10/15.
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class QingInitCheckAspect {
     private static final Logger logger = LoggerFactory.getLogger(QingInitCheckAspect.class);
 
