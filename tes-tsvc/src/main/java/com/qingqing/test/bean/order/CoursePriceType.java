@@ -19,8 +19,9 @@ public class CoursePriceType {
     public static CoursePriceType package_course = new CoursePriceType(101, "优惠包", null, null);
     public static CoursePriceType content_package = new CoursePriceType(102, "内容包", null, null);
     public static CoursePriceType class_course = new CoursePriceType(103, "小组课", TeacherCoursePriceType.live_class_teacher_course_price_type, OrderType.live_class_order_type);
+    public static CoursePriceType class_hour = new CoursePriceType(104, "课时包", TeacherCoursePriceType.class_hour_normal_price_type, OrderType.class_hour_order_type);
 
-    public static Set<CoursePriceType> values = Sets.newHashSet(genrenal, group_two, group_three, group_four, group_five, class_course);
+    public static Set<CoursePriceType> values = Sets.newHashSet(genrenal, group_two, group_three, group_four, group_five, class_course, class_hour);
 
     private CoursePriceType(Integer value, String name, TeacherCoursePriceType priceType, OrderType orderType) {
         this.value = value;

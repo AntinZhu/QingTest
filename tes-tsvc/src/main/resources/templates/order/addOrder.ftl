@@ -170,7 +170,7 @@
                                                                     </select>
                                                                 </div><!-- /span -->
                                                             </div>
-                                                            <div class="form-group hide" id="coursePackageChooseDiv">
+                                                            <div class="form-group hide packageChooseDiv" id="coursePackageChooseDiv">
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="coursePackageId">选择优惠包：</label>
                                                                 <div class="col-xs-4 col-sm-4">
                                                                     <div>
@@ -179,11 +179,20 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group hide" id="contentPackageChooseDiv">
+                                                            <div class="form-group hide packageChooseDiv" id="contentPackageChooseDiv">
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="contentPackageId">选择内容包：</label>
                                                                 <div class="col-xs-4 col-sm-4">
                                                                     <div>
                                                                         <select class="width-80 form-control" id="contentPackageId" multiple="multiple">
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group hide packageChooseDiv" id="classHourPackageChooseDiv">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="classHourPackageId">选择课时包：</label>
+                                                                <div class="col-xs-4 col-sm-4">
+                                                                    <div>
+                                                                        <select class="width-80 form-control" id="classHourPackageId" multiple="multiple">
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -290,8 +299,6 @@
                                                                     <option value="23">19:30</option>
                                                                     <option value="24">20:00</option>
                                                                     <option value="25">20:30</option>
-                                                                    <option value="26">21:00</option>
-                                                                    <option value="27">21:30</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -778,11 +785,14 @@
 
         var packageCourseId = null;
         var contentPackageId = null;
+        var classHourPackageId = null;
         var discountType = $("#discountType").val();
         if(discountType == "2"){
             packageCourseId = $("#coursePackageId").val()[0];
         }else if(discountType == "3"){
             contentPackageId = $("#contentPackageId").val()[0];
+        }else if(discountType == "4"){
+            classHourPackageId =  $("#classHourPackageId").val()[0];
         }
 
         var strengthenType = $("#strengthenType").val();
@@ -836,7 +846,8 @@
             normalTimes :normalTimes,
             strengthenTimes :strengthenTimes,
             servicePackageId : servicePackageId,
-            startBlock : $("#startBlock").val()
+            startBlock : $("#startBlock").val(),
+            classHourPackageId : classHourPackageId
         };
 
         var request = {
@@ -1305,11 +1316,14 @@
     var contentPackageList;
     // 巩固包
     var strengthenPackageList;
+    // 课时包
+    var classHourPackageList;
     function handlerTeacherInfo(resu){
         courseOrderList = resu.courseOrderList;
         coursePackageList = resu.coursePackageList;
         contentPackageList = resu.courseContentPackageList;
         strengthenPackageList = resu.strengthenPackageList;
+        classHourPackageList = resu.classHourPackageList;
 
         $("#qingqingTeacherId").val(resu.qingqingTeacherId);
         // 更新下拉款内容
@@ -1360,7 +1374,7 @@
             if(courseOrder.coursePriceType.value == coursePriceType){
                 for(var gradeIdIdx in courseOrder.supprtGradeAndSiteTypeList){
                     var price = courseOrder.supprtGradeAndSiteTypeList[gradeIdIdx];
-                    options[optionIdx++] = price.grade;
+                 options[optionIdx++] = price.grade;
                 }
                 break;
             }
@@ -1369,8 +1383,7 @@
     }
 
     function updateDiscountType(resu){
-        $("#coursePackageChooseDiv").addClass("hide");
-        $("#contentPackageChooseDiv").addClass("hide");
+        $(".packageChooseDiv").addClass("hide");
 
         var discountTypes = new Array();
         var siteIdx = 0;
@@ -1394,13 +1407,20 @@
             discountTypes[siteIdx++] = discountType;
         }
 
+        if(resu.classHourPackageList.length > 0){
+            discountType = new Object();
+            discountType.key = 4;
+            discountType.value = '课时包';
+            discountTypes[siteIdx++] = discountType;
+        }
+
         updateOptions("discountType", discountTypes, 1);
     }
 
     $("#discountType").change(function(){
-        $("#coursePackageChooseDiv").addClass("hide");
-        $("#contentPackageChooseDiv").addClass("hide");
+        $(".packageChooseDiv").addClass("hide");
         $("#courseTimes").removeAttr("readonly");
+        $("#classHour").removeAttr("readonly");
         $("#courseTimes").val(4);
         $("#classHour").val(20);
 
@@ -1438,6 +1458,26 @@
             $("#courseTimes").attr("readonly","readonly");
 
             $("#contentPackageChooseDiv").removeClass("hide");
+        }else if(discountValue == "4"){
+            var options = new Array();
+            var optionIdx = 0;
+            for(idx in classHourPackageList){
+                var classHourPackage = classHourPackageList[idx];
+
+                var option = new Object();
+                option.key = classHourPackage.packageId;
+                option.value = classHourPackage.name;
+                options[optionIdx++] = option;
+            }
+
+            var firstClassHourPackage = classHourPackageList[0];
+            updateOptions("classHourPackageId", options, firstClassHourPackage.packageId);
+            $("#courseTimes").val((firstClassHourPackage.feeClassHour + firstClassHourPackage.freeClassHour) / 10);
+            $("#classHour").val(10);
+            $("#courseTimes").attr("readonly","readonly");
+            $("#classHour").attr("readonly","readonly");
+
+            $("#classHourPackageChooseDiv").removeClass("hide");
         }
 
 
@@ -1470,6 +1510,20 @@
         updateOrderSelector();
     });
 
+    $("#classHourPackageId").change(function(){
+        var classHourPackageId = $(this).val();
+        for(idx in classHourPackageList) {
+            var coursePackage = classHourPackageList[idx];
+            if(coursePackage.packageId == classHourPackageId){
+                $("#courseTimes").val((coursePackage.feeClassHour + coursePackage.freeClassHour) / 10);
+                $("#classHour").val(10);
+                break;
+            }
+        }
+
+        updateOrderSelector();
+    });
+
 
     function refreshCoursePriceType(){ // 更新订单类型
         var courseData = getCourseOrderList();
@@ -1491,9 +1545,9 @@
         var discountType = $("#discountType").val();
         switch(discountType){
             case "1":
-                return courseOrderList;
+                return filter(courseOrderList, [1,2,3,4,5]);
             case "2":
-                return get(courseOrderList);
+                return filter(courseOrderList, [1]);
             case "3":
                 var contentPackageId = $("#contentPackageId").val();
                 for(var idx in contentPackageList){
@@ -1503,15 +1557,17 @@
                     }
                 }
                 return null;
+            case "4":
+                return filter(courseOrderList, [104])
         }
     }
 
-    function get(courseOrderList){
+    function filter(courseOrderList, includeArr){
         var result = new Array();
         var arrIdx = 0;
         for(var idx in courseOrderList) {
             var courseOrder = courseOrderList[idx];
-            if(courseOrder.coursePriceType.value == 1){
+            if(includeArr.includes(courseOrder.coursePriceType.value)){
                 result[arrIdx++] = courseOrder;
             }
         }
