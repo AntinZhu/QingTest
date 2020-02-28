@@ -212,6 +212,9 @@ public class OrderManager {
         }else if(addOrderBean.getContentPackageId() != null){
             builder.setContentPackageRelationId(addOrderBean.getContentPackageId());
             builder.setDiscountType(DiscountType.content_package_discount_type);
+        }else if(addOrderBean.getClassHourPackageId() != null){
+            builder.setClassHourPackageId(addOrderBean.getClassHourPackageId());
+            builder.setDiscountType(DiscountType.class_hour_package_discount_type);
         }
 
         CoursePriceType priceType = CoursePriceType.valueOf(addOrderBean.getCoursePriceType());
@@ -273,7 +276,7 @@ public class OrderManager {
             builder6.addTimeParams(timeBuilder.build());
 
             start = start + halfHourLength;
-            if(start > 28){
+            if((start + (halfHourLength -1)) > 25){
                 start = 0;
                 courseDate = TimeUtil.dayAfter(courseDate, 1);
             }
@@ -304,7 +307,7 @@ public class OrderManager {
                 builder6.addTimeParams(timeBuilder.build());
 
                 start = start + halfHourLength;
-                if(start > 28){
+                if((start + (halfHourLength -1)) > 25){
                     start = 0;
                     courseDate = TimeUtil.dayAfter(courseDate, 1);
                 }
@@ -333,7 +336,7 @@ public class OrderManager {
                 omus.add(timeBuilder.build());
 
                 start = start + halfHourLength;
-                if (start > 28) {
+                if ((start + (halfHourLength -1)) > 25) {
                     start = 0;
                     courseDate = TimeUtil.dayAfter(courseDate, 1);
                 }

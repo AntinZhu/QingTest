@@ -1,5 +1,6 @@
 package com.qingqing.test.controller.converter;
 
+import com.qingqing.api.proto.api_course_class_hour.ApisvcCourseClassHour;
 import com.qingqing.api.proto.order.ClassOrderProto.JoinClassOrderResponse;
 import com.qingqing.api.proto.order.ClassOrderProto.TeacherDetailForLiveClassOrderResponse;
 import com.qingqing.api.proto.v1.ApiServicePackageProto.ApiServicePackageInfo;
@@ -177,10 +178,15 @@ public class OrderConverter {
         }
 
         // 课时包
-        if(response.hasClass){
-
+        List<ClassHourPackage> classHourPackageList = new ArrayList<>();
+        for(ApisvcCourseClassHour.ApisvcCourseClassHourPackageInfo classHourPackageInfo  : response.getClassHourInfo().getClassHourPackagesList()){
+            ClassHourPackage classPackage = new ClassHourPackage();
+            classPackage.setPackageId(classHourPackageInfo.getPackageId());
+            classPackage.setName(classHourPackageInfo.getName());
+            classPackage.setFeeClassHour(classHourPackageInfo.getFeeClassHour());
+            classPackage.setFreeClassHour(classHourPackageInfo.getFreeClassHour());
+            classHourPackageList.add(classPackage);
         }
-        List<ClassHourPackage> classHurPackageList = new ArrayList<>();
 
         bean.setSupportCourseList(BaseConverter.convertToKeyAndValue(courseMap));
         bean.setCourseOrderList(courseOrderBeanList);
@@ -188,6 +194,7 @@ public class OrderConverter {
         bean.setCoursePackageList(coursePackageList);
         bean.setCourseContentPackageList(courseContentPackageList);
         bean.setStrengthenPackageList(strengthenPackageList);
+        bean.setClassHourPackageList(classHourPackageList);
 
         return bean;
     }
