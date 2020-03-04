@@ -1545,7 +1545,7 @@
         var discountType = $("#discountType").val();
         switch(discountType){
             case "1":
-                return filter(courseOrderList, [1,2,3,4,5]);
+                return filter(courseOrderList, [1,2,3,4,5,104]);
             case "2":
                 return filter(courseOrderList, [1]);
             case "3":
