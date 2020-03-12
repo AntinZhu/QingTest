@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>下单流程-1</title>
+    <title>下单流程</title>
     <#include "/include/resource.ftl" />
 
     <style>
@@ -924,7 +924,7 @@
         var request={};
 
         var common_order = {};
-        common_order["order_type"] = parseInt($("#coursePriceType").val());
+        common_order["order_type"] = getOrderType($("#coursePriceType").val());
         common_order["qingqing_common_order_id"] = $("#qingqingOrderId").text();
 
         var order_voucher_items = {};

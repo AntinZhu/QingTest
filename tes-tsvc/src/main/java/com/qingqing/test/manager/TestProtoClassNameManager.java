@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by zhujianxing on 2019/3/5.
  */
 @Component
-public class TestProtoClassNameManager implements ISyncable, IQingInitDelayable {
+public class TestProtoClassNameManager implements ISyncable {
     private static final Logger logger = LoggerFactory.getLogger(TestProtoClassNameManager.class);
 
     @Autowired
@@ -88,12 +88,10 @@ public class TestProtoClassNameManager implements ISyncable, IQingInitDelayable 
         return simpleFullMap.get(simpleName);
     }
 
-    @Override
     public void doInit() {
         sync();
     }
 
-    @Override
     public boolean isNeedInit() {
         return simpleFullMap == null;
     }

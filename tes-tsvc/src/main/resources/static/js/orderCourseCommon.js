@@ -243,3 +243,21 @@ function deleteClassOrderCourse(base, orderCourseId, assistantId){
 
     commonAjaxRequest(request);
 }
+
+function getOrderType(coursePriceType){
+    switch (coursePriceType){
+        case "1":
+            return "general_order_type";
+        case "2":
+        case "3":
+        case "4":
+        case "5":
+            return "group_order_type";
+        case "103":
+            return "live_class_order_type";
+        case "104":
+            return "class_hour_order_type";
+    }
+
+    return null;
+}

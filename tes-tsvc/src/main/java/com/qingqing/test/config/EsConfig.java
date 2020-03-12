@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 public class EsConfig {
 
     @Bean
-    public RestClient getClient(@Value("${a}") String value) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+    public RestClient getClient() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         // 如果有多个从节点可以持续在内部new多个HttpHost，参数1是ip,参数2是HTTP端口，参数3是通信协议
         RestClientBuilder clientBuilder = RestClient.builder(new HttpHost("backend.es.idc.cedu.cn", 9201, "http"));
 
