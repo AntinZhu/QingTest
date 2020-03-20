@@ -182,9 +182,11 @@ public class QingApiLabUtils {
     }
 
     public static void main(String[] args) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36");
-
-        System.out.println(doJsonPost("https://zhujianxinghahaha:115dbe9b426bc0a539b148d13c3f14dd66@jenkins.changingedu.com/job/api-protobuf/build", "", headers));
+        String[] phoneNumbers = new String[]{"15919396605","13439092513","15652923897","15099569493","18097699077","19912302623","18709947760","16609946105","18701431061","15920195027","13698486518","15916363363","13422948858","15524205571","18359570596","15637647527","13513331816","13780506143"};
+        String sessionId = "cec1aaa4-062e-4b65-b5b6-79c02ac8c402";
+        for (String phoneNumber : phoneNumbers) {
+            String userId = phoneToUserId("copartner", phoneNumber, sessionId);
+            System.out.println(userId);
+        }
     }
 }
