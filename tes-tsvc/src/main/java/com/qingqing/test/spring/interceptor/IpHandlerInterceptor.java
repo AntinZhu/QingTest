@@ -71,7 +71,7 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
         return content.toJSONString();
     }
 
-    private boolean isIgnore(String requestUrl, String contentPath){
+    public boolean isIgnore(String requestUrl, String contentPath){
         for (String ignoreUrl : IGNORE_SET) {
             if(requestUrl.equals(contentPath + ignoreUrl)){
                 return true;

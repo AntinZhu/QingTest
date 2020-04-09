@@ -8,6 +8,7 @@ import com.qingqing.test.bean.schedule.QingScheduleType;
 import com.qingqing.test.bean.schedule.QingScheduleable;
 import com.qingqing.test.manager.UserIpManager;
 import com.qingqing.test.manager.WxNotifyManager;
+import com.qingqing.test.spring.interceptor.IpHandlerInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -41,6 +42,8 @@ public class IpFilter implements Filter, QingScheduleable {
     private WxNotifyManager wxNotifyManager;
     @Autowired
     private UserIpManager userIpManager;
+    @Autowired
+    private IpHandlerInterceptor ipHandlerInterceptor;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -50,17 +53,18 @@ public class IpFilter implements Filter, QingScheduleable {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String requestIp = RequestExtract.getServerIpByRequest((HttpServletRequest)servletRequest);
+        HttpServletRequest request = (HttpServletRequest)servletRequest;
+        String requestIp = RequestExtract.getServerIpByRequest(request);
 
         String requestDay = TimeUtil.dateToMonthDay(new Date());
         if(!today.equals(requestDay)){
             ipSet = new HashSet<>();
             today = requestDay;
 
-            addNewIp(requestIp);
+            addNewIp(requestIp, request);
         }else{
             if(!ipSet.contains(requestIp)){
-                addNewIp(requestIp);
+                addNewIp(requestIp, request);
             }
         }
 
@@ -74,7 +78,11 @@ public class IpFilter implements Filter, QingScheduleable {
         }
     }
 
-    private void addNewIp(String ip){
+    private void addNewIp(String ip, HttpServletRequest request){
+        if(ipHandlerInterceptor.isIgnore(request.getRequestURI(), request.getContextPath())){
+            return;
+        }
+
         ipSet.add(ip);
         logger.warn("request from ip :" + ip + ", full in today:" + JsonUtil.format(ipSet));
         wxNotify(ip);

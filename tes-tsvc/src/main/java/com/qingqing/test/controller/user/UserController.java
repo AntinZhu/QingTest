@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @RequestMapping("/edit")
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.82")
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.15")
     public String editUserPage(@RequestParam(value = "id", defaultValue = "0") Long userId, Model model){
         model.addAttribute("id", userId);
         if(userId > 0){
@@ -102,7 +102,7 @@ public class UserController {
 
     @RequestMapping("/add")
     @ResponseBody
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.82")
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.15")
     public SimpleResponse addUser(@RequestBody  TestUserIp userIp){
         testUserIpService.insert(userIp);
 
@@ -112,7 +112,7 @@ public class UserController {
 
     @RequestMapping("/isDeleted/set")
     @ResponseBody
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.82")
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.15")
     public SimpleResponse updateDeleted(@RequestBody IdAndBoolBean request){
         testUserIpService.updateDeleted(request.getId(), request.getBool());
 
