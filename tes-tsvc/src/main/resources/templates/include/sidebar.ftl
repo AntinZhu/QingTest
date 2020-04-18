@@ -123,7 +123,11 @@
         });
 
         function upIp(){
-            bootbox.prompt("IP上传:请输入你的姓名", function(result) {
+            upIpWithTitle("IP上传:请输入你的姓名");
+        }
+
+        function upIpWithTitle(title){
+            bootbox.prompt(title, function(result) {
                 if (result === null) {
                     return;
                 } else {

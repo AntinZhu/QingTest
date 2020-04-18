@@ -46,8 +46,11 @@
                                     </h1>
 
                                     <hr />
-                                    <h3 class="lighter smaller">不要再试了，非验证用户无法使用该系统</h3>
-
+                                    <#if (inBlack!0) gt 0>
+                                        <h3 class="lighter smaller">你已被加入黑名单，请上传用户名，通过审核之后才能使用</h3>
+                                    <#else>
+                                        <h3 class="lighter smaller">不要再试了，非验证用户无法使用该系统</h3>
+                                    </#if>
                                     <hr />
                                     <div class="space"></div>
                                 </div>
@@ -62,7 +65,12 @@
 </body>
 <script type="text/javascript">
     $(document).ready(function(){
-        upIp();
+<#if (inBlack!0) gt 0>
+    upIpWithTitle("你已被加入黑名单，请上传用户名，通过审核之后才能使用");
+<#else>
+    upIp();
+</#if>
+
     });
 </script>
 </html>

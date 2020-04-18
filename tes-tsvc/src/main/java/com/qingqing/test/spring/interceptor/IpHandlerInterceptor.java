@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Sets;
 import com.qingqing.common.onoff.ISwitchDeterminer;
 import com.qingqing.common.web.util.RequestExtract;
+import com.qingqing.test.domain.user.IpStatus;
 import com.qingqing.test.domain.user.TestUserIp;
 import com.qingqing.test.manager.UserIpManager;
 import com.qingqing.test.manager.WxNotifyManager;
@@ -52,7 +53,11 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
             TestUserIp userIp = userIpManager.getUserInfoIncTmp(requestIp);
             if(userIp == null){
                 response.sendRedirect(request.getContextPath() + PAGE + "?requestUrl=" + URLEncoder.encode(request.getRequestURI().replace(request.getContextPath(), "")  + "?" + request.getQueryString(), "utf-8"));
-                wxNotifyManager.selfNotify(buildNewIpFilterContent(requestIp));
+                wxNotifyManager.selfNotify(buildNewIpFilterContent(requestIp, "当日新IP被限制访问"));
+            }else if(IpStatus.black.equals(userIp.getIpStatus())){
+                // 进入黑名单
+                response.sendRedirect(request.getContextPath() + PAGE + "?inBlack=1&requestUrl=" + URLEncoder.encode(request.getRequestURI().replace(request.getContextPath(), "")  + "?" + request.getQueryString(), "utf-8"));
+                wxNotifyManager.selfNotify(buildNewIpFilterContent(requestIp, "黑名单用户访问被限制"));
             }
         }
 
@@ -60,9 +65,9 @@ public class IpHandlerInterceptor extends HandlerInterceptorAdapter {
     }
 
 
-    private String buildNewIpFilterContent(String newIp){
+    private String buildNewIpFilterContent(String newIp, String alertText){
         JSONObject markdown = new JSONObject();
-        markdown.put("content", "当日新IP被限制访问\n                >用户IP: <font color=\"comment\">" + newIp + "</font>\n");
+        markdown.put("content", alertText + "\n                >用户IP: <font color=\"comment\">" + newIp + "</font>\n");
 
         JSONObject content = new JSONObject();
         content.put("msgtype", "markdown");

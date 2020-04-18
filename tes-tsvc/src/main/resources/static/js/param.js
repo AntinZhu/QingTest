@@ -722,6 +722,14 @@ $(document).on("change", "#isLocalDebug", function(){
     }
 });
 
+$(document).on("change", ".qing_select", function(){
+    if($(this).val() == 0){
+        $(this).val(1);
+    }else{
+        $(this).val(0);
+    }
+});
+
 function editableOff(){
     $(document).find(".date_editable").each(function(key,value){
         $(value).editable('toggleDisabled');

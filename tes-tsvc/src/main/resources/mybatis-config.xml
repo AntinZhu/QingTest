@@ -13,6 +13,7 @@
         <typeAlias alias="CatelogRefType" type="com.qingqing.test.domain.inter.CatelogRefType" />
         <typeAlias alias="RuleInterfaceType" type="com.qingqing.test.domain.mock.InterfaceType"/>
         <typeAlias alias="RuleType" type="com.qingqing.test.domain.mock.RuleType"/>
+        <typeAlias alias="IpStatus" type="com.qingqing.test.domain.user.IpStatus"/>
     </typeAliases>
 
     <typeHandlers>
@@ -26,5 +27,6 @@
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.inter.CatelogRefType" />
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.mock.InterfaceType"/>
         <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.mock.RuleType"/>
+        <typeHandler handler="com.qingqing.common.mybatis.handler.GenericEnumTypeHandler" javaType="com.qingqing.test.domain.user.IpStatus"/>
     </typeHandlers>
 </configuration>

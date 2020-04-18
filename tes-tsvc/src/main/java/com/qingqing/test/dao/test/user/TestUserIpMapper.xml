@@ -9,10 +9,11 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
     <result column="head_image" property="headImage" jdbcType="VARCHAR" />
+    <result column="ip_status" property="ipStatus" javaType="IpStatus" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, user_name, user_ip, is_deleted, create_time, last_update_time, head_image
+    id, user_name, user_ip, is_deleted, create_time, last_update_time, head_image, ip_status
   </sql>
 
   <select id="selectAll" resultMap="BaseResultMap">
@@ -21,11 +22,12 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.user.TestUserIp">
-    insert into t_user_ip(user_name, user_ip, is_deleted, head_image, create_time)
-    value(#{userName,jdbcType=VARCHAR} , #{userIp,jdbcType=VARCHAR} , 0, #{headImage,jdbcType=VARCHAR} , now())
+    insert into t_user_ip(user_name, user_ip, is_deleted, head_image, create_time, ip_status)
+    value(#{userName,jdbcType=VARCHAR} , #{userIp,jdbcType=VARCHAR} , 0, #{headImage,jdbcType=VARCHAR} , now(), #{ipStatus, javaType=IpStatus})
     ON DUPLICATE KEY UPDATE
       	is_deleted = 0,
-      	user_name = #{userName, jdbcType=VARCHAR}
+      	user_name = #{userName, jdbcType=VARCHAR},
+      	ip_status = #{ipStatus, javaType=IpStatus}
   </insert>
 
   <update id="updateHeadImage">
@@ -37,6 +39,12 @@
   <update id="updateDeleted">
     update t_user_ip
     set is_deleted = #{isDeleted,jdbcType=BOOLEAN}
+    where id = #{id, jdbcType=BIGINT}
+  </update>
+
+  <update id="updateIpStatus">
+    update t_user_ip
+    set ip_status = #{ipStatus, javaType=IpStatus}
     where id = #{id, jdbcType=BIGINT}
   </update>
 

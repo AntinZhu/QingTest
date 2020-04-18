@@ -1,15 +1,21 @@
 package com.qingqing.test.util;
 
+import java.io.File;
+
 /**
  * Created by zhujianxing on 2018/9/27.
  */
 public class QingStringUtil {
 
     public static String toUnderlineStyle(String value){
+        return humpToOtherStyle(value, "_");
+    }
+
+    public static String humpToOtherStyle(String value, String separator){
         StringBuilder sb = new StringBuilder();
         for(byte b : value.getBytes()){
             if(b >= 65 && b <= 90){
-                sb.append("_");
+                sb.append(separator);
                 b = (byte)(b + 32);
             }
             sb.append((char)b);

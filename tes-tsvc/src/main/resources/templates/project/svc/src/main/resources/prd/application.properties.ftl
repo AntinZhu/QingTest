@@ -1,0 +1,1 @@
+apollo.cacheDir=/home/qingqing/data/conf

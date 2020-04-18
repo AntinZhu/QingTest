@@ -8,6 +8,7 @@ import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.IdAndBoolBean;
 import com.qingqing.test.bean.common.response.ListResponse;
+import com.qingqing.test.domain.user.IpStatus;
 import com.qingqing.test.domain.user.TestUserIp;
 import com.qingqing.test.manager.CommonSyncManager;
 import com.qingqing.test.manager.ISyncable.SyncType;
@@ -120,10 +121,20 @@ public class UserController {
         return SimpleResponse.SUCC;
     }
 
+    @RequestMapping("/isBlack/set")
+    @ResponseBody
+    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.7.15")
+    public SimpleResponse updateBlack(@RequestBody IdAndBoolBean request){
+        testUserIpService.updateIpStatus(request.getId(), request.getBool()? IpStatus.black : IpStatus.enable);
+
+        commonSyncManager.sync(SyncType.user_ip);
+        return SimpleResponse.SUCC;
+    }
+
     @RequestMapping("/tmp/login")
     @ResponseBody
     public SimpleResponse tmpLogin(@RequestParam("userIp") String userIp, @RequestParam("userName") String userName){
-        userIpManager.addTmpUser(userName, userIp);
+        userIpManager.addTmpUser(userName, userIp, IpStatus.enable);
 
         return SimpleResponse.SUCC;
     }

@@ -9,6 +9,7 @@ public class TestUserIp {
     private Long id;
     private String userName;
     private String userIp;
+    private IpStatus ipStatus;
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
@@ -36,6 +37,14 @@ public class TestUserIp {
 
     public void setUserIp(String userIp) {
         this.userIp = userIp;
+    }
+
+    public IpStatus getIpStatus() {
+        return ipStatus;
+    }
+
+    public void setIpStatus(IpStatus ipStatus) {
+        this.ipStatus = ipStatus;
     }
 
     public Boolean getDeleted() {

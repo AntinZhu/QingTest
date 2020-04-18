@@ -83,6 +83,7 @@
                                             <th>用户名</th>
                                             <th>用户IP</th>
                                             <th>状态</th>
+                                            <th>黑名单</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
@@ -126,6 +127,7 @@
             '<td>{userName}</td>' +
             '<td><a href="#">{userIp}</a></td>' +
             '<td class="hidden-480"><label><input id="{id}" class="ace ace-switch ace-switch-6 enable_user" type="checkbox" value="{isEnable}" {enable_checked} />    <span class="lbl"></span>    </label></td>' +
+            '<td class="hidden-480"><label><input userId="{id}" class="ace ace-switch ace-switch-6 black_user" type="checkbox" value="{isBlack}" {black_checked} />    <span class="lbl"></span>    </label></td>' +
             '<td>' +
                 '<input type="hidden" id = "id" value="{id}"/> ' +
                 '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">' +
@@ -171,6 +173,14 @@
                     html = html.replace(new RegExp("{isEnable}", "gm"), "1");
                 }
 
+                if(result.ipStatus == "enable"){
+                    html = html.replace(new RegExp("{black_checked}", "gm"),  '');
+                    html = html.replace(new RegExp("{isBlack}", "gm"), "0");
+                }else{
+                    html = html.replace(new RegExp("{black_checked}", "gm"),  'checked="checked"');
+                    html = html.replace(new RegExp("{isBlack}", "gm"), "1");
+                }
+
                 $("#ruleListBody").append(html);
             }
         }
@@ -196,6 +206,35 @@
 
         var request = {
             url : "${base}/v1/user/isDeleted/set.json",
+            data : data,
+            handlerFunc : handleDefaultResult,
+            isASync : true,
+            failTitle :"保存出错:"
+        };
+
+        commonAjaxRequest(request);
+    });
+
+    $(document).on("click", '.black_user', function(){
+        var id = $(this).attr("userId");
+        var defaultValue;
+
+        var isEnable = $(this).val();
+        if(isEnable == 0){
+            defaultValue = true;
+            $(this).val(1);
+        }else{
+            defaultValue = false;
+            $(this).val(0);
+        }
+
+        var data = {
+            id : id,
+            bool : defaultValue
+        };
+
+        var request = {
+            url : "${base}/v1/user/isBlack/set.json",
             data : data,
             handlerFunc : handleDefaultResult,
             isASync : true,

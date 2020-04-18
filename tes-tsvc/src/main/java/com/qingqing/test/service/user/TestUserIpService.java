@@ -1,5 +1,6 @@
 package com.qingqing.test.service.user;
 
+import com.qingqing.test.domain.user.IpStatus;
 import com.qingqing.test.domain.user.TestUserIp;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface TestUserIpService {
     TestUserIp findById(Long id);
 
     void updateDeleted(Long id, boolean isDeleted);
+
+    void updateIpStatus(Long id, IpStatus ipStatus);
 
     boolean updateUserHeadImage(String userIp, String headImage);
 }

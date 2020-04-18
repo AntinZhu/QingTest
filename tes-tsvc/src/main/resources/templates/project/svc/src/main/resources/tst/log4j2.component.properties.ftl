@@ -1,0 +1,2 @@
+#log4j2.ContextDataInjector=com.qingqing.scoresvc.config.ScoreThreadContextMap
+isThreadContextMapInheritable=true

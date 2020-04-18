@@ -1,6 +1,7 @@
 package com.qingqing.test.service.user.impl;
 
 import com.qingqing.test.dao.test.user.TestUserIpMapper;
+import com.qingqing.test.domain.user.IpStatus;
 import com.qingqing.test.domain.user.TestUserIp;
 import com.qingqing.test.service.user.TestUserIpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class TestUserIpServiceImpl implements TestUserIpService {
     @Override
     public void updateDeleted(Long id, boolean isDeleted) {
         mapper.updateDeleted(id, isDeleted);
+    }
+
+    @Override
+    public void updateIpStatus(Long id, IpStatus ipStatus) {
+        mapper.updateIpStatus(id, ipStatus);
     }
 
     @Override

@@ -117,6 +117,21 @@
                                                                                         <div class="space-2"></div>
                                                                                     </div>
                                                                                 </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label class="col-sm-3 control-label no-padding-right" for="ipStatus">黑名单:</label>
+
+                                                                                    <div class="col-sm-9">
+                                                                                        <div class="clearfix">
+                                                                                            <label class="pull-left inline"  title="禁用该IP" data-rel="tooltip" >
+                                                                                                <input id="ipStatus" type="checkbox" class="ace ace-switch ace-switch-5" value="0" />
+                                                                                                <span class="lbl"></span>
+                                                                                            </label>
+                                                                                        </div>
+
+                                                                                        <div class="space-2"></div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </form>
 
                                                                             <div class="hr hr-dotted"></div>
@@ -163,8 +178,22 @@
                 $("#id").val(${bean.id});
                 $("#userName").val("${bean.userName}");
                 $("#userIp").val("${bean.userIp}");
+                <#if ((bean.ipStatus)!"enable") == "enable">
+                    $("#ipStatus").val(0);
+                <#else>
+                    $("#ipStatus").val(1);
+                    $("#ipStatus").attr("checked", "checked");
+                </#if>
             <#else>
             </#if>
+            });
+
+            $("#ipStatus").click(function(){
+                if($(this).val() == "0"){
+                    $(this).val(1);
+                }else{
+                    $(this).val(0);
+                }
             });
 
             $("#saveBtn").click(function () {
@@ -191,7 +220,8 @@
                     id : $("#id").val(),
                     userName : userName,
                     userIp : userIp,
-                    deleted : false
+                    deleted : false,
+                    ipStatus: $("#ipStatus").val() == "1" ? "black":"enable"
                 };
 
                 var request = {

@@ -1,6 +1,7 @@
 package com.qingqing.test.manager;
 
 import com.qingqing.common.util.TimeUtil;
+import com.qingqing.test.domain.user.IpStatus;
 import com.qingqing.test.domain.user.TestUserIp;
 import com.qingqing.test.service.user.TestUserIpService;
 import org.slf4j.Logger;
@@ -96,12 +97,13 @@ public class UserIpManager implements ISyncable{
         return new SyncType[]{SyncType.all, SyncType.user_ip};
     }
 
-    public void addTmpUser(String userName, String userIp){
+    public void addTmpUser(String userName, String userIp, IpStatus ipStatus){
         TestUserIp testUserIp = new TestUserIp();
         testUserIp.setId(0L);
         testUserIp.setCreateTime(new Date());
         testUserIp.setUserIp(userIp);
         testUserIp.setUserName(userName);
+        testUserIp.setIpStatus(ipStatus);
 
         tmpUserMapping.put(userIp, testUserIp);
     }
