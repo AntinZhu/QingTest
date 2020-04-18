@@ -22,7 +22,7 @@ public class QingProtoClassNameUtil {
         if(args.length > 0){
             outFilePath = args[0];
         }
-        genProtoClassName(args[1], outFilePath);
+        genProtoClassName("E:\\work_B\\proto-teacher-commander", outFilePath);
     }
 
     private static void genProtoClassName(String dirPath, String outputFileName) throws IOException {
