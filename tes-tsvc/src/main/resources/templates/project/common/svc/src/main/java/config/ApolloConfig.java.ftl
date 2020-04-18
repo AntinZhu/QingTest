@@ -1,10 +1,10 @@
-package com.qingqing.api.teacher.config;
+package ${basePackage}.config;
 
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import org.springframework.context.annotation.Configuration;
 
 /**
-* Created on ${date}
+* Created by ${user!'test-api'} on ${date}
 */
 @Configuration
 @EnableApolloConfig({"application", "common", "config", "sentry"})

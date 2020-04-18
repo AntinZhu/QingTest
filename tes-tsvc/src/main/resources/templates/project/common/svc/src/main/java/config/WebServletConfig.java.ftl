@@ -1,4 +1,4 @@
-package com.qingqing.api.teacher.config;
+package ${basePackage}.config;
 
 import com.qingqing.springboot.config.WebServletConfigBase;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+/**
+* Created by ${user!'test-api'} on ${date}
+*/
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {

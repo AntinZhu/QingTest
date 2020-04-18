@@ -1,4 +1,4 @@
-package com.qingqing.api.teacher.config;
+package ${basePackage}.config;
 
 import com.qingqing.common.web.manager.HttpClientManagerV2;
 import org.slf4j.Logger;
@@ -10,10 +10,13 @@ import org.springframework.context.annotation.Primary;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+* Created by ${user!'test-api'} on ${date}
+*/
 @Configuration
 public class CommonManagerConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(com.qingqing.api.teacher.config.CommonManagerConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonManagerConfig.class);
 
     public final static String HTTPCLIENT_MANAGER_V2 = "httpClientManagerV2";
 

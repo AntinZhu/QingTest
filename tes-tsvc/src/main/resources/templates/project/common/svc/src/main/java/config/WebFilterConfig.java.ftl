@@ -1,4 +1,4 @@
-package com.qingqing.api.teacher.config;
+package ${basePackage}.config;
 
 import com.qingqing.common.web.filter.Log4jFilter;
 import com.qingqing.common.web.filter.ServerAuthorizationFilter;
@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
+/**
+* Created by ${user!'test-api'} on ${date}
+*/
 @Configuration
 public class WebFilterConfig {
 

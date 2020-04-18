@@ -1,4 +1,4 @@
-package com.qingqing.api.teacher;
+package ${basePackage};
 
 import com.qingqing.common.util.LogUtils;
 import com.qingqing.common.util.TimeUtil;
@@ -28,9 +28,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.util.Date;
 
 /**
- * Created on ${date}.
- */
-
+* Created by ${user!'test-api'} on ${date}
+*/
 @SpringBootApplication
 @EnableAutoConfiguration(exclude={
         DataSourceAutoConfiguration.class,

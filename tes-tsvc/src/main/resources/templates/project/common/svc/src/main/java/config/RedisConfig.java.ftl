@@ -1,4 +1,4 @@
-package com.qingqing.api.teacher.config;
+package ${basePackage}.config;
 
 import com.qingqing.common.redissvc.CacheRedisService;
 import com.qingqing.common.redissvc.impl.BaseRedisService;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
-* Created on ${date}
+* Created by ${user!'test-api'} on ${date}
 */
 @Configuration
 public class RedisConfig {

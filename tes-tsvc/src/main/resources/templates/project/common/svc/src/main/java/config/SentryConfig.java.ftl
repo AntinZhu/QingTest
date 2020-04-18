@@ -1,4 +1,4 @@
-package com.qingqing.api.teacher.config;
+package ${basePackage}.config;
 
 import com.google.common.base.Joiner;
 import com.qingqing.common.exception.QingQingRuntimeException;
@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+* Created by ${user!'test-api'} on ${date}
+*/
 @Configuration
 public class SentryConfig {
 

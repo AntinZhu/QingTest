@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created on ${date}
- */
+* Created by ${user!'test-api'} on ${date}
+*/
 @Controller
 @RequestMapping("/pi/v1/xxxxx/")
 public class PrivateTemplateController {
