@@ -11,7 +11,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import com.qingqing.common.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by baixiaoxuan on 2017/6/7.

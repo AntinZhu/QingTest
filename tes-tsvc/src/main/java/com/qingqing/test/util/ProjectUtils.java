@@ -10,6 +10,8 @@ import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.bean.test.BankValidateResult;
 import com.qingqing.test.manager.project.IProjectCustomHandler;
 import com.qingqing.test.manager.project.impl.MySQLProjectCustomHandler;
+import com.qingqing.test.manager.project.impl.SelfRedisProjectCustomHandler;
+import com.qingqing.test.manager.project.impl.UserInfoDpProjectCustomHandler;
 import com.tencentcloudapi.faceid.v20180301.models.BankCardVerificationResponse;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -47,10 +49,7 @@ public class ProjectUtils {
         // 1.3 生成其他
         mkOthers(rootDitPah);
         // 2. 生成文件
-
-        // 2.1 构建生成文件所需数据
-        final Map<String, Object> dataMap = buildTemplateData(projectCustomBean);
-        // 2.2 生成定制化文件：DB配置，ZK配置，mongoDB，对外异步事件，对内异步事件
+        // 2.1 生成定制化文件：DB配置，ZK配置，mongoDB，对外异步事件，对内异步事件
         if(!CollectionsUtil.isNullOrEmpty(projectCustomBean.getCustomItemList())){
             for (ProjectCustomItem projectCustomItem : projectCustomBean.getCustomItemList()) {
                 for (IProjectCustomHandler iProjectCustomHandler : customHandlerList) {
@@ -61,7 +60,9 @@ public class ProjectUtils {
             }
         }
 
-        // 2.3 生成必备文件
+        // 2.2 生成必备文件
+        // 构建生成文件所需数据
+        final Map<String, Object> dataMap = buildTemplateData(projectCustomBean);
         File dir = new File(TEMPLATE_PATH_COMMON);
         try {
             DirSearchUtils.checkDir(dir, new DirSearchUtils.FileHandler() {
@@ -188,7 +189,9 @@ public class ProjectUtils {
 
         // 通用jar包版本走配置
         if(!CollectionsUtil.isNullOrEmpty(projectCustomBean.getJarVersionMap())){
-            dataMap.putAll(projectCustomBean.getJarVersionMap());
+            for (Entry<String, Object> stringObjectEntry : projectCustomBean.getJarVersionMap().entrySet()) {
+                dataMap.put(stringObjectEntry.getKey().replaceAll("-", "_"), stringObjectEntry.getValue());
+            }
         }
 
         // 定制属性
@@ -206,7 +209,9 @@ public class ProjectUtils {
         configMap.put("spring_web_util_version", "1.4.8.7-SNAPSHOT");
 
         List<ProjectCustomItem> customItemList = Lists.newArrayList(
-                new ProjectCustomItem("{\"dbName\":\"qq_data\"}", ProjectCustomConfigType.MYSQL_DB)
+                new ProjectCustomItem("{\"dbName\":\"qq_data\"}", ProjectCustomConfigType.MYSQL_DB),
+                new ProjectCustomItem(null, ProjectCustomConfigType.REDIS_SELF),
+                new ProjectCustomItem(null, ProjectCustomConfigType.REDIS_USER_INFO_DP)
         );
 
         ProjectCustomBean projectCustomBean = new ProjectCustomBean();
@@ -218,8 +223,12 @@ public class ProjectUtils {
         projectCustomBean.setCustomItemList(customItemList);
 
         MySQLProjectCustomHandler mySQLProjectCustomHandler = new MySQLProjectCustomHandler();
+        SelfRedisProjectCustomHandler selfRedisProjectCustomHandler = new SelfRedisProjectCustomHandler();
+        UserInfoDpProjectCustomHandler userInfoDpProjectCustomHandler = new UserInfoDpProjectCustomHandler();
         List<IProjectCustomHandler> handlerList = Lists.newArrayList();
         handlerList.add(mySQLProjectCustomHandler);
+        handlerList.add(selfRedisProjectCustomHandler);
+        handlerList.add(userInfoDpProjectCustomHandler);
 
         ProjectUtils.createEmptyProject(projectCustomBean, handlerList);
     }

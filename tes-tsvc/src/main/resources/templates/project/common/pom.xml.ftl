@@ -7,7 +7,7 @@
     <groupId>com.qingqing.api</groupId>
     <artifactId>${artifactId}-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>svc</module>
     </modules>

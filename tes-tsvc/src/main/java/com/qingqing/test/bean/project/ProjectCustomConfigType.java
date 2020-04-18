@@ -8,6 +8,8 @@ import java.util.Map;
 public enum ProjectCustomConfigType {
   ALL("所有类型"),
   MYSQL_DB("数据库配置"),
+  REDIS_SELF("服务自用Redis"),
+  REDIS_USER_INFO_DP("userInfoDp"),
   ;
 
   private final String name;

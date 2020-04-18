@@ -26,6 +26,9 @@
         <qingqing-starter.version>${qingqing_starter_version!'1.1.6-SNAPSHOT'}</qingqing-starter.version>
         <api-common.version>${api_common_version!'1.9.2.8-SNAPSHOT'}</api-common.version>
         <spring-web-util.version>${spring_web_util_version!'1.4.8.7-SNAPSHOT'}</spring-web-util.version>
+<#if (use_userinfodp!0) gt 0 >
+        <userinfodp-client.version>${userinfodp_client_version!'2.1.4'}</userinfodp-client.version>
+</#if>
     </properties>
 
     <dependencies>
@@ -87,6 +90,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>${"$"}{springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <version>${"$"}{springboot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-classic</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -285,6 +300,14 @@
             <artifactId>sentry-log4j2</artifactId>
             <version>1.7.16</version>
         </dependency>
+
+        <#if (use_userinfodp!0) gt 0 >
+            <dependency>
+                <groupId>com.qingqing.userinfodp</groupId>
+                <artifactId>client</artifactId>
+                <version>${"$"}{userinfodp-client.version}</version>
+            </dependency>
+        </#if>
     </dependencies>
 
     <build>

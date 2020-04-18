@@ -1,4 +1,4 @@
-package ${basePackage}.xinterface.controller;
+package ${basePackage}.xinterface.controller.v1;
 
 import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.util.Common;

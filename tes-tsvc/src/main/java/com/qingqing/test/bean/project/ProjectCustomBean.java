@@ -1,5 +1,6 @@
 package com.qingqing.test.bean.project;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +67,26 @@ public class ProjectCustomBean {
 
   public Map<String, Object> getCustomMap() {
     return customMap;
+  }
+
+  public void addCustomMapping(String mappingKey, Object mappingValue){
+    if(customMap == null){
+      customMap = new HashMap();
+    }
+
+    customMap.put(mappingKey, mappingValue);
+  }
+
+  public void appendCustomMapping(String mappingKey, String appendContent){
+    if(customMap == null){
+      addCustomMapping(mappingKey, appendContent);
+    }else{
+      Object oldValue = customMap.get(mappingKey);
+      if(oldValue == null){
+        oldValue = "";
+      }
+      addCustomMapping(mappingKey, appendContent + oldValue);
+    }
   }
 
   public void setCustomMap(Map<String, Object> customMap) {

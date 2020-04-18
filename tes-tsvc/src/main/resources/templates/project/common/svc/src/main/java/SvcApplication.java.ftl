@@ -42,16 +42,16 @@ import java.util.Date;
         ErrorMvcAutoConfiguration.class,
         RabbitAutoConfiguration.class,
 })
-@ComponentScan(basePackages = {"${basePackage}", "com.qingqing.springboot.config"})
+@ComponentScan(basePackages = {"${basePackage}", "com.qingqing.springboot.config"${svcOtherScan!''}})
 @EnableDruidMetric
 @EnableTransactionManagement(proxyTargetClass = true)
 public class SvcApplication extends SpringBootServletInitializer implements EmbeddedServletContainerCustomizer {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(TeacherSvcApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(SvcApplication.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(TeacherSvcApplication.class, args);
+        SpringApplication.run(SvcApplication.class, args);
     }
 
     static {
@@ -67,7 +67,7 @@ public class SvcApplication extends SpringBootServletInitializer implements Embe
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(TeacherSvcApplication.class);
+        return builder.sources(SvcApplication.class);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ${basePackage}.config;
+package ${basePackage}.config.redis;
 
 import com.qingqing.common.redissvc.CacheRedisService;
 import com.qingqing.common.redissvc.impl.BaseRedisService;
@@ -20,11 +20,11 @@ import java.util.Set;
 * Created by ${user!'test-api'} on ${date}
 */
 @Configuration
-public class RedisConfig {
+public class SelfRedisConfig {
 
-    @Value("${"$"}{redis.${svcName}.sentinel.url:172.22.12.12:6398,172.22.12.13:6393,172.22.12.14:6420}")
+    @Value("${"$"}{redis.${svcName}.sentinel.url}")
     private String activityRedisSentinelUrls;
-    @Value("${"$"}{redis.${svcName}.sentinel.master.name:sentinel-172.22.12.12-6397}")
+    @Value("${"$"}{redis.${svcName}.sentinel.master.name}")
     private String activityRedisSentinelMasterName;
 
     @Bean

@@ -4,6 +4,7 @@ package ${basePackage}.config;
 import ${basePackage}.aspect.mock.QingMockAspect;
 </#if>
 import com.qingqing.common.web.aspect.log.GuidAspect;
+import com.qingqing.common.web.aspect.log.MessageListenerGuidAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
