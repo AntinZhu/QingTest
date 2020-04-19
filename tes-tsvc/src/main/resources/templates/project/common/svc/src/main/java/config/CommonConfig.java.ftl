@@ -1,6 +1,6 @@
 package ${basePackage}.config;
 
-<#if (commonMock!0) gt 0>
+<#if (useCommonMock!0) gt 0>
 import ${basePackage}.aspect.mock.QingMockAspect;
 </#if>
 import com.qingqing.common.web.aspect.log.GuidAspect;
@@ -30,7 +30,7 @@ public class CommonConfig {
         return  messageListenerGuidAspect;
     }
 
-<#if (commonMock!0) gt 0>
+<#if (useCommonMock!0) gt 0>
     @Bean
     @ConditionalOnProperty(value = "config.common.mock.enable", havingValue = "true", matchIfMissing = false)
     public QingMockAspect qingMockAspect(){

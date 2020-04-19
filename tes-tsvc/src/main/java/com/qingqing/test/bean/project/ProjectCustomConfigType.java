@@ -10,6 +10,7 @@ public enum ProjectCustomConfigType {
   MYSQL_DB("数据库配置"),
   REDIS_SELF("服务自用Redis"),
   REDIS_USER_INFO_DP("userInfoDp"),
+  COMMON_MOCK("mock配置"),
   ;
 
   private final String name;

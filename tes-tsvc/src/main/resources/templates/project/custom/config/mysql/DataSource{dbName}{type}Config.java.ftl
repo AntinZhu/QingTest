@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by baixiaoxuan on 2017/6/7.
- */
+* Created by ${user!'test-api'} on ${date}
+*/
 @Configuration
 @MapperScan(basePackages = {DataSourceDataConfig.PACKAGE_PATH, DataSourceDataConfig.PACKAGE_PATH}, sqlSessionFactoryRef = DataSourceDataConfig.SQL_SESSION_FACTORY)
-public class DataSource${upDbName}Config {
-    private static final String SIMPLE_DB_NAME = "${simpleDbName}";
+public class DataSource${simpleDbName?cap_first}Config {
+    private static final String SIMPLE_DB_NAME = "${simpleDbName}${type?cap_first}";
 
-    public static final String PACKAGE_PATH = "${basePackage}.dao.mybitas." + SIMPLE_DB_NAME;
+    public static final String PACKAGE_PATH = "${basePackage}.dao.mybitas.${simpleDbName}";
     public static final String SQL_SESSION_FACTORY = SIMPLE_DB_NAME + "SqlSessionFactory";
     public static final String DATA_SOURCE_NAME = SIMPLE_DB_NAME + "DataSource";
     public static final String TX_MANAGER = SIMPLE_DB_NAME + "TransactionManager";
@@ -31,14 +31,14 @@ public class DataSource${upDbName}Config {
         XML_PATHS.add("classpath:${basePackagePath}/dao/mybatis/${simpleDbName}/*.xml");
     }
 
-    @Value("${"$"}{mysql.${dbName}.master.url}")
+    @Value("${"$"}{mysql.${dbName}.${type!'master'}.url}")
     private String url;
-    @Value("${"$"}{mysql.${dbName}.master.username}")
+    @Value("${"$"}{mysql.${dbName}.${type!'master'}.username}")
     private String username;
-    @Value("${"$"}{mysql.${dbName}.master.password}")
+    @Value("${"$"}{mysql.${dbName}.${type!'master'}.password}")
     private String password;
 
-    @Value("${"$"}{mysql.${dbName}.url.param:characterEncoding=UTF-8&useAffectedRows=true}")
+    @Value("${"$"}{mysql.${dbName}.${type!'master'}.url.param:characterEncoding=UTF-8&useAffectedRows=true}")
     private String urlParam;
     //按需添加
     @Value("${"$"}{mybatis.config.path:mybatis/mybatis-config.xml}")

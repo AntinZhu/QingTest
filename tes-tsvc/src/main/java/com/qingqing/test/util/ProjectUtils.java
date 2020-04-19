@@ -9,6 +9,7 @@ import com.qingqing.test.bean.project.ProjectCustomConfigType;
 import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.bean.test.BankValidateResult;
 import com.qingqing.test.manager.project.IProjectCustomHandler;
+import com.qingqing.test.manager.project.impl.CommonMockProjectCustomHandler;
 import com.qingqing.test.manager.project.impl.MySQLProjectCustomHandler;
 import com.qingqing.test.manager.project.impl.SelfRedisProjectCustomHandler;
 import com.qingqing.test.manager.project.impl.UserInfoDpProjectCustomHandler;
@@ -211,7 +212,8 @@ public class ProjectUtils {
         List<ProjectCustomItem> customItemList = Lists.newArrayList(
                 new ProjectCustomItem("{\"dbName\":\"qq_data\"}", ProjectCustomConfigType.MYSQL_DB),
                 new ProjectCustomItem(null, ProjectCustomConfigType.REDIS_SELF),
-                new ProjectCustomItem(null, ProjectCustomConfigType.REDIS_USER_INFO_DP)
+                new ProjectCustomItem(null, ProjectCustomConfigType.REDIS_USER_INFO_DP),
+                new ProjectCustomItem(null, ProjectCustomConfigType.COMMON_MOCK)
         );
 
         ProjectCustomBean projectCustomBean = new ProjectCustomBean();
@@ -225,10 +227,12 @@ public class ProjectUtils {
         MySQLProjectCustomHandler mySQLProjectCustomHandler = new MySQLProjectCustomHandler();
         SelfRedisProjectCustomHandler selfRedisProjectCustomHandler = new SelfRedisProjectCustomHandler();
         UserInfoDpProjectCustomHandler userInfoDpProjectCustomHandler = new UserInfoDpProjectCustomHandler();
+        CommonMockProjectCustomHandler commonMockProjectCustomHandler = new CommonMockProjectCustomHandler();
         List<IProjectCustomHandler> handlerList = Lists.newArrayList();
         handlerList.add(mySQLProjectCustomHandler);
         handlerList.add(selfRedisProjectCustomHandler);
         handlerList.add(userInfoDpProjectCustomHandler);
+        handlerList.add(commonMockProjectCustomHandler);
 
         ProjectUtils.createEmptyProject(projectCustomBean, handlerList);
     }

@@ -23,7 +23,7 @@ import java.util.Map;
 public class MySQLProjectCustomHandler extends AbstractProjectCustomHandler {
 
     private static final List<ProjectCustomTemplate> TEMPLATE_LIST = Lists.newArrayList(
-        new ProjectCustomTemplate("mysql", "DataSource{dbName}Config.java.ftl", "svc.src.main.java.{basePackage}.config.db")
+        new ProjectCustomTemplate("config.mysql", "DataSource{dbName}{type}Config.java.ftl", "svc.src.main.java.{basePackage}.config.db")
     );
 
     @Override
@@ -38,21 +38,25 @@ public class MySQLProjectCustomHandler extends AbstractProjectCustomHandler {
 
     @Override
     protected Map<String, Object> generateCustomData(ProjectCustomBean projectCustomBean, ProjectCustomItem projectCustomItem) {
-        Map<String, Object> dataMap = new HashMap<>();
-        String dbName = getDbName(projectCustomItem);
+        Map<String, Object> dataMap = buildBaseDataMap(projectCustomBean);
+
+        CustomParam customParam = JsonUtil.getObjectFromJson(projectCustomItem.getCustomJson(), CustomParam.class);
+        String dbName = customParam.getDbName();
         String simpleDbName = getSimpleDbName(dbName);
         dataMap.put("dbName", dbName);
         dataMap.put("simpleDbName", simpleDbName);
-        dataMap.put("basePackage", projectCustomBean.getBasePackage());
         dataMap.put("basePackagePath", projectCustomBean.getBasePackage().replaceAll("\\.", "/"));
-        dataMap.put("upDbName", QingStringUtil.upperCase(simpleDbName));
+        dataMap.put("type", customParam.getType());
 
         return dataMap;
     }
 
     @Override
     protected String customDestFileName(ProjectCustomTemplate customTemplate, ProjectCustomBean projectCustomBean, ProjectCustomItem projectCustomItem) {
-        String destFileName = customTemplate.getTemplateFile().replaceAll("\\{dbName\\}", QingStringUtil.upperCase(getSimpleDbName(getDbName(projectCustomItem))));
+        CustomParam customParam = JsonUtil.getObjectFromJson(projectCustomItem.getCustomJson(), CustomParam.class);
+
+        String destFileName = customTemplate.getTemplateFile().replaceAll("\\{dbName\\}", QingStringUtil.upperCase(getSimpleDbName(customParam.getDbName())));
+        destFileName = destFileName.replaceAll("\\{type\\}", QingStringUtil.upperCase(customParam.getType()));
 
         return buildJavaFile(projectCustomBean.getBasePackage(), customTemplate.getDestDir(), destFileName);
     }
@@ -75,5 +79,26 @@ public class MySQLProjectCustomHandler extends AbstractProjectCustomHandler {
 
         simpleDbName = simpleDbName.replaceAll("_", "");
         return simpleDbName;
+    }
+
+    public static class CustomParam{
+        private String dbName;
+        private String type = "master";
+
+        public String getDbName() {
+            return dbName;
+        }
+
+        public void setDbName(String dbName) {
+            this.dbName = dbName;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 }
