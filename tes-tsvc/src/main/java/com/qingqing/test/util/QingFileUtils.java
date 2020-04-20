@@ -147,6 +147,11 @@ public class QingFileUtils {
                     }
                 }
             }
+
+            @Override
+            public void doAfterFileChecked(File dir) {
+
+            }
         });
     }
 

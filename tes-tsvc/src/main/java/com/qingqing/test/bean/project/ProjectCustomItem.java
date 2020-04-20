@@ -4,22 +4,22 @@ package com.qingqing.test.bean.project;
  * Created by zhujianxing on 2019/1/31.
  */
 public class ProjectCustomItem {
-  private ProjectCustomConfigType projectCustomConfigType;
+  private ProjectCustomConfigType itemType;
   private String customJson;
 
   public ProjectCustomItem(){}
 
-  public ProjectCustomItem(String customJson, ProjectCustomConfigType projectCustomConfigType) {
+  public ProjectCustomItem(String customJson, ProjectCustomConfigType itemType) {
     this.customJson = customJson;
-    this.projectCustomConfigType = projectCustomConfigType;
+    this.itemType = itemType;
   }
 
-  public ProjectCustomConfigType getProjectCustomConfigType() {
-    return projectCustomConfigType;
+  public ProjectCustomConfigType getItemType() {
+    return itemType;
   }
 
-  public void setProjectCustomConfigType(ProjectCustomConfigType projectCustomConfigType) {
-    this.projectCustomConfigType = projectCustomConfigType;
+  public void setItemType(ProjectCustomConfigType itemType) {
+    this.itemType = itemType;
   }
 
   public String getCustomJson() {

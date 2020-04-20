@@ -36,6 +36,11 @@ public class PomUtils {
                     }
                 }
             }
+
+            @Override
+            public void doAfterFileChecked(File dir) {
+
+            }
         });
     }
 

@@ -12,5 +12,5 @@ public interface TestConfigService {
 
     void add(TestConfig config);
 
-    void deletedByConfigKey(String configKey);
+    TestConfig findById(Long id);
 }

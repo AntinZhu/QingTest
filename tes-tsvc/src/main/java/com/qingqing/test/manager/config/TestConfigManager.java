@@ -1,9 +1,11 @@
-package com.qingqing.test.manager;
+package com.qingqing.test.manager.config;
 
+import com.google.common.collect.Maps;
 import com.qingqing.common.onoff.ISwitchDeterminer;
 import com.qingqing.test.bean.config.ITestConfigNotify;
 import com.qingqing.test.config.TestSourceDataConfig;
 import com.qingqing.test.domain.config.TestConfig;
+import com.qingqing.test.manager.ISyncable;
 import com.qingqing.test.service.config.TestConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,17 +34,24 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
     @Autowired
     private List<ITestConfigNotify> testConfigNotifies;
     private Map<String, String> configMap;
+    private Map<String, Object> jarVersionMap;
 
     @PostConstruct
     public void sync(){
-        List<TestConfig> testConfigList = testConfigService.selectAll();
+        List<TestConfig> configList = testConfigService.selectAll();
 
-        Map<String, String> tmpConfigMap = new HashMap<>();
-        for (TestConfig testConfig : testConfigList) {
+        Map<String, String> tmpConfigMap = Maps.newHashMapWithExpectedSize(configList.size());
+        Map<String, Object> tmpJarVersionMap = Maps.newHashMapWithExpectedSize(configList.size());
+        for (TestConfig testConfig : configList) {
             tmpConfigMap.put(testConfig.getConfigKey(), testConfig.getConfigValue());
+            if(testConfig.getConfigKey() != null && testConfig.getConfigKey().endsWith("_version")){
+                tmpJarVersionMap.put(testConfig.getConfigKey(), testConfig.getConfigValue());
+            }
         }
 
         configMap = tmpConfigMap;
+        jarVersionMap = tmpJarVersionMap;
+
         for(ITestConfigNotify testConfigNotify : testConfigNotifies){
             try{
                 testConfigNotify.notifyChange();
@@ -75,17 +84,18 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
     public boolean isOn(String s, boolean defaultValue) {
         String configValue = configMap.get(s);
         if(configValue != null){
-//            logger.info("config-key:" + s + " config-value:" + configValue);
            return "true".equals(configValue);
         }
 
         return defaultValue;
     }
 
+    public Map<String, Object> getJarVersionMap() {
+        return Collections.unmodifiableMap(jarVersionMap);
+    }
+
     @Transactional(transactionManager = TestSourceDataConfig.TX_MANAGER)
     public void addConfig(String configKey, String configValue){
-        testConfigService.deletedByConfigKey(configKey);
-
         TestConfig testConfig = new TestConfig();
         testConfig.setConfigKey(configKey);
         testConfig.setConfigValue(configValue);

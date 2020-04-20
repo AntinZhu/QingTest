@@ -1,8 +1,8 @@
 package com.qingqing.test.manager;
 
-import com.qingqing.test.aspect.delayinit.IQingInitDelayable;
 import com.qingqing.test.aspect.delayinit.QingInitCheck;
 import com.qingqing.test.domain.config.TestProtoClassName;
+import com.qingqing.test.manager.config.TestConfigManager;
 import com.qingqing.test.service.common.CommonService;
 import com.qingqing.test.service.config.TestProtoClassNameService;
 import com.qingqing.test.util.QingFileUtils;

@@ -43,10 +43,10 @@ public class CommonSyncManager implements ApplicationContextAware {
 
     public void sync(SyncType syncType){
         CommonLink<ISyncable> syncable = syncTypeMapping.get(syncType);
-        do{
+        while(syncable != null){
             syncable.getT().sync();
             syncable = syncable.getNext();
-        }while(syncable != null);
+        }
     }
 
     @Override

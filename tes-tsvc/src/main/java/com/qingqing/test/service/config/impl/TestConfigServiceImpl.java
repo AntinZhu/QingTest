@@ -28,7 +28,7 @@ public class TestConfigServiceImpl implements TestConfigService {
     }
 
     @Override
-    public void deletedByConfigKey(String configKey) {
-        mapper.deletedByConfigKey(configKey);
+    public TestConfig findById(Long id) {
+        return mapper.findById(id);
     }
 }

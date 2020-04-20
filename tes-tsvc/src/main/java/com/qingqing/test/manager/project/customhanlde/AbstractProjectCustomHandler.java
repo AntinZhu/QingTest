@@ -5,7 +5,7 @@ import com.qingqing.test.bean.project.ProjectCustomBean;
 import com.qingqing.test.bean.project.ProjectCustomConfigType;
 import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.bean.project.ProjectCustomTemplate;
-import com.qingqing.test.util.ProjectUtils;
+import com.qingqing.test.util.QingProjectUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
 
     @Override
     public boolean supports(ProjectCustomItem projectCustomItem) {
-        return getSupportProjectCustomConfigType().equals(projectCustomItem.getProjectCustomConfigType());
+        return getSupportProjectCustomConfigType().equals(projectCustomItem.getItemType());
     }
 
     public void handle(ProjectCustomItem projectCustomItem, ProjectCustomBean projectCustomBean){
@@ -28,9 +28,9 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
             Map<String, Object> customTemplateData = generateCustomData(projectCustomBean, projectCustomItem);
 
             for (ProjectCustomTemplate projectCustomTemplate : templateList) {
-                String templateFileDir = ProjectUtils.buildDirPath(ProjectUtils.TEMPLATE_PATH_CUSTOM, projectCustomTemplate.getTemplateDir());
-                String destFilePath = ProjectUtils.buildFilePath(projectCustomBean.getDestProjectDir(), customDestFileName(projectCustomTemplate, projectCustomBean, projectCustomItem));
-                ProjectUtils.generateFile(templateFileDir, projectCustomTemplate.getTemplateFile(), customTemplateData, destFilePath);
+                String templateFileDir = QingProjectUtils.buildDirPath(QingProjectUtils.TEMPLATE_PATH_CUSTOM, projectCustomTemplate.getTemplateDir());
+                String destFilePath = QingProjectUtils.buildFilePath(projectCustomBean.getDestProjectDir(), customDestFileName(projectCustomTemplate, projectCustomBean, projectCustomItem));
+                QingProjectUtils.generateFile(templateFileDir, projectCustomTemplate.getTemplateFile(), customTemplateData, destFilePath);
             }
         }
 
@@ -52,7 +52,7 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
         if(javaFileName.endsWith(".ftl")){
             javaFileName = javaFileName.substring(0,javaFileName.length() - 3);
         }
-        return ProjectUtils.buildFilePath(destFileDir.replaceAll("\\{basePackage\\}", basePackage), javaFileName);
+        return QingProjectUtils.buildFilePath(destFileDir.replaceAll("\\{basePackage\\}", basePackage), javaFileName);
     }
 
     protected abstract ProjectCustomConfigType getSupportProjectCustomConfigType();

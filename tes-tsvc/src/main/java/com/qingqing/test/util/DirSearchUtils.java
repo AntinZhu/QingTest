@@ -43,6 +43,11 @@ public class DirSearchUtils {
 
                 }
             }
+
+            @Override
+            public void doAfterFileChecked(File dir) {
+
+            }
         });
     }
 
@@ -55,10 +60,14 @@ public class DirSearchUtils {
                 fileHandler.handle(xmlFile);
             }
         }
+
+        fileHandler.doAfterFileChecked(dir);
     }
 
     public static interface FileHandler {
 
         void handle(File file) throws IOException;
+
+        void doAfterFileChecked(File dir);
     }
 }

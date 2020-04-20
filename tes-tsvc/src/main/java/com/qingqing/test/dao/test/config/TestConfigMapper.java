@@ -9,5 +9,5 @@ public interface TestConfigMapper {
 
     void add(TestConfig config);
 
-    void deletedByConfigKey(String configKey);
+    TestConfig findById(Long id);
 }

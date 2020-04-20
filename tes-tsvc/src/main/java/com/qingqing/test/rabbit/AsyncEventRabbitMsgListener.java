@@ -6,7 +6,7 @@ import com.qingqing.test.bean.common.Env;
 import com.qingqing.test.bean.config.ITestConfigNotify;
 import com.qingqing.test.client.PiClient;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
-import com.qingqing.test.manager.TestConfigManager;
+import com.qingqing.test.manager.config.TestConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;

@@ -1,14 +1,25 @@
 package com.qingqing.test.domain.config;
 
+import com.qingqing.common.intf.Composer;
+
 import java.util.Date;
 
 /**
  * Created by zhujianxing on 2019/3/5.
  */
 public class TestConfig {
+
+    public static final Composer<String, TestConfig> CONFIG_KEY_COMPOSER = new Composer<String, TestConfig>() {
+        @Override
+        public String getComposerId(TestConfig testConfig) {
+            return testConfig.getConfigKey();
+        }
+    };
+
     private Long id;
     private String configKey;
     private String configValue;
+    private String description;
     private Boolean isDeleted;
     private Date createTime;
     private Date lastUpdateTime;
@@ -35,6 +46,14 @@ public class TestConfig {
 
     public void setConfigValue(String configValue) {
         this.configValue = configValue;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Boolean getDeleted() {

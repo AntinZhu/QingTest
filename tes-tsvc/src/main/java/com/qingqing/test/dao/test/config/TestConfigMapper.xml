@@ -5,13 +5,14 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result property="configKey" column="config_key" jdbcType="VARCHAR" />
     <result property="configValue" column="config_value" jdbcType="VARCHAR" />
+    <result property="description" column="description" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, config_key, config_value, is_deleted, create_time, last_update_time
+    id, config_key, config_value, is_deleted, create_time, last_update_time, description
   </sql>
 
   <select id="selectAll" resultMap="BaseResultMap">
@@ -21,15 +22,19 @@
   </select>
 
   <insert id="add" parameterType="com.qingqing.test.domain.config.TestConfig" useGeneratedKeys="true" keyProperty="id">
-    insert into t_config(config_key, config_value, is_deleted, create_time) value(
-    #{configKey,jdbcType=VARCHAR} , #{configValue,jdbcType=VARCHAR} , 0, now()
+    insert into t_config(config_key, config_value, is_deleted, create_time, description) value(
+    #{configKey,jdbcType=VARCHAR} , #{configValue,jdbcType=VARCHAR} , 0, now(), #{description, jdbcType=VARCHAR}
     )
+    on duplicate key update
+    config_value = values(config_value),
+    description = values(description),
+    is_deleted = 0
   </insert>
 
-  <update id="deletedByConfigKey" >
-    update t_config
-    set is_deleted = TRUE
-    where config_key = #{configKey, jdbcType=VARCHAR}
-  </update>
+  <select id="findById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from t_config
+    where id = #{id, jdbcType=BIGINT}
+  </select>
 
 </mapper>
