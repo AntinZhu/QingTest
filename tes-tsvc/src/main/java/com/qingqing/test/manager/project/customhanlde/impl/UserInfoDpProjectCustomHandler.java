@@ -1,14 +1,13 @@
-package com.qingqing.test.manager.project.impl;
+package com.qingqing.test.manager.project.customhanlde.impl;
 
 import com.google.common.collect.Lists;
 import com.qingqing.test.bean.project.ProjectCustomBean;
 import com.qingqing.test.bean.project.ProjectCustomConfigType;
 import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.bean.project.ProjectCustomTemplate;
-import com.qingqing.test.manager.project.AbstractProjectCustomHandler;
+import com.qingqing.test.manager.project.customhanlde.AbstractProjectCustomHandler;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

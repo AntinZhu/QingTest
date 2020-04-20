@@ -1,4 +1,4 @@
-package com.qingqing.test.manager.project;
+package com.qingqing.test.manager.project.customhanlde;
 
 import com.qingqing.test.bean.project.ProjectCustomBean;
 import com.qingqing.test.bean.project.ProjectCustomConfigType;

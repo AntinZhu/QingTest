@@ -7,18 +7,15 @@ import com.qingqing.common.util.TimeUtil;
 import com.qingqing.test.bean.project.ProjectCustomBean;
 import com.qingqing.test.bean.project.ProjectCustomConfigType;
 import com.qingqing.test.bean.project.ProjectCustomItem;
-import com.qingqing.test.bean.test.BankValidateResult;
-import com.qingqing.test.manager.project.IProjectCustomHandler;
-import com.qingqing.test.manager.project.impl.CommonMockProjectCustomHandler;
-import com.qingqing.test.manager.project.impl.MySQLProjectCustomHandler;
-import com.qingqing.test.manager.project.impl.SelfRedisProjectCustomHandler;
-import com.qingqing.test.manager.project.impl.UserInfoDpProjectCustomHandler;
-import com.tencentcloudapi.faceid.v20180301.models.BankCardVerificationResponse;
+import com.qingqing.test.manager.project.customhanlde.IProjectCustomHandler;
+import com.qingqing.test.manager.project.customhanlde.impl.CommonMockProjectCustomHandler;
+import com.qingqing.test.manager.project.customhanlde.impl.MySQLProjectCustomHandler;
+import com.qingqing.test.manager.project.customhanlde.impl.SelfRedisProjectCustomHandler;
+import com.qingqing.test.manager.project.customhanlde.impl.UserInfoDpProjectCustomHandler;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import java.io.*;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.Map.Entry;
 

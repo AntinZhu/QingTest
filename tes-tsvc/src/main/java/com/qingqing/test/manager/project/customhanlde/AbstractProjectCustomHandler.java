@@ -1,11 +1,10 @@
-package com.qingqing.test.manager.project;
+package com.qingqing.test.manager.project.customhanlde;
 
 import com.qingqing.common.util.TimeUtil;
 import com.qingqing.test.bean.project.ProjectCustomBean;
 import com.qingqing.test.bean.project.ProjectCustomConfigType;
 import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.bean.project.ProjectCustomTemplate;
-import com.qingqing.test.manager.project.IProjectCustomHandler;
 import com.qingqing.test.util.ProjectUtils;
 
 import java.util.Date;
