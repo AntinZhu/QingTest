@@ -6,6 +6,7 @@ import com.qingqing.common.web.manager.HttpClientManagerV2;
 import com.qingqing.test.aspect.externalsystem.QingExternalSystemFusingAspect;
 import com.qingqing.test.aspect.qingswitch.aspect.AnnotationSwitchAspect;
 import com.qingqing.test.aspect.qingswitch.determiner.ISwitchKeyDeterminer;
+import com.qingqing.test.util.QingProjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -71,5 +72,11 @@ public class OtherConfiguration {
     @Bean
     public QingExternalSystemFusingAspect externalSystemFusingAspect(){
         return new QingExternalSystemFusingAspect();
+    }
+
+    @Bean
+    public boolean initProjectUtils(){
+        QingProjectUtils.initStringTemplate();;
+        return Boolean.TRUE;
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 public class MySQLProjectCustomHandler extends AbstractProjectCustomHandler {
 
     private static final List<ProjectCustomTemplate> TEMPLATE_LIST = Lists.newArrayList(
-        new ProjectCustomTemplate("config.mysql", "DataSource{dbName}{type}Config.java.ftl", "svc.src.main.java.{basePackage}.config.db")
+        new ProjectCustomTemplate("custom.config.mysql", "DataSource{dbName}{type}Config.java.ftl", "svc.src.main.java.{basePackage}.config.db")
     );
 
     @Override
@@ -58,14 +58,13 @@ public class MySQLProjectCustomHandler extends AbstractProjectCustomHandler {
         return buildJavaFile(projectCustomBean.getBasePackage(), customTemplate.getDestDir(), destFileName);
     }
 
-    private String getDbName(ProjectCustomItem projectCustomItem){
-        Map<String, String> customDataMap = JsonUtil.parserJsonMap(projectCustomItem.getCustomJson(), String.class);
-        String dbName = customDataMap.get("dbName");
-        if(dbName == null){
-            dbName = "";
-        }
+    @Override
+    protected void doAfterHandleSucc(ProjectCustomItem projectCustomItem, ProjectCustomBean projectCustomBean) {
+        CustomParam customParam = JsonUtil.getObjectFromJson(projectCustomItem.getCustomJson(), CustomParam.class);
+        String dbName = customParam.getDbName();
+        String simpleDbName = getSimpleDbName(dbName);
 
-        return dbName;
+        projectCustomBean.addCustomDir("svc.src.main.java.{basePackage}.dao.mybatis." + simpleDbName);
     }
 
     private String getSimpleDbName(String dbName){

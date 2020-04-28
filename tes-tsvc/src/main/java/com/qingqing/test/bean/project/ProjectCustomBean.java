@@ -1,8 +1,6 @@
 package com.qingqing.test.bean.project;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhujianxing on 2019/1/31.
@@ -24,6 +22,8 @@ public class ProjectCustomBean {
   private String destProjectDir;
   // 定制化选线
   private List<ProjectCustomItem> customItemList;
+  // 由定制化触发需要生成的目录
+  private Set<String> customDir;
 
   public String getBasePackage() {
     return basePackage;
@@ -67,6 +67,18 @@ public class ProjectCustomBean {
 
   public Map<String, Object> getCustomMap() {
     return customMap;
+  }
+
+  public void addCustomDir(String dirPath){
+    if(customDir == null){
+      customDir = new HashSet<>();
+    }
+
+    customDir.add(dirPath);
+  }
+
+  public Set<String> getCustomDir() {
+    return customDir;
   }
 
   public void addCustomMapping(String mappingKey, Object mappingValue){

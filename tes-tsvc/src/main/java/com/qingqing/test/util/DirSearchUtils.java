@@ -53,13 +53,13 @@ public class DirSearchUtils {
 
     public static void checkDir(File dir, FileHandler fileHandler) throws IOException {
         File[] xmlFiles = dir.listFiles();
-        for (File xmlFile : xmlFiles) {
-            if(xmlFile.isDirectory()){
-                checkDir(xmlFile, fileHandler);
-            }else{
-                fileHandler.handle(xmlFile);
+            for (File xmlFile : xmlFiles) {
+                if(xmlFile.isDirectory()){
+                    checkDir(xmlFile, fileHandler);
+                }else{
+                    fileHandler.handle(xmlFile);
+                }
             }
-        }
 
         fileHandler.doAfterFileChecked(dir);
     }

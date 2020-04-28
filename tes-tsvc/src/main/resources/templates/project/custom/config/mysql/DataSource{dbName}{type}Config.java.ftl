@@ -18,8 +18,8 @@ import java.util.List;
 * Created by ${user!'test-api'} on ${date}
 */
 @Configuration
-@MapperScan(basePackages = {DataSourceDataConfig.PACKAGE_PATH, DataSourceDataConfig.PACKAGE_PATH}, sqlSessionFactoryRef = DataSourceDataConfig.SQL_SESSION_FACTORY)
-public class DataSource${simpleDbName?cap_first}Config {
+@MapperScan(basePackages = {DataSource${simpleDbName?cap_first}${type?cap_first}Config.PACKAGE_PATH, DataSource${simpleDbName?cap_first}${type?cap_first}Config.PACKAGE_PATH}, sqlSessionFactoryRef = DataSource${simpleDbName?cap_first}${type?cap_first}Config.SQL_SESSION_FACTORY)
+public class DataSource${simpleDbName?cap_first}${type?cap_first}Config {
     private static final String SIMPLE_DB_NAME = "${simpleDbName}${type?cap_first}";
 
     public static final String PACKAGE_PATH = "${basePackage}.dao.mybitas.${simpleDbName}";

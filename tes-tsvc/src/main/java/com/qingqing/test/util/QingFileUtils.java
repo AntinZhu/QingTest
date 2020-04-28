@@ -1,6 +1,7 @@
 package com.qingqing.test.util;
 
 import com.csvreader.CsvReader;
+import com.qingqing.common.exception.QingQingRuntimeException;
 import com.qingqing.common.intf.Composer;
 import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.JsonUtil;
@@ -38,6 +39,37 @@ public class QingFileUtils {
         }
 
         return resultList;
+    }
+
+    public static final String readAll(File file) throws IOException {
+        InputStream inputStream = null;
+        try{
+            inputStream = new FileInputStream(file);
+
+            return readAll(inputStream);
+        }catch(Exception e){
+            throw new QingQingRuntimeException("read file fail, filePath:" + file.getAbsolutePath());
+        }finally {
+            if(inputStream != null){
+                try{
+                    inputStream.close();
+                }catch(Exception e){
+                    // ignore
+                }
+            }
+        }
+    }
+
+    public static final String readAll(InputStream in) throws IOException {
+        StringBuilder result = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+
+        String line = null;
+        while((line = reader.readLine()) != null){
+            result.append(line).append("\r\n");
+        }
+
+        return result.toString();
     }
 
     public static final byte[] readBytes(InputStream in) throws IOException {

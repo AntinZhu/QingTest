@@ -18,7 +18,7 @@ import java.util.Map;
 public class SelfRedisProjectCustomHandler extends AbstractProjectCustomHandler {
 
     private static final List<ProjectCustomTemplate> TEMPLATE_LIST = Lists.newArrayList(
-        new ProjectCustomTemplate("config.redis", "SelfRedisConfig.java.ftl", "svc.src.main.java.{basePackage}.config.redis")
+        new ProjectCustomTemplate("custom.config.redis", "SelfRedisConfig.java.ftl", "svc.src.main.java.{basePackage}.config.redis")
     );
 
     @Override

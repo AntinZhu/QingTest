@@ -39,6 +39,22 @@ public class QingDirUtils {
         });
     }
 
+    public static String buildFilePathWithSeparator(String path, String split){
+        if("\\".equals(split)){
+            split = "\\\\";
+        }
+        // 相对目录
+        String entryFileDir = "";
+        String entryFileName = path;
+        if(path.lastIndexOf(split) != -1){
+            int lastFilePathIdx = path.lastIndexOf(split);
+            entryFileDir = path.substring(0, lastFilePathIdx);
+            entryFileName = path.substring(lastFilePathIdx);
+        }
+
+        return entryFileDir.replaceAll(split, File.separator) + entryFileName;
+    }
+
     public static void main(String[] args) throws IOException {
         String path = "D:\\_1\\work\\Github\\QingTest\\tes-tsvc\\target\\test-svc-0.0.1-SNAPSHOT.jar";
         try {

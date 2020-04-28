@@ -47,6 +47,7 @@ import com.qingqing.test.service.tool.TestCronTaskService;
 import com.qingqing.test.service.user.UserService;
 import com.qingqing.test.spring.filter.IpFilter;
 import com.qingqing.test.util.QingFileUtils;
+import com.qingqing.test.util.ReportShareCodeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +64,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -517,14 +515,24 @@ public class UtilsController {
     @RequestMapping("report/student/encode")
     @ResponseBody
     public SingleResponse<String> encodeTeacherReportId(@ProtoRequestBody SimpleRepeatedStringRequest request) {
-        String reportId = request.getData(0);
-        String studentId = request.getData(1);
+        int dataCount = request.getDataCount();
+        String reportIdStr = request.getData(0);
+        String studentIdStr=null;
+        if(dataCount>1){
+            studentIdStr = request.getData(1);
+        }
         String encodeId = null;
         try {
-            encodeId = MixedEncryption.encode(MIX_CODE, "v1", reportId, studentId);
+            //reportId  is not allow empty
+            Long reportId = Long.valueOf(reportIdStr);
+            Long studentId = null;
+            if (!StringUtils.isEmpty(studentIdStr)) {
+                studentId = Long.valueOf(studentIdStr);
+            }
+            encodeId = ReportShareCodeUtils.generatorStudentShareCodeV2(reportId, studentId);
         } catch (Exception e) {
             throw new ErrorCodeException(new SimpleErrorCode(1001, "report id encode error", "加密失败，请检查参数"),
-                    "encode report id error, value:" + reportId, e);
+                    "encode report id error, value:" + reportIdStr, e);
         }
 
         SingleResponse<String> result = new SingleResponse<String>();
@@ -541,22 +549,16 @@ public class UtilsController {
         if (StringUtils.isEmpty(shareCode)) {
             throw new RequestValidateException("unknown share code:" + shareCode, "code error");
         }
-
         try {
-            String[] arr = MixedEncryption.decode(shareCode, MIX_CODE);
-            if (arr == null || arr.length != 3) {
-                throw new RequestValidateException("parse array is null or length mismatch", "code error");
-            }
-
-            if (!v1.equals(arr[0])) {
-                throw new RequestValidateException("version mismatch. version:" + arr[0], "code error");
-            }
-            Long reportId = Long.valueOf(arr[1]);
-            Long studentId = Long.valueOf(arr[2]);
-
+            ReportShareCodeUtils.ReportShareBean reportShareBean = ReportShareCodeUtils.parseStudentShareCode(shareCode);
             ListResponse<Long> result = new ListResponse<Long>();
             result.setResponse(com.qingqing.test.bean.base.BaseResponse.SUCC_RESP);
-            result.setResultList(Arrays.asList(reportId, studentId));
+            ArrayList<Long> resultList = new ArrayList<>(2);
+            resultList.add(reportShareBean.getReportId());
+            if(reportShareBean.getStudentId()!=null){
+                resultList.add(reportShareBean.getStudentId());
+            }
+            result.setResultList(resultList);
             return result;
         } catch (RuntimeException ex) {
             throw new RequestValidateException("code parse failed. code:" + shareCode, "code error", ex);

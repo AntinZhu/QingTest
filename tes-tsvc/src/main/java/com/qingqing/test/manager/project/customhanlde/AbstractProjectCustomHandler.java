@@ -28,7 +28,7 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
             Map<String, Object> customTemplateData = generateCustomData(projectCustomBean, projectCustomItem);
 
             for (ProjectCustomTemplate projectCustomTemplate : templateList) {
-                String templateFileDir = QingProjectUtils.buildDirPath(QingProjectUtils.TEMPLATE_PATH_CUSTOM, projectCustomTemplate.getTemplateDir());
+                String templateFileDir = QingProjectUtils.buildDirPath(projectCustomTemplate.getTemplateDir());
                 String destFilePath = QingProjectUtils.buildFilePath(projectCustomBean.getDestProjectDir(), customDestFileName(projectCustomTemplate, projectCustomBean, projectCustomItem));
                 QingProjectUtils.generateFile(templateFileDir, projectCustomTemplate.getTemplateFile(), customTemplateData, destFilePath);
             }
@@ -49,8 +49,8 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
 
     protected String buildJavaFile(String basePackage, String destFileDir, String destFileName){
         String javaFileName = destFileName;
-        if(javaFileName.endsWith(".ftl")){
-            javaFileName = javaFileName.substring(0,javaFileName.length() - 3);
+        if(javaFileName.endsWith(QingProjectUtils.TEMPLATE_FILE_SUFFIX)){
+            javaFileName = javaFileName.substring(0,javaFileName.length() - QingProjectUtils.TEMPLATE_FILE_SUFFIX.length());
         }
         return QingProjectUtils.buildFilePath(destFileDir.replaceAll("\\{basePackage\\}", basePackage), javaFileName);
     }

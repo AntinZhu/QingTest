@@ -83,20 +83,21 @@
 
                                                     <div class="panel panel-default">
                                                         <div id="faq-0-1">
-                                                            <div id="accordion" class="accordion-style2">
+                                                            <div id="xxxx" class="accordion-style2">
                                                                 <div class="group">
                                                                     <h3 class="accordion-header">用户参数填写</h3>
 
                                                                     <div>
                                                                         <div class="col-xs-12">
+                                                                            <!-- 必备信息 -->
                                                                             <form id="createProjectForm" class="form-horizontal" method="post" target="_blank" action="${base}/v1/project/create">
-                                                                                <input type="hidden" id = "id" />
+                                                                                <input type="hidden" id="custom" name = "custom" />
                                                                                 <div class="form-group">
                                                                                     <label class="col-sm-3 control-label no-padding-right" for="svcName">服务名:</label>
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" name="svcName" id="svcName" placeholder="请使用驼峰风格，方便解析..." />
+                                                                                            <input class="col-xs-3" type="text" style="width: 40%;" name="svcName" id="svcName" placeholder="请使用驼峰风格，方便解析:teacherSvc..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -108,7 +109,7 @@
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" name="poolCode" id="poolCode" placeholder="poolCode..." />
+                                                                                            <input class="col-xs-3" type="text" style="width: 40%;" name="poolCode" id="poolCode" placeholder="poolCode : ps-teacher-svc..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -120,7 +121,7 @@
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" name="basePackage" id="basePackage" placeholder="basePackage..." />
+                                                                                            <input class="col-xs-3" type="text" style="width: 40%;" name="basePackage" id="basePackage" placeholder="basePackage : com.qingqing.api.teacher..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -132,7 +133,7 @@
 
                                                                                     <div class="col-sm-9">
                                                                                         <div class="clearfix">
-                                                                                            <input class="col-xs-3" type="text" name="createUser" id="createUser" placeholder="createUser..." />
+                                                                                            <input class="col-xs-3" type="text" style="width: 40%;" name="createUser" id="createUser" placeholder="createUser..." />
                                                                                         </div>
 
                                                                                         <div class="space-2"></div>
@@ -142,7 +143,7 @@
 
                                                                             <div class="hr hr-dotted"></div>
                                                                             <div class="hr hr-dotted"></div>
-
+                                                                            <!-- 按钮 -->
                                                                             <div class="clearfix form-actions">
                                                                                 <div class="col-md-offset-3 col-md-9">
                                                                                     <button class="btn btn-info" type="button" id = "saveBtn">
@@ -164,6 +165,156 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- 接口参数 -->
+                                                <div class="timeline-item clearfix">
+                                                    <div class="timeline-info">
+                                                        <i class="timeline-indicator icon-star btn btn-warning no-hover green"></i>
+                                                    </div>
+
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <div href="#faq-0-1"  class="accordion-toggle">
+                                                                <h1>
+                                                                    可选配置和组件
+                                                                    <small>
+                                                                        <i class="icon-double-angle-right"></i>
+                                                                        <label id = "interfaceNameDiv">选择你会使用到的配置</label>
+                                                                    </small>
+                                                                </h1>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="faq-0-1">
+                                                            <div id="accordion" class="accordion-style2">
+                                                                <div class="col-md-6">
+                                                                    <div class="group">
+                                                                        <h3 id="param-step-1" class="accordion-header">DB相关</h3>
+                                                                        <div>
+                                                                            <div class="col-md-12" style="padding:0;position:relative;height:100%;">
+                                                                                <div style="min-height: 300px;">
+                                                                                    <form class="form-horizontal">
+                                                                                        <div class="form-group">
+                                                                                            <label class="col-sm-3 control-label no-padding-right" for="selfDbName">服务自用数据库名:</label>
+
+                                                                                            <div class="col-sm-9">
+                                                                                                <div class="clearfix">
+                                                                                                    <input class="col-xs-6" type="text" id="selfDbName" placeholder="对应数据库名称..." />
+                                                                                                </div>
+
+                                                                                                <div class="space-2"></div>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="form-group">
+                                                                                            <label class="col-sm-3 control-label no-padding-right" for="useMasterDbName">其他Master数据库名</label>
+
+                                                                                            <div class="col-sm-9">
+                                                                                                <div class="clearfix">
+                                                                                                    <select multiple="" class="width-80 chosen-select tag-input-style" id="useMasterDbName" data-placeholder="选择已有数据库...">
+                                                                                                        <option value="qq_data">qq_data</option>
+                                                                                                        <option value="qq_user">qq_user</option>
+                                                                                                        <option value="qq_passport">qq_passport</option>
+                                                                                                    </select>
+                                                                                                </div>
+
+                                                                                                <div class="space-2"></div>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="form-group">
+                                                                                            <label class="col-sm-3 control-label no-padding-right" for="useSlaveDbName">其他Slave数据库名</label>
+
+                                                                                            <div class="col-sm-9">
+                                                                                                <div class="clearfix">
+                                                                                                    <select multiple="" class="width-80 chosen-select tag-input-style" id="useSlaveDbName" data-placeholder="选择已有数据库...">
+                                                                                                        <option value="qq_data">qq_data</option>
+                                                                                                        <option value="qq_user">qq_user</option>
+                                                                                                        <option value="qq_passport">qq_passport</option>
+                                                                                                    </select>
+                                                                                                </div>
+
+                                                                                                <div class="space-2"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="col-xs-12 col-sm-12 widget-container-span">
+                                                                        <div class="widget-box">
+                                                                            <div class="widget-header header-color-blue">
+                                                                                <h5 class="bigger lighter">
+                                                                                    <i class="icon-table"></i>
+                                                                                    可选项(TODO-功能配置待丰富)
+                                                                                </h5>
+                                                                            </div>
+
+                                                                            <div class="widget-body">
+                                                                                <div class="widget-main no-padding">
+                                                                                    <table class="table table-striped table-bordered table-hover">
+                                                                                        <thead class="thin-border-bottom">
+                                                                                        <tr>
+                                                                                            <th>
+                                                                                                <i class="icon-user"></i>
+                                                                                                功能描述
+                                                                                            </th>
+                                                                                            <th class="hidden-480">是否开启</th>
+                                                                                            <th>
+                                                                                                <i class="icon-user"></i>
+                                                                                                功能描述
+                                                                                            </th>
+                                                                                            <th class="hidden-480">是否开启</th>
+                                                                                        </tr>
+                                                                                        </thead>
+
+                                                                                        <tbody>
+                                                                                        <tr>
+                                                                                            <td class="">服务自用Redis</td>
+                                                                                            <td>
+                                                                                                <label class="pull-left inline"  title="信了你的鬼" data-rel="tooltip" >
+                                                                                                    <input id="REDIS_SELF" type="checkbox" class="ace ace-switch ace-switch-6 qing_custom_switch" value="0" />
+                                                                                                    <span class="lbl"></span>
+                                                                                                </label>
+                                                                                            </td>
+
+                                                                                            <td class=""></td>
+                                                                                            <td>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td class="">使用UserInfoDp</td>
+                                                                                            <td>
+                                                                                                <label class="pull-left inline"  title="信了你的鬼" data-rel="tooltip" >
+                                                                                                    <input id="REDIS_USER_INFO_DP" type="checkbox" class="ace ace-switch ace-switch-6 qing_custom_switch" value="0" />
+                                                                                                    <span class="lbl"></span>
+                                                                                                </label>
+                                                                                            </td>
+
+                                                                                            <td class="">Mock功能配置</td>
+                                                                                            <td>
+                                                                                                <label class="pull-left inline"  title="信了你的鬼" data-rel="tooltip" >
+                                                                                                    <input id="COMMON_MOCK" type="checkbox" class="ace ace-switch ace-switch-6 qing_custom_switch" value="0" />
+                                                                                                    <span class="lbl"></span>
+                                                                                                </label>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div><!-- /span -->
+
+                                                                </div>
+
+                                                            </div><!-- #accordion -->
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div><!-- /.timeline-items -->
                                     </div><!-- /.timeline-container -->
@@ -180,6 +331,14 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
+            });
+
+            $(document).on("change", ".qing_custom_switch", function(){
+                if($(this).val() == 0){
+                    $(this).val(1);
+                }else{
+                    $(this).val(0);
+                }
             });
 
             $("#saveBtn").click(function () {
@@ -212,6 +371,9 @@
                     return;
                 }
 
+                var customArr = generateCustom();
+                $("#custom").val(JSON.stringify(customArr));
+
                 $("#createProjectForm").submit();
 
                 <#--var data = {-->
@@ -232,6 +394,57 @@
                 <#--commonAjaxRequest(request);-->
             });
 
+            function generateCustom(){
+                var customArr = [];
+
+                if($("#selfDbName").val() != ""){
+                    var custom = {};
+                    custom.itemType = "MYSQL_DB";
+                    custom.customJson = '{"dbName":"' + $("#selfDbName").val() + '"}';
+
+                    customArr.push(custom);
+                }
+                if($("#useMasterDbName").val() != null){
+                    var useDbsArr = $("#useMasterDbName").val();
+                    for(var idx in useDbsArr){
+                        var useDb = useDbsArr[idx];
+                        var custom = {};
+                        custom.itemType = "MYSQL_DB";
+                        custom.customJson = '{"dbName":"' + useDb + '"}';
+
+                        customArr.push(custom);
+                    }
+                }
+
+                if($("#useSlaveDbName").val() != null){
+                    var useDbsArr = $("#useSlaveDbName").val();
+                    for(var idx in useDbsArr){
+                        var useDb = useDbsArr[idx];
+                        var custom = {};
+                        custom.itemType = "MYSQL_DB";
+                        custom.customJson = '{"dbName":"' + useDb + '","type":"slave"}';
+
+                        customArr.push(custom);
+                    }
+                }
+
+                var customSwitchItems = $(".qing_custom_switch");
+                var itemIdx = 0;
+                while(itemIdx < customSwitchItems.length){
+                    var item = customSwitchItems[itemIdx];
+                    if($(item).val() == 1){
+                        var custom = {};
+                        custom.itemType = $(item).attr("id");
+
+                        customArr.push(custom);
+                    }
+
+                    itemIdx++;
+                }
+
+                return customArr;
+            }
+
             function handlerSave(resu){
                 $.gritter.add({
                     title : '提示:',
@@ -241,6 +454,22 @@
             }
 
             jQuery(function($) {
+                $(".chosen-select").chosen();
+
+                $( "#accordion" ).accordion({
+                    collapsible: true ,
+                    heightStyle: "content",
+                    animate: 250,
+                    header: ".accordion-header"
+                }).sortable({
+                    axis: "y",
+                    handle: ".accordion-header",
+                    stop: function( event, ui ) {
+                        // IE doesn't register the blur when sorting
+                        // so trigger focusout handlers to remove .ui-state-focus
+                        ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+                    }
+                });
             });
         </script>
     </div>

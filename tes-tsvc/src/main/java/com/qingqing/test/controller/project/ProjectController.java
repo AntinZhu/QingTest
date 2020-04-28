@@ -14,6 +14,7 @@ import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.IdAndBoolBean;
 import com.qingqing.test.bean.common.response.ListResponse;
 import com.qingqing.test.bean.project.ProjectCustomBean;
+import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.controller.DownloadController;
 import com.qingqing.test.controller.errorcode.SimpleErrorCode;
 import com.qingqing.test.controller.project.errorCode.ProjectGenerateErrorCode;
@@ -68,6 +69,8 @@ public class ProjectController {
         String requestParam = new JSONObject(params).toJSONString();
         logger.info("create project param:" + requestParam);
         ProjectCustomBean projectCustomBean = JSON.parseObject(requestParam, ProjectCustomBean.class);
+        projectCustomBean.setCustomItemList(JsonUtil.parserJsonList((String)params.get("custom"), ProjectCustomItem.class));
+        logger.info("custom:" + params.get("custom"));
 
         //将文件进行打包下载
         String destFilePath = null;

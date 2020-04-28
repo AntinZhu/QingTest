@@ -24,6 +24,19 @@ public class QingStringUtil {
         return sb.toString();
     }
 
+    public static String betterReg(String value){
+        StringBuilder sb = new StringBuilder();
+        for(char c : value.toCharArray()){
+            if("\\".toCharArray()[0] == c){
+                sb.append("\\\\");
+            }else{
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
     public static String generateGetMethod(String properties){
         return "get" + upperCase(properties);
     }

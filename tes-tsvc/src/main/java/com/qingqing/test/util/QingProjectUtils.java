@@ -12,14 +12,13 @@ import com.qingqing.test.manager.project.customhanlde.impl.CommonMockProjectCust
 import com.qingqing.test.manager.project.customhanlde.impl.MySQLProjectCustomHandler;
 import com.qingqing.test.manager.project.customhanlde.impl.SelfRedisProjectCustomHandler;
 import com.qingqing.test.manager.project.customhanlde.impl.UserInfoDpProjectCustomHandler;
-import freemarker.cache.StringTemplateLoader;
+import com.qingqing.test.project.MyStringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.jar.JarEntry;
@@ -33,12 +32,97 @@ public class QingProjectUtils {
     private static final Logger logger = LoggerFactory.getLogger(QingProjectUtils.class);
 
     private static final boolean isWins = File.separator.equals("\\");
-    public static final String TEMPLATE_PATH = buildDirPath("src", "main", "resources", "templates", "project");
-    public static final String TEMPLATE_PATH_COMMON = buildDirPath(TEMPLATE_PATH, "common");
-    public static final String TEMPLATE_PATH_CUSTOM = buildDirPath(TEMPLATE_PATH, "custom");
-    private static final String TMP_DIR = isWins? "D:\\" : "/home/qingqing/";
+    public static final String TEMPLATE_PATH = buildDirPath( "src", "main", "resources", "templates", "project");
+    public static final String COMMON_ABS_PATH = buildDirPath("common", "");
+    public static final String TEMPLATE_FILE_SUFFIX = ".ftl";
 
+    private static final String TMP_DIR = isWins? "D:\\" : "/home/qingqing/";
     private static final String SP = File.separator.equals("\\")? "\\\\":File.separator;
+
+    // 预先加载的string模板
+    private static Configuration stringTemplateConfig;
+    private static MyStringTemplateLoader stringTemplateLoader;
+
+    public static void initStringTemplate(){
+        stringTemplateConfig  = new Configuration();
+        stringTemplateLoader = new MyStringTemplateLoader();
+        stringTemplateConfig.setTemplateLoader(stringTemplateLoader);
+
+        if(isInJar()){
+            // 以jar包运行
+            String jarPath = QingProjectUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+
+            JarFile jarFile = null;
+            try {
+                jarPath = java.net.URLDecoder.decode(jarPath, "UTF-8");
+                int firstIdx = jarPath.indexOf("!");
+                if(firstIdx != -1){
+                    jarPath = jarPath.substring(0, firstIdx);
+                }
+                logger.info("jarPath:" + jarPath);
+
+                jarFile = new JarFile(new File(jarPath.substring(isWins? 6 : 5)));
+                Enumeration<JarEntry> es = jarFile.entries();
+                final String templatePath = "classes/templates/project/";
+                while (es.hasMoreElements()) {
+                    JarEntry jarEntry = (JarEntry) es.nextElement();
+                    String nameEntryName = new String(jarEntry.getName().getBytes(), "UTF-8");
+                    if(nameEntryName.contains(templatePath) && nameEntryName.endsWith(QingProjectUtils.TEMPLATE_FILE_SUFFIX)){
+                        logger.info("nameEntryName:" + nameEntryName);
+                        // 相对于templatePath的路径
+                        String nameAbsByTemplatePath = nameEntryName.substring(nameEntryName.indexOf(templatePath) + templatePath.length());
+                        String templateKey = buildTemplateKey(nameAbsByTemplatePath, "/");
+                        logger.info("templateKey:" + templateKey);
+
+                        stringTemplateLoader.putTemplate(templateKey, QingJarUtils.readFromJar(jarPath, nameEntryName));
+                    }
+                }
+            } catch (Exception e) {
+                throw new QingQingRuntimeException("generate file in jar error", e);
+            }
+        }else{
+            File dir = new File(TEMPLATE_PATH);
+            try {
+                DirSearchUtils.checkDir(dir, new DirSearchUtils.FileHandler() {
+                    @Override
+                    public void handle(File file) throws IOException {
+                        if(file.getName().endsWith(QingProjectUtils.TEMPLATE_FILE_SUFFIX)){
+                            String fileFullPath = file.getAbsolutePath();
+                            String fileAbsPath = fileFullPath.substring(fileFullPath.indexOf(TEMPLATE_PATH ) + TEMPLATE_PATH.length() + 1);
+
+                            String templateKey = buildTemplateKey(fileAbsPath, File.separator);
+                            System.out.println("templateKey:" + templateKey);
+                            stringTemplateLoader.putTemplate(templateKey, QingFileUtils.readAll(file));
+                        }
+                    }
+
+                    @Override
+                    public void doAfterFileChecked(File dir) {}
+                });
+            } catch (IOException e) {
+                throw new QingQingRuntimeException("generate file error", e);
+            }
+        }
+    }
+
+    private static final String buildTemplateKey(String nameAbsByTemplatePath, String pathSeparator){
+        String pathSeparatorReg = pathSeparator;
+        if("\\".equals(pathSeparator)){
+            pathSeparatorReg = "\\\\";
+        }
+        // 相对目录
+        String entryFileDir = "";
+        String entryFileName = nameAbsByTemplatePath;
+        if(nameAbsByTemplatePath.lastIndexOf(pathSeparator) != -1){
+            int lastFilePathIdx = nameAbsByTemplatePath.lastIndexOf(pathSeparator);
+            entryFileDir = nameAbsByTemplatePath.substring(0, lastFilePathIdx);
+            entryFileDir = entryFileDir.replaceAll(pathSeparatorReg, ".");
+            entryFileDir = entryFileDir.replaceAll("src\\.main\\.java", "src.main.java.{basePackage}");
+            entryFileName = nameAbsByTemplatePath.substring(lastFilePathIdx + 1);
+        }
+
+        return buildFilePath(entryFileDir, entryFileName);
+    }
 
     public static final String createEmptyProject(final ProjectCustomBean projectCustomBean, List<IProjectCustomHandler> customHandlerList){
         String svcName = projectCustomBean.getSvcName();
@@ -71,95 +155,47 @@ public class QingProjectUtils {
         // 2.2 生成必备文件
         buildCommonFile(destProjectDir, projectCustomBean);
 
+        // 生成定制化功能目录
+        mkCustoms(rootDitPah, projectCustomBean.getBasePackage(), projectCustomBean.getCustomDir());
+
         // 返回生成项目的根目录
         return destProjectDir;
+    }
+
+    private static final void mkCustoms(String rootDitPah, String basePackage, Set<String> customSet){
+        if(CollectionsUtil.isNullOrEmpty(customSet)){
+            return;
+        }
+
+        for (String custom : customSet) {
+            String path = buildDirPath(rootDitPah, custom.replaceAll("\\{basePackage\\}", basePackage));
+            mkDirNotExists(path);
+        }
     }
 
     private static final void buildCommonFile(final String destProjectDir, final ProjectCustomBean projectCustomBean){
         // 构建生成文件所需数据
         final Map<String, Object> dataMap = buildTemplateData(projectCustomBean);
 
-        String filePath = QingProjectUtils.class.getResource("QingProjectUtils.class").getPath();
-        logger.info("QingProjectUtils.class filePath:" + filePath);
-        if(filePath.contains(".jar!")){
-            // 以jar包运行
-            String jarPath = QingProjectUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-
-            JarFile jarFile = null;
-            try {
-                jarPath = java.net.URLDecoder.decode(jarPath, "UTF-8");
-                int firstIdx = jarPath.indexOf("!");
-                if(firstIdx != -1){
-                    jarPath = jarPath.substring(0, firstIdx);
+        String basePackagePath = QingStringUtil.betterReg(buildDirPath(projectCustomBean.getBasePackage()));
+        // 遍历模板目录下/common/下的所有模板文件
+        for (String templateKey : stringTemplateLoader.getAllTemplateKey()) {
+            if(templateKey.startsWith(COMMON_ABS_PATH)){
+                String outputFilePath = templateKey;
+                outputFilePath = outputFilePath.substring(COMMON_ABS_PATH.length());
+                if(outputFilePath.endsWith(QingProjectUtils.TEMPLATE_FILE_SUFFIX)){
+                    outputFilePath = outputFilePath.substring(0, outputFilePath.length() - QingProjectUtils.TEMPLATE_FILE_SUFFIX.length());
                 }
-                logger.info("jarPath:" + jarPath);
+                outputFilePath = outputFilePath.replaceAll("\\{basePackage\\}", basePackagePath);
+                outputFilePath = buildFilePath(destProjectDir, outputFilePath);
 
-                jarFile = new JarFile(new File(jarPath.substring(isWins? 6 : 5)));
-                Enumeration<JarEntry> es = jarFile.entries();
-                final String commonTemplatePath = "classes/templates/project/common/";
-                while (es.hasMoreElements()) {
-                    JarEntry jarEntry = (JarEntry) es.nextElement();
-                    String nameEntryName = new String(jarEntry.getName().getBytes(), "UTF-8");
-                    if(nameEntryName.contains(commonTemplatePath) && nameEntryName.endsWith(".ftl")){
-                        logger.info("nameEntryName:" + nameEntryName);
-                        // 路径拼接
-                        URL url = new URL("jar:" + jarPath + "!/" + nameEntryName);
-                        // 标准输入流
-                        InputStream in = url.openStream();
-                        byte[] buf = new byte[in.available()];
-                        in.read(buf);
-                        String templateValue = new String(buf, "utf-8");
-                        logger.info("templateValue:" + templateValue);
-
-                        // 去除.ftl
-                        String destFilePath = nameEntryName.substring(0, nameEntryName.length() - 4);
-                        // 去除不需要的前缀
-                        destFilePath = destFilePath.substring(destFilePath.indexOf(commonTemplatePath) + commonTemplatePath.length());
-                        // java目录下文件路径增加basePckage
-                        destFilePath = destFilePath.replace("src/main/java", buildDirPath("src.main.java", projectCustomBean.getBasePackage()));
-                        // jar包文件分隔符装换为系统的文件分隔符
-//                        destFilePath = destFilePath.replaceAll("/", File.separator);
-                        logger.info("destFilePath:" + destFilePath);
-                        generateFileWithStringTemplate(nameEntryName, templateValue, dataMap, buildFilePath(destProjectDir , destFilePath));
-                        in.close();
-                    }
-                }
-            } catch (Exception e) {
-                throw new QingQingRuntimeException("generate file in jar error", e);
-            }
-        }else{
-            File dir = new File(TEMPLATE_PATH_COMMON);
-            try {
-                DirSearchUtils.checkDir(dir, new DirSearchUtils.FileHandler() {
-                    @Override
-                    public void handle(File file) throws IOException {
-                        if(file.getName().endsWith(".ftl")){
-                            String fileFullPath = file.getAbsolutePath();
-                            String fileAbsPath = fileFullPath.substring(fileFullPath.indexOf(TEMPLATE_PATH_COMMON ) + TEMPLATE_PATH_COMMON.length() + 1);
-                            String destFilePath = fileAbsPath.substring(0, fileAbsPath.length() - 4);
-                            String javaPath = buildDirPath("src", "main", "java");
-
-                            destFilePath = destFilePath.replace(javaPath, buildDirPath(javaPath, projectCustomBean.getBasePackage()));
-
-                            String fileName = file.getName();
-                            String fileDir;
-                            if(fileAbsPath.equals(fileName)){
-                                fileDir = "";
-                            }else{
-                                fileDir = fileAbsPath.substring(0, fileAbsPath.length() - fileName.length() - 1);
-                            }
-
-                            generateFile(buildDirPath(TEMPLATE_PATH_COMMON, fileDir), fileName, dataMap, buildFilePath(destProjectDir, destFilePath));
-                        }
-                    }
-
-                    @Override
-                    public void doAfterFileChecked(File dir) {}
-                });
-            } catch (IOException e) {
-                throw new QingQingRuntimeException("generate file error", e);
+                generateFileWithStringTemplate(templateKey, dataMap, outputFilePath);
             }
         }
+    }
+
+    private static boolean isInJar(){
+        return QingProjectUtils.class.getResource("QingProjectUtils.class").getPath().contains(".jar!");
     }
 
     public static final String buildDirPath(String rootDir, String ... pathNames){
@@ -294,10 +330,15 @@ public class QingProjectUtils {
         handlerList.add(userInfoDpProjectCustomHandler);
         handlerList.add(commonMockProjectCustomHandler);
 
+        QingProjectUtils.initStringTemplate();
         QingProjectUtils.createEmptyProject(projectCustomBean, handlerList);
     }
 
     public static void generateFile(String templateDir, String templateFileName, Map<String, Object> dataMap, String outputFilePath) {
+        generateFileWithStringTemplate(templateDir, templateFileName, dataMap, outputFilePath);
+    }
+
+    private static void generateFileWithTemplate(String templateDir, String templateFileName, Map<String, Object> dataMap, String outputFilePath) {
         // step1 创建freeMarker配置实例
         Configuration configuration = new Configuration();
         Writer out = null;
@@ -328,21 +369,30 @@ public class QingProjectUtils {
         }
     }
 
-    public static void generateFileWithStringTemplate(String path, String templateValue, Map<String, Object> dataMap, String outputFilePath) {
-        Configuration config  = new Configuration();
-        StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
-        stringTemplateLoader.putTemplate(path, templateValue);
-        config.setTemplateLoader(stringTemplateLoader);
+    private static void generateFileWithStringTemplate(String pathDir, String fileName, Map<String, Object> dataMap, String outputFilePath) {
+        String templateKey = buildFilePath(pathDir, fileName);
 
+        generateFileWithStringTemplate(templateKey, dataMap, outputFilePath);
+    }
+
+    private static void generateFileWithStringTemplate(String templateKey, Map<String, Object> dataMap, String outputFilePath) {
         Template template = null;
         Writer out = null;
         try {
-            template = config.getTemplate(path,"UTF-8");
+            template = stringTemplateConfig.getTemplate(templateKey,"UTF-8");
+            if(template == null){
+                throw new QingQingRuntimeException("unknown template for templateKey:" + templateKey);
+            }
+
+            File outputFile = new File(outputFilePath);
+            if(!outputFile.exists()){
+                outputFile.getParentFile().mkdirs();
+            }
             out = new BufferedWriter(new FileWriter(outputFilePath));
             template.process(dataMap, out);
             out.flush();
         } catch (Exception e) {
-            throw new QingQingRuntimeException("generate file fail, templateFileName:" + path + ", outputFilePath:" + outputFilePath, e);
+            throw new QingQingRuntimeException("generate file fail, templateFileName:" + templateKey + ", outputFilePath:" + outputFilePath, e);
         }finally {
             if(out != null){
                 try {
