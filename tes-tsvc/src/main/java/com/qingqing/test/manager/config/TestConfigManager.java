@@ -33,6 +33,7 @@ public class TestConfigManager implements ISwitchDeterminer,ISyncable {
     private TestConfigService testConfigService;
     @Autowired
     private List<ITestConfigNotify> testConfigNotifies;
+
     private Map<String, String> configMap;
     private Map<String, Object> jarVersionMap;
 

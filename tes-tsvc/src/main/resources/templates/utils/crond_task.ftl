@@ -193,10 +193,15 @@
 
     function invokeLocal(url, guid){
         var localPort = $("#localDebugPort").val();
-        var url = "http://127.0.0.1:" + localPort + url + "?guid=" + guid;
+        var finalUrl = "http://127.0.0.1:" + localPort + url.trim();
+        if(finalUrl.indexOf("?") > -1){
+            finalUrl = finalUrl +  "&guid=" + guid
+        }else{
+            finalUrl = finalUrl +  "?guid=" + guid
+        }
 
         var data = {
-            url : url
+            url : finalUrl
         };
 
         var request = {

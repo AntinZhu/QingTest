@@ -3,9 +3,11 @@ package com.qingqing.test.manager;
 import com.qingqing.common.exception.ErrorCodeException;
 import com.qingqing.common.exception.QingQingRuntimeException;
 import com.qingqing.common.exception.RequestValidateException;
+import com.qingqing.common.util.CollectionsUtil;
 import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.XMLFormatUtil;
 import com.qingqing.common.util.converter.lang.BigDecimalUtil;
+import com.qingqing.test.bean.pay.ThirdPayBriefExtend;
 import com.qingqing.test.bean.pay.ahm.AhmNotifyRequest;
 import com.qingqing.test.bean.pay.ahm.AhmNotifyResponse;
 import com.qingqing.test.bean.pay.baidu.BaiduNotifyResponse;
@@ -19,6 +21,8 @@ import com.qingqing.test.domain.pay.ThirdPayBrief;
 import com.qingqing.test.service.pay.ThirdPayBriefService;
 import com.qingqing.test.util.ObjectUtil;
 import com.qingqing.test.util.UrlUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,6 +32,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PayManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(PayManager.class);
 
     @Autowired
     private ThirdPayBriefService thirdPayBriefService;
@@ -62,9 +68,61 @@ public class PayManager {
                 return mockCmblifeNotify(thirdPayBrief);
             case jd_pay:
                 return mockJdNotify(thirdPayBrief);
+            case alipay_chinaums:
+            case weixin_pay_chinaums:
+                return mockChinaums(thirdPayBrief);
             default:
                 throw new ErrorCodeException(PayErrorCode.not_usupport_mock_notify_type, "not support mock pay notify, OrderPayTypeV2:" + thirdPayBrief.getThirdPaymentTypeV3().getOrderPayTypeV2());
         }
+    }
+
+    private boolean mockChinaums(ThirdPayBrief thirdPayBrief){
+        Integer channelId = thirdPayBrief.getThirdPaymentTypeV3().getValue();
+
+        String chinaumsTradeNo = "";
+        if(!CollectionsUtil.isNullOrEmpty(thirdPayBrief.getExtendList())){
+            for (ThirdPayBriefExtend thirdPayBriefExtend : thirdPayBrief.getExtendList()) {
+                if(ThirdPayBriefExtend.CHINAUMS_TRADE_NO.equals(thirdPayBriefExtend.getRefType())){
+                    chinaumsTradeNo = thirdPayBriefExtend.getExtendValue();
+                    break;
+                }
+            }
+        }
+
+        String param = "buyerUsername=152****2089&" +
+                "eF=cWZN&" +
+                "payTime=2020-05-12 19:25:52&" +
+                "connectSys=ALIPAY&" +
+                "sign=test&" +
+                "merName=全渠道&" +
+                "mid=898310148160568&" +
+                "invoiceAmount=3&" +
+                "settleDate=2020-05-12&" +
+                "acqSpId=KFTEST12&" +
+                "billFunds=花呗:3&" +
+                "buyerId=2088012948980027&" +
+                "tid=88880001&" +
+                "instMid=H5DEFAULT&" +
+                "receiptAmount=3&" +
+                "couponAmount=0&" +
+                "targetOrderId=2020051222001480021450699553&" +
+                "cardAttr=BALANCE&" +
+                "billFundsDesc=花呗支付0.03元。&" +
+                "orderDesc=测试支付&" +
+                "seqId=00737800104N&" +
+                "merOrderId=" + chinaumsTradeNo + "&" +
+                "targetSys=Alipay 2.0&" +
+                "totalAmount=3&" +
+                "createTime=2020-05-12 19:25:29&" +
+                "buyerPayAmount=3&" +
+                "notifyId=5cbaef05-7bbf-4849-832e-3edcfff49cc6&" +
+                "subInst=101300&" +
+                "status=TRADE_SUCCESS";
+
+        String result = payPbClient.chinaumsNotify(param, channelId);
+
+        logger.info("chinaumsNotify result:" + result);
+        return result != null && result.startsWith("SUCCESS");
     }
 
     private boolean mockAlipayNotify(ThirdPayBrief thirdPayBrief){

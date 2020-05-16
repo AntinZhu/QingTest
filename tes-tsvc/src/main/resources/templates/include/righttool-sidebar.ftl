@@ -1194,11 +1194,11 @@
 
         function encodeTeacherReportId(reportId) {
             var data = {
-                data : reportId
+                data : [reportId]
             };
 
             var request = {
-                url : "${base}/v1/utils/report/teacher/encode.json",
+                url : "${base}/v1/utils/report/student/encode.json",
                 data : data,
                 handlerFunc : handleTeacherReportEncode,
                 isASync : true,
@@ -1214,7 +1214,7 @@
             };
 
             var request = {
-                url : "${base}/v1/utils/report/teacher/decode.json",
+                url : "${base}/v1/utils/report/student/decode.json",
                 data : data,
                 handlerFunc : handleTeacherReportDecode,
                 isASync : true,

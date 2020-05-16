@@ -1,8 +1,12 @@
 package com.qingqing.test.manager;
 
+import com.google.common.collect.Sets;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.common.util.TimeUtil;
+import com.qingqing.test.bean.config.ITestConfigNotify;
 import com.qingqing.test.domain.user.IpStatus;
 import com.qingqing.test.domain.user.TestUserIp;
+import com.qingqing.test.manager.config.TestConfigManager;
 import com.qingqing.test.service.user.TestUserIpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,21 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhujianxing on 2019/7/8.
  */
 @Component
-public class UserIpManager implements ISyncable{
+public class UserIpManager implements ISyncable, ITestConfigNotify {
 
     private static final Logger logger = LoggerFactory.getLogger(UserIpManager.class);
 
+    private static final String TMP_ALWAYS_ALLOW_USERNAME_CONFIG_KEY = "tmp_user_allow_set";
+    private static Set<String> TMP_ALWAYS_ALLOW_USERNAME_SET = Collections.emptySet();
+
     @Autowired
     private TestUserIpService testUserIpService;
+    @Autowired
+    private TestConfigManager testConfigManager;
 
     private Map<String, TestUserIp> userIpMapping;
     private Map<String, TestUserIp> userNameMapping;
@@ -100,11 +106,22 @@ public class UserIpManager implements ISyncable{
     public void addTmpUser(String userName, String userIp, IpStatus ipStatus){
         TestUserIp testUserIp = new TestUserIp();
         testUserIp.setId(0L);
-        testUserIp.setCreateTime(new Date());
         testUserIp.setUserIp(userIp);
         testUserIp.setUserName(userName);
         testUserIp.setIpStatus(ipStatus);
+        Date createTime;
+        if(TMP_ALWAYS_ALLOW_USERNAME_SET.contains(userName)){
+            createTime = TimeUtil.dayAfterNow(1);
+        }else{
+            createTime = new Date();
+        }
+        testUserIp.setCreateTime(createTime);
 
         tmpUserMapping.put(userIp, testUserIp);
+    }
+
+    @Override
+    public void notifyChange() {
+        TMP_ALWAYS_ALLOW_USERNAME_SET = Sets.newHashSet(JsonUtil.parserJsonList(testConfigManager.getConfigValue(TMP_ALWAYS_ALLOW_USERNAME_CONFIG_KEY, "[]"), String.class));
     }
 }

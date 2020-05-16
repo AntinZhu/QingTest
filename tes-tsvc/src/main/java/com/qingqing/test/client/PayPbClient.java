@@ -3,6 +3,7 @@ package com.qingqing.test.client;
 import com.qingqing.test.config.feign.PayFeignConfiguration;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,4 +45,8 @@ public interface PayPbClient {
     @RequestMapping(path = "jd", method = RequestMethod.POST, consumes = {MediaType.TEXT_XML_VALUE})
     @ResponseBody
     String jdNotify(String param);
+
+    @RequestMapping(path = "chinaums/{channelId}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @ResponseBody
+    String chinaumsNotify(String param, @PathVariable("channelId") Integer channelId);
 }

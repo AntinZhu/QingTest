@@ -24,6 +24,8 @@ public enum PayType {
     apple_pay("apple_pay", "Apple Pay", OrderPayType.apple_pay),
     lovehaimi_pay("lovehaimi_pay", "爱海米分期", OrderPayType.lovehaimi_pay),
     cmb_installment("cmb_installment", "招行分期", OrderPayType.cmb_installment),
+    weixin_pay_chinaums("weixin_pay_chinaums", "银联微信", OrderPayType.weixin_pay_chinaums),
+    alipay_chinaums("alipay_chinaums", "银联支付宝", OrderPayType.alipay_chinaums),
     ;
 
     private static Map<String, String> keyNameMap = new HashMap<>(PayType.values().length);

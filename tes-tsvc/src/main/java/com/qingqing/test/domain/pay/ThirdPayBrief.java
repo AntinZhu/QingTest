@@ -2,9 +2,11 @@ package com.qingqing.test.domain.pay;
 
 import com.qingqing.common.util.converter.lang.BigDecimalUtil;
 import com.qingqing.test.bean.pay.OrderPayTypeV3;
+import com.qingqing.test.bean.pay.ThirdPayBriefExtend;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class ThirdPayBrief {
 
@@ -61,6 +63,8 @@ public class ThirdPayBrief {
     private Long installmentPoundageConfigId;   //分期手续费利率配置id
 
     private String paymentAccountNo;
+
+	private List<ThirdPayBriefExtend> extendList;
 
 	public Double getUnWithdrawableBalanceAmount() {
 		return unWithdrawableBalanceAmount;
@@ -261,5 +265,13 @@ public class ThirdPayBrief {
      */
 	public Double getTotalThirdPaymentAmount() {
 		return BigDecimalUtil.add(thirdPaymentAmount, BigDecimalUtil.notNullTrim(installmentPoundagePrice));
+	}
+
+	public List<ThirdPayBriefExtend> getExtendList() {
+		return extendList;
+	}
+
+	public void setExtendList(List<ThirdPayBriefExtend> extendList) {
+		this.extendList = extendList;
 	}
 }

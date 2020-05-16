@@ -401,6 +401,8 @@ public class OrderManager {
             request.setMultipleInfoForAckPay(multipleBuilder);
         }
 
+        request.setH5ReturnUrl("abc");
+
         PayResult payResult = ptClient.payForOrder(request.build(), userId, UserType.valueOf(userType));
         ProtoBufResponse.BaseResponse.Builder baseResponse = ProtoBufResponse.BaseResponse.newBuilder();
         baseResponse.setErrorCode(payResult.getResponse().getErrorCode());
