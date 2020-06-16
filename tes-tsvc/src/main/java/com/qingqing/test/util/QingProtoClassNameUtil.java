@@ -1,12 +1,8 @@
 package com.qingqing.test.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,28 +14,55 @@ import java.util.regex.Pattern;
 public class QingProtoClassNameUtil {
 
     public static void main(String[] args) throws ClassNotFoundException,IOException {
-        String outFilePath = "D:\\sql\\full-proto.sql";
-        if(args.length > 0){
-            outFilePath = args[0];
+        String outFilePath = null;
+        String inputFilePath = null;
+        String fromServer  = null;
+        if(args.length > 2){
+            fromServer = args[0];
+            inputFilePath = args[1];
+            outFilePath = args[2];
+
+            genProtoClassName(fromServer, inputFilePath, outFilePath);
+        }else{
+            System.out.println("缺少参数");
         }
-        genProtoClassName("E:\\work_B\\proto-teacher-commander", outFilePath);
+
+        genProtoClassName("scoresvc", "D:\\protobuf\\protobuf-scoresvc", "D:\\_1\\work\\Github\\bat\\scoresvc.sql");
     }
 
-    private static void genProtoClassName(String dirPath, String outputFileName) throws IOException {
+    private static void genProtoClassName(String fromServer, String dirPath, String outputFileName) throws IOException {
         List<QingProtoFile> qingProtoFiles = parseProtoDir(new File(dirPath));
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName));
-        writer.write("use qq_itest;");
-        writer.write("delete from `t_proto_class_name`;");
-        for (QingProtoFile qingProtoFile : qingProtoFiles) {
-            String fullOuterClassName = qingProtoFile.getPackageName() + "." + qingProtoFile.getOutterClassName();
-            for (String innerClassName : qingProtoFile.getInnerClassNames()) {
-                writer.newLine();
-                writer.write(String.format("insert into t_proto_class_name(simple_name, full_class_name, is_deleted, create_time) values('%s', '%s', 0, now());", innerClassName, fullOuterClassName + "$" + innerClassName));
+        File outputFile = new File(outputFileName);
+        if(!outputFile.exists()){
+            outputFile.mkdirs();
+        }
+        outputFile.delete();
+
+        BufferedWriter writer = null;
+        FileOutputStream fos = null;
+        try{
+            fos = new FileOutputStream(outputFileName);
+            writer = new BufferedWriter(new OutputStreamWriter(fos));
+            writer.write("use qq_itest;");
+            writer.write("delete from `t_proto_class_name` where from_server = '" + fromServer + "';");
+            for (QingProtoFile qingProtoFile : qingProtoFiles) {
+                try{
+                    String fullOuterClassName = qingProtoFile.getPackageName() + "." + qingProtoFile.getOutterClassName();
+                    for (String innerClassName : qingProtoFile.getInnerClassNames()) {
+                        writer.newLine();
+                        writer.write(String.format("insert into t_proto_class_name(from_server, simple_name, full_class_name, is_deleted, create_time) values('%s','%s', '%s', 0, now());", fromServer, innerClassName, fullOuterClassName + "$" + innerClassName));
+                        writer.flush();
+                    }
+                }catch(Exception e){
+                    // ignore
+                }
+            }
+        }finally{
+            if(fos != null){
+                fos.close();
             }
         }
-
-        writer.close();
     }
 
     private static final Pattern JAVA_PACKAGE_FORMAT = Pattern.compile("\\s*option\\s+java_package\\s*=\\s*\"([^\"]+)\".*");
@@ -50,6 +73,10 @@ public class QingProtoClassNameUtil {
         List<QingProtoFile> resultList = new LinkedList<>();
 
         File[] fileList = director.listFiles();
+        if(fileList == null){
+            return Collections.emptyList();
+        }
+
         for(File file : fileList){
             if(file.isDirectory()){
                 resultList.addAll(parseProtoDir(file));
@@ -139,3 +166,4 @@ public class QingProtoClassNameUtil {
         return String.class.equals(enumClazz) || enumClazz.isPrimitive() || Number.class.isAssignableFrom(enumClazz);
     }
 }
+

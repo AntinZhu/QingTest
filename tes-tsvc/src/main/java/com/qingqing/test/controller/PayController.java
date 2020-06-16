@@ -67,6 +67,7 @@ public class PayController {
             @RequestParam(value = "def", defaultValue = "{}") String defaultObj,
             @RequestParam(value = "paramId", defaultValue = "0") Long paramId,
             @RequestParam(value = "inv", defaultValue = "0") String inv,
+            @RequestParam(value = "gnp", defaultValue = "0") int goToNextPage,
             Model model
     ){
         model.addAttribute("paramExampleId", paramId);
@@ -75,6 +76,7 @@ public class PayController {
         model.addAttribute("userType", userType);
         model.addAttribute("defaultObj", defaultObj);
         model.addAttribute("inv", inv);
+        model.addAttribute("goToNextPage", goToNextPage);
 
         return "pay/mock_pay_notify";
     }

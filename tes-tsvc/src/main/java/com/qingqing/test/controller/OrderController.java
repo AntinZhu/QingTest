@@ -119,4 +119,9 @@ public class OrderController {
                 .setQingqingGroupSubOrderId(request.getQingqingOrderId())
                 .build(), request.getStudentId());
     }
+
+    @RequestMapping("add_class_hour_page")
+    public String addClassHour(){
+        return "order/add_class_hour_order";
+    }
 }

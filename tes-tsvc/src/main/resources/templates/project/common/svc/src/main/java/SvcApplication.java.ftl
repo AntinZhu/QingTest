@@ -24,6 +24,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import com.qingqing.springboot.listener.ApplicationFailedListener;
 
 import java.util.Date;
 
@@ -67,6 +68,7 @@ public class SvcApplication extends SpringBootServletInitializer implements Embe
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        builder.listeners(new ApplicationFailedListener());
         return builder.sources(SvcApplication.class);
     }
 

@@ -18,9 +18,9 @@ import java.util.Map;
 public class CommonMockProjectCustomHandler extends AbstractProjectCustomHandler {
 
     private static final List<ProjectCustomTemplate> TEMPLATE_LIST = Lists.newArrayList(
-        new ProjectCustomTemplate("custom.java.mock", "QingMock.java.ftl", "svc.src.main.java.{basePackage}.aspect.mock"),
-        new ProjectCustomTemplate("custom.java.mock", "QingMockAspect.java.ftl", "svc.src.main.java.{basePackage}.aspect.mock"),
-        new ProjectCustomTemplate("custom.java.mock", "QingMockType.java.ftl", "svc.src.main.java.{basePackage}.aspect.mock")
+//        new ProjectCustomTemplate("custom.java.mock", "QingMock.java.ftl", "svc.src.main.java.{basePackage}.aspect.mock"),
+//        new ProjectCustomTemplate("custom.java.mock", "QingMockAspect.java.ftl", "svc.src.main.java.{basePackage}.aspect.mock"),
+//        new ProjectCustomTemplate("custom.java.mock", "QingMockType.java.ftl", "svc.src.main.java.{basePackage}.aspect.mock")
     );
 
     @Override

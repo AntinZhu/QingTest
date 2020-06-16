@@ -32,6 +32,7 @@
     select
   	  <include refid="Base_Column_List" />
     	from t_mock_type
+        order by id desc
   </select>
 
   <select id="findById" resultMap="BaseResultMap">

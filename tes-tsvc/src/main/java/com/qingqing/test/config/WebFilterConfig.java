@@ -14,13 +14,13 @@ public class WebFilterConfig {
     @Autowired
     private IpFilter ipFilter;
 
-    @Bean
-    public FilterRegistrationBean setCharacterEncodingFilterRegistrationBean() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setName("ipFilter");
-        registrationBean.setFilter(ipFilter);
-        registrationBean.addUrlPatterns("/*");
-        registrationBean.setOrder(10);
-        return registrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean setCharacterEncodingFilterRegistrationBean() {
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        registrationBean.setName("ipFilter");
+//        registrationBean.setFilter(ipFilter);
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setOrder(10);
+//        return registrationBean;
+//    }
 }

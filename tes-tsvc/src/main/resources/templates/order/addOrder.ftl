@@ -318,6 +318,37 @@
 
                                                         <div class="hr hr-dotted"></div>
 
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="qingScoreCount">使用轻豆数量:</label>
+                                                            <div class="col-xs-12 col-sm-3">
+                                                                <input type="number" name="qingScoreCount" id="qingScoreCount" value="0" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="qingScoreAmount">轻豆抵扣金额:</label>
+                                                            <div class="col-xs-12 col-sm-3">
+                                                                <input type="number" name="qingScoreAmount" id="qingScoreAmount" value="0" />
+                                                            </div>
+                                                        </div>
+
+                                                            <#--<div class="form-group">-->
+                                                                <#--<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="uniqRefType">幂等类型:</label>-->
+                                                                <#--<div class="input-group col-xs-12 col-sm-6">-->
+                                                                    <#--<select class="width-80 chosen-select" id="uniqRefType" data-placeholder="选择幂等类型...">-->
+                                                                        <#--<option value="">不选</option>-->
+                                                                        <#--<option value="1">轻豆兑换订单</option>-->
+                                                                    <#--</select>-->
+                                                                <#--</div>-->
+                                                            <#--</div>-->
+                                                            <div class="form-group">
+                                                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="uniqRefId">轻豆幂等ID:</label>
+                                                                <div class="col-xs-12 col-sm-3">
+                                                                    <input type="number" name="uniqRefId" id="uniqRefId" value="100" />
+                                                                </div>
+                                                            </div>
+
+                                                        <div class="hr hr-dotted"></div>
+
                                                         <!-- 学生相关的信息 -->
                                                         <div class="form-group hide" id="studentAddress">
                                                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right">学生可选地址:</label>
@@ -842,12 +873,16 @@
             coursePriceType : $("#coursePriceType").val(),
             packageCourseId : packageCourseId,
             contentPackageId :contentPackageId,
+
             strengthenType :strengthenType,
             normalTimes :normalTimes,
             strengthenTimes :strengthenTimes,
             servicePackageId : servicePackageId,
             startBlock : $("#startBlock").val(),
-            classHourPackageId : classHourPackageId
+            classHourPackageId : classHourPackageId,
+            qingScoreCount : $("#qingScoreCount").val(),
+            qingScoreAmount :$("#qingScoreAmount").val(),
+            uniqRefId :$("#uniqRefId").val()
         };
 
         var request = {

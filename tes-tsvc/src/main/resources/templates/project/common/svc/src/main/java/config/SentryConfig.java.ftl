@@ -26,7 +26,8 @@ public class SentryConfig {
                                      @Value("${"$"}{servername:}")String servername,
                                      @Value("${"$"}{buffer.size:}")String bufferSize,
                                      @Value("${"$"}{async.queuesize:}")String queuesize,
-                                     @Value("${"$"}{maxmessagelength:}")String maxmessagelength){
+                                     @Value("${"$"}{maxmessagelength:}")String maxmessagelength,
+                                     @Value("${"$"}{asyncThreads:3}")String asyncThreads){
         if ((StringUtils.isEmpty(dsn))) {
             throw new QingQingRuntimeException("sentry dsn is empty");
         }
@@ -48,6 +49,9 @@ public class SentryConfig {
         }
         if(!StringUtils.isEmpty(maxmessagelength)){
             param.put(DefaultSentryClientFactory.MAX_MESSAGE_LENGTH_OPTION,maxmessagelength);
+        }
+        if(!StringUtils.isEmpty(asyncThreads)){
+            param.put(DefaultSentryClientFactory.ASYNC_THREADS_OPTION,asyncThreads);
         }
         String paramUrl = Joiner.on("&").withKeyValueSeparator("=").join(param);
         return Sentry.init(StringUtils.isEmpty(paramUrl) ? dsn : dsn + "?" + paramUrl);

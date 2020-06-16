@@ -1,6 +1,8 @@
 package com.qingqing.test.controller.config;
 
+import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
+import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.test.aspect.validate.IpLoginValid;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.ProxyGenerator;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -36,6 +39,12 @@ public class TestConfigController {
     private TestConfigService testConfigService;
     @Autowired
     private CommonSyncManager commonSyncManager;
+
+    @RequestMapping("test")
+    @ResponseBody
+    public ProtoBufResponse.SimpleLongDataResponse add(@RequestBody SimpleLongRequest request){
+        return ProtoBufResponse.SimpleLongDataResponse.newBuilder().setResponse(ProtoRespGenerator.SUCC_BASE_RESP).setData(request.getData()).build();
+    }
 
     @RequestMapping("list_page")
     @IpLoginValid

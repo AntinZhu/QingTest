@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AspectConfig {
 
-    @Bean
-    @ConditionalOnProperty(value = "a.b", havingValue="2", matchIfMissing = false)
-    public QingMockAspect qingMockAspect(){
-        return new QingMockAspect();
-    }
+//    @Bean
+//    @ConditionalOnProperty(value = "a.b", havingValue="2", matchIfMissing = false)
+//    public QingMockAspect qingMockAspect(){
+//        return new QingMockAspect();
+//    }
 }

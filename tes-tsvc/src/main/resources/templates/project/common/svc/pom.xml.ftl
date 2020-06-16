@@ -301,13 +301,27 @@
             <version>1.7.16</version>
         </dependency>
 
-        <#if (use_userinfodp!0) gt 0 >
-            <dependency>
-                <groupId>com.qingqing.userinfodp</groupId>
-                <artifactId>client</artifactId>
-                <version>${"$"}{userinfodp-client.version}</version>
-            </dependency>
-        </#if>
+        <dependency>
+            <groupId>com.qingqing.test</groupId>
+            <artifactId>controller-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+    <#if (use_userinfodp!0) gt 0 >
+        <dependency>
+            <groupId>com.qingqing.userinfodp</groupId>
+            <artifactId>client</artifactId>
+            <version>${"$"}{userinfodp-client.version}</version>
+        </dependency>
+    </#if>
+<#if (useCommonMock!0) gt 0>
+        <dependency>
+            <groupId>com.qingqing.mock</groupId>
+            <artifactId>mock-spring-boot-starter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+</#if>
     </dependencies>
 
     <build>

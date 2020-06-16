@@ -12,6 +12,7 @@ import com.qingqing.api.proto.v1.ProtoBufResponse.SimpleStringResponse;
 import com.qingqing.api.proto.v1.TeacherProto.SimpleTeacherIdRequest;
 import com.qingqing.api.proto.v1.TeacherProto.TeacherStartEndClassV2;
 import com.qingqing.api.proto.v1.course.OrderCourse.PrivateCancelCourseRequest;
+import com.qingqing.api.proto.v1.order.Order;
 import com.qingqing.api.proto.v1.util.Common.SimpleRepeatedLongRequest;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.web.protobuf.ProtoResponseBody;
@@ -31,6 +32,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @FeignClient(value = "piClient", url = "http://{host}", configuration = MyPiFeignConfiguration.class)
 public interface PiClient {
+
+    @RequestMapping(path = "/svc/api/pi/v2/group_order/add_order", method = RequestMethod.POST)
+    @ProtoResponseBody
+    Order.AddGroupOrderResponse piAddOrder(Order.AddGroupOrderRequestV2 request);
 
     @RequestMapping(path = "{url}", method = RequestMethod.POST, produces ={MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody

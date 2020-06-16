@@ -173,7 +173,7 @@
             $(document).ready(function(){
             <#if ((id)!0) gt 0>
                 $("#configKey").val("${config.configKey}");
-                $("#configValue").val("${config.configValue}");
+                $("#configValue").val('${config.configValue}');
                 $("#description").val("${config.description!''}");
             </#if>
             });

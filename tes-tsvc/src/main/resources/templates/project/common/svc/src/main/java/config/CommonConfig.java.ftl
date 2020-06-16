@@ -1,8 +1,5 @@
 package ${basePackage}.config;
 
-<#if (useCommonMock!0) gt 0>
-import ${basePackage}.aspect.mock.QingMockAspect;
-</#if>
 import com.qingqing.common.web.aspect.log.GuidAspect;
 import com.qingqing.common.web.aspect.log.MessageListenerGuidAspect;
 import org.slf4j.Logger;
@@ -29,13 +26,4 @@ public class CommonConfig {
         MessageListenerGuidAspect messageListenerGuidAspect = new MessageListenerGuidAspect();
         return  messageListenerGuidAspect;
     }
-
-<#if (useCommonMock!0) gt 0>
-    @Bean
-    @ConditionalOnProperty(value = "config.common.mock.enable", havingValue = "true", matchIfMissing = false)
-    public QingMockAspect qingMockAspect(){
-        logger.info("init QingMockAspect");
-        return new QingMockAspect();
-    }
-</#if>
 }

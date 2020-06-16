@@ -118,6 +118,7 @@ public class QingProjectUtils {
             entryFileDir = nameAbsByTemplatePath.substring(0, lastFilePathIdx);
             entryFileDir = entryFileDir.replaceAll(pathSeparatorReg, ".");
             entryFileDir = entryFileDir.replaceAll("src\\.main\\.java", "src.main.java.{basePackage}");
+            entryFileDir = entryFileDir.replaceAll("src\\.test\\.java", "src.test.java.{basePackage}");
             entryFileName = nameAbsByTemplatePath.substring(lastFilePathIdx + 1);
         }
 
@@ -249,6 +250,13 @@ public class QingProjectUtils {
                 "xinterface.converter",
                 "xinterface.errorcode",
                 "domain"
+                )
+        );
+
+        String testJavaDir = rootDir + (".svc.src.test.java." + packagePath).replaceAll("\\.", SP);
+        batchMkDir(testJavaDir, Lists.newArrayList(
+                "xinterface.controller.v1",
+                "xinterface.controller"
                 )
         );
     }

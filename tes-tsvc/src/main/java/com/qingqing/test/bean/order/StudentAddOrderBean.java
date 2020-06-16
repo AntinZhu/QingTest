@@ -30,6 +30,10 @@ public class StudentAddOrderBean {
     private Long servicePackageId;
     private Integer startBlock;
     private Long classHourPackageId;
+    private Integer qingScoreAmount;
+    private Integer qingScoreCount;
+    private String uniqRefType;
+    private String uniqRefId;
 
     public Long getStudentId() {
         return studentId;
@@ -173,5 +177,37 @@ public class StudentAddOrderBean {
 
     public void setClassHourPackageId(Long classHourPackageId) {
         this.classHourPackageId = classHourPackageId;
+    }
+
+    public Integer getQingScoreAmount() {
+        return qingScoreAmount;
+    }
+
+    public void setQingScoreAmount(Integer qingScoreAmount) {
+        this.qingScoreAmount = qingScoreAmount;
+    }
+
+    public Integer getQingScoreCount() {
+        return qingScoreCount;
+    }
+
+    public void setQingScoreCount(Integer qingScoreCount) {
+        this.qingScoreCount = qingScoreCount;
+    }
+
+    public String getUniqRefType() {
+        return uniqRefType;
+    }
+
+    public void setUniqRefType(String uniqRefType) {
+        this.uniqRefType = uniqRefType;
+    }
+
+    public String getUniqRefId() {
+        return uniqRefId;
+    }
+
+    public void setUniqRefId(String uniqRefId) {
+        this.uniqRefId = uniqRefId;
     }
 }

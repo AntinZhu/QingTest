@@ -268,7 +268,8 @@
                     failTitle :"获取订单前置接口失败:",
                     env : $("#env").val(),
                     otherData : null,
-                    guid : $("#guid").val()
+                    guid : $("#guid").val(),
+                    ignoreFail  : true
                 };
 
                 return commonAjaxRequest(request);
@@ -281,6 +282,13 @@
             var localResu;
             var installmentConfigs;
             function handlerPrePay(resu){
+                if(resu.response.error_code != 0){
+                    if(resu.response.error_code == 2004){
+                        checkPay();
+                    }
+                    return;
+                }
+
                 localResu = resu;
                 installmentConfigs = resu.installmentConfigs;
                 $(".qing_multiple").addClass("hide");
@@ -583,8 +591,26 @@
                         clearTimeout(checkPayTimer);
                         checkPayTimer = null;
                     }
+
+                    afterPaySuccess();
                 }
                 return true;
+            }
+
+            function afterPaySuccess(){
+                // 课时包2.0订单支付成功，跳转到签署合同页面
+                if(getParam("order_type") == "class_hour_v2_order_type"){
+                    var goToNextPage = ${goToNextPage!0};
+                    if(goToNextPage == "1"){
+                        var naxtPageUrl = "/v1/contract/ahaya?catelogIndex=1-4&paramId=-1&inv=1&env={env}&uid={userId}&uty={userType}&def=%7b%22qingqing_common_order_id%22%3a%22{qingqing_order_id}%22%2c%22order_type%22%3a%22class_hour_v2_order_type%22%7d";
+                        naxtPageUrl = naxtPageUrl.replace("{env}", $("#env").val());
+                        naxtPageUrl = naxtPageUrl.replace("{userId}", new Number($("#requestUserId").val()));
+                        naxtPageUrl = naxtPageUrl.replace("{userType}", $("#requestUserType").val());
+                        naxtPageUrl = naxtPageUrl.replace("{qingqing_order_id}", getParam("qingqing_common_order_id"));
+
+                        window.location.href= "${base}" + naxtPageUrl;
+                    }
+                }
             }
 
             $("#payType").change(function () {

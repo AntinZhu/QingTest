@@ -28,6 +28,7 @@ import com.qingqing.api.proto.v1.Time.TimeParam;
 import com.qingqing.api.proto.v1.app.AppCommon.DeviceIdentification;
 import com.qingqing.api.proto.v1.app.AppCommon.PlatformType;
 import com.qingqing.api.proto.v1.app.AppCommon.SourceChannel;
+import com.qingqing.api.proto.v1.order.Order;
 import com.qingqing.api.proto.v1.order.Order.AddGroupOrderRequestV2;
 import com.qingqing.api.proto.v1.order.Order.ApiStrengthenPackageInfoForOrder;
 import com.qingqing.api.proto.v1.order.Order.JoinGroupOrderRequest;
@@ -232,6 +233,16 @@ public class OrderManager {
         // 服务包
         if(addOrderBean.getServicePackageId() != null && addOrderBean.getServicePackageId() > 0){
             builder.setServicePackageId(addOrderBean.getServicePackageId());
+        }
+
+        if(addOrderBean.getQingScoreCount() != null && addOrderBean.getQingScoreCount() > 0){
+            builder.setScoreExchangeOrder(Order.ApiScoreExchangeOrder.newBuilder()
+                    .setScoreExchangeNumber(addOrderBean.getQingScoreCount())
+                    .setScoreExchangeOrderAmount(addOrderBean.getQingScoreAmount())
+            );
+            builder.setCreateType(OrderCreateType.score_exchange_order_create_type);
+
+            builder.setUniqCreateOrder(Order.ApiUniqCreateOrder.newBuilder().setUniqRefType(Order.ApiUniqCreateOrder.ApiUniqRefType.score_exchange_api_uniq_ref_type).setUniqRefId(addOrderBean.getUniqRefId()));
         }
 
         StudentAddGroupOrderResponse response = ptClient.studentAddOrderV2(builder.build(), addOrderBean.getStudentId());

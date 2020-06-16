@@ -87,6 +87,25 @@ while(   nOffset   !=   -1   )
 return   bstr   +   strUtf8; 
 }
 
+function getDataFromPi(base, data, env, guid, ignoreFail){
+    var request = {
+        url : base + "/v1/common/pi.json",
+        data : data,
+        handlerFunc : handleReturnValue,
+        isASync : false,
+        failTitle :"查询数据失败:",
+        env : env,
+        guid : guid,
+        ignoreFail : ignoreFail
+    };
+
+    return  commonAjaxRequest(request);;
+}
+
+function handleReturnValue(resu){
+    return resu;
+}
+
 function commonAjaxRequest(request){
     var url = request.url;
     var data = request.data;
@@ -137,6 +156,8 @@ function commonAjaxRequest(request){
                             gritterError(failTitle, resu.response);
                             break;
                     }
+                }else{
+                    result = handlerFunc(resu, otherData);
                 }
                 result = false;
             }else{

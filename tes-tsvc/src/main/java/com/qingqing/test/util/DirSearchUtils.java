@@ -16,17 +16,17 @@ public class DirSearchUtils {
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
-        File dir = new File("F:\\work\\hf");
+        File dir = new File("D:\\_1\\work");
         DirSearchUtils.checkDir(dir, new FileHandler() {
             @Override
             public void handle(File file) throws IOException {
-                if(file.getName().indexOf(".java") > 0 || file.getName().indexOf(".xml") > 0){
+                if(file.getName().indexOf(".xml") > 0){
                     InputStream in = null;
                     try{
                         in = new FileInputStream(file);
                         List<String> lines =  QingFileUtils.readLines(in);
                         for (String line : lines) {
-                            if(line.contains("vocation")){
+                            if(line.contains("18017330991")){
                                 System.out.println(file.getAbsolutePath());
                                 break;
                             }

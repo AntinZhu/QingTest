@@ -49,7 +49,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(responseBuildInteceptor).addPathPatterns("/**");
         registry.addInterceptor(envHandlerInteceptor).addPathPatterns("/**");
         registry.addInterceptor(catelogHandlerInteceptor).addPathPatterns("/**");
-        registry.addInterceptor(ipHandlerInterceptor).addPathPatterns("/**");
+//        registry.addInterceptor(ipHandlerInterceptor).addPathPatterns("/**");
         super.addInterceptors(registry);
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
 public class DataSource${simpleDbName?cap_first}${type?cap_first}Config {
     private static final String SIMPLE_DB_NAME = "${simpleDbName}${type?cap_first}";
 
-    public static final String PACKAGE_PATH = "${basePackage}.dao.mybitas.${simpleDbName}";
+    public static final String PACKAGE_PATH = "${basePackage}.dao.mybatis.${simpleDbName}";
     public static final String SQL_SESSION_FACTORY = SIMPLE_DB_NAME + "SqlSessionFactory";
     public static final String DATA_SOURCE_NAME = SIMPLE_DB_NAME + "DataSource";
     public static final String TX_MANAGER = SIMPLE_DB_NAME + "TransactionManager";
