@@ -26,7 +26,7 @@ public class DirSearchUtils {
                         in = new FileInputStream(file);
                         List<String> lines =  QingFileUtils.readLines(in);
                         for (String line : lines) {
-                            if(line.contains("18017330991")){
+                            if(line.contains("com.qingqing.api.proto.v1.msg")){
                                 System.out.println(file.getAbsolutePath());
                                 break;
                             }

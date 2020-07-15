@@ -106,11 +106,16 @@ public class QingApiLabUtils {
         String requestData = "{\"lan_ip\":\"172.22.7.82\",\"userType\":\"%s\",\"userId\":\"\",\"qingqingUserId\":\"\",\"phoneNumber\":\"%s\"}";
         requestData = String.format(requestData, userType, phoneNumber);
 
-        String resp =  doJsonPost(USER_CONVERT_URL, requestData, getCommonHeader(session));
-        if(resp != null && resp != ""){
-            JSONObject respObj = JSON.parseObject(resp);
-            return respObj.getJSONObject("data").getString("userId");
+        try{
+            String resp =  doJsonPost(USER_CONVERT_URL, requestData, getCommonHeader(session));
+            if(resp != null && resp != ""){
+                JSONObject respObj = JSON.parseObject(resp);
+                return respObj.getJSONObject("data").getString("userId");
+            }
+        }catch(Exception e){
+//            logger.error(e);
         }
+
 
         return "null";
     }
@@ -182,11 +187,11 @@ public class QingApiLabUtils {
     }
 
     public static void main(String[] args) {
-        String[] phoneNumbers = new String[]{"15919396605","13439092513","15652923897","15099569493","18097699077","19912302623","18709947760","16609946105","18701431061","15920195027","13698486518","15916363363","13422948858","15524205571","18359570596","15637647527","13513331816","13780506143"};
-        String sessionId = "cec1aaa4-062e-4b65-b5b6-79c02ac8c402";
+        String[] phoneNumbers = new String[]{"17851513765","13027428893","18095442597","13166081061","13331863488"};
+        String sessionId = "248c5c4c-ea77-436a-8105-406407afa301";
         for (String phoneNumber : phoneNumbers) {
-            String userId = phoneToUserId("copartner", phoneNumber, sessionId);
-            System.out.println(userId);
+            String userId = phoneToUserId("ta", phoneNumber, sessionId);
+            System.out.println(phoneNumber + "," + userId);
         }
     }
 }

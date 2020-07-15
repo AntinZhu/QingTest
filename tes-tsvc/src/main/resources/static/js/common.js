@@ -102,6 +102,21 @@ function getDataFromPi(base, data, env, guid, ignoreFail){
     return  commonAjaxRequest(request);;
 }
 
+function getDataFromPt(base, data, env, guid, ignoreFail){
+    var request = {
+        url : base + "/v1/common/pt.json",
+        data : data,
+        handlerFunc : handleReturnValue,
+        isASync : false,
+        failTitle :"查询数据失败:",
+        env : env,
+        guid : guid,
+        ignoreFail : ignoreFail
+    };
+
+    return  commonAjaxRequest(request);;
+}
+
 function handleReturnValue(resu){
     return resu;
 }
@@ -935,3 +950,13 @@ function copyToClipboard(txt) {
 function returnResult(resp){
     return resp;
 }
+
+$(document).on("change", ".qing_enable", function(){
+    if($(this).val() == 0){
+        $(this).removeClass("hide");
+        $(this).val(1);
+    }else{
+        $(this).addClass("hide");
+        $(this).val(0);
+    }
+});
