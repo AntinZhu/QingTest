@@ -471,7 +471,7 @@
             });
 
             var userTypeArr = [];
-            $.each(["student", "teacher", "assistant"] , function(k, v){
+            $.each(["student", "teacher", "assistant", "parent"] , function(k, v){
                 userTypeArr.push({id: v, text: v});
             });
             var interfaceBean;

@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @RequestMapping("/edit")
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.200.47")
+    @IpLoginValid(validaType = IpLoginValidType.assign)
     public String editUserPage(@RequestParam(value = "id", defaultValue = "0") Long userId, Model model){
         model.addAttribute("id", userId);
         if(userId > 0){
@@ -103,7 +103,7 @@ public class UserController {
 
     @RequestMapping("/add")
     @ResponseBody
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.200.47")
+    @IpLoginValid(validaType = IpLoginValidType.assign)
     public SimpleResponse addUser(@RequestBody  TestUserIp userIp){
         testUserIpService.insert(userIp);
 
@@ -113,7 +113,7 @@ public class UserController {
 
     @RequestMapping("/isDeleted/set")
     @ResponseBody
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.200.47")
+    @IpLoginValid(validaType = IpLoginValidType.assign)
     public SimpleResponse updateDeleted(@RequestBody IdAndBoolBean request){
         testUserIpService.updateDeleted(request.getId(), request.getBool());
 
@@ -123,7 +123,7 @@ public class UserController {
 
     @RequestMapping("/isBlack/set")
     @ResponseBody
-    @IpLoginValid(validaType = IpLoginValidType.assign, assignIp = "172.22.200.47")
+    @IpLoginValid(validaType = IpLoginValidType.assign)
     public SimpleResponse updateBlack(@RequestBody IdAndBoolBean request){
         testUserIpService.updateIpStatus(request.getId(), request.getBool()? IpStatus.black : IpStatus.enable);
 
