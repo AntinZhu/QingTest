@@ -26,6 +26,7 @@ public class UserIpManager implements ISyncable, ITestConfigNotify {
 
     private static final String TMP_ALWAYS_ALLOW_USERNAME_CONFIG_KEY = "tmp_user_allow_set";
     private static Set<String> TMP_ALWAYS_ALLOW_USERNAME_SET = Collections.emptySet();
+    private static final String ADMIN_IP_LIST = "admin_ip_list";
 
     @Autowired
     private TestUserIpService testUserIpService;
@@ -35,6 +36,7 @@ public class UserIpManager implements ISyncable, ITestConfigNotify {
     private Map<String, TestUserIp> userIpMapping;
     private Map<String, TestUserIp> userNameMapping;
     private Map<String, TestUserIp> tmpUserMapping;
+    private List<String> adminIpList = Collections.EMPTY_LIST;
 
     @PostConstruct
     public void init(){
@@ -123,5 +125,13 @@ public class UserIpManager implements ISyncable, ITestConfigNotify {
     @Override
     public void notifyChange() {
         TMP_ALWAYS_ALLOW_USERNAME_SET = Sets.newHashSet(JsonUtil.parserJsonList(testConfigManager.getConfigValue(TMP_ALWAYS_ALLOW_USERNAME_CONFIG_KEY, "[]"), String.class));
+
+        String adminConfigValue = testConfigManager.getConfigValue(ADMIN_IP_LIST, "[]");
+        adminIpList = JsonUtil.parserJsonList(adminConfigValue, String.class);
+    }
+
+
+    public boolean isAdmin(String userIp){
+        return adminIpList.contains(userIp);
     }
 }

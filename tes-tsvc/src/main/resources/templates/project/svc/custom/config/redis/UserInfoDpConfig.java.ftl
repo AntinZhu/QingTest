@@ -14,7 +14,7 @@ public class UserInfoDpConfig {
 
     @Value("${"$"}{redis.userinfodpsvc.cluster.url}")
     private String userDpCluster;
-    @Value("${"$"}{config.userinfodpsvc.host}")
+    @Value("${"$"}{http.inner.userinfodpsvc}")
     private String userDpHost;
 
     @Bean(name = DpClientConfig.QINGQING_USER_DP_CLIENT_PROPERTY_CONFIG_BEAN_NAME)

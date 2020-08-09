@@ -23,17 +23,12 @@ import java.util.List;
  */
 @Aspect
 @Component
-public class IpLoginUserValidAspect implements ITestConfigNotify {
+public class IpLoginUserValidAspect {
 
-    private static final String ADMIN_IP_LIST = "admin_ip_list";
     private static final Logger logger = LoggerFactory.getLogger(IpLoginUserValidAspect.class);
 
     @Autowired
     private UserIpManager userIpManager;
-    @Autowired
-    private TestConfigManager testConfigManager;
-
-    private List<String> adminIpList;
 
     @Before(value = "@annotation(ipUserValid)", argNames = "ipUserValid")
     public void before(IpLoginValid ipUserValid) throws Throwable {
@@ -45,15 +40,9 @@ public class IpLoginUserValidAspect implements ITestConfigNotify {
 
         IpLoginValidType validType = ipUserValid.validaType();
         if(validType == IpLoginValidType.assign){
-            if(!adminIpList.contains(requestUserIp)){
+            if(!userIpManager.isAdmin(requestUserIp)){
                 throw new ErrorCodeException(new SimpleErrorCode(1001, "tmp user invalid", "非管理员用户无法使用该功能"), "hehe for userIp:" + requestUserIp);
             }
         }
-    }
-
-    @Override
-    public void notifyChange() {
-        String adminConfigValue = testConfigManager.getConfigValue(ADMIN_IP_LIST, "[]");
-        adminIpList = JsonUtil.parserJsonList(adminConfigValue, String.class);
     }
 }

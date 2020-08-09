@@ -1,14 +1,22 @@
 package com.qingqing.test.feign.client;
 
+import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.exception.ErrorCodeInterface;
 import com.qingqing.common.exception.QingQingRuntimeException;
+import com.qingqing.common.util.JsonUtil;
 import com.qingqing.test.bean.common.Env;
+import com.qingqing.test.bean.config.ITestConfigNotify;
 import com.qingqing.test.config.inteceptor.EnvHandlerInteceptor;
+import com.qingqing.test.manager.UserIpManager;
+import com.qingqing.test.manager.config.TestConfigManager;
+import com.qingqing.test.spring.filter.IpFilter;
 import feign.Client;
 import feign.Request;
 import feign.Request.Options;
 import feign.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -38,6 +46,9 @@ import static java.lang.String.format;
 public class EnvClient implements Client {
     public static final String BEAN_NAME = "envClient";
     private static final Logger logger = LoggerFactory.getLogger(EnvClient.class);
+
+    @Autowired
+    private UserIpManager userIpManager;
 
     @Override
     public Response execute(Request request, Options options) throws IOException {
@@ -197,13 +208,30 @@ public class EnvClient implements Client {
             case tst:
             case pfm:
                 return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
-            case on_line:
-                String onLineHost = "apigw.changingedu.com";
-                logger.info("on_line host:" + onLineHost);
-                return onLineHost;
+            case pre:
+            case prd:
+                boolean isAdmin = userIpManager.isAdmin(IpFilter.getRequestUserIp());
+                if(!isAdmin){
+                    throw new ErrorCodeException(new ErrorCodeInterface() {
+                        @Override
+                        public Integer getErrorCode() {
+                            return 10001;
+                        }
+
+                        @Override
+                        public String getMsg() {
+                            return "no permission";
+                        }
+
+                        @Override
+                        public String getHintMessage() {
+                            return "您未被允许使用该环境，请联系管理员";
+                        }
+                    });
+                }
+                return "gateway.{env}.idc.cedu.cn".replace("{env}", envValue);
             default:
                 throw new QingQingRuntimeException("unknown env");
         }
     }
-
 }

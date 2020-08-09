@@ -20,13 +20,13 @@ public class DirSearchUtils {
         DirSearchUtils.checkDir(dir, new FileHandler() {
             @Override
             public void handle(File file) throws IOException {
-                if(file.getName().indexOf(".xml") > 0){
+                if(file.getName().indexOf(".jsp") > 0){
                     InputStream in = null;
                     try{
                         in = new FileInputStream(file);
                         List<String> lines =  QingFileUtils.readLines(in);
                         for (String line : lines) {
-                            if(line.contains("com.qingqing.api.proto.v1.msg")){
+                            if(line.contains("preview-src-lis")){
                                 System.out.println(file.getAbsolutePath());
                                 break;
                             }

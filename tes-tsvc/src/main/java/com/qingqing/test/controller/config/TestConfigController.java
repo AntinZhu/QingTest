@@ -4,6 +4,7 @@ import com.qingqing.api.proto.v1.ProtoBufResponse;
 import com.qingqing.api.proto.v1.util.Common.SimpleLongRequest;
 import com.qingqing.common.web.protobuf.ProtoRespGenerator;
 import com.qingqing.test.aspect.validate.IpLoginValid;
+import com.qingqing.test.aspect.validate.IpLoginValidType;
 import com.qingqing.test.bean.base.BaseResponse;
 import com.qingqing.test.bean.base.SimpleResponse;
 import com.qingqing.test.bean.common.response.ListResponse;
@@ -68,7 +69,7 @@ public class TestConfigController {
 
     @RequestMapping("add")
     @ResponseBody
-    @IpLoginValid
+    @IpLoginValid(validaType = IpLoginValidType.assign)
     public SimpleResponse add(@RequestBody TestConfig testConfig){
         testConfigService.add(testConfig);
         commonSyncManager.sync(ISyncable.SyncType.test_config);

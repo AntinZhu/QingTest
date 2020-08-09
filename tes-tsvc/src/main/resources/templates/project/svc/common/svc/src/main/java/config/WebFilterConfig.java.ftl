@@ -43,6 +43,7 @@ public class WebFilterConfig {
         ServerAuthorizationFilter serverAuthorizationFilter = new ServerAuthorizationFilter();
         registrationBean.setFilter(serverAuthorizationFilter);
         registrationBean.addUrlPatterns("/api/pi/*");
+        registrationBean.addUrlPatterns("/api/pbff/*");
         registrationBean.setOrder(20);
         return registrationBean;
     }

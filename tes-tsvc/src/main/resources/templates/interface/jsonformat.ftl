@@ -344,7 +344,7 @@
             var paramExamples;
             var interfaceBean;
             var userTypeArr = [];
-            $.each(["student", "teacher", "assistant", "parent"] , function(k, v){
+            $.each(["student", "teacher", "ta", "parent","system"] , function(k, v){
                 userTypeArr.push({id: v, text: v});
             });
             function handlerInterface(resu){

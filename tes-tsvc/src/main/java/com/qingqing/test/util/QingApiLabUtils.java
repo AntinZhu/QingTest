@@ -187,8 +187,8 @@ public class QingApiLabUtils {
     }
 
     public static void main(String[] args) {
-        String[] phoneNumbers = new String[]{"17851513765","13027428893","18095442597","13166081061","13331863488"};
-        String sessionId = "248c5c4c-ea77-436a-8105-406407afa301";
+        String[] phoneNumbers = new String[]{"15636180117","18200278830","18166854855","13589031382","18642935599","19845040079","18045153579","17645099483","15371158258","13842039429","18746014282","15019741969","15846394908","18691803625","18987148621","15357928479","16601807607","18249776315","17865354417","18111505431","15664665831","18204015135","15222590535","15501852483","18724607213","13153832639","18766666430","13379073303"};
+        String sessionId = "1cf85974-26fd-40ac-9cbd-563ca01a07bf";
         for (String phoneNumber : phoneNumbers) {
             String userId = phoneToUserId("ta", phoneNumber, sessionId);
             System.out.println(phoneNumber + "," + userId);

@@ -6,6 +6,7 @@ import com.qingqing.test.bean.project.ProjectCustomConfigType;
 import com.qingqing.test.bean.project.ProjectCustomItem;
 import com.qingqing.test.bean.project.ProjectCustomTemplate;
 import com.qingqing.test.util.QingProjectUtils;
+import freemarker.template.Configuration;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
         return getSupportProjectCustomConfigType().equals(projectCustomItem.getItemType());
     }
 
-    public void handle(ProjectCustomItem projectCustomItem, ProjectCustomBean projectCustomBean){
+    public void handle(Configuration stringTemplateConfig, ProjectCustomItem projectCustomItem, ProjectCustomBean projectCustomBean){
         List<ProjectCustomTemplate> templateList = getTemplateFileList();
         if(templateList != null){
             Map<String, Object> customTemplateData = generateCustomData(projectCustomBean, projectCustomItem);
@@ -30,7 +31,7 @@ public abstract class AbstractProjectCustomHandler implements IProjectCustomHand
             for (ProjectCustomTemplate projectCustomTemplate : templateList) {
                 String templateFileDir = QingProjectUtils.buildDirPath(projectCustomTemplate.getTemplateDir());
                 String destFilePath = QingProjectUtils.buildFilePath(projectCustomBean.getDestProjectDir(), customDestFileName(projectCustomTemplate, projectCustomBean, projectCustomItem));
-                QingProjectUtils.generateFile(templateFileDir, projectCustomTemplate.getTemplateFile(), customTemplateData, destFilePath);
+                QingProjectUtils.generateFile(stringTemplateConfig, templateFileDir, projectCustomTemplate.getTemplateFile(), customTemplateData, destFilePath);
             }
         }
 

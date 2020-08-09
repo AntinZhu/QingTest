@@ -5,6 +5,8 @@ import com.qingqing.api.passort.proto.PassportLoginProto.PassportTkLoginRequestV
 import com.qingqing.api.proto.v1.UserProto;
 import com.qingqing.common.auth.domain.UserType;
 import com.qingqing.common.exception.ErrorCodeException;
+import com.qingqing.common.util.StringUtils;
+import com.qingqing.common.util.UserIdEncoder;
 import com.qingqing.common.web.util.ServerAuthUtil;
 import com.qingqing.test.bean.inter.UserRequestParam;
 import com.qingqing.test.client.PassportPiClient;
@@ -35,6 +37,12 @@ public class PassportManager {
             token = response.getToken();
             session = response.getSessionId();
             qingqingUserId = response.getQingqingUserId();
+            if(StringUtils.isEmpty(qingqingUserId)){
+                qingqingUserId = UserIdEncoder.encodeUser(userType, userId);
+            }
+        }
+        catch (ErrorCodeException e){
+            throw e;
         }catch (Exception e){
             throw new ErrorCodeException(BaseInterfaceErrorCode.get_token_session_fail, "", e);
         }

@@ -496,7 +496,7 @@
     var colorArr = ["header-color-red3", "header-color-orange", "header-color-dark", "header-color-blue", "header-color-green", "header-color-grey"];
     var btnColorArr = ["btn-danger", "btn-warning", "btn-inverse", "btn-primary", "btn-success", "btn-grey"];
     var colorIdx = 0;
-    var packageTemplate = '<div class="col-xs-6 col-sm-3 pricing-box"><div class="widget-box"><div class="widget-header {color}"><h5 class="bigger lighter">{package_name}({package_id})</h5></div><div class="widget-body"><div class="widget-main"><ul class="list-unstyled spaced2"><li><div class="form-group"><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="customUnitPrice">策略:</label><div class="col-xs-12 col-sm-9"><span>{strategy}</span></div></div></li><li><div class="form-group"><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="customUnitPrice">价格:</label><div class="col-xs-12 col-sm-9"><span>{price}</span></div></div></li><li><div class="form-group"><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="customUnitPrice">课时:</label><div class="col-xs-12 col-sm-9"><span>{hour}</span></div></div></li></ul><hr /><div class="price">$ {total_price}<small>/单</small></div></div><div><a href="#" class="btn btn-block {btnColor} buyPackageBtn" id="{package_id}"><i class="icon-shopping-cart bigger-110"></i><span>Buy</span></a></div></div></div></div>';
+    var packageTemplate = '<div class="col-xs-6 col-sm-3 pricing-box"><div class="widget-box"><div class="widget-header {color}"><h5 class="bigger lighter">{package_name}({package_id}){tagName}</h5></div><div class="widget-body"><div class="widget-main"><ul class="list-unstyled spaced2"><li><div class="form-group"><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="customUnitPrice">策略:</label><div class="col-xs-12 col-sm-9"><span>{strategy}</span></div></div></li><li><div class="form-group"><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="customUnitPrice">价格:</label><div class="col-xs-12 col-sm-9"><span>{price}</span></div></div></li><li><div class="form-group"><label class="control-label col-xs-12 col-sm-3 no-padding-right" for="customUnitPrice">课时:</label><div class="col-xs-12 col-sm-9"><span>{hour}</span></div></div></li></ul><hr /><div class="price">$ {total_price}<small>/单</small></div></div><div><a href="#" class="btn btn-block {btnColor} buyPackageBtn" id="{package_id}"><i class="icon-shopping-cart bigger-110"></i><span>Buy</span></a></div></div></div></div>';
     var detailForOrderObj;
     var createOrderResultObj;
     function initOrderParam() {
@@ -567,26 +567,32 @@
             return "";
         }
 
+        var tagName = "";
+        if(strategy.tag_info != null && strategy.tag_info.name != null){
+            tagName = "-(" + strategy.tag_info.name + ")";
+        }
+
         var result = "";
         var idx = 0;
         while(idx < strategy.course_class_hour_package_info.length){
             var package = strategy.course_class_hour_package_info[idx++];
-            result += buildPackageHtml(strategy.strategy_name, package);
+            result += buildPackageHtml(strategy.strategy_name, package, tagName);
         }
 
         return result;
     }
 
-    function buildPackageHtml(strategyName, packageData){
+    function buildPackageHtml(strategyName, packageData, tagName){
         var html = packageTemplate;
-        html = html.replace(new RegExp("{color}","gm"), colorArr[colorIdx]);
-        html = html.replace(new RegExp("{btnColor}","gm"), btnColorArr[colorIdx]);
+        html = html.replace(new RegExp("{color}","gm"), colorArr[colorIdx%colorArr.length]);
+        html = html.replace(new RegExp("{btnColor}","gm"), btnColorArr[colorIdx%colorArr.length]);
         html = html.replace(new RegExp("{package_id}","gm"), packageData.package_id);
         html = html.replace(new RegExp("{package_name}","gm"), packageData.package_name);
         html = html.replace(new RegExp("{strategy}","gm"), strategyName);
         html = html.replace(new RegExp("{price}","gm"), packageData.package_price.sale_price + " = " + packageData.package_price.guide_price + " * " + ((packageData.package_price.discount_percent == null)? "1":packageData.package_price.discount_percent));
         html = html.replace(new RegExp("{hour}","gm"), "买" + packageData.class_hour_info.fee_class_hour + " 送 " + packageData.class_hour_info.free_class_hour + " （" + packageData.class_hour_info.class_hour_effect_days + "天)");
         html = html.replace(new RegExp("{total_price}","gm"), packageData.package_price.sale_price * packageData.class_hour_info.fee_class_hour);
+        html = html.replace(new RegExp("{tagName}","gm"), tagName);
 
         colorIdx++;
         return html;

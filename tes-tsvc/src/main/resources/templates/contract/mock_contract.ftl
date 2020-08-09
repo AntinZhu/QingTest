@@ -54,6 +54,7 @@
                                 <div class="hr hr-dotted"></div>
                                 <div class="hr hr-dotted"></div>
                                 <input type="hidden" id="contractId">
+                                <input type="hidden" id="contractVersion">
 
                                 <!-- PAGE CONTENT BEGINS -->
                                 <#include "/include/param.ftl" />
@@ -135,6 +136,24 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                <form class="form-horizontal">
+                                    <div class="form-group hide" id="protocolView">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="idCardNo">协议操作</label>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <button class="btn btn-lg btn-success" type="button" id="signProtocolBtn">
+                                                <i class="icon-ok"></i>
+                                                签署协议
+                                            </button>
+
+                                            <button class="btn btn-xs btn-danger hide" type="button" id="protocolViewBtn">
+                                                <i class="icon-bolt bigger-110"></i>
+                                                查看协议
+                                                <i class="icon-arrow-right icon-on-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -184,6 +203,43 @@
                 return resu;
             }
 
+            $("#signProtocolBtn").click(function(){
+                var data = {
+                    url :"/contractsvc/api/h5pt/v1/contract/sign_qingqing_protocol.json",
+                    param : '{"contract_id":' + getContractId() + ', "contract_version":' + getContractVersion() + '}',
+                    userType : $("#requestUserType").val(),
+                    userId : $("#requestUserId").val()
+                };
+
+                var request = {
+                    url : "${base}/v1/common/pt.json",
+                    data : data,
+                    handlerFunc : handleSignProtocol,
+                    isASync : false,
+                    failTitle :"签署协议失败:",
+                    env : $("#env").val(),
+                    guid : $("#guid").val()
+                };
+
+                commonAjaxRequest(request);
+            });
+
+            $("#protocolViewBtn").click(function(){
+                var preInfo = queryPreInfo();
+
+                window.open(preInfo.contract_result_url);
+            });
+
+            function handleSignProtocol(){
+                $.gritter.add({
+                    title : '结果:',
+                    text : '签署协议成功',
+                    class_name : 'gritter-info gritter-center'
+                });
+
+                $("#protocolViewBtn").removeClass("hide");
+            }
+
             $("#submitBtn").click(queryContractInfo);
 
             function queryContractInfo(){
@@ -206,16 +262,46 @@
 
                 commonAjaxRequest(request);
 
-                var preInfo = queryPreInfo();
-                if(preInfo!= null){
-                    if(preInfo.signer_name != null){
-                        $("#realName").val(preInfo.signer_name);
+                var contractInfo = queryContract();
+                $("#contractVersion").val(contractInfo.contract_brief_info.contract_version);
+                if(contractInfo.contract_brief_info.contract_type == "ssq_contractsvc_contrac_type"){
+                    var preInfo = queryPreInfo();
+                    if(preInfo!= null){
+                        if(preInfo.signer_name != null){
+                            $("#realName").val(preInfo.signer_name);
+                        }
+
+                        if(preInfo.signer_ID_card != null){
+                            $("#idCardNo").val(preInfo.signer_ID_card);
+                        }
                     }
 
-                    if(preInfo.signer_ID_card != null){
-                        $("#idCardNo").val(preInfo.signer_ID_card);
-                    }
+                    // 查询当前
+                    $("#resultShow").removeClass("hide");
+                }else{ // 签署协议
+                    $("#protocolView").removeClass("hide");
                 }
+            }
+
+            function queryContract(){
+                var data = {
+                    url :"/contractsvc/api/pi/v1/contract/contract_brief_info.json",
+                    param : '{"data":' + getContractId() + '}',
+                    userType : $("#requestUserType").val(),
+                    userId : $("#requestUserId").val()
+                };
+
+                var request = {
+                    url : "${base}/v1/common/pi.json",
+                    data : data,
+                    handlerFunc : returnResult,
+                    isASync : false,
+                    failTitle :"查询数据失败:",
+                    env : $("#env").val(),
+                    guid : $("#guid").val()
+                };
+
+                return commonAjaxRequest(request);
             }
 
             function handleQueryContractId(resu){
@@ -226,9 +312,6 @@
 
                 $("#contractId").val(resu.contract_id);
                 refreshContractList();
-
-                // 查询当前
-                $("#resultShow").removeClass("hide");
             }
 
             $("#createBtn").click(function() {
@@ -284,6 +367,10 @@
 
             function getContractId(){
                 return new Number($("#contractId").val());
+            }
+
+            function getContractVersion(){
+                return new Number($("#contractVersion").val());
             }
 
             function refreshContractList(){
@@ -471,7 +558,7 @@
             });
 
             var userTypeArr = [];
-            $.each(["student", "teacher", "assistant", "parent"] , function(k, v){
+            $.each(["student", "teacher", "ta", "parent"] , function(k, v){
                 userTypeArr.push({id: v, text: v});
             });
             var interfaceBean;

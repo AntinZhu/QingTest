@@ -80,7 +80,7 @@ public class FeginExceptionHandler extends ProtoExceptionHandler {
 
             if(pf != null){
                 builder.setField(pf, ProtoRespGenerator.generateResponse(baseResponse.getError_code(), baseResponse.getError_message(), baseResponse.getHint_message()));
-                return builder;
+                return builder.build();
             }
         }
 

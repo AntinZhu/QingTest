@@ -78,6 +78,9 @@ public class PtRequestInterceptor extends ProtoRequestInterceptor {
             PassportLoginResponse response = passportPiClient.getTokenAndSession(request);
             token = response.getToken();
             session = response.getSessionId();
+        }
+        catch (ErrorCodeException e){
+            throw e;
         }catch (Exception e){
             throw new ErrorCodeException(BaseInterfaceErrorCode.get_token_session_fail, "", e);
         }
