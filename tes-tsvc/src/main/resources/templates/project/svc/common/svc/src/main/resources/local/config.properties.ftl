@@ -1,0 +1,1 @@
+http.inner.userinfodpsvc=http://gateway.dev.idc.cedu.cn/userinfodpsvc

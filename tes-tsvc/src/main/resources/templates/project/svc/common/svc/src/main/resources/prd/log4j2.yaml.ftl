@@ -7,6 +7,8 @@ Configuration:
         value: /home/logs/tomcat
       - name: appName
         value: ${poolCode}
+      - name: projectName
+        value: ${svcName}
 
   Appenders:
     Sentry:
@@ -17,7 +19,16 @@ Configuration:
       PatternLayout:
         Pattern: '[#|%d{yyyy-MM-dd''T''HH:mm:ss.SSS}|%p|%c{3}|%t|%X{userId}|%X{userType}|%X{guid}|%m\t%throwable%n|#]%n'
 
-    #业务日志,以前的flume
+    QingLogSdk:
+      name: QingLogSdk
+      project: ${'$'}{projectName}
+      logType: appLog
+      endpoint: http://logsdk.tst.idc.cedu.cn:86
+      localCache: true
+      localIOPath: ./cachelog/
+      totalSizeInBytesWaitNet: 10485760
+      totalSizeInBytesWaitIO: 10485760
+
     Syslog:
       - name: appSql
         appName: ${"$"}{appName}
@@ -105,6 +116,7 @@ Configuration:
       level: info
       AppenderRef:
         - ref: Console
+        - ref: QingLogSdk
         - ref: appStd
         - ref: Sentry
           level: error
@@ -114,6 +126,7 @@ Configuration:
         level: info
         AppenderRef:
           - ref: Console
+          - ref: QingLogSdk
           - ref: appStd
           - ref: Sentry
             level: error
@@ -134,6 +147,7 @@ Configuration:
         level: debug
         AppenderRef:
           - ref: Console
+          - ref: QingLogSdk
           - ref: appSql
           - ref: Sentry
             level: error

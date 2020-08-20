@@ -1,5 +1,7 @@
 package ${basePackage}.config.redis;
 
+import com.qingqing.boot.actuator.base.annotations.ReadinessCheck;
+import com.qingqing.boot.actuator.base.constants.Component;
 import com.qingqing.common.redissvc.CacheRedisService;
 import com.qingqing.common.redissvc.impl.BaseRedisService;
 import com.qingqing.common.redissvc.impl.CacheRedisServiceImpl;
@@ -48,6 +50,7 @@ public class SelfRedisConfig {
     }
 
     @Bean
+    @ReadinessCheck(component = Component.REDIS)
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) {
         JedisConnectionFactory jedisConnectionFactory =
                 new JedisConnectionFactory(redisSentinelConfig(activityRedisSentinelMasterName, activityRedisSentinelUrls), jedisPoolConfig);

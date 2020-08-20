@@ -17,7 +17,6 @@ Configuration:
       PatternLayout:
         Pattern: '[#|%d{yyyy-MM-dd''T''HH:mm:ss.SSS}|%p|%c{3}|%t|%X{userId}|%X{userType}|%X{guid}|%m\t%throwable%n|#]%n'
 
-    #业务日志,以前的flume
     Syslog:
       - name: appSql
         appName: ${"$"}{appName}

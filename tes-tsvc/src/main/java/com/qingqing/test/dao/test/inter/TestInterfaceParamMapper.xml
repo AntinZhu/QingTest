@@ -6,6 +6,7 @@
     <result column="interface_id" property="interfaceId" jdbcType="VARCHAR" />
     <result column="param_name" property="paramName" jdbcType="VARCHAR" />
     <result column="request_user_id" property="requestUserId" jdbcType="BIGINT" />
+    <result column="request_user_type" property="requestUserType" jdbcType="VARCHAR" />
     <result column="param_detail" property="paramDetail" jdbcType="VARCHAR" />
     <result column="is_default" property="isDefault" jdbcType="TINYINT" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
@@ -15,7 +16,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, interface_id, param_name, request_user_id, param_detail, is_default, is_deleted, create_time, last_update_time, full_param
+    id, interface_id, param_name, request_user_id, request_user_type, param_detail, is_default, is_deleted, create_time, last_update_time, full_param
   </sql>
 
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -25,14 +26,14 @@
   </select>
 
   <insert id="insert" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" keyProperty="id" useGeneratedKeys="true">
-    insert into t_interface_param (interface_id, param_name, request_user_id, param_detail, is_default, is_deleted, create_time, full_param)
-    values (#{interfaceId,jdbcType=BIGINT}, #{paramName,jdbcType=VARCHAR}, #{requestUserId,jdbcType=BIGINT}, #{paramDetail, jdbcType=VARCHAR}, #{isDefault,jdbcType=TINYINT},
+    insert into t_interface_param (interface_id, param_name, request_user_id, request_user_type, param_detail, is_default, is_deleted, create_time, full_param)
+    values (#{interfaceId,jdbcType=BIGINT}, #{paramName,jdbcType=VARCHAR}, #{requestUserId,jdbcType=BIGINT}, #{requestUserType, jdbcType=VARCHAR}, #{paramDetail, jdbcType=VARCHAR}, #{isDefault,jdbcType=TINYINT},
     #{isDeleted,jdbcType=TINYINT}, now(), #{fullParam,jdbcType=VARCHAR} )
   </insert>
 
   <update id="update" parameterType="com.qingqing.test.domain.inter.TestInterfaceParam" >
       update t_interface_param
-      set param_name = #{paramName,jdbcType=VARCHAR}, request_user_id = #{requestUserId,jdbcType=BIGINT}, param_detail = #{paramDetail, jdbcType=VARCHAR}, full_param = #{fullParam,jdbcType=VARCHAR}
+      set param_name = #{paramName,jdbcType=VARCHAR}, request_user_id = #{requestUserId,jdbcType=BIGINT}, request_user_type = #{requestUserType, jdbcType=VARCHAR}, param_detail = #{paramDetail, jdbcType=VARCHAR}, full_param = #{fullParam,jdbcType=VARCHAR}
       where id = #{id,jdbcType=BIGINT}
   </update>
 

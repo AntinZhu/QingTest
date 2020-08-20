@@ -35,4 +35,10 @@ public class SelfRedisProjectCustomHandler extends AbstractProjectCustomHandler 
     protected Map<String, Object> generateCustomData(ProjectCustomBean projectCustomBean, ProjectCustomItem projectCustomItem) {
         return buildBaseDataMap(projectCustomBean);
     }
+
+    @Override
+    protected void doAfterHandleSucc(ProjectCustomItem projectCustomItem, ProjectCustomBean projectCustomBean) {
+        // 标记系统引入userinfosp，后续处理中会引入userinfodp对应的jar包
+        projectCustomBean.addCustomMapping("use_selfRedis", 1);
+    }
 }

@@ -7,6 +7,7 @@ public class TestInterfaceParam {
     private Long interfaceId;
     private String paramName;
     private Long requestUserId;
+    private String requestUserType;
     private String paramDetail;
     private Boolean isDefault;
     private Boolean isDeleted;
@@ -44,6 +45,14 @@ public class TestInterfaceParam {
 
     public void setRequestUserId(Long requestUserId) {
         this.requestUserId = requestUserId;
+    }
+
+    public String getRequestUserType() {
+        return requestUserType;
+    }
+
+    public void setRequestUserType(String requestUserType) {
+        this.requestUserType = requestUserType;
     }
 
     public String getParamDetail() {

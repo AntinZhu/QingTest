@@ -27,6 +27,6 @@ public class WebServletConfig extends WebServletConfigBase {
 
     @Bean
     public ServletRegistrationBean apiDispatcherServletRegistration(@Qualifier("apiDispatcherServlet") DispatcherServlet dispatcherServlet) {
-        return super.getDispatcherServletRegistration(dispatcherServlet, new String[]{"/api/*"}, "api_servlet");
+        return super.getDispatcherServletRegistration(dispatcherServlet, "/api/*", "api_servlet");
     }
 }

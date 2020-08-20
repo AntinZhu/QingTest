@@ -20,12 +20,10 @@
         <java.version>1.8</java.version>
         <log4j2.version>2.8.2</log4j2.version>
         <metrics.version>3.2.2</metrics.version>
-        <spring.version>4.3.7.RELEASE</spring.version>
-        <springboot.version>1.5.2.RELEASE</springboot.version>
         <idencode-util.version>${idencode_util_version!'1.3.0-SNAPSHOT'}</idencode-util.version>
         <qingqing-starter.version>${qingqing_starter_version!'1.1.6-SNAPSHOT'}</qingqing-starter.version>
-        <api-common.version>${api_common_version!'1.9.2.8-SNAPSHOT'}</api-common.version>
-        <spring-web-util.version>${spring_web_util_version!'1.4.8.7-SNAPSHOT'}</spring-web-util.version>
+        <qq.spring.web.util.version>${spring_web_util_version!'2.0.0.1-SNAPSHOT'}</qq.spring.web.util.version>
+        <qq.api.common.version>${api_common_version!'2.0.2.6-SNAPSHOT'}</qq.api.common.version>
 <#if (use_userinfodp!0) gt 0 >
         <userinfodp-client.version>${userinfodp_client_version!'2.1.4'}</userinfodp-client.version>
 </#if>
@@ -71,7 +69,21 @@
         <dependency> <!-- 引入log4j2依赖 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
-            <version>${"$"}{springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-classic</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -82,36 +94,6 @@
                 <exclusion>
                     <artifactId>*</artifactId>
                     <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>${"$"}{springboot.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-            <version>${"$"}{springboot.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>logback-classic</artifactId>
-                    <groupId>ch.qos.logback</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <version>${"$"}{springboot.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>logback-classic</artifactId>
-                    <groupId>ch.qos.logback</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -131,7 +113,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>${"$"}{springboot.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -146,18 +127,6 @@
                 <exclusion>
                     <artifactId>junit</artifactId>
                     <groupId>junit</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-beans</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-aop</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-core</artifactId>
-                    <groupId>org.springframework</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>spring-web-util</artifactId>
@@ -175,7 +144,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${"$"}{springboot.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -188,7 +156,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>${"$"}{springboot.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -219,7 +186,6 @@
         <dependency>
             <groupId>com.qingqing.api</groupId>
             <artifactId>api-common</artifactId>
-            <version>${"$"}{api-common.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>log4j</groupId>
@@ -239,7 +205,6 @@
         <dependency>
             <groupId>com.qingqing.api</groupId>
             <artifactId>spring-web-util</artifactId>
-            <version>${"$"}{spring-web-util.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.mybatis</groupId>

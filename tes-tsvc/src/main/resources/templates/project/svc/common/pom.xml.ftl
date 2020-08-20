@@ -12,6 +12,12 @@
         <module>svc</module>
     </modules>
 
+    <parent>
+        <artifactId>qingqing-springboot-starter</artifactId>
+        <groupId>com.qingqing</groupId>
+        <version>2.0.1-SNAPSHOT</version>
+    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <file_encoding>UTF-8</file_encoding>

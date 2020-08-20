@@ -1,5 +1,7 @@
 package ${basePackage}.config.db;
 
+import com.qingqing.boot.actuator.base.annotations.ReadinessCheck;
+import com.qingqing.boot.actuator.base.constants.Component;
 import com.qingqing.springboot.config.helper.MybatisDataSourceConfigHelper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
@@ -45,6 +47,7 @@ public class DataSource${simpleDbName?cap_first}${type?cap_first}Config {
     private String configPath;
 
     @Bean(name = DATA_SOURCE_NAME)
+    @ReadinessCheck(component = Component.DATASOURCE)
     public DataSource getDataSource() {
         String finalUrl = url;
         if(StringUtils.isEmpty(urlParam)){

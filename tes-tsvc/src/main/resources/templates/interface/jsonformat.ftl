@@ -468,6 +468,8 @@
                 if(paramEx != null){
                     $("#requestUserId").val(paramEx.requestUserId);
                     $("#requestUserIdDiv").text(paramEx.requestUserId);
+                    $("#requestUserType").val(paramEx.requestUserType);
+                    $("#requestUserTypeDiv").text(paramEx.requestUserType);
                     if(paramEx.paramDetail != "[]"){
                         paramInfo = showParam({paramData:paramEx.paramDetail});
                     }
@@ -756,6 +758,8 @@
                             }
                             $("#requestUserId").val(paramEx.requestUserId);
                             $("#requestUserIdDiv").text(paramEx.requestUserId);
+                            $("#requestUserType").val(paramEx.requestUserType);
+                            $("#requestUserTypeDiv").text(paramEx.requestUserType);
 
                             if(paramEx.fullParam == null || paramEx.fullParam == ""){
                                 fillFullParam();
@@ -842,6 +846,7 @@
                             id : $("#paramChoose").val(),
                             interfaceId : $("#interfaceId").val(),
                             requestUserId : $("#requestUserId").val(),
+                            requestUserType : $("#requestUserType").val(),
                             paramDetail : paramDetail,
                             deleted : 0,
                             default : 0,
