@@ -23,7 +23,7 @@ Configuration:
       name: QingLogSdk
       project: ${'$'}{projectName}
       logType: appLog
-      endpoint: http://logsdk.tst.idc.cedu.cn:86
+      endpoint: http://logsdk.idc.cedu.cn:80
       localCache: true
       localIOPath: ./cachelog/
       totalSizeInBytesWaitNet: 10485760

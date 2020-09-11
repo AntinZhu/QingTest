@@ -16,17 +16,17 @@ public class DirSearchUtils {
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
-        File dir = new File("D:\\_1\\work");
+        File dir = new File("D:\\all-project");
         DirSearchUtils.checkDir(dir, new FileHandler() {
             @Override
             public void handle(File file) throws IOException {
-                if(file.getName().indexOf(".jsp") > 0){
+                if(file.getName().indexOf(".java") > 0){
                     InputStream in = null;
                     try{
                         in = new FileInputStream(file);
                         List<String> lines =  QingFileUtils.readLines(in);
                         for (String line : lines) {
-                            if(line.contains("preview-src-lis")){
+                            if(line.contains("HF_FILTER_MSGTYPE_LIST")){
                                 System.out.println(file.getAbsolutePath());
                                 break;
                             }
