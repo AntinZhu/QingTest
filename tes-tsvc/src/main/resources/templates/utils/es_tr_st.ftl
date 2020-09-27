@@ -508,12 +508,12 @@
             }
 
             var indexInfoBean = getIndexInfo($("#indexType").val());
-            updateIndex(indexInfoBean.uniqueKey, getUniqueValue(indexInfoBean), indexInfo._index, JSON.stringify(fullData));
+            updateIndex(indexInfo._type, getUniqueValue(indexInfoBean), indexInfo._index, JSON.stringify(fullData));
         });
 
         $("#fullUpdateBtn").click(function () {
             var indexInfoBean = getIndexInfo($("#indexType").val());
-            updateIndex(indexInfoBean.uniqueKey, getUniqueValue(indexInfoBean), indexInfo._index, $("#fullData").val());
+            updateIndex(indexInfo._type, getUniqueValue(indexInfoBean), indexInfo._index, $("#fullData").val());
         });
 
         $("#delBtn").click(function () {
