@@ -32,6 +32,10 @@ public enum OrderPayTypeV2 implements HasDefaultInterface<OrderPayTypeV2> {
     alipay_chinaums(18,"支付宝支付（新）","支付宝（新）", 2, true), //8.8.5 银联支付宝支付
     weixin_pay_chinaums(19, "微信支付（新）","微信支付（新）",3, false), // 8.8.5 银联微信支付
     public_transfer_pay(20, "对公转账支付","对公转账", 1000, false),  //8.9.1-course 对公转账支付
+    thirdparty_pay(21, "第三方支付", "第三方支付", 1001, false), //9.2.0 第三方支付
+    transfrom_order_pay(22, "订单转化(小时转课时)", "订单转化(小时转课时)", 1002, false), //9.3.0 订单转化
+    cmbc_installment(23, "民生分期", "民生分期支付", 8, false),//9.3.5 民生分期
+    chinaums_installment(24, "银联分期", "银联分期", 9, false), //9.3.5 银联分期
     ;
 
     public static final EnumSet<OrderPayTypeV2> old_support = EnumSet.of(alipay, qingqing_balance, zhikang_balance,

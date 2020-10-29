@@ -26,6 +26,7 @@ public enum PayType {
     cmb_installment("cmb_installment", "招行分期", OrderPayType.cmb_installment),
     weixin_pay_chinaums("weixin_pay_chinaums", "银联微信", OrderPayType.weixin_pay_chinaums),
     alipay_chinaums("alipay_chinaums", "银联支付宝", OrderPayType.alipay_chinaums),
+    cmbc_installment("cmbc_installment", "民生分期", OrderPayType.cmbc_installment),
     ;
 
     private static Map<String, String> keyNameMap = new HashMap<>(PayType.values().length);

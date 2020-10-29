@@ -1,6 +1,7 @@
 package com.qingqing.test.aspect.mock;
 
 import com.qingqing.common.util.JsonUtil;
+import com.qingqing.common.util.converter.lang.BigDecimalUtil;
 import com.qingqing.test.client.ApiTestClient;
 import com.qingqing.test.util.ExpressionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -54,5 +55,14 @@ public class QingMockAspect {
         }
 
 //        return pjp.proceed();
+    }
+
+    public static void main(String[] args) {
+        double realPriceWithoutTax = 18.73D;
+        double hourLength = 1.5D;
+        Double realUnitPrice = BigDecimalUtil.div(realPriceWithoutTax, hourLength);
+        double shareRate = 100D;
+        double  sharePreAmount = BigDecimalUtil.mul(hourLength, realUnitPrice);
+        System.out.println(BigDecimalUtil.div(BigDecimalUtil.mul(sharePreAmount, shareRate), 100D));
     }
 }

@@ -1,12 +1,16 @@
 package com.qingqing.test.client;
 
 import com.qingqing.test.config.feign.PayFeignConfiguration;
+import feign.Param;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Map;
 
 /**
  * Created by zhujianxing on 2018/2/4.
@@ -49,4 +53,8 @@ public interface PayPbClient {
     @RequestMapping(path = "chinaums/{channelId}", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     @ResponseBody
     String chinaumsNotify(String param, @PathVariable("channelId") Integer channelId);
+
+    @RequestMapping(path = "cmbcpay", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @ResponseBody
+    String cmbcNotify(@RequestParam Map<String, String> params);
 }

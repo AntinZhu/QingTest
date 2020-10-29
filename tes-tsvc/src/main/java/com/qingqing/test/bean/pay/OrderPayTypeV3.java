@@ -44,10 +44,14 @@ public enum OrderPayTypeV3 implements HasDefaultInterface<OrderPayTypeV3> {
 	alipay_h5_nanjing(30, OrderPayTypeV2.alipay, "南京轻轻支付宝h5支付"),  // 7.4.0 南京轻轻支付宝h5支付
 	weixin_pay_app_nanjing(31, OrderPayTypeV2.weixin_pay, "南京轻轻微信app支付"),	// 7.4.0 南京轻轻微信app支付
 	weixin_pay_h5_nanjing(32, OrderPayTypeV2.weixin_pay, "南京轻轻微信H5支付"),	// 7.4.0 南京轻轻微信H5支付
+	cmbc_installment_h5(33, OrderPayTypeV2.cmbc_installment, "民生分期H5支付"),//9.3.5 民生分期h5
 	weixin_h5_qq_chinaums_pay_channel(39, OrderPayTypeV2.weixin_pay_chinaums, "银联微信H5支付"),//8.8.5 银联微信h5（轻轻侧使用）
 	alipay_h5_qq_chinaums_pay_channel(40, OrderPayTypeV2.alipay_chinaums, "银联支付宝H5支付"), // 8.8.5 银联支付宝h5 （轻轻侧使用）
 	public_transfer_pay_channel(41, OrderPayTypeV2.public_transfer_pay, "对公转账支付"), // 8.9.1-course 对公转账支付方式
 	alipay_app_qq_chinaums_pay_channel(42, OrderPayTypeV2.alipay_chinaums, "银联支付宝app"),  //9.1.0 轻轻-银联支付宝app
+	weixinpayApp_for_online(43, OrderPayTypeV2.weixin_pay, "微信app支付2"), //9.1.5 微信app 在线专用
+	thirdparty_pay(44, OrderPayTypeV2.thirdparty_pay, "第三方支付"), //9.2.0 第三方支付
+	transfrom_order_pay(45, OrderPayTypeV2.transfrom_order_pay, "订单转化(小时转课时)"),//9.3.0 订单转化
 	;
 	
 	private final int value;

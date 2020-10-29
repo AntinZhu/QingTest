@@ -21,11 +21,15 @@ import com.qingqing.test.domain.pay.ThirdPayBrief;
 import com.qingqing.test.service.pay.ThirdPayBriefService;
 import com.qingqing.test.util.ObjectUtil;
 import com.qingqing.test.util.UrlUtil;
+import feign.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zhujianxing on 2018/8/24.
@@ -71,9 +75,37 @@ public class PayManager {
             case alipay_chinaums:
             case weixin_pay_chinaums:
                 return mockChinaums(thirdPayBrief);
+            case cmbc_installment:
+                return mockCmbc(thirdPayBrief);
             default:
                 throw new ErrorCodeException(PayErrorCode.not_usupport_mock_notify_type, "not support mock pay notify, OrderPayTypeV2:" + thirdPayBrief.getThirdPaymentTypeV3().getOrderPayTypeV2());
         }
+    }
+
+    private boolean mockCmbc(ThirdPayBrief thirdPayBrief){
+        String notifyParam = "{" +
+                "  \"s\" : \"SUCCESS\"," +
+                "  \"msg\" : \"交易成功\"," +
+                "  \"cipRs\" : \"{\\\"usedPoint\\\":0,\\\"realyOrderAmt\\\":9.9,\\\"orderNum\\\":\\\"" + thirdPayBrief.getQingqingTradeNo() + "\\\",\\\"finishedTime\\\":\\\"2020-01-07 14:49:19\\\",\\\"flowSeq\\\":\\\"51135202001071214438848650543105\\\",\\\"orderAmt\\\":" + thirdPayBrief.getThirdPaymentAmount() +"}\"," +
+                "  \"cipRsBean\" : {" +
+                "    \"flowSeq\" : \"51135202001071214438848650543105\"," +
+                "    \"orderNum\" : \"1578313250014T178293109510\"," +
+                "    \"orderAmt\" : 10000.0," +
+                "    \"realyOrderAmt\" : 9.9," +
+                "    \"finishedTime\" : \"2020-01-07 14:49:19\"," +
+                "    \"usedPoint\" : 0" +
+                "  }" +
+                "}";
+
+
+        Map<String, String> params = new HashMap<>();
+        params.put("_cryptDatas", notifyParam);
+        params.put("h5ReturnUrl", "aHR0cHM6Ly93d3cuYmFpZHUuY29t");
+
+        String result = payPbClient.cmbcNotify(params);
+
+        logger.info("mockCmbc result:" + result);
+        return true;
     }
 
     private boolean mockChinaums(ThirdPayBrief thirdPayBrief){
@@ -250,6 +282,6 @@ public class PayManager {
 
         String result = payPbClient.jdNotify(param);
 
-        return "success\r\n".equals(String.valueOf(result));
+        return "success\r".equals(String.valueOf(result));
     }
 }
