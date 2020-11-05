@@ -16,7 +16,7 @@ public class DirSearchUtils {
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
-        File dir = new File("D:\\all-project");
+        File dir = new File("D:\\_1\\work");
         DirSearchUtils.checkDir(dir, new FileHandler() {
             @Override
             public void handle(File file) throws IOException {
@@ -26,7 +26,7 @@ public class DirSearchUtils {
                         in = new FileInputStream(file);
                         List<String> lines =  QingFileUtils.readLines(in);
                         for (String line : lines) {
-                            if(line.contains("HF_FILTER_MSGTYPE_LIST")){
+                            if(line.contains("tutor_teaching/assign")){
                                 System.out.println(file.getAbsolutePath());
                                 break;
                             }
