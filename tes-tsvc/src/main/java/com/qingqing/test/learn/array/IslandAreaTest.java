@@ -1,5 +1,7 @@
 package com.qingqing.test.learn.array;
 
+import java.util.Stack;
+
 /**
  * Created by zhujianxing on 2020/11/2.
  */
@@ -17,8 +19,8 @@ public class IslandAreaTest {
                 {0, 0, 0, 1, 1, 0, 0}
         };
 
-//        System.out.println(new IslandAreaTest().maxAreaOfIsland(arr));
-        System.out.println(new IslandAreaTest().count(arr));
+        System.out.println(new IslandAreaTest().maxAreaOfIsland(arr));
+        System.out.println(new IslandAreaTest().dfsWithStack(arr));
 
         char[][] charGrid = new char[][]{
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x'},
@@ -145,5 +147,48 @@ public class IslandAreaTest {
         }
 
         return count;
+    }
+
+    private int dfsWithStack(int[][] grid){
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] access = new boolean[n][m];
+
+        Stack<Integer> stackI = new Stack<>();
+        Stack<Integer> stackJ = new Stack<>();
+
+        int max = 0;
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < m; j++){
+                if(grid[i][j] == 0 || access[i][j]){
+                    continue;
+                }
+
+                stackI.push(i);
+                stackJ.push(j);
+                int count = 0;
+                while (!stackI.isEmpty()){
+                    int x = stackI.pop();
+                    int y = stackJ.pop();
+                    if(x < 0 || x == n || y < 0 || y == m || access[x][y] || grid[x][y] == 0){
+                        continue;
+                    }
+
+                    access[x][y] = true;
+                    count++;
+                    for (int[] direct : directs) {
+                        stackI.push(x + direct[0]);
+                        stackJ.push(y + direct[1]);
+                    }
+                }
+
+                max = Math.max(max, count);
+            }
+
+            return max;
+        }
+
+
+        return max;
     }
 }
