@@ -17,9 +17,8 @@ public class MatchTest {
      */
 
     public static void main(String[] args) {
-        System.out.print(new MatchTest().isMatch("aa", "a"));
+        System.out.print(new MatchTest().isMatchTest("aab", "c*a*b"));
     }
-
 
     public boolean isMatch(String s, String p) {
         int m = s.length();
@@ -76,4 +75,60 @@ public class MatchTest {
         return s == p || p == '.';
     }
 
+    public int subMatch(String a, String b){
+        if(a == null || b == null || a.length() == 0 || b.length() == 0){
+            return 0;
+        }
+
+        int aLen = a.length();
+        int bLen = b.length();
+        int[][] resultArr = new int[aLen + 1][bLen + 1];
+
+        int maxResult = 0;
+        for(int i = 0; i < aLen; i++){
+            char aChar = a.charAt(i);
+            for(int j = 0; j < bLen; j++){
+                if(aChar == b.charAt(j)){
+                    resultArr[i + 1][j + 1] = resultArr[i][j] + 1;
+                    maxResult = Math.max(maxResult, resultArr[i + 1][j + 1]);
+                }
+            }
+        }
+
+        return maxResult;
+    }
+
+    private boolean isMatchTest(String s, String p){
+        int sLen = s.length();
+        int pLen = p.length();
+        boolean[][] matchResult = new boolean[sLen + 1][pLen + 1];
+        matchResult[0][0] = true;
+        for(int i = 0; i < p.length(); i++){
+            char pChar = p.charAt(i);
+            if(pChar == '*'){
+                matchResult[0][i + 1] = matchResult[0][i - 1];
+            }
+        }
+
+        for(int i = 0; i < sLen; i++) {
+            char sChar = s.charAt(i);
+            for (int j = 0; j < pLen; j++) {
+                if(isCharMatchTest(sChar, p.charAt(j))){
+                    matchResult[i + 1][j + 1] = matchResult[i][j];
+                }else if(p.charAt(j) == '*'){
+                    // 默认等于不匹配
+                    matchResult[i + 1][j + 1] = matchResult[i + 1][j - 1];
+                    if(sChar == p.charAt(j - 1)){
+                        matchResult[i + 1][j + 1] |= matchResult[i][j + 1];
+                    }
+                }
+            }
+        }
+
+        return matchResult[sLen][pLen];
+    }
+
+    private boolean isCharMatchTest(char s, char p){
+        return s == p || p == '.';
+    }
 }

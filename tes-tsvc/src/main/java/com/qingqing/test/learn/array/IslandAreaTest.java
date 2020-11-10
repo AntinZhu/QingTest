@@ -1,5 +1,13 @@
 package com.qingqing.test.learn.array;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -35,6 +43,134 @@ public class IslandAreaTest {
 
         new IslandAreaTest().solve(charGrid);
     }
+
+    public int[][] merge(int[][] intervals) {
+        Queue<Integer> queue = new LinkedList<>();
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] - o2[0];
+            }
+        });
+
+
+        for (int i = 0; i < intervals.length; i++) {
+            int min = intervals[i][0];
+            int max = intervals[i][1];
+            while (i + 1 < intervals.length && !(intervals[i + 1][0] > max || min > intervals[i + 1][1])){
+                max = Math.max(max, intervals[i + 1][1]);
+                i++;
+            }
+            queue.offer(min);
+            queue.offer(max);
+        }
+
+        int[][] resultArr = new int[queue.size() / 2][2];
+        int resultIdx = 0;
+        while (!queue.isEmpty()){
+            resultArr[resultIdx][0] = queue.poll();
+            resultArr[resultIdx][1] = queue.poll();
+            resultIdx++;
+        }
+
+        return resultArr;
+}
+
+    /*
+    [
+        [1,0,0,1],
+        [0,1,1,0],
+        [0,1,1,1],
+        [1,0,1,1]]
+     */
+
+    public int findCircleNum(int[][] M) {
+        int n = M.length;
+
+        boolean[] visit = new boolean[n];
+        int result = 0;
+        for(int i = 0; i < n; i++) {
+            if(visit[i]){
+                continue;
+            }
+            visit[i] = true;
+            dfsCircleNum(M, n, visit, i);
+            result++;
+        }
+
+        return result;
+    }
+
+    private void dfsCircleNum(int[][] M, int n, boolean[] visit, int i){
+        for (int j = 0; j < n; j++) {
+            if(M[i][j] == 1 && !visit[j]){
+                visit[j] = true;
+                dfsCircleNum(M, n, visit, j);
+            }
+        }
+    }
+
+    public int findCircleNumBfs(int[][] M) {
+        int n = M.length;
+
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visit = new boolean[n];
+        int result = 0;
+        for(int i = 0; i < n; i++) {
+            if(visit[i]){
+                continue;
+            }
+
+            queue.offer(i);
+            visit[i] = true;
+            while (!queue.isEmpty()){
+                int item = queue.poll();
+                for(int j = 0; j < n; j++){
+                    if(M[item][j] == 1 && !visit[j]){
+                        visit[j] = true;
+                        queue.offer(j);
+                    }
+                }
+            }
+            result++;
+        }
+
+        return result;
+    }
+
+//    public int findCircleNum(int[][] M) {
+//        int n = M.length;
+//
+//        Set<Integer> numSet = new HashSet<>();
+//        for(int i = 0; i < n; i++){
+//            numSet.add(i);
+//        }
+//
+//        int result = 0;
+//        while (!numSet.isEmpty()){
+//            int item = numSet.iterator().next();
+//            Stack<Integer> friendStack = new Stack<>();
+//            friendStack.push(item);
+//            while (!friendStack.isEmpty()){
+//                int friend = friendStack.pop();
+//                if(numSet.contains(friend)){
+//                    // 将朋友的朋友中还没有查看朋友关系的放入friendStack继续遍历
+//                    for(int i = 0; i < n; i++){
+//                        if(i != friend && M[friend][i] == 1){
+//                            if(numSet.contains(i)){
+//                                friendStack.push(i);
+//                            }
+//                        }
+//                    }
+//                    numSet.remove(friend);
+//                }
+//            }
+//
+//            result++;
+//        }
+//
+//        return result;
+//    }
 
     public int count(int[][] grid){
         if(grid.length == 0){
