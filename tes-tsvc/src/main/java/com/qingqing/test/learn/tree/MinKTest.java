@@ -1,5 +1,7 @@
 package com.qingqing.test.learn.tree;
 
+import com.qingqing.test.learn.tree.TreeUtils.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -8,12 +10,6 @@ import java.util.Stack;
  * Created by zhujianxing on 2020/11/5.
  */
 public class MinKTest {
-
-    public class TreeNode {
-        int val = 0;
-        TreeNode left = null;
-        TreeNode right = null;
-    }
 
     private int findMinK(TreeNode root, int k){
         Stack<TreeNode> stack =  new Stack<>();

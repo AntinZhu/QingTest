@@ -27,6 +27,7 @@ public enum PayType {
     weixin_pay_chinaums("weixin_pay_chinaums", "银联微信", OrderPayType.weixin_pay_chinaums),
     alipay_chinaums("alipay_chinaums", "银联支付宝", OrderPayType.alipay_chinaums),
     cmbc_installment("cmbc_installment", "民生分期", OrderPayType.cmbc_installment),
+    chinaums_installment("chinaums_installment", "银联分期", OrderPayType.chinaums_installment)
     ;
 
     private static Map<String, String> keyNameMap = new HashMap<>(PayType.values().length);
@@ -69,6 +70,11 @@ public enum PayType {
     }
 
     public static String getName(String key){
-        return keyNameMap.get(key);
+        String result =  keyNameMap.get(key);
+        if(result == null){
+            result = "未识别支付方式(" + result + ")";
+        }
+
+        return result;
     }
 }

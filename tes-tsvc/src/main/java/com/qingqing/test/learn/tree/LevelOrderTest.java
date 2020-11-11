@@ -1,6 +1,8 @@
 package com.qingqing.test.learn.tree;
 
 
+import com.qingqing.test.learn.tree.TreeUtils.TreeNode;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -12,13 +14,6 @@ import java.util.Stack;
  * Created by zhujianxing on 2020/10/30.
  */
 public class LevelOrderTest {
-
-
-    public class TreeNode {
-        int val = 0;
-        TreeNode left = null;
-        TreeNode right = null;
-    }
 
     public int[] levelOrder2(TreeNode root) {
         if(root == null){

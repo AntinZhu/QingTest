@@ -1,5 +1,7 @@
 package com.qingqing.test.learn.tree;
 
+import com.qingqing.test.learn.tree.TreeUtils.TreeNode;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,11 +49,4 @@ public class RebuildTreeTest {
 
         return thisNode;
     }
-
-    public class TreeNode {
-      int val;
-      TreeNode left;
-      TreeNode right;
-      TreeNode(int x) { val = x; }
-  }
 }

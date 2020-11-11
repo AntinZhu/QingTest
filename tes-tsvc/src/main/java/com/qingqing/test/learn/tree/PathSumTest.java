@@ -1,5 +1,7 @@
 package com.qingqing.test.learn.tree;
 
+import com.qingqing.test.learn.tree.TreeUtils.TreeNode;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -9,12 +11,6 @@ import java.util.stream.Collectors;
  * Created by zhujianxing on 2020/10/30.
  */
 public class PathSumTest {
-
-  public class TreeNode {
-    int val = 0;
-    TreeNode left = null;
-    TreeNode right = null;
-  }
 
     /**
      *

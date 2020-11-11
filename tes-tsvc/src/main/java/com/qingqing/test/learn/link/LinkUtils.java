@@ -8,7 +8,6 @@ public class LinkUtils {
     public static class ListNode {
         int val;
         ListNode next;
-        ListNode() {}
         ListNode(int val) { this.val = val; }
 
         public ListNode(int val, ListNode next) {
@@ -25,5 +24,21 @@ public class LinkUtils {
             }
             head = head.next;
         }
+        System.out.println();
+    }
+
+    public static ListNode build(int[] arr){
+        if(arr == null || arr.length == 0){
+            return null;
+        }
+
+        ListNode result = new ListNode(-1);
+        ListNode link = result;
+        for (int i : arr) {
+            link.next = new ListNode(i);
+            link = link.next;
+        }
+
+        return result.next;
     }
 }
