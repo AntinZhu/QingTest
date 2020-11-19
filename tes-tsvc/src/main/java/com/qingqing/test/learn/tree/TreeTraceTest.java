@@ -1,8 +1,10 @@
 package com.qingqing.test.learn.tree;
 
+import com.qingqing.test.learn.link.LinkUtils.ListNode;
 import com.qingqing.test.learn.tree.TreeUtils.TreeNode;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
@@ -85,6 +87,49 @@ public class TreeTraceTest {
             while(!stack2.isEmpty()){
                 resultList.add(stack2.pop().val);
             }
+        }
+
+        return resultList;
+    }
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> resultList = new LinkedList<>();
+        if(root == null){
+            return resultList;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        int traceType = 1;
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            List<Integer> result = new LinkedList<>();
+            while (!queue.isEmpty()){
+                TreeNode node = queue.poll();
+                result.add(node.val);
+                if(traceType % 2 == 1){
+                    if(node.left != null){
+                        stack.push(node.left);
+                    }
+                    if(node.right != null){
+                        stack.push(node.right);
+                    }
+                }else{
+                    if(node.right != null){
+                        stack.push(node.right);
+                    }
+                    if(node.left != null){
+                        stack.push(node.left);
+                    }
+                }
+            }
+
+            while (!stack.isEmpty()){
+                queue.offer(stack.pop());
+            }
+
+            traceType++;
+            resultList.add(result);
         }
 
         return resultList;

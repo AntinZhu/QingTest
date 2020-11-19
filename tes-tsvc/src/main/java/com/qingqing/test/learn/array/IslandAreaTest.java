@@ -16,32 +16,90 @@ import java.util.Stack;
 public class IslandAreaTest {
 
     public static void main(String[] args) {
-        int[][] arr = new int[][]{
-                {0, 0, 0, 1, 1, 0, 0},
-                {0, 1, 1, 1, 1, 0, 0},
-                {0, 1, 0, 1, 1, 0, 0},
-                {0, 1, 1, 1, 1, 0, 0},
-                {0, 0, 0, 0, 0, 0, 1},
-                {0, 0, 0, 1, 1, 0, 0},
-                {0, 0, 0, 1, 1, 0, 0},
-                {0, 0, 0, 1, 1, 0, 0}
-        };
+//        int[][] arr = new int[][]{
+//                {0, 0, 0, 1, 1, 0, 0},
+//                {0, 1, 1, 1, 1, 0, 0},
+//                {0, 1, 0, 1, 1, 0, 0},
+//                {0, 1, 1, 1, 1, 0, 0},
+//                {0, 0, 0, 0, 0, 0, 1},
+//                {0, 0, 0, 1, 1, 0, 0},
+//                {0, 0, 0, 1, 1, 0, 0},
+//                {0, 0, 0, 1, 1, 0, 0}
+//        };
+//
+//        System.out.println(new IslandAreaTest().maxAreaOfIsland(arr));
+//        System.out.println(new IslandAreaTest().dfsWithStack(arr));
+//
+//        char[][] charGrid = new char[][]{
+//                {'x', 'x', 'x', 'x', 'x', 'x', 'x'},
+//                {'x', 'x', 'o', 'x', 'x', 'o', 'x'},
+//                {'x', 'o', 'o', 'o', 'x', 'x', 'x'},
+//                {'x', 'x', 'x', 'x', 'x', 'x', 'x'},
+//                {'x', 'x', 'o', 'o', 'x', 'x', 'o'},
+//                {'x', 'x', 'x', 'o', 'x', 'x', 'x'},
+//                {'x', 'o', 'o', 'o', 'x', 'x', 'x'},
+//                {'x', 'o', 'x', 'x', 'x', 'x', 'x'},
+//        };
+//
+//        new IslandAreaTest().solve(charGrid);
 
-        System.out.println(new IslandAreaTest().maxAreaOfIsland(arr));
-        System.out.println(new IslandAreaTest().dfsWithStack(arr));
+        char[][] charArr = {
+                {'1','0','1','0','0'},
+                {'1','0','1','1','1'},
+                {'1','1','1','1','1'},
+                {'1','0','1','1','1'}};
 
-        char[][] charGrid = new char[][]{
-                {'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-                {'x', 'x', 'o', 'x', 'x', 'o', 'x'},
-                {'x', 'o', 'o', 'o', 'x', 'x', 'x'},
-                {'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-                {'x', 'x', 'o', 'o', 'x', 'x', 'o'},
-                {'x', 'x', 'x', 'o', 'x', 'x', 'x'},
-                {'x', 'o', 'o', 'o', 'x', 'x', 'x'},
-                {'x', 'o', 'x', 'x', 'x', 'x', 'x'},
-        };
+        char[][] arr2 = {{'0','0','0','1'},{'1','1','0','1'},{'1','1','1','1'},{'0','1','1','1'},{'0','1','1','1'}};
 
-        new IslandAreaTest().solve(charGrid);
+        System.out.println(new IslandAreaTest().maximalSquare(arr2));
+    }
+
+    public int maximalSquare(char[][] matrix) {
+        if(matrix == null){
+            return 0;
+        }
+
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        if(n == 0){
+            return 0;
+        }
+
+        int[][] result = new int[n][m];
+        int maxResult = 0;
+        for(int i = 0; i < n; i++){
+            result[i][0] = matrix[i][0] - '0';
+            maxResult = Math.max(maxResult, result[i][0]);
+        }
+        for(int j = 0; j < m; j++){
+            result[0][j] = matrix[0][j] - '0';
+            maxResult = Math.max(maxResult, result[0][j]);
+        }
+
+        for(int i = 1; i < n; i++){
+            for(int j = 1; j < m; j++){
+                if(matrix[i][j] == '1'){
+                    result[i][j] = Math.min(Math.min(result[i - 1][j - 1], result[i - 1][j]), result[i][j - 1]) + 1;
+                    maxResult = Math.max(maxResult, result[i][j]);
+                }
+            }
+        }
+
+        ArrayUtils.print(result);
+
+        return maxResult * maxResult;
+    }
+
+    private int maxLenWithDirect(char[][] matrix, int i, int j, int n, int m, int[] direct){
+        int result = 0;
+        while(i>=0 && i < n && j>=0 && j < m && matrix[i][j] == '1'){
+            result++;
+            i += direct[0];
+            j += direct[1];
+        }
+
+        return result;
     }
 
     public int[][] merge(int[][] intervals) {
