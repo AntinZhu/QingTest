@@ -56,43 +56,4 @@ public class MaxConcatLenTest {
             System.out.println(Arrays.toString(arr[i]));
         }
     }
-
-    public int maxLen(int[][] arr, int m, int n){
-        int result = 0;
-        for(int i=0; i < m; i++){
-            int start = 0;
-            int end = 0;
-            int maxLen = 0;
-            for(int j=0; j < n; j++){
-                if(arr[i][j] == 1){
-                    if(start < j){
-                        end++;
-                    }
-
-                    maxLen = 1;
-                    if(i > 0){
-                        maxLen = Math.max(maxLen, arr[i - 1][j] + 1);
-                    }
-                    if(j > 0){
-                        maxLen = Math.max(maxLen, arr[i][j - 1] + 1);
-                    }
-                    arr[i][j] = maxLen;
-                    result = Math.max(maxLen, result);
-                }else{
-                    while(start < end){
-                        arr[i][start++] = arr[i][end];
-                    }
-
-                    start = j + 1;
-                    end = start;
-                }
-            }
-
-            while(start < end){
-                arr[i][start++] = arr[i][end];
-            }
-        }
-
-        return result;
-    }
 }
