@@ -19,7 +19,7 @@ public class MyMockTestManager {
     @Autowired
     private MyMockTestManager self;
 
-    @QingMock(type = QingMockType.test, mockEnableSwitchKey = "abc", ruleParamExpression = "url")
+    @QingMock(type = "test", ruleParamExpression = "url")
     public String test(UrlAndParam urlAndParam, UserWithDataBean userData){
         self.a(urlAndParam, userData);
         self.b(urlAndParam, userData);
@@ -27,15 +27,15 @@ public class MyMockTestManager {
         return "normal";
     }
 
-    @QingMock(type = QingMockType.test, mockEnableSwitchKey = "abc", ruleParamExpression = "url")
+    @QingMock(type = "test", ruleParamExpression = "url")
     public UrlAndParam a(UrlAndParam urlAndParam, UserWithDataBean userData){
         return new UrlAndParam();
     }
 
-    @QingMock(type = QingMockType.test, mockEnableSwitchKey = "abc", ruleParamExpression = "url")
+    @QingMock(type = "test", ruleParamExpression = "url")
     public void b(UrlAndParam urlAndParam, UserWithDataBean userData){}
 
-    @QingMock(type = QingMockType.test, mockEnableSwitchKey = "abc", ruleParamExpression = "url")
+    @QingMock(type = "test", ruleParamExpression = "url")
     public QingMockType c(UrlAndParam urlAndParam, UserWithDataBean userData){
         return QingMockType.unknown;
     }

@@ -1,5 +1,7 @@
 package com.qingqing.test.learn.integer;
 
+import com.qingqing.test.learn.link.LinkUtils;
+import com.qingqing.test.learn.link.LinkUtils.ListNode;
 import com.qingqing.test.learn.tree.TreeUtils.TreeNode;
 
 import java.util.*;
@@ -12,7 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CoinTest {
 
     public static void main(String[] args) {
-        System.out.println(new CoinTest().ladderLength("hit","cog",Arrays.asList("hot","dot","dog","lot","log","cog")));
+        ListNode head = LinkUtils.build(new int[]{1, 2, 3, 4});
+        new CoinTest().reorderList(head);
+        LinkUtils.print(head);
     }
 
     public int coinChange2(int[] coins, int amount) {
@@ -181,5 +185,93 @@ public class CoinTest {
         }
 
         return diffCnt == 1;
+    }
+
+    public void reorderList(ListNode head) {
+        int len = getLength(head);
+        if(len < 3){
+            return;
+        }
+
+        int mid = len / 2;
+
+        ListNode link = head;
+        while(mid-- > 0){
+            link = link.next;
+        }
+        System.out.println(link.val);
+
+        ListNode insertNode = link.next;
+        link.next = null;
+
+        ListNode reverseHead = reverse(head);
+        ListNode insert = reverseHead;
+        if(len % 2 == 0){
+            insert = insert.next;
+        }
+        while(insertNode != null){
+            ListNode next = insertNode.next;
+            insertNode.next = insert.next;
+            insert.next = insertNode;
+            insertNode = next;
+            insert = insert.next.next;
+        }
+
+        reverse(reverseHead);
+    }
+
+    private ListNode reverse(ListNode head){
+        if(head == null){
+            return head;
+        }
+        ListNode pre = null;
+        ListNode next = head;
+        while(next != null){
+            ListNode n = next.next;
+            next.next = pre;
+            pre = next;
+            next = n;
+        }
+
+        return pre;
+    }
+
+    private int getLength(ListNode head){
+        int len = 0;
+        while(head != null){
+            len++;
+            head = head.next;
+        }
+
+        return len;
+    }
+
+    ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        if(pRoot == null){
+            return new ArrayList<ArrayList<Integer>>(0);
+        }
+
+        ArrayList<ArrayList<Integer>> resultList = new ArrayList();
+
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(pRoot);
+        while(!queue.isEmpty()){
+            int queueSize = queue.size();
+            ArrayList<Integer> result = new ArrayList(queueSize);
+            for(int i = 0; i < queueSize; i++){
+                TreeNode node = queue.poll();
+                result.add(node.val);
+                if(node.left != null){
+                    queue.offer(node.left);
+                }
+                if(node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+
+            resultList.add(result);
+        }
+
+        return resultList;
     }
 }

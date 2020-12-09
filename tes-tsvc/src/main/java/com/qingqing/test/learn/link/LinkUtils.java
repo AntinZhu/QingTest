@@ -6,8 +6,8 @@ package com.qingqing.test.learn.link;
 public class LinkUtils {
 
     public static class ListNode {
-        int val;
-        ListNode next;
+        public int val;
+        public ListNode next;
         ListNode(int val) { this.val = val; }
 
         public ListNode(int val, ListNode next) {

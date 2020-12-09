@@ -13,11 +13,29 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Documented
 public @interface QingMock {
-    String mockEnableSwitchKey();
+    String enableKey() default "";
 
-    QingMockType type();
+    /**
+     *
+     * @return
+     */
+    String type();
 
-    int ruleParamIndex() default 0;
+    /**
+     * 参数下标
+     * @return
+     */
+    int ruleParamIndex() default -1;
 
-    String ruleParamExpression();
+    /**
+     * 参数表达式
+     * @return
+     */
+    String ruleParamExpression()  default "";
+
+    /**
+     * 不为空时，固定结果，不走mock服务
+     * @return
+     */
+    String fixedResult() default "";
 }
